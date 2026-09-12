@@ -4,10 +4,19 @@ from torch_geometric.nn import TopKPooling
 from torch_geometric_temporal.nn.recurrent.evolvegcno import GCNConv_Fixed_W
 from torch_geometric.nn.inits import glorot
 
+
 class EvolveGCNH(torch.nn.Module):
     r"""An implementation of the Evolving Graph Convolutional Hidden Layer.
     For details see this paper: `"EvolveGCN: Evolving Graph Convolutional
     Networks for Dynamic Graph." <https://arxiv.org/abs/1902.10191>`_
+
+    The graph-convolution weight is recurrent state, not a module attribute:
+    :meth:`forward` accepts the weight produced by the previous snapshot and
+    returns the weight it produced for the next one.  Passing ``None`` for the
+    first snapshot of a traversal starts from the learnable
+    :attr:`initial_weight` parameter, which stays connected to autograd.  A new
+    traversal must start from ``None`` again; nothing is cached on the layer, so
+    state cannot leak between epochs or dataset splits.
 
     Args:
         num_of_nodes (int): Number of vertices.
@@ -44,13 +53,20 @@ class EvolveGCNH(torch.nn.Module):
         self.cached = cached
         self.normalize = normalize
         self.add_self_loops = add_self_loops
-        self.weight = None
         self.initial_weight = torch.nn.Parameter(torch.Tensor(in_channels, in_channels))
         self._create_layers()
         self.reset_parameters()
-    
+
     def reset_parameters(self):
         glorot(self.initial_weight)
+
+    def initial_state(self) -> torch.Tensor:
+        """Return the learnable initial weight that starts a fresh traversal.
+
+        The returned tensor is the registered parameter itself, so a loss that
+        backpropagates through the first recurrent update still reaches it.
+        """
+        return self.initial_weight
 
     def _create_layers(self):
 
@@ -76,7 +92,8 @@ class EvolveGCNH(torch.nn.Module):
         X: torch.FloatTensor,
         edge_index: torch.LongTensor,
         edge_weight: torch.FloatTensor = None,
-    ) -> torch.FloatTensor:
+        previous_weight: torch.FloatTensor = None,
+    ):
         """
         Making a forward pass.
 
@@ -84,20 +101,27 @@ class EvolveGCNH(torch.nn.Module):
             * **X** *(PyTorch Float Tensor)* - Node embedding.
             * **edge_index** *(PyTorch Long Tensor)* - Graph edge indices.
             * **edge_weight** *(PyTorch Float Tensor, optional)* - Edge weight vector.
+            * **previous_weight** *(PyTorch Float Tensor, optional)* - Weight state
+              returned by the preceding snapshot, or :obj:`None` to start a
+              traversal from :attr:`initial_weight`.
 
         Return types:
             * **X** *(PyTorch Float Tensor)* - Output matrix for all nodes.
+            * **weight** *(PyTorch Float Tensor)* - Weight state for the next snapshot.
         """
         X_tilde = self.pooling_layer(X, edge_index)
 
         X_tilde = X_tilde[0][None, :, :]
 
-        if self.weight is None:
-            self.weight = self.initial_weight.data
-        W = self.weight[None, :, :]
+        if previous_weight is None:
+            W = self.initial_weight
+        else:
+            W = previous_weight
+        W = W[None, :, :]
 
         X_tilde = X_tilde[:, :W.shape[1], :]
-        
+
         X_tilde, W = self.recurrent_layer(X_tilde, W)
-        X = self.conv_layer(W.squeeze(dim=0), X, edge_index, edge_weight)
-        return X
+        W = W.squeeze(dim=0)
+        X = self.conv_layer(W, X, edge_index, edge_weight)
+        return X, W

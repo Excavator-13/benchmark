@@ -35,8 +35,8 @@ We benchmark a range of models on this dataset, evaluating their performance in 
 Step 1: Create a python 3.8 environment and install dependencies:
 
 ```
-conda create -n python3.8 Job-SDF
-source activate Job-SDF
+conda create -n Job-SDF python=3.8
+conda activate Job-SDF
 ```
 
 Step 2: Install library
@@ -61,15 +61,15 @@ We store the processed files in the **'./dataset'** directory.
 The file information in each directory is as follows:
 
 ```
-./demand    These are presented in tabular files, where each row represents a specific skill, and each column corresponds to a different time slice (month). Each cell within the table contains a numerical value that reflects the demand for the respective skill during that month.
+./demand    These are presented in tabular files, where each row represents a specific skill, and each column corresponds to a different time slice (month). Each cell within the table contains a numerical value that reflects the demand for the respective skill during that month. This directory backs the public `count` mode.
 
 ./entity_map    The specific name index tables of L1 occupations, L2 occupations, regions, and skills are stored here. In order to protect privacy information, we have hidden this part of the data. If you need it, you can contact the first author's email (chenxi0401@mail.ustc.edu.cn).
 
-./proportion    This component is also formatted in tabular files similar to the skill demand sequences. However, each cell in these tables displays a value between 0 and 1, representing the proportion of demand.
+./proportion    This component is also formatted in tabular files similar to the skill demand sequences. However, each cell in these tables displays a value between 0 and 1, representing the proportion of demand. This directory backs the public `rate` mode.
 
 ./structural_breaks_index     In the provided dataset, data concerning skills that have experienced structural breaks are organized in JSON format. Each granularity level is represented by a separate JSON file, which contains a list of indexes. These indexes correspond to the skills that have undergone structural breaks and can be directly mapped to the skill indexes in the skill demand sequences. The purpose of supplying this data is to facilitate research on the demand trends of skills that have exhibited structural breaks, enabling a detailed analysis of their demand dynamics over time.
 
-./graph   This data is provided as a set of triples (skill ID\_1, skill ID\_2, frequency of co-occurrence), forming a collection that outlines the co-occurrence relationships between skills. Each triple indicates how frequently two skills are mentioned or required together within the job advertisements in the training data, serving as a prior knowledge graph to enhance predictive modeling by capturing relationships between skills.
+./graph   Co-occurrence rows in Parquet format, one file per granularity. Each file carries the granularity's context identifier column(s) — for example `r0_id` for `r0`, `r1_id` plus `region_id` for `r1-region` — followed by `row_id` and `col_id`. There is **no** frequency or weight column in the shipped files. A graph endpoint is the ordered tuple of all context identifiers followed by the skill identifier, so the same skill pair under two different contexts is two different graph nodes; the number of identical fully qualified `(row_id, col_id)` rows under the same context is the only multiplicity the data provides.
 ```
 
 ## 4. How to Run
@@ -95,7 +95,7 @@ python run.py [-h] [--root_path {../../dataset/demand, ../../dataset/proportion}
 ### 4.3 Pre-DyGAE
 
 ```bash
-run data_process.ipynb
+run benchmark/predygae/data_process.ipynb
 cd benchmark/predygae
 sh scripts/stage1.sh {r0,r1,...}
 sh scripts/stage2.sh {r0,r1,...} 24 36
@@ -104,13 +104,51 @@ sh scripts/stage3.sh {r0,r1,...} 24 36
 
 ### 4.4 Graph-based time series forecasting
 
+Preparation. All preparation logic lives in `prepare_graph_data.py`, and every path is
+resolved relative to the repository, so these commands work from any directory:
+
 ```bash
-run data_process.ipynb
-cd benchmark/graph_method
-python main.py [-h] [--data_name {r0, r1,...}]
-      [--model {EvolveGCNH, EvolveGCNO}]
-      [--mode {count, rate,...}]
+conda activate Job-SDF
+python benchmark/graph_method/prepare_graph_data.py --help
+python benchmark/graph_method/prepare_graph_data.py --mode rate --data_name r0
 ```
+
+Passing no `--data_name`/`--mode` prepares all seven granularities
+(`r0`, `r1`, `r2`, `r1-region`, `r2-region`, `region`, `company`) in both modes.
+`count` reads `dataset/demand` and `rate` reads `dataset/proportion`; the generated,
+versioned artifacts are written to `benchmark/graph_method/data/<mode>/<granularity>.json`.
+`benchmark/graph_method/data_process.ipynb` is only a thin caller of the same CLI.
+
+Training and evaluation. One invocation runs the requested seed exactly once and writes
+its results under `results/<mode>/<data_name>/<model_name>/<seed>/`:
+
+```bash
+cd benchmark/graph_method
+python main.py [-h] [--data_name {r0, r1, ...}]
+      [--model_name {A3TGCN, DCRNN, DyGrEncoder, EvolveGCNH, EvolveGCNO,
+                     GCLSTM, GConvGRU, GConvLSTM, LRGCN, MPNNLSTM, TGCN}]
+      [--mode {count, rate}]
+      [--device cpu] [--seed 0] [--window_size 6] [--hidden_dim 32]
+      [--pred_length 3] [--num_epochs 500]
+```
+
+The documented default command is therefore:
+
+```bash
+python benchmark/graph_method/main.py --data_name r0 --mode rate --model_name EvolveGCNH
+```
+
+`--hidden_dim` applies only to the model families that consume it (A3TGCN, DCRNN,
+DyGrEncoder, GCLSTM, GConvGRU, GConvLSTM, LRGCN, MPNNLSTM and TGCN). EvolveGCNH and
+EvolveGCNO derive their square graph-convolution weight from `--window_size` and ignore
+`--hidden_dim`.
+
+Each run trains on the training split, selects the best checkpoint by validation loss
+only, and traverses the test split exactly once after restoring that checkpoint. The
+result directory contains `checkpoint.pt` (a versioned `model_state_dict` plus the
+configuration, seed and best validation loss), `pred_<t>.pt`, `gold_<t>.pt` and
+`metrics.json`. Checkpoints are not pickled model objects, and legacy `model.pt` files
+are intentionally not loadable: rerun the experiment to produce `checkpoint.pt`.
 
 ## 5 Directory Structure
 
@@ -119,6 +157,14 @@ The expected structure of files is:
 ```
 Job-SDF
  |-- benchmark
+ |    |-- graph_method
+ |    |    |-- prepare_graph_data.py  # preparation CLI for the graph datasets
+ |    |    |-- dataset.py             # validated weighted temporal graph loader
+ |    |    |-- main.py                # one seeded experiment per invocation
+ |    |    |-- data_process.ipynb     # thin caller of prepare_graph_data.py
+ |    |    |-- data/                  # generated artifacts (created on demand)
+ |    |    |-- results/               # checkpoints, predictions, metrics (created on demand)
+ |    |    |-- tests/                 # graph-method unit suite
  |-- dataset  # Job-SDF_data
  |    |-- demand
  |    |-- entity_map

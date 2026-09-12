@@ -1,2 +1,15 @@
 .DS_Store
 .vscode/
+.agents/
+openspec/
+.pip-cache/
+.venv-graph/
+.venv-pinned/
+.uv-cache/
+.uv-python/
+.uv-tools/
+benchmark/graph_method/data/
+benchmark/graph_method/results/
+__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
