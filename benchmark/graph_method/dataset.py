@@ -17,6 +17,8 @@ from typing import Any, List, Mapping, Optional, Sequence, Tuple
 import numpy as np
 from torch_geometric_temporal.signal import StaticGraphTemporalSignal
 
+from prepare_graph_data import CONTEXT_COLUMNS, GRANULARITIES, MODES
+
 SCHEMA_VERSION = 1
 
 MODULE_DIR = Path(__file__).resolve().parent
@@ -51,6 +53,8 @@ def dataset_path(data_name: str, mode: str, data_dir: Optional[Path] = None) -> 
 
 
 def _as_float(value: Any, label: str) -> float:
+    if isinstance(value, bool):
+        raise GraphDatasetError(f"{label} must be numeric, got {value!r}")
     try:
         as_float = float(value)
     except (TypeError, ValueError) as exc:
@@ -60,14 +64,23 @@ def _as_float(value: Any, label: str) -> float:
     return as_float
 
 
-def _as_index(value: Any, label: str, node_count: int) -> int:
+def _as_integer(value: Any, label: str) -> int:
+    """Return ``value`` as an integer, refusing booleans and float truncation."""
+    if isinstance(value, bool):
+        raise GraphDatasetError(f"{label} must be an integer, got {value!r}")
+    if isinstance(value, int):
+        return value
     try:
         as_float = float(value)
     except (TypeError, ValueError) as exc:
-        raise GraphDatasetError(f"{label} must be numeric, got {value!r}") from exc
+        raise GraphDatasetError(f"{label} must be an integer, got {value!r}") from exc
     if not math.isfinite(as_float) or as_float != int(as_float):
         raise GraphDatasetError(f"{label} must be a finite integer, got {value!r}")
-    index = int(as_float)
+    return int(as_float)
+
+
+def _as_index(value: Any, label: str, node_count: int) -> int:
+    index = _as_integer(value, label)
     if not 0 <= index < node_count:
         raise GraphDatasetError(
             f"{label} is {index}, outside the valid node range [0, {node_count})"
@@ -75,11 +88,50 @@ def _as_index(value: Any, label: str, node_count: int) -> int:
     return index
 
 
-def validate_payload(payload: Any, source: Optional[Path] = None) -> Mapping[str, Any]:
+def _validate_identity(
+    payload: Mapping[str, Any],
+    origin: str,
+    expected_data_name: Optional[str],
+    expected_mode: Optional[str],
+) -> str:
+    """Check the payload's own granularity/mode, and that they match the request."""
+    data_name = payload["data_name"]
+    mode = payload["mode"]
+    if not isinstance(data_name, str) or data_name not in GRANULARITIES:
+        raise GraphDatasetError(
+            f"'data_name'{origin} is {data_name!r}, expected one of {list(GRANULARITIES)}"
+        )
+    if not isinstance(mode, str) or mode not in MODES:
+        raise GraphDatasetError(
+            f"'mode'{origin} is {mode!r}, expected one of {list(MODES)}"
+        )
+    if expected_data_name is not None and data_name != expected_data_name:
+        raise GraphDatasetError(
+            f"generated dataset{origin} declares data_name={data_name!r} but "
+            f"{expected_data_name!r} was requested"
+        )
+    if expected_mode is not None and mode != expected_mode:
+        raise GraphDatasetError(
+            f"generated dataset{origin} declares mode={mode!r} but "
+            f"{expected_mode!r} was requested"
+        )
+    return data_name
+
+
+def validate_payload(
+    payload: Any,
+    source: Optional[Path] = None,
+    *,
+    expected_data_name: Optional[str] = None,
+    expected_mode: Optional[str] = None,
+) -> Mapping[str, Any]:
     """Validate a generated payload and return it unchanged.
 
-    Raises :class:`GraphDatasetError` on any structural, version, or integrity
-    problem so that training never starts from malformed data.
+    Raises :class:`GraphDatasetError` on any structural, version, identity, or
+    integrity problem so that training never starts from malformed or
+    mislabelled data.  ``expected_data_name``/``expected_mode`` are compared
+    against the values recorded inside the payload, so an artifact that was
+    copied to the wrong path or renamed cannot be loaded silently.
     """
     origin = f" in {source}" if source is not None else ""
 
@@ -97,6 +149,9 @@ def validate_payload(payload: Any, source: Optional[Path] = None) -> Mapping[str
     if missing:
         raise GraphDatasetError(f"generated dataset{origin} is missing field(s) {missing}")
 
+    data_name = _validate_identity(payload, origin, expected_data_name, expected_mode)
+    expected_arity = len(CONTEXT_COLUMNS[data_name]) + 1
+
     node_keys = payload["node_keys"]
     if not isinstance(node_keys, Sequence) or isinstance(node_keys, (str, bytes)):
         raise GraphDatasetError(f"'node_keys'{origin} must be a list")
@@ -106,7 +161,15 @@ def validate_payload(payload: Any, source: Optional[Path] = None) -> Mapping[str
     for position, key in enumerate(node_keys):
         if not isinstance(key, Sequence) or isinstance(key, (str, bytes)) or len(key) == 0:
             raise GraphDatasetError(f"'node_keys[{position}]'{origin} must be a non-empty list")
-        canonical = tuple(int(_as_float(part, f"'node_keys[{position}]'{origin}")) for part in key)
+        if len(key) != expected_arity:
+            raise GraphDatasetError(
+                f"'node_keys[{position}]'{origin} has {len(key)} components, expected "
+                f"{expected_arity} for {data_name} (its context identifiers plus the "
+                f"skill identifier)"
+            )
+        canonical = tuple(
+            _as_integer(part, f"'node_keys[{position}]'{origin}") for part in key
+        )
         if canonical in seen:
             raise GraphDatasetError(
                 f"generated dataset{origin} contains duplicate node key {list(canonical)}"
@@ -147,7 +210,12 @@ def validate_payload(payload: Any, source: Optional[Path] = None) -> Mapping[str
         _as_index(edge[0], f"'edges[{edge_index}][0]'{origin}", node_count)
         _as_index(edge[1], f"'edges[{edge_index}][1]'{origin}", node_count)
     for weight_index, weight in enumerate(weights):
-        _as_float(weight, f"'edge_weights[{weight_index}]'{origin}")
+        value = _as_float(weight, f"'edge_weights[{weight_index}]'{origin}")
+        if value <= 0:
+            raise GraphDatasetError(
+                f"'edge_weights[{weight_index}]'{origin} is {value!r}; schema version "
+                f"{SCHEMA_VERSION} weights are positive fully qualified source-row multiplicities"
+            )
 
     return payload
 
@@ -161,7 +229,12 @@ def load_payload(data_name: str, mode: str, data_dir: Optional[Path] = None) -> 
         )
     with path.open("r", encoding="utf-8") as handle:
         payload = json.load(handle)
-    return validate_payload(payload, source=path)
+    return validate_payload(
+        payload,
+        source=path,
+        expected_data_name=data_name,
+        expected_mode=mode,
+    )
 
 
 def _require_positive_length(value: Any, label: str) -> int:
@@ -172,22 +245,15 @@ def _require_positive_length(value: Any, label: str) -> int:
     return value
 
 
-def build_snapshots(
-    payload: Mapping[str, Any],
+def _build_snapshots(
+    features: Sequence[Sequence[float]],
     lags: int,
     pred_length: int,
 ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
-    """Slice a payload into ``[nodes, lags]`` inputs and ``[nodes, pred_length]`` targets.
-
-    For time index ``t`` the input window is ``features[t : t + lags]`` and the
-    target window is ``features[t + lags : t + lags + pred_length]``, each
-    transposed to be node-major.  A dataset with ``T`` observations therefore
-    yields ``T - lags - pred_length + 1`` snapshots.
-    """
+    """Slice validated features into node-major input and target windows."""
     lags = _require_positive_length(lags, "lags")
     pred_length = _require_positive_length(pred_length, "pred_length")
 
-    features = validate_payload(payload)["features"]
     observations = len(features)
     if lags + pred_length > observations:
         raise GraphDatasetError(
@@ -207,9 +273,23 @@ def build_snapshots(
     return inputs, targets
 
 
-def static_graph(payload: Mapping[str, Any]) -> Tuple[np.ndarray, np.ndarray]:
-    """Return the ``[2, E]`` edge index and ``[E]`` weight arrays for a payload."""
-    validate_payload(payload)
+def build_snapshots(
+    payload: Mapping[str, Any],
+    lags: int,
+    pred_length: int,
+) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+    """Slice a payload into ``[nodes, lags]`` inputs and ``[nodes, pred_length]`` targets.
+
+    For time index ``t`` the input window is ``features[t : t + lags]`` and the
+    target window is ``features[t + lags : t + lags + pred_length]``, each
+    transposed to be node-major.  A dataset with ``T`` observations therefore
+    yields ``T - lags - pred_length + 1`` snapshots.
+    """
+    features = validate_payload(payload)["features"]
+    return _build_snapshots(features, lags, pred_length)
+
+
+def _static_graph(payload: Mapping[str, Any]) -> Tuple[np.ndarray, np.ndarray]:
     edges = payload["edges"]
     if len(edges):
         edge_index = np.asarray(edges, dtype=np.int64).T
@@ -217,6 +297,12 @@ def static_graph(payload: Mapping[str, Any]) -> Tuple[np.ndarray, np.ndarray]:
         edge_index = np.zeros((2, 0), dtype=np.int64)
     edge_weight = np.asarray(payload["edge_weights"], dtype=np.float32)
     return edge_index, edge_weight
+
+
+def static_graph(payload: Mapping[str, Any]) -> Tuple[np.ndarray, np.ndarray]:
+    """Return the ``[2, E]`` edge index and ``[E]`` weight arrays for a payload."""
+    validate_payload(payload)
+    return _static_graph(payload)
 
 
 class DatasetLoader:
@@ -230,6 +316,6 @@ class DatasetLoader:
     def get_dataset(self, lags: int = 6, pred_length: int = 3) -> StaticGraphTemporalSignal:
         """Build the static weighted temporal signal for ``lags``/``pred_length``."""
         payload = load_payload(self.data_name, self.mode, data_dir=self.data_dir)
-        inputs, targets = build_snapshots(payload, lags=lags, pred_length=pred_length)
-        edge_index, edge_weight = static_graph(payload)
+        inputs, targets = _build_snapshots(payload["features"], lags=lags, pred_length=pred_length)
+        edge_index, edge_weight = _static_graph(payload)
         return StaticGraphTemporalSignal(edge_index, edge_weight, inputs, targets)

@@ -7,6 +7,8 @@ import io
 import json
 import os
 import random
+import re
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -579,6 +581,70 @@ class SelectionTests(unittest.TestCase):
             self.assertFalse((directory / main.LEGACY_CHECKPOINT_FILENAME).exists())
 
 
+class ResultDirectoryTests(unittest.TestCase):
+    """Task 3.3: a rerun in the same seed directory must not keep stale predictions."""
+
+    @staticmethod
+    def _splits(snapshot_count=12):
+        signal = synthetic_signal(snapshot_count=snapshot_count)
+        return temporal_signal_split(signal, 0.5, 0.25)
+
+    def test_rerun_removes_predictions_left_by_a_longer_previous_run(self):
+        train, evaluation, test = self._splits()
+        with tempfile.TemporaryDirectory() as tmp:
+            results = Path(tmp)
+            directory = main.result_dir(small_config(), results_dir=results)
+            directory.mkdir(parents=True)
+            for index in range(test.snapshot_count + 2):
+                for kind in ("pred", "gold"):
+                    torch.save(torch.zeros(NUM_NODES, PRED), directory / f"{kind}_{index}.pt")
+            # Files the cleanup must never touch.
+            (directory / "notes.txt").write_text("keep me", encoding="utf-8")
+            (directory / "pred_extra.pt").write_text("keep me", encoding="utf-8")
+
+            with quiet_progress():
+                train_experiment(
+                    small_config(num_epochs=1), train, evaluation, test, results_dir=results
+                )
+
+            present = {path.name for path in directory.iterdir()}
+            stored_metrics = json.loads(
+                (directory / main.METRICS_FILENAME).read_text(encoding="utf-8")
+            )
+
+        self.assertGreater(test.snapshot_count, 0)
+        for index in range(test.snapshot_count):
+            self.assertIn(f"pred_{index}.pt", present)
+            self.assertIn(f"gold_{index}.pt", present)
+        for index in range(test.snapshot_count, test.snapshot_count + 2):
+            self.assertNotIn(f"pred_{index}.pt", present)
+            self.assertNotIn(f"gold_{index}.pt", present)
+        self.assertIn("notes.txt", present)
+        self.assertIn("pred_extra.pt", present)
+        stored_predictions = sorted(
+            name for name in present if re.match(r"^pred_\d+\.pt$", name)
+        )
+        self.assertEqual(len(stored_predictions), test.snapshot_count)
+        self.assertTrue(np.isfinite(stored_metrics["RMSE"]))
+
+    def test_clear_prediction_artifacts_matches_only_strict_names(self):
+        keep = ["pred_0.pt.bak", "pred_x.pt", "gold_.pt", "prediction_0.pt", "metrics.json"]
+        remove = ["pred_0.pt", "pred_12.pt", "gold_3.pt"]
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            for name in keep + remove:
+                (directory / name).write_text("x", encoding="utf-8")
+            removed = main.clear_prediction_artifacts(directory)
+            remaining = {path.name for path in directory.iterdir()}
+        self.assertEqual(sorted(path.name for path in removed), sorted(remove))
+        for name in keep:
+            self.assertIn(name, remaining)
+
+    def test_clear_prediction_artifacts_tolerates_a_missing_directory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertEqual(main.clear_prediction_artifacts(Path(tmp) / "absent"), [])
+
+
 class SeedTests(unittest.TestCase):
     """Task 3.4: one seeded run, reproducible on CPU."""
 
@@ -798,15 +864,26 @@ class DocumentationContractTests(unittest.TestCase):
     """Task 4.1: the documented graph workflow matches the implementation."""
 
     def setUp(self):
-        self.readme = (MODULE_DIR.parents[1] / "README.md").read_text(encoding="utf-8")
+        self.repository_root = MODULE_DIR.parents[1]
+        self.readme = (self.repository_root / "README.md").read_text(encoding="utf-8")
         start = self.readme.index("### 4.4")
         end = self.readme.index("\n## ", start)
         self.graph_section = self.readme[start:end]
 
+    def _bash_blocks(self):
+        """Every ``bash`` fenced block in the graph section, as command lists."""
+        blocks = re.findall(r"```bash\n(.*?)```", self.graph_section, flags=re.S)
+        return [
+            [line.strip() for line in block.splitlines() if line.strip()] for block in blocks
+        ]
+
+    def _documented_commands(self):
+        return [line for block in self._bash_blocks() for line in block]
+
     def test_readme_documents_the_real_options_and_environment(self):
         self.assertIn("--model_name", self.graph_section)
         self.assertIsNone(
-            __import__("re").search(r"(?<![\w-])--model(?![\w-])", self.graph_section),
+            re.search(r"(?<![\w-])--model(?![\w-])", self.graph_section),
             "the graph section must not document a bare --model option",
         )
         self.assertIn("prepare_graph_data.py", self.graph_section)
@@ -822,27 +899,75 @@ class DocumentationContractTests(unittest.TestCase):
         for token in ("row_id", "col_id", "context"):
             self.assertIn(token, self.readme)
 
-    def test_documented_help_commands_work_from_any_directory(self):
-        scripts = (
-            MODULE_DIR / "main.py",
-            MODULE_DIR / "prepare_graph_data.py",
-        )
-        for cwd in (MODULE_DIR.parents[1], Path(tempfile.gettempdir())):
-            for script in scripts:
-                with self.subTest(script=script.name, cwd=str(cwd)):
-                    completed = subprocess.run(
-                        [sys.executable, str(script), "--help"],
-                        cwd=str(cwd),
-                        capture_output=True,
-                        text=True,
-                    )
-                    self.assertEqual(completed.returncode, 0, completed.stderr)
+    def test_graph_section_never_changes_the_working_directory(self):
+        for line in self._documented_commands():
+            with self.subTest(command=line):
+                self.assertFalse(
+                    line.startswith("cd "),
+                    "the graph section must declare one working directory and keep it",
+                )
+        self.assertIn("repository root", self.graph_section)
 
-    def test_documented_default_invocation_parses(self):
-        config = main.parse_config(
-            ["--data_name", "r0", "--mode", "rate", "--model_name", "EvolveGCNH"]
-        )
-        self.assertEqual(config.architecture(NUM_NODES)["model_name"], "EvolveGCNH")
+    def test_every_documented_script_resolves_from_the_repository_root(self):
+        scripts = set()
+        for line in self._documented_commands():
+            match = re.match(r"python\s+(\S+)", line)
+            if match:
+                scripts.add(match.group(1))
+        self.assertIn("benchmark/graph_method/main.py", scripts)
+        self.assertIn("benchmark/graph_method/prepare_graph_data.py", scripts)
+        for script in scripts:
+            with self.subTest(script=script):
+                self.assertTrue(
+                    (self.repository_root / script).is_file(),
+                    f"{script} must exist relative to the repository root",
+                )
+
+    def test_documented_preparation_commands_run_verbatim_in_order(self):
+        """Run the README lines as written (relative script path, declared cwd)."""
+        commands = [
+            line
+            for line in self._documented_commands()
+            if line.startswith("python benchmark/graph_method/prepare_graph_data.py")
+        ]
+        self.assertTrue(commands, "the graph section must document the preparation CLI")
+        self.assertTrue(commands[0].endswith("--help"))
+        for line in commands:
+            with self.subTest(command=line):
+                # Only the interpreter is substituted; the documented script path
+                # and arguments are executed exactly as written, from the root.
+                completed = subprocess.run(
+                    [sys.executable, *shlex.split(line)[1:]],
+                    cwd=str(self.repository_root),
+                    capture_output=True,
+                    text=True,
+                )
+                self.assertEqual(completed.returncode, 0, completed.stderr)
+
+    def test_documented_training_command_resolves_and_parses(self):
+        documented = [
+            line
+            for line in self._documented_commands()
+            if line.startswith("python benchmark/graph_method/main.py --data_name r0")
+        ]
+        self.assertTrue(documented, "the graph section must document the default training command")
+        for line in documented:
+            parts = shlex.split(line)
+            # parts[0] is the interpreter; parts[1] the documented script path.
+            script_args = parts[1:]
+            argv = parts[2:]
+            with self.subTest(command=line):
+                completed = subprocess.run(
+                    [sys.executable, *script_args, "--help"],
+                    cwd=str(self.repository_root),
+                    capture_output=True,
+                    text=True,
+                )
+                self.assertEqual(completed.returncode, 0, completed.stderr)
+                config = main.parse_config(argv)
+                self.assertEqual(config.data_name, "r0")
+                self.assertEqual(config.mode, "rate")
+                self.assertEqual(config.model_name, "EvolveGCNH")
 
 
 class DeviceResolutionTests(unittest.TestCase):

@@ -104,8 +104,11 @@ sh scripts/stage3.sh {r0,r1,...} 24 36
 
 ### 4.4 Graph-based time series forecasting
 
-Preparation. All preparation logic lives in `prepare_graph_data.py`, and every path is
-resolved relative to the repository, so these commands work from any directory:
+Run every command in this section **from the repository root**; none of them changes the
+working directory. Repository data, generated data and results are resolved from the
+module location, not from the current directory.
+
+Preparation. All preparation logic lives in `prepare_graph_data.py`:
 
 ```bash
 conda activate Job-SDF
@@ -120,11 +123,10 @@ versioned artifacts are written to `benchmark/graph_method/data/<mode>/<granular
 `benchmark/graph_method/data_process.ipynb` is only a thin caller of the same CLI.
 
 Training and evaluation. One invocation runs the requested seed exactly once and writes
-its results under `results/<mode>/<data_name>/<model_name>/<seed>/`:
+its results under `benchmark/graph_method/results/<mode>/<data_name>/<model_name>/<seed>/`:
 
 ```bash
-cd benchmark/graph_method
-python main.py [-h] [--data_name {r0, r1, ...}]
+python benchmark/graph_method/main.py [-h] [--data_name {r0, r1, ...}]
       [--model_name {A3TGCN, DCRNN, DyGrEncoder, EvolveGCNH, EvolveGCNO,
                      GCLSTM, GConvGRU, GConvLSTM, LRGCN, MPNNLSTM, TGCN}]
       [--mode {count, rate}]
@@ -147,8 +149,10 @@ Each run trains on the training split, selects the best checkpoint by validation
 only, and traverses the test split exactly once after restoring that checkpoint. The
 result directory contains `checkpoint.pt` (a versioned `model_state_dict` plus the
 configuration, seed and best validation loss), `pred_<t>.pt`, `gold_<t>.pt` and
-`metrics.json`. Checkpoints are not pickled model objects, and legacy `model.pt` files
-are intentionally not loadable: rerun the experiment to produce `checkpoint.pt`.
+`metrics.json`; prediction files left by an earlier run in the same seed directory are
+removed before the new ones are written. Checkpoints are not pickled model objects, and
+legacy `model.pt` files are intentionally not loadable: rerun the experiment to produce
+`checkpoint.pt`.
 
 ## 5 Directory Structure
 

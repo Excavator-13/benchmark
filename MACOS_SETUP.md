@@ -23,7 +23,14 @@
 | torch_scatter / torch_sparse | 2.1.2 / 0.6.18 | 2.1.2 / 0.6.18 |
 | numpy / pandas / pyarrow | 2.5.3 / 3.0.5 / 25.0.1 | 1.22.4 / 1.3.5 / 14.0.1 |
 | 用途 | 日常跑测试、跑实验（装得最顺） | 验证 Python 3.8 + 锁定数据/图库版本 |
-| 测试结果 | 136 passed / 6 skipped（共 142） | 136 passed / 6 skipped（共 142） |
+| 单元套件（165 个测试） | 159 passed / 6 skipped | 159 passed / 6 skipped |
+| 真实数据集成测试（14 组合） | 2 passed / 0 skipped | 2 passed / 0 skipped |
+
+> 6 个 skip 全部是「本机没有 CUDA」的显式跳过（`CUDA is not available in this environment`），
+> 不是实现失败。真实数据的 14 组合集成测试默认整类 skip，必须用
+> `JOB_SDF_INTEGRATION=1` 显式运行才算验收；见第 4 节。
+> 分离的验收记录（命令、版本、通过/失败/跳过数量、耗时、smoke 产物、CUDA 跳过原因）见
+> `not_in_origin/graph_method_apply_acceptance.md`。
 
 要点：
 

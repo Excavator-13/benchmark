@@ -34,6 +34,14 @@ def payload(**overrides):
     return value
 
 
+def write_payload(directory, value, data_name="r0", mode="rate"):
+    """Write ``value`` to ``<directory>/<mode>/<data_name>.json``."""
+    destination = Path(directory) / mode / f"{data_name}.json"
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(json.dumps(value), encoding="utf-8")
+    return destination
+
+
 class SnapshotShapeTests(unittest.TestCase):
     def test_snapshot_count_and_shapes(self):
         inputs, targets = build_snapshots(payload(), lags=2, pred_length=1)
@@ -143,12 +151,135 @@ class IntegrityTests(unittest.TestCase):
             build_snapshots(broken, lags=2, pred_length=1)
 
 
+class MetadataTests(unittest.TestCase):
+    """Task 2.1: the payload's own granularity/mode must match the request."""
+
+    def test_requested_granularity_mismatch_is_rejected(self):
+        # A company payload dropped at the r0 path must not be accepted.
+        foreign = payload(data_name="company", mode="rate")
+        with tempfile.TemporaryDirectory() as tmp:
+            write_payload(tmp, foreign, data_name="r0", mode="rate")
+            loader = DatasetLoader("r0", "rate", data_dir=Path(tmp))
+            with self.assertRaises(GraphDatasetError) as caught:
+                loader.get_dataset(lags=2, pred_length=1)
+        message = str(caught.exception)
+        self.assertIn("'company'", message)
+        self.assertIn("'r0'", message)
+
+    def test_requested_mode_mismatch_is_rejected(self):
+        foreign = payload(data_name="r0", mode="count")
+        with tempfile.TemporaryDirectory() as tmp:
+            write_payload(tmp, foreign, data_name="r0", mode="rate")
+            loader = DatasetLoader("r0", "rate", data_dir=Path(tmp))
+            with self.assertRaises(GraphDatasetError) as caught:
+                loader.get_dataset(lags=2, pred_length=1)
+        message = str(caught.exception)
+        self.assertIn("'count'", message)
+        self.assertIn("'rate'", message)
+
+    def test_matching_metadata_is_accepted(self):
+        compound = payload(
+            data_name="r1-region",
+            mode="count",
+            node_keys=[[0, 0, 10], [0, 1, 10]],
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            write_payload(tmp, compound, data_name="r1-region", mode="count")
+            signal = DatasetLoader(
+                "r1-region", "count", data_dir=Path(tmp)
+            ).get_dataset(lags=2, pred_length=1)
+        self.assertEqual(signal.snapshot_count, 3)
+
+    def test_unknown_granularity_inside_payload_is_rejected(self):
+        with self.assertRaises(GraphDatasetError) as caught:
+            validate_payload(payload(data_name="r99"))
+        self.assertIn("r0", str(caught.exception))
+
+    def test_unknown_mode_inside_payload_is_rejected(self):
+        with self.assertRaises(GraphDatasetError) as caught:
+            validate_payload(payload(mode="frequency"))
+        self.assertIn("count", str(caught.exception))
+
+    def test_non_string_identity_is_rejected(self):
+        for bad in (0, None, ["r0"]):
+            with self.subTest(data_name=bad), self.assertRaises(GraphDatasetError):
+                validate_payload(payload(data_name=bad))
+
+    def test_programmatic_request_bypassing_cli_choices_still_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write_payload(tmp, payload(), data_name="r0", mode="rate")
+            # The r1/rate path does not exist, and the loader must say so rather
+            # than silently falling back to a payload with different metadata.
+            with self.assertRaises(FileNotFoundError):
+                dataset_module.load_payload("r1", "rate", data_dir=Path(tmp))
+            with self.assertRaises(GraphDatasetError):
+                validate_payload(
+                    payload(data_name="r0"), expected_data_name="r1", expected_mode="rate"
+                )
+
+
+class StrictnessTests(unittest.TestCase):
+    """Task 3.1: identifiers and edge weights are validated exactly."""
+
+    def test_fractional_node_identifier_is_rejected(self):
+        with self.assertRaises(GraphDatasetError) as caught:
+            validate_payload(payload(node_keys=[[0, 10], [0, 10.9]]))
+        self.assertIn("integer", str(caught.exception))
+
+    def test_nan_node_identifier_is_rejected(self):
+        with self.assertRaises(GraphDatasetError):
+            validate_payload(payload(node_keys=[[0, 10], [0, float("nan")]]))
+
+    def test_boolean_node_identifier_is_rejected(self):
+        with self.assertRaises(GraphDatasetError) as caught:
+            validate_payload(payload(node_keys=[[0, 10], [0, True]]))
+        self.assertIn("integer", str(caught.exception))
+
+    def test_integral_float_identifier_is_accepted(self):
+        validated = validate_payload(payload(node_keys=[[0, 10], [0, 11.0]]))
+        self.assertEqual(validated["node_keys"][1], [0, 11.0])
+
+    def test_wrong_key_arity_for_single_context_granularity_is_rejected(self):
+        with self.assertRaises(GraphDatasetError) as caught:
+            validate_payload(payload(node_keys=[[0, 1, 10], [0, 1, 11]]))
+        self.assertIn("components", str(caught.exception))
+
+    def test_wrong_key_arity_for_compound_granularity_is_rejected(self):
+        compound = payload(data_name="r1-region", mode="rate", node_keys=[[0, 10], [0, 11]])
+        with self.assertRaises(GraphDatasetError) as caught:
+            validate_payload(compound)
+        self.assertIn("components", str(caught.exception))
+
+    def test_compound_granularity_arity_is_accepted(self):
+        compound = payload(
+            data_name="r1-region",
+            mode="rate",
+            node_keys=[[0, 0, 10], [0, 1, 10]],
+        )
+        self.assertIs(validate_payload(compound), compound)
+
+    def test_zero_edge_weight_is_rejected(self):
+        with self.assertRaises(GraphDatasetError) as caught:
+            validate_payload(payload(edge_weights=[0.0, 1.0]))
+        self.assertIn("positive", str(caught.exception))
+
+    def test_negative_edge_weight_is_rejected(self):
+        with self.assertRaises(GraphDatasetError) as caught:
+            validate_payload(payload(edge_weights=[-4.0, 1.0]))
+        self.assertIn("positive", str(caught.exception))
+
+    def test_boolean_edge_weight_is_rejected(self):
+        with self.assertRaises(GraphDatasetError):
+            validate_payload(payload(edge_weights=[True, 1.0]))
+
+    def test_fractional_edge_index_is_rejected(self):
+        with self.assertRaises(GraphDatasetError):
+            validate_payload(payload(edges=[[0, 1.5]], edge_weights=[1.0]))
+
+
 class LoaderTests(unittest.TestCase):
     def write(self, directory, value, data_name="r0", mode="rate"):
-        destination = Path(directory) / mode / f"{data_name}.json"
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(json.dumps(value), encoding="utf-8")
-        return destination
+        return write_payload(directory, value, data_name=data_name, mode=mode)
 
     def test_missing_artifact_reports_regeneration_hint(self):
         with tempfile.TemporaryDirectory() as tmp:

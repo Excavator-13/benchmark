@@ -16,6 +16,7 @@ import argparse
 import json
 import math
 import random
+import re
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -715,6 +716,29 @@ def result_dir(config: ExperimentConfig, results_dir: Optional[Path] = None) -> 
     return base / config.mode / config.data_name / config.model_name / str(config.seed)
 
 
+#: Prediction artifacts written by a run; nothing else in a result directory matches.
+_PREDICTION_ARTIFACT_PATTERN = re.compile(r"^(?:pred|gold)_(\d+)\.pt$")
+
+
+def clear_prediction_artifacts(directory: Path) -> List[Path]:
+    """Delete ``pred_<n>.pt``/``gold_<n>.pt`` left behind by an earlier run.
+
+    The result directory is keyed by mode/granularity/model/seed only, so a rerun
+    with a different window or forecast horizon would otherwise leave the previous
+    run's higher-index predictions next to the new ones.  Only strict
+    ``pred_<int>.pt``/``gold_<int>.pt`` names directly inside ``directory`` match.
+    """
+    directory = Path(directory)
+    removed: List[Path] = []
+    if not directory.is_dir():
+        return removed
+    for entry in sorted(directory.iterdir()):
+        if entry.is_file() and _PREDICTION_ARTIFACT_PATTERN.match(entry.name):
+            entry.unlink()
+            removed.append(entry)
+    return removed
+
+
 def _first_snapshot(iterator: Any) -> Any:
     try:
         return iterator[0]
@@ -779,6 +803,9 @@ def train_experiment(
     test_result = run_split(model, test_split, device, collect_predictions=True)
     metrics = regression_metrics(test_result.predictions, test_result.golds)
 
+    # Drop any prediction artifacts from a previous run in this directory so the
+    # stored set always matches the metrics written below.
+    clear_prediction_artifacts(directory)
     for time_index, (prediction, gold) in enumerate(
         zip(test_result.predictions, test_result.golds)
     ):
