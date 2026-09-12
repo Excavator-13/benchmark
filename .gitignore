@@ -3,6 +3,7 @@
 .agents/
 openspec/
 .pip-cache/
+.pytest_cache/
 .venv-graph/
 .venv-pinned/
 .uv-cache/

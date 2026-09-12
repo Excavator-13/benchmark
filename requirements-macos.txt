@@ -1,0 +1,61 @@
+# Apple Silicon macOS 上实测可用的一组依赖（环境 A：Python 3.12/3.13 + torch 2.7）。
+#
+# 本文件不是项目的正式依赖声明——项目锁定依赖仍是 requirements.txt。
+# 完整说明、踩坑记录、测试命令与删除方法见 MACOS_SETUP.md。
+#
+# 用法：
+#   export PIP_CACHE_DIR="$PWD/.pip-cache"          # 本机 ~/Library/Caches/pip 不可写
+#   python -m venv .venv-graph
+#   .venv-graph/bin/python -m pip install --upgrade pip setuptools wheel
+#   .venv-graph/bin/python -m pip install -r requirements-macos.txt
+#   .venv-graph/bin/python -m pip install "decorator==4.4.2"
+#   .venv-graph/bin/python -m pip install --no-deps "torch_geometric_temporal==0.54.0"
+#
+# 为什么最后两步要单独装：
+#   torch_geometric_temporal==0.54.0 的元数据声明 pandas<=1.3.5 / cython / torch-sparse，
+#   一旦参与依赖解析，pip 会在 Python 3.13 上尝试构建老 pandas 并失败。
+#   所以它被故意注释在文件末尾，必须先用 --no-deps 单独安装。
+#
+# 为什么必须有 --find-links：
+#   torch_scatter / torch_sparse 没有 PyPI wheel，需要 data.pyg.org 上与 torch 版本匹配的
+#   macOS 预编译 wheel（universal2 含 arm64）。torch 1.13.1（requirements.txt 的锁定版本）
+#   在 arm64 macOS 上没有可用的扩展 wheel，也无法用当前 Xcode 工具链源码编译，
+#   因此这里使用 torch 2.7.0。
+#
+# 为什么 PyG 固定 2.4.0：
+#   tgt 0.54.0 仍从 torch_geometric.utils.to_dense_adj 子模块路径导入，
+#   PyG 2.8 已移除该路径，升级后会 ModuleNotFoundError。
+
+--find-links https://data.pyg.org/whl/torch-2.7.0+cpu.html
+
+numpy==2.5.3
+pandas==3.0.5
+pyarrow==25.0.1
+pytest==9.1.1
+
+torch==2.7.0
+torch_scatter==2.1.2
+torch_sparse==0.6.18
+torch_geometric==2.4.0
+
+# 环境 A 的剩余两项（见上方用法，需单独安装）：
+# decorator==4.4.2
+# torch_geometric_temporal==0.54.0
+
+# ---------------------------------------------------------------------------
+# 环境 B（最接近 requirements.txt 的版本，需 Python 3.8；用 uv 安装，见 MACOS_SETUP.md）
+# 唯一偏离锁定值的是 torch 构建方式：2.3.0 CPU 取代 1.13.1+cu117（CUDA 在 Apple Silicon 上不存在），
+# 因为 2.3.0 是最后一个支持 Python 3.8 的版本、且 data.pyg.org 为它提供了 cp38 universal2 wheel。
+#
+# --find-links https://data.pyg.org/whl/torch-2.3.0+cpu.html
+#
+# numpy==1.22.4
+# pandas==1.3.5
+# pyarrow==14.0.1
+# torch==2.3.0
+# torch_scatter==2.1.2
+# torch_sparse==0.6.18
+# torch_geometric==2.4.0
+# decorator==4.4.2
+# torch_geometric_temporal==0.54.0
+# ---------------------------------------------------------------------------
