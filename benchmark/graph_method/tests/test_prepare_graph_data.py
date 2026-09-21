@@ -138,12 +138,15 @@ class PathResolutionTests(unittest.TestCase):
 
     def test_paths_do_not_depend_on_working_directory(self):
         original = os.getcwd()
-        self.addCleanup(os.chdir, original)
         expected = prep.output_path("r0", "rate")
         with tempfile.TemporaryDirectory() as tmp:
-            os.chdir(tmp)
-            self.assertEqual(prep.output_path("r0", "rate"), expected)
-            self.assertEqual(prep.source_paths("r0", "rate")[0], prep.DATASET_DIR / "proportion" / "r0.parquet")
+            try:
+                os.chdir(tmp)
+                self.assertEqual(prep.output_path("r0", "rate"), expected)
+                self.assertEqual(prep.source_paths("r0", "rate")[0], prep.DATASET_DIR / "proportion" / "r0.parquet")
+            finally:
+                # Windows cannot delete a process's current directory.
+                os.chdir(original)
 
     def test_context_columns_cover_every_granularity(self):
         self.assertEqual(prep.CONTEXT_COLUMNS["r1-region"], ("r1_id", "region_id"))

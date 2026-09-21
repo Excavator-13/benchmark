@@ -1,0 +1,88 @@
+{
+  "original/cpu": {
+    "maximum_score": 1.0,
+    "tied_maxima": 57,
+    "selected_nodes": [
+      10,
+      1432,
+      934,
+      286,
+      631,
+      196,
+      787
+    ],
+    "stable_selected_nodes": [
+      10,
+      49,
+      80,
+      110,
+      133,
+      143
+    ]
+  },
+  "original/cuda:0": {
+    "maximum_score": 1.0,
+    "tied_maxima": 57,
+    "selected_nodes": [
+      10,
+      49,
+      80,
+      110,
+      133,
+      143,
+      196
+    ],
+    "stable_selected_nodes": [
+      10,
+      49,
+      80,
+      110,
+      133,
+      143
+    ]
+  },
+  "original_max_difference": 33644.73828125,
+  "stable/cpu": {
+    "maximum_score": 1.0,
+    "tied_maxima": 57,
+    "selected_nodes": [
+      10,
+      1432,
+      934,
+      286,
+      631,
+      196,
+      787
+    ],
+    "stable_selected_nodes": [
+      10,
+      49,
+      80,
+      110,
+      133,
+      143
+    ]
+  },
+  "stable/cuda:0": {
+    "maximum_score": 1.0,
+    "tied_maxima": 57,
+    "selected_nodes": [
+      10,
+      49,
+      80,
+      110,
+      133,
+      143,
+      196
+    ],
+    "stable_selected_nodes": [
+      10,
+      49,
+      80,
+      110,
+      133,
+      143
+    ]
+  },
+  "stable_max_difference": 0.025390625
+}

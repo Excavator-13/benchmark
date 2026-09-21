@@ -9,6 +9,20 @@ Define trustworthy and repeatable graph forecasting runs whose selection, final 
 ### Requirement: Chronological splits have distinct responsibilities
 The experiment SHALL split temporal snapshots chronologically into non-empty training, validation, and test partitions. It SHALL optimize parameters only on training data, select the best checkpoint only by validation loss, and evaluate the selected checkpoint on test data only after training and selection are complete.
 
+Target observation periods SHALL be disjoint across partitions. For unit-stride
+windows with forecast length H, the split SHALL omit H-1 windows at each boundary.
+It SHALL preserve the nominal test period and validation count by deducting both
+gaps from training. All training labels SHALL be available at the first validation
+forecast origin, and all validation labels at the first test forecast origin.
+
+#### Scenario: Multi-step targets cross nominal snapshot boundaries
+- **WHEN** 36 observations yield 28 windows with input length 6 and forecast length 3 under ratios 0.83/0.04
+- **THEN** the split retains 19 training, 1 validation and 4 test windows, omits 4 boundary windows, and no target observation occurs in more than one partition
+
+#### Scenario: Boundary gaps exhaust training history
+- **WHEN** the necessary gaps leave no training windows
+- **THEN** the split fails before training and explains that more history, different ratios or a shorter forecast horizon is needed
+
 #### Scenario: Validation improvement saves a checkpoint
 - **WHEN** an epoch produces a validation loss lower than all preceding epochs
 - **THEN** the experiment updates the best checkpoint using that validation result without consulting test targets
@@ -45,6 +59,20 @@ Each invocation SHALL execute the single integer seed supplied by the user, SHAL
 
 ### Requirement: Checkpoints are reconstructable and device-portable
 The experiment SHALL save a checkpoint payload containing model parameters and the configuration required to reconstruct the model, rather than serializing the entire model object. Loading SHALL reconstruct the model, apply parameters through the state dictionary, and map tensors to the requested device.
+
+Checkpoint format 2 SHALL encode best validation loss as a finite scalar tensor
+compatible with the PyTorch 1.13.1 weights-only loader. Saving checkpoint and
+prediction tensors SHALL support Unicode filesystem paths. Loading SHALL reject
+older checkpoint formats with a rerun instruction and SHALL NOT fall back to
+unrestricted pickle loading.
+
+#### Scenario: Save and restore under a Windows Unicode path
+- **WHEN** a run writes checkpoints, predictions and targets to a directory containing Chinese characters
+- **THEN** all files can be saved and loaded, and recomputed metrics match the recorded metrics
+
+#### Scenario: Load an old floating-point metadata checkpoint
+- **WHEN** a user loads a format-1 checkpoint, including on PyTorch 1.13.1
+- **THEN** the loader gives an actionable rerun error instead of proceeding with a legacy checkpoint or exposing an uncaught unpickling error
 
 #### Scenario: Restore on a different device class
 - **WHEN** a checkpoint created on one supported device class is loaded for evaluation on another supported device class

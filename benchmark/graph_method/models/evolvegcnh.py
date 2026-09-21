@@ -87,6 +87,21 @@ class EvolveGCNH(torch.nn.Module):
             add_self_loops=self.add_self_loops
         )
 
+    def _summarize(self, X: torch.Tensor) -> torch.Tensor:
+        """Select exactly in_channels nodes, breaking equal scores by node order.
+
+        Count inputs often saturate tanh at 1. PyG's unstable TopK sort then
+        chooses different tied nodes on CPU and CUDA. Keep its learnable
+        projection and score weighting, but use stable sorting for this single
+        graph. Only pooled features are needed by the GRU, not pooled edges.
+        """
+        if X.shape[0] < self.in_channels:
+            raise ValueError("EvolveGCNH needs at least in_channels nodes for its weight summary")
+        select = self.pooling_layer.select
+        score = select.act((X * select.weight).sum(dim=-1) / select.weight.norm(p=2, dim=-1))
+        indices = torch.argsort(score, descending=True, stable=True)[:self.in_channels]
+        return X[indices] * score[indices, None]
+
     def forward(
         self,
         X: torch.FloatTensor,
@@ -109,17 +124,13 @@ class EvolveGCNH(torch.nn.Module):
             * **X** *(PyTorch Float Tensor)* - Output matrix for all nodes.
             * **weight** *(PyTorch Float Tensor)* - Weight state for the next snapshot.
         """
-        X_tilde = self.pooling_layer(X, edge_index)
-
-        X_tilde = X_tilde[0][None, :, :]
+        X_tilde = self._summarize(X)[None, :, :]
 
         if previous_weight is None:
             W = self.initial_weight
         else:
             W = previous_weight
         W = W[None, :, :]
-
-        X_tilde = X_tilde[:, :W.shape[1], :]
 
         X_tilde, W = self.recurrent_layer(X_tilde, W)
         W = W.squeeze(dim=0)

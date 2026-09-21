@@ -1,0 +1,4 @@
+✓ spec/evolvegcn-h-recurrence
+✓ spec/graph-forecast-data-pipeline
+✓ spec/graph-forecast-experiments
+Totals: 3 passed, 0 failed (3 items)

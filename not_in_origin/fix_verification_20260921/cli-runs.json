@@ -1,0 +1,187 @@
+[
+  {
+    "label": "final-rate-cpu-a",
+    "mode": "rate",
+    "device": "cpu",
+    "seed": 202609221,
+    "epochs": 3,
+    "command": [
+      "D:\\conda-envs\\JOBSDF\\python.exe",
+      "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\benchmark\\graph_method\\main.py",
+      "--data_name",
+      "r0",
+      "--mode",
+      "rate",
+      "--model_name",
+      "EvolveGCNH",
+      "--device",
+      "cpu",
+      "--seed",
+      "202609221",
+      "--num_epochs",
+      "3"
+    ],
+    "metrics": {
+      "RMSE": 0.2462078617078734,
+      "MAE": 0.20178376883268356
+    },
+    "validation_loss": 0.060837674885988235,
+    "split_sizes": [
+      19,
+      1,
+      4
+    ],
+    "checkpoint_format": 2,
+    "cross_device_max_absolute_difference": 2.9802322387695312e-08,
+    "wall_seconds_including_subprocess_startup": 5.404933300000001,
+    "results": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\not_in_origin\\fix_verification_20260921\\runs\\final-rate-cpu-a"
+  },
+  {
+    "label": "final-rate-cpu-b",
+    "mode": "rate",
+    "device": "cpu",
+    "seed": 202609221,
+    "epochs": 3,
+    "command": [
+      "D:\\conda-envs\\JOBSDF\\python.exe",
+      "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\benchmark\\graph_method\\main.py",
+      "--data_name",
+      "r0",
+      "--mode",
+      "rate",
+      "--model_name",
+      "EvolveGCNH",
+      "--device",
+      "cpu",
+      "--seed",
+      "202609221",
+      "--num_epochs",
+      "3"
+    ],
+    "metrics": {
+      "RMSE": 0.2462078617078734,
+      "MAE": 0.20178376883268356
+    },
+    "validation_loss": 0.060837674885988235,
+    "split_sizes": [
+      19,
+      1,
+      4
+    ],
+    "checkpoint_format": 2,
+    "cross_device_max_absolute_difference": 2.9802322387695312e-08,
+    "wall_seconds_including_subprocess_startup": 3.7015914,
+    "results": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\not_in_origin\\fix_verification_20260921\\runs\\final-rate-cpu-b"
+  },
+  {
+    "label": "final-count-cpu",
+    "mode": "count",
+    "device": "cpu",
+    "seed": 202609221,
+    "epochs": 3,
+    "command": [
+      "D:\\conda-envs\\JOBSDF\\python.exe",
+      "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\benchmark\\graph_method\\main.py",
+      "--data_name",
+      "r0",
+      "--mode",
+      "count",
+      "--model_name",
+      "EvolveGCNH",
+      "--device",
+      "cpu",
+      "--seed",
+      "202609221",
+      "--num_epochs",
+      "3"
+    ],
+    "metrics": {
+      "RMSE": 8684.269485685023,
+      "MAE": 1889.0896911621094
+    },
+    "validation_loss": 142287168.0,
+    "split_sizes": [
+      19,
+      1,
+      4
+    ],
+    "checkpoint_format": 2,
+    "cross_device_max_absolute_difference": 0.42578125,
+    "wall_seconds_including_subprocess_startup": 3.8465968000000004,
+    "results": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\not_in_origin\\fix_verification_20260921\\runs\\final-count-cpu"
+  },
+  {
+    "label": "final-rate-cuda",
+    "mode": "rate",
+    "device": "cuda:0",
+    "seed": 202609222,
+    "epochs": 3,
+    "command": [
+      "D:\\conda-envs\\JOBSDF\\python.exe",
+      "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\benchmark\\graph_method\\main.py",
+      "--data_name",
+      "r0",
+      "--mode",
+      "rate",
+      "--model_name",
+      "EvolveGCNH",
+      "--device",
+      "cuda:0",
+      "--seed",
+      "202609222",
+      "--num_epochs",
+      "3"
+    ],
+    "metrics": {
+      "RMSE": 0.19876134946495044,
+      "MAE": 0.18399085476994514
+    },
+    "validation_loss": 0.039527300745248795,
+    "split_sizes": [
+      19,
+      1,
+      4
+    ],
+    "checkpoint_format": 2,
+    "cross_device_max_absolute_difference": 2.9802322387695312e-08,
+    "wall_seconds_including_subprocess_startup": 5.327967599999997,
+    "results": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\not_in_origin\\fix_verification_20260921\\runs\\final-rate-cuda"
+  },
+  {
+    "label": "final-count-cuda",
+    "mode": "count",
+    "device": "cuda:0",
+    "seed": 202609222,
+    "epochs": 3,
+    "command": [
+      "D:\\conda-envs\\JOBSDF\\python.exe",
+      "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\benchmark\\graph_method\\main.py",
+      "--data_name",
+      "r0",
+      "--mode",
+      "count",
+      "--model_name",
+      "EvolveGCNH",
+      "--device",
+      "cuda:0",
+      "--seed",
+      "202609222",
+      "--num_epochs",
+      "3"
+    ],
+    "metrics": {
+      "RMSE": 6575.87754600099,
+      "MAE": 1574.6993713378906
+    },
+    "validation_loss": 17189840.0,
+    "split_sizes": [
+      19,
+      1,
+      4
+    ],
+    "checkpoint_format": 2,
+    "cross_device_max_absolute_difference": 0.015625,
+    "wall_seconds_including_subprocess_startup": 5.020885099999997,
+    "results": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\not_in_origin\\fix_verification_20260921\\runs\\final-count-cuda"
+  }
+]

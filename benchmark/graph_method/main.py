@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import pickle
 import random
 import re
 import sys
@@ -55,7 +56,7 @@ _HIDDEN_AND_CELL_MODELS = ("GCLSTM", "GConvLSTM", "LRGCN")
 #: Models whose recurrent state the runner carries explicitly as ``H``.
 _HIDDEN_ONLY_MODELS = ("A3TGCN", "DCRNN", "GConvGRU", "TGCN")
 
-CHECKPOINT_FORMAT_VERSION = 1
+CHECKPOINT_FORMAT_VERSION = 2
 CHECKPOINT_FILENAME = "checkpoint.pt"
 LEGACY_CHECKPOINT_FILENAME = "model.pt"
 METRICS_FILENAME = "metrics.json"
@@ -302,8 +303,18 @@ def load_dataset(config: ExperimentConfig):
     return loader.get_dataset(lags=config.window_size, pred_length=config.pred_length)
 
 
-def split_sizes(snapshot_count: int, train_ratio: float, eval_ratio: float) -> Tuple[int, int, int]:
-    """Return chronological ``(train, validation, test)`` sizes or raise."""
+def split_sizes(
+    snapshot_count: int,
+    train_ratio: float,
+    eval_ratio: float,
+    pred_length: int = 1,
+) -> Tuple[int, int, int]:
+    """Return retained ``(train, validation, test)`` sizes after boundary gaps.
+
+    Ratios set the nominal counts. Reserve ``pred_length - 1`` omitted windows
+    at each boundary, charging both gaps to training so the test period and
+    validation count remain fixed. Counts exclude those omitted windows.
+    """
     if isinstance(snapshot_count, bool) or not isinstance(snapshot_count, int) or snapshot_count <= 0:
         raise SplitValidationError(f"snapshot_count must be a positive integer, got {snapshot_count!r}")
     if not 0.0 < train_ratio < 1.0:
@@ -314,15 +325,20 @@ def split_sizes(snapshot_count: int, train_ratio: float, eval_ratio: float) -> T
         raise SplitValidationError(
             f"train_ratio={train_ratio} plus eval_ratio={eval_ratio} must leave room for a test split"
         )
+    if isinstance(pred_length, bool) or not isinstance(pred_length, int) or pred_length <= 0:
+        raise SplitValidationError(f"pred_length must be a positive integer, got {pred_length!r}")
 
-    train_count = int(train_ratio * snapshot_count)
+    nominal_train_count = int(train_ratio * snapshot_count)
     eval_count = int(eval_ratio * snapshot_count)
-    test_count = snapshot_count - train_count - eval_count
+    test_count = snapshot_count - nominal_train_count - eval_count
+    gap = pred_length - 1
+    train_count = nominal_train_count - 2 * gap
     if min(train_count, eval_count, test_count) < 1:
         raise SplitValidationError(
             f"train_ratio={train_ratio} and eval_ratio={eval_ratio} over {snapshot_count} "
-            f"snapshots produce empty partitions (train={train_count}, validation={eval_count}, "
-            f"test={test_count}); adjust the ratios or provide more history"
+            f"snapshots produce empty partitions after reserving two gaps of {gap} "
+            f"windows for pred_length={pred_length} (train={train_count}, validation={eval_count}, "
+            f"test={test_count}); reduce pred_length, adjust the ratios or provide more history"
         )
     return train_count, eval_count, test_count
 
@@ -332,24 +348,38 @@ def temporal_signal_split(
     train_ratio: float = 0.83,
     eval_ratio: float = 0.04,
 ) -> Tuple[Any, Any, Any]:
-    r"""Split a weighted temporal signal into chronological partitions.
+    r"""Split unit-stride forecast windows without sharing target observations.
 
     Arg types:
         * **data_iterator** *(Signal Iterator)* - Weighted temporal snapshots exposing
           ``snapshot_count`` and slice indexing.
-        * **train_ratio** *(float)* - Fraction of leading snapshots reserved for training.
-        * **eval_ratio** *(float)* - Fraction of snapshots reserved for validation, taken
-          immediately after the training block.
+        * **train_ratio** *(float)* - Nominal fraction for training, before subtracting
+          both boundary gaps.
+        * **eval_ratio** *(float)* - Fraction of snapshots reserved for validation.
 
     Return types:
         * **(train_iterator, eval_iterator, test_iterator)** *(tuple of Signal Iterators)* -
-          Three disjoint, chronological partitions. Every partition is non-empty or a
+          Three chronological partitions with disjoint target periods. Infer the
+          forecast length from the first snapshot's ``y`` and omit that length minus
+          one windows between partitions. Preserve the nominal test period and
+          validation count by reducing training. Every partition is non-empty or a
           :class:`SplitValidationError` is raised before any training happens.
     """
-    train_count, eval_count, _ = split_sizes(data_iterator.snapshot_count, train_ratio, eval_ratio)
+    # Validate counts/ratios before indexing, including an empty signal.
+    split_sizes(data_iterator.snapshot_count, train_ratio, eval_ratio)
+    target = _first_snapshot(data_iterator).y
+    if target.ndim not in (1, 2):
+        raise SplitValidationError("snapshot targets must have shape [nodes] or [nodes, pred_length]")
+    pred_length = 1 if target.ndim == 1 else int(target.shape[1])
+    train_count, eval_count, _ = split_sizes(
+        data_iterator.snapshot_count, train_ratio, eval_ratio, pred_length
+    )
+    gap = pred_length - 1
+    eval_start = train_count + gap
+    test_start = eval_start + eval_count + gap
     train_iterator = data_iterator[0:train_count]
-    eval_iterator = data_iterator[train_count : train_count + eval_count]
-    test_iterator = data_iterator[train_count + eval_count :]
+    eval_iterator = data_iterator[eval_start : eval_start + eval_count]
+    test_iterator = data_iterator[test_start:]
     return train_iterator, eval_iterator, test_iterator
 
 
@@ -622,7 +652,9 @@ def checkpoint_payload(
         "model_state_dict": model.state_dict(),
         "config": config.architecture(num_nodes, node_features),
         "seed": int(config.seed),
-        "best_val_loss": float(best_val_loss),
+        # PyTorch 1.13's weights-only loader cannot decode Python float
+        # metadata (pickle BINFLOAT). A scalar tensor is portable and safe.
+        "best_val_loss": torch.tensor(best_val_loss, dtype=torch.float64),
     }
 
 
@@ -641,7 +673,9 @@ def save_checkpoint(
     payload = checkpoint_payload(
         model, config, num_nodes=num_nodes, node_features=node_features, best_val_loss=best_val_loss
     )
-    torch.save(payload, path)
+    # Python opens Unicode Windows paths correctly even on older PyTorch.
+    with path.open("wb") as handle:
+        torch.save(payload, handle)
     return path
 
 
@@ -663,7 +697,15 @@ def load_checkpoint(
             )
         raise CheckpointError(f"checkpoint {path} does not exist{extra}")
 
-    payload = torch.load(path, map_location=device, weights_only=True)
+    try:
+        with path.open("rb") as handle:
+            payload = torch.load(handle, map_location=device, weights_only=True)
+    except (pickle.UnpicklingError, EOFError, RuntimeError) as exc:
+        raise CheckpointError(
+            f"checkpoint {path} could not be loaded safely with PyTorch {torch.__version__}; "
+            f"legacy float-metadata checkpoints are incompatible with PyTorch 1.13. "
+            f"Rerun the experiment to produce format {CHECKPOINT_FORMAT_VERSION}: {exc}"
+        ) from exc
     if not isinstance(payload, Mapping):
         raise CheckpointError(f"checkpoint {path} is not a mapping payload")
     version = payload.get("format_version")
@@ -675,6 +717,9 @@ def load_checkpoint(
     for key in ("model_state_dict", "config", "seed", "best_val_loss"):
         if key not in payload:
             raise CheckpointError(f"checkpoint {path} is missing the {key!r} field")
+    loss = payload["best_val_loss"]
+    if not isinstance(loss, torch.Tensor) or loss.ndim != 0 or not torch.isfinite(loss):
+        raise CheckpointError(f"checkpoint {path} must contain a finite scalar tensor 'best_val_loss'")
 
     architecture = payload["config"]
     if not isinstance(architecture, Mapping):
@@ -809,8 +854,10 @@ def train_experiment(
     for time_index, (prediction, gold) in enumerate(
         zip(test_result.predictions, test_result.golds)
     ):
-        torch.save(prediction, directory / f"pred_{time_index}.pt")
-        torch.save(gold, directory / f"gold_{time_index}.pt")
+        with (directory / f"pred_{time_index}.pt").open("wb") as handle:
+            torch.save(prediction, handle)
+        with (directory / f"gold_{time_index}.pt").open("wb") as handle:
+            torch.save(gold, handle)
     with (directory / METRICS_FILENAME).open("w", encoding="utf-8") as handle:
         json.dump(metrics, handle)
 
