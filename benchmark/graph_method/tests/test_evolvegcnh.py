@@ -50,6 +50,36 @@ class RecordingGRU:
 class RecurrenceTests(unittest.TestCase):
     """Task 2.1: the weight evolves across snapshots."""
 
+    def test_saturated_scores_use_node_order_and_exact_summary_size(self):
+        layer = make_layer(num_of_nodes=2335, in_channels=6)
+        with torch.no_grad():
+            layer.pooling_layer.select.weight.fill_(1)
+        X = torch.arange(2335 * 6, dtype=torch.float32).view(2335, 6) + 100
+        # All scores are tanh(large positive value) == 1 despite distinct rows.
+        torch.testing.assert_close(layer._summarize(X), X[:6], rtol=0, atol=0)
+
+    def test_summary_matches_pyg_when_scores_are_distinct(self):
+        layer = make_layer()
+        X, edge, _ = make_batch()
+        torch.testing.assert_close(layer._summarize(X), layer.pooling_layer(X, edge)[0])
+
+    @unittest.skipUnless(CUDA_AVAILABLE, CUDA_REASON)
+    def test_tied_scores_produce_matching_cpu_cuda_summaries_and_recurrence(self):
+        cpu = make_layer()
+        gpu = make_layer().to("cuda")
+        with torch.no_grad():
+            cpu.pooling_layer.select.weight.fill_(1)
+        gpu.load_state_dict(cpu.state_dict())
+        X = torch.arange(64 * 4, dtype=torch.float32).view(64, 4) + 100
+        _, edge, weight = make_batch()
+        torch.testing.assert_close(cpu._summarize(X), gpu._summarize(X.cuda()).cpu(), rtol=0, atol=0)
+        cpu_state, gpu_state = None, None
+        for offset in (0, 1):
+            actual_cpu, cpu_state = cpu(X + offset, edge, weight, cpu_state)
+            actual_gpu, gpu_state = gpu((X + offset).cuda(), edge.cuda(), weight.cuda(), gpu_state)
+            torch.testing.assert_close(cpu_state, gpu_state.cpu(), rtol=1e-4, atol=1e-5)
+            torch.testing.assert_close(actual_cpu, actual_gpu.cpu(), rtol=1e-4, atol=1e-3)
+
     def test_first_snapshot_uses_initial_weight(self):
         layer = make_layer()
         X, edge_index, edge_weight = make_batch()

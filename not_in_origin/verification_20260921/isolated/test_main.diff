@@ -1,0 +1,20 @@
+--- C:\Users\Lenovo\Documents\大创参考论文\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py
++++ C:\Users\Lenovo\Documents\大创参考论文\rescopy\cocopyres\benchmark\not_in_origin\verification_20260921\isolated\test_main.py
+@@ -273,7 +273,7 @@
+         for model_name in main.MODEL_NAMES:
+             config = small_config(model_name=model_name, num_epochs=1)
+             try:
+-                model = build_model(config, NUM_NODES)
++                model = build_model(config, NUM_NODES).to("cpu")
+                 result = run_split(
+                     model, signal[0:2], torch.device("cpu"), collect_predictions=True
+                 )
+@@ -815,7 +815,7 @@
+                     "model_state_dict": {},
+                     "config": {},
+                     "seed": 0,
+-                    "best_val_loss": 0.0,
++                    "best_val_loss": torch.tensor(0.0, dtype=torch.float64),
+                 },
+                 path,
+             )

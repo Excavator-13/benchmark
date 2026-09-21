@@ -1,0 +1,18 @@
+--- C:\Users\Lenovo\Documents\大创参考论文\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_prepare_graph_data.py
++++ C:\Users\Lenovo\Documents\大创参考论文\rescopy\cocopyres\benchmark\not_in_origin\verification_20260921\isolated\test_prepare_graph_data.py
+@@ -141,9 +141,12 @@
+         self.addCleanup(os.chdir, original)
+         expected = prep.output_path("r0", "rate")
+         with tempfile.TemporaryDirectory() as tmp:
+-            os.chdir(tmp)
+-            self.assertEqual(prep.output_path("r0", "rate"), expected)
+-            self.assertEqual(prep.source_paths("r0", "rate")[0], prep.DATASET_DIR / "proportion" / "r0.parquet")
++            try:
++                os.chdir(tmp)
++                self.assertEqual(prep.output_path("r0", "rate"), expected)
++                self.assertEqual(prep.source_paths("r0", "rate")[0], prep.DATASET_DIR / "proportion" / "r0.parquet")
++            finally:
++                os.chdir(original)
+ 
+     def test_context_columns_cover_every_granularity(self):
+         self.assertEqual(prep.CONTEXT_COLUMNS["r1-region"], ("r1_id", "region_id"))

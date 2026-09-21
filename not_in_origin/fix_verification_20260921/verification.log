@@ -1,0 +1,18 @@
+{"label": "rate-cpu-a", "mode": "rate", "device": "cpu", "seed": 202609211, "epochs": 3, "command": ["D:\\conda-envs\\JOBSDF\\python.exe", "C:\\Users\\Lenovo\\Documents\\\u5927\u521b\u53c2\u8003\u8bba\u6587\\rescopy\\cocopyres\\benchmark\\benchmark\\graph_method\\main.py", "--data_name", "r0", "--mode", "rate", "--model_name", "EvolveGCNH", "--device", "cpu", "--seed", "202609211", "--num_epochs", "3"], "metrics": {"RMSE": 0.2241775798881326, "MAE": 0.177224550396204}, "validation_loss": 0.050032638013362885, "split_sizes": [19, 1, 4], "checkpoint_format": 2, "cross_device_max_absolute_difference": 2.9802322387695312e-08, "wall_seconds_including_subprocess_startup": 5.145400100000001, "results": "C:\\Users\\Lenovo\\Documents\\\u5927\u521b\u53c2\u8003\u8bba\u6587\\rescopy\\cocopyres\\benchmark\\not_in_origin\\fix_verification_20260921\\runs\\rate-cpu-a"}
+{"label": "rate-cpu-b", "mode": "rate", "device": "cpu", "seed": 202609211, "epochs": 3, "command": ["D:\\conda-envs\\JOBSDF\\python.exe", "C:\\Users\\Lenovo\\Documents\\\u5927\u521b\u53c2\u8003\u8bba\u6587\\rescopy\\cocopyres\\benchmark\\benchmark\\graph_method\\main.py", "--data_name", "r0", "--mode", "rate", "--model_name", "EvolveGCNH", "--device", "cpu", "--seed", "202609211", "--num_epochs", "3"], "metrics": {"RMSE": 0.2241775798881326, "MAE": 0.177224550396204}, "validation_loss": 0.050032638013362885, "split_sizes": [19, 1, 4], "checkpoint_format": 2, "cross_device_max_absolute_difference": 2.9802322387695312e-08, "wall_seconds_including_subprocess_startup": 3.6423892, "results": "C:\\Users\\Lenovo\\Documents\\\u5927\u521b\u53c2\u8003\u8bba\u6587\\rescopy\\cocopyres\\benchmark\\not_in_origin\\fix_verification_20260921\\runs\\rate-cpu-b"}
+Traceback (most recent call last):
+  File "not_in_origin/fix_verification_20260921/verify_fixed.py", line 150, in <module>
+    run()
+  File "not_in_origin/fix_verification_20260921/verify_fixed.py", line 134, in run
+    records.append(run_cli(mode, device, label, seed))
+  File "not_in_origin/fix_verification_20260921/verify_fixed.py", line 102, in run_cli
+    torch.testing.assert_close(actual, expected, rtol=1e-4, atol=1e-2 if mode == "count" else 1e-6)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\testing\_comparison.py", line 1342, in assert_close
+    assert_equal(
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\testing\_comparison.py", line 1093, in assert_equal
+    raise error_metas[0].to_error(msg)
+AssertionError: Tensor-likes are not close!
+
+Mismatched elements: 6679 / 7005 (95.3%)
+Greatest absolute difference: 33644.73828125 at index (1654, 0) (up to 0.01 allowed)
+Greatest relative difference: 30.3228982173663 at index (1806, 0) (up to 0.0001 allowed)

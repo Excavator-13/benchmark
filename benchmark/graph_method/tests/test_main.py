@@ -273,7 +273,7 @@ class DatasetAndModelTests(unittest.TestCase):
         for model_name in main.MODEL_NAMES:
             config = small_config(model_name=model_name, num_epochs=1)
             try:
-                model = build_model(config, NUM_NODES)
+                model = build_model(config, NUM_NODES).to("cpu")
                 result = run_split(
                     model, signal[0:2], torch.device("cpu"), collect_predictions=True
                 )
@@ -302,7 +302,7 @@ class SplitTests(unittest.TestCase):
     """Task 3.1: validated, chronological, three-way splitting."""
 
     def test_default_ratios_over_default_snapshots(self):
-        self.assertEqual(split_sizes(28, 0.83, 0.04), (23, 1, 4))
+        self.assertEqual(split_sizes(28, 0.83, 0.04, pred_length=3), (19, 1, 4))
 
     def test_sizes_are_chronological_and_non_empty(self):
         train, evaluation, test = split_sizes(100, 0.8, 0.1)
@@ -330,10 +330,57 @@ class SplitTests(unittest.TestCase):
     def test_split_slices_a_real_signal_chronologically(self):
         signal = synthetic_signal(snapshot_count=10)
         train, evaluation, test = temporal_signal_split(signal, 0.5, 0.3)
-        self.assertEqual((train.snapshot_count, evaluation.snapshot_count, test.snapshot_count), (5, 3, 2))
-        np.testing.assert_allclose(train.features[-1], signal.features[4])
-        np.testing.assert_allclose(evaluation.features[0], signal.features[5])
+        self.assertEqual((train.snapshot_count, evaluation.snapshot_count, test.snapshot_count), (1, 3, 2))
+        np.testing.assert_allclose(train.features[-1], signal.features[0])
+        np.testing.assert_allclose(evaluation.features[0], signal.features[3])
         np.testing.assert_allclose(test.features[0], signal.features[8])
+
+    def test_target_dates_never_overlap_across_splits(self):
+        from dataset import build_snapshots
+
+        # Encode actual month indices in every node's observations. Test the
+        # resulting targets, not a second implementation of the split formula.
+        for observations, horizon in ((36, 3), (72, 1), (72, 2), (72, 5)):
+            with self.subTest(observations=observations, horizon=horizon):
+                payload = {
+                    "schema_version": 1, "data_name": "r0", "mode": "count",
+                    "node_keys": [[0, 0], [0, 1]],
+                    "features": [[float(t), float(t)] for t in range(observations)],
+                    "edges": [], "edge_weights": [],
+                }
+                x, y = build_snapshots(payload, lags=6, pred_length=horizon)
+                signal = StaticGraphTemporalSignal(np.empty((2, 0), dtype=np.int64), np.empty(0), x, y)
+                splits = temporal_signal_split(signal)
+                dates = [{int(v) for snapshot in part for v in snapshot.y[0]} for part in splits]
+                self.assertTrue(all(dates))
+                self.assertLess(max(dates[0]), min(dates[1]))
+                self.assertLess(max(dates[1]), min(dates[2]))
+                self.assertTrue(dates[0].isdisjoint(dates[2]))
+                # All labels used for training are known at the first
+                # validation origin; all validation labels at the test origin.
+                self.assertLessEqual(max(dates[0]), int(splits[1][0].x[0, -1]))
+                self.assertLessEqual(max(dates[1]), int(splits[2][0].x[0, -1]))
+                self.assertEqual(max(dates[2]), observations - 1)
+                if observations == 36:
+                    self.assertEqual([s.snapshot_count for s in splits], [19, 1, 4])
+                    self.assertEqual(dates[1], {27, 28, 29})  # 2023-04 through 2023-06
+                    self.assertEqual(dates[2], set(range(30, 36)))  # 2023-07 through 2023-12
+
+    def test_gap_that_exhausts_training_is_rejected(self):
+        with self.assertRaisesRegex(SplitValidationError, "gaps"):
+            temporal_signal_split(synthetic_signal(snapshot_count=8), 0.5, 0.25)
+
+    def test_invalid_prediction_lengths_are_rejected(self):
+        for horizon in (0, -1, True, 1.5):
+            with self.subTest(horizon=horizon), self.assertRaises(SplitValidationError):
+                split_sizes(28, 0.83, 0.04, pred_length=horizon)
+
+    def test_single_step_forecasts_keep_all_windows(self):
+        signal = synthetic_signal(snapshot_count=10, pred=1)
+        splits = temporal_signal_split(signal, 0.5, 0.3)
+        self.assertEqual([s.snapshot_count for s in splits], [5, 3, 2])
+        np.testing.assert_array_equal(splits[1].targets[0], signal.targets[5])
+        np.testing.assert_array_equal(splits[2].targets[0], signal.targets[8])
 
     def test_split_reports_empty_partition_before_training(self):
         signal = synthetic_signal(snapshot_count=8)
@@ -644,6 +691,21 @@ class ResultDirectoryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             self.assertEqual(main.clear_prediction_artifacts(Path(tmp) / "absent"), [])
 
+    def test_complete_experiment_writes_loadable_outputs_under_unicode_path(self):
+        train, evaluation, test = self._splits()
+        with tempfile.TemporaryDirectory() as tmp, quiet_progress():
+            results = Path(tmp) / "中文结果"
+            config = small_config(num_epochs=1)
+            metrics = train_experiment(config, train, evaluation, test, results_dir=results)
+            directory = main.result_dir(config, results_dir=results)
+            restored = load_checkpoint(directory / main.CHECKPOINT_FILENAME, torch.device("cpu"))
+            self.assertTrue(np.isfinite(restored.best_val_loss))
+            predictions, golds = [], []
+            for index in range(test.snapshot_count):
+                predictions.append(torch.load(directory / f"pred_{index}.pt", weights_only=True))
+                golds.append(torch.load(directory / f"gold_{index}.pt", weights_only=True))
+            self.assertEqual(main.regression_metrics(predictions, golds), metrics)
+
 
 class SeedTests(unittest.TestCase):
     """Task 3.4: one seeded run, reproducible on CPU."""
@@ -722,7 +784,9 @@ class CheckpointTests(unittest.TestCase):
         self.assertIsInstance(payload["model_state_dict"], dict)
         self.assertNotIsInstance(payload["model_state_dict"], torch.nn.Module)
         self.assertEqual(payload["seed"], 3)
-        self.assertAlmostEqual(payload["best_val_loss"], 0.25)
+        self.assertEqual(payload["best_val_loss"].ndim, 0)
+        self.assertEqual(payload["best_val_loss"].dtype, torch.float64)
+        self.assertAlmostEqual(float(payload["best_val_loss"]), 0.25)
         self.assertEqual(sorted(payload["config"]), sorted(main.CHECKPOINT_CONFIG_KEYS))
         self.assertTrue(
             any(key.endswith("initial_weight") for key in payload["model_state_dict"]),
@@ -771,6 +835,19 @@ class CheckpointTests(unittest.TestCase):
         for parameter in restored.model.parameters():
             self.assertEqual(parameter.device.type, "cuda")
 
+    @unittest.skipUnless(CUDA_AVAILABLE, CUDA_REASON)
+    def test_checkpoint_maps_from_cuda_to_cpu(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            config = small_config(device="cuda")
+            model = build_model(config, NUM_NODES).to("cuda")
+            path = Path(tmp) / main.CHECKPOINT_FILENAME
+            save_checkpoint(path, model, config, num_nodes=NUM_NODES, best_val_loss=0.123456789)
+            restored = load_checkpoint(path, torch.device("cpu"))
+            self.assertEqual(restored.best_val_loss, 0.123456789)
+            for expected, actual in zip(model.parameters(), restored.model.parameters()):
+                self.assertEqual(actual.device.type, "cpu")
+                torch.testing.assert_close(expected.cpu(), actual)
+
     def test_incompatible_configuration_is_reported(self):
         with tempfile.TemporaryDirectory() as tmp:
             path, _ = self._save(tmp)
@@ -815,13 +892,36 @@ class CheckpointTests(unittest.TestCase):
                     "model_state_dict": {},
                     "config": {},
                     "seed": 0,
-                    "best_val_loss": 0.0,
+                    "best_val_loss": torch.tensor(0.0, dtype=torch.float64),
                 },
                 path,
             )
             with self.assertRaises(CheckpointError) as caught:
                 load_checkpoint(path, torch.device("cpu"))
         self.assertIn("format_version", str(caught.exception))
+
+    def test_version_one_checkpoints_require_rerunning(self):
+        # Both the old float metadata and the earlier audit's tensor workaround
+        # used version 1. Neither should silently stand in for a new experiment.
+        for loss in (0.25, torch.tensor(0.25, dtype=torch.float64)):
+            with self.subTest(loss_type=type(loss).__name__), tempfile.TemporaryDirectory() as tmp:
+                path, _ = self._save(tmp)
+                payload = torch.load(path, map_location="cpu", weights_only=True)
+                payload.update(format_version=1, best_val_loss=loss)
+                torch.save(payload, path)
+                with self.assertRaises(CheckpointError) as caught:
+                    load_checkpoint(path, torch.device("cpu"))
+                self.assertIn("rerun", str(caught.exception).lower())
+
+    def test_invalid_validation_loss_metadata_is_rejected(self):
+        for loss in (torch.tensor(float("nan")), torch.tensor(float("inf")), torch.tensor([0.25]), "0.25"):
+            with self.subTest(loss=loss), tempfile.TemporaryDirectory() as tmp:
+                path, _ = self._save(tmp)
+                payload = torch.load(path, map_location="cpu", weights_only=True)
+                payload["best_val_loss"] = loss
+                torch.save(payload, path)
+                with self.assertRaisesRegex(CheckpointError, "finite scalar tensor"):
+                    load_checkpoint(path, torch.device("cpu"))
 
     def test_non_mapping_payload_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:

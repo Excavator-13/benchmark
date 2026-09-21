@@ -145,14 +145,32 @@ DyGrEncoder, GCLSTM, GConvGRU, GConvLSTM, LRGCN, MPNNLSTM and TGCN). EvolveGCNH 
 EvolveGCNO derive their square graph-convolution weight from `--window_size` and ignore
 `--hidden_dim`.
 
+EvolveGCNH summarizes exactly `window_size` nodes for each recurrent weight update.
+Equal TopK scores are resolved by canonical node order, including scores saturated
+by large count inputs, so CPU and CUDA do not choose different tied nodes.
+
+Temporal splitting reserves `pred_length - 1` omitted windows between training and
+validation, and between validation and test. The nominal ratios remain 0.83/0.04/the
+remainder: the test period and validation count are preserved, while both gaps are
+subtracted from training. This prevents the same target month from appearing in
+different splits. With 36 months, `window_size=6` and `pred_length=3`, the 28 windows
+yield **19 training, 1 validation and 4 test snapshots**, with 4 windows omitted.
+Training targets end in March 2023, validation targets cover April–June 2023, and
+test targets cover July–December 2023. Inputs may use earlier known observations.
+Configurations that cannot leave all three partitions non-empty fail before training.
+
 Each run trains on the training split, selects the best checkpoint by validation loss
 only, and traverses the test split exactly once after restoring that checkpoint. The
 result directory contains `checkpoint.pt` (a versioned `model_state_dict` plus the
 configuration, seed and best validation loss), `pred_<t>.pt`, `gold_<t>.pt` and
 `metrics.json`; prediction files left by an earlier run in the same seed directory are
-removed before the new ones are written. Checkpoints are not pickled model objects, and
-legacy `model.pt` files are intentionally not loadable: rerun the experiment to produce
-`checkpoint.pt`.
+removed before the new ones are written. Checkpoint **format 2** stores best validation
+loss as a float64 scalar tensor, so PyTorch 1.13.1 can load it with `weights_only=True`.
+All tensor outputs use Python file handles to support Windows paths containing Unicode.
+Checkpoints are not pickled model objects. Legacy `model.pt` and format-1 `checkpoint.pt`
+files are intentionally rejected with a rerun hint; retrain to produce format 2 under
+the corrected split. Earlier metrics from overlapping target periods are not comparable
+to this protocol.
 
 ## 5 Directory Structure
 

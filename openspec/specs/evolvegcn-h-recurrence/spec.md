@@ -24,6 +24,16 @@ The learnable initial weight SHALL remain connected to automatic differentiation
 - **WHEN** a training loss that depends on an EvolveGCN-H output is backpropagated
 - **THEN** the initial weight parameter has a finite, non-null gradient
 
+### Requirement: Tied summary scores have deterministic node selection
+The node summary SHALL select exactly the graph-convolution input dimension's
+number of nodes. Equal projection scores SHALL be ordered by canonical node
+index before selection, consistently on CPU and CUDA. The projection and selected
+score weighting SHALL remain differentiable.
+
+#### Scenario: Count inputs saturate projection scores
+- **WHEN** multiple distinct nodes have the same maximal tanh score
+- **THEN** CPU and CUDA select the same nodes in the same order for the GRU summary
+
 ### Requirement: Recurrent state has explicit sequence boundaries
 The experiment runner SHALL initialize EvolveGCN-H recurrent weight state at the start of every train, validation, and test traversal, carry it only between chronological snapshots within that traversal, and prevent state from persisting implicitly on the model between traversals.
 

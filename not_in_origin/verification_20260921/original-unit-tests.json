@@ -1,0 +1,30 @@
+{
+  "tests": 165,
+  "failures": 1,
+  "errors": 19,
+  "skipped": [
+    [
+      "test_all_fourteen_combinations (test_generated_datasets.EveryShippedCombinationTests)",
+      "set JOB_SDF_INTEGRATION=1 to check the shipped Job-SDF data"
+    ],
+    [
+      "test_default_r0_rate_artifact_is_created_and_loadable (test_generated_datasets.ShippedDataIntegrationTests)",
+      "set JOB_SDF_INTEGRATION=1 to check the shipped Job-SDF data"
+    ],
+    [
+      "test_main_fails_before_loading_data_on_an_unavailable_device (test_main.DeviceResolutionTests)",
+      "CUDA is available here, so the failure path is untestable"
+    ],
+    [
+      "test_unavailable_cuda_is_rejected (test_main.DeviceResolutionTests)",
+      "CUDA is available here, so the failure path is untestable"
+    ],
+    [
+      "test_paths_do_not_depend_on_working_directory (test_prepare_graph_data.PathResolutionTests)",
+      "Already reproduced: Windows cannot delete the current directory; original test crashes the runner"
+    ]
+  ],
+  "passed": 140,
+  "successful": false,
+  "isolated_compatibility_copy": false
+}

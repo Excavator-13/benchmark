@@ -1,0 +1,200 @@
+[
+  {
+    "model": "A3TGCN",
+    "device": "cpu",
+    "status": "PASS",
+    "losses": [
+      1.084773302078247,
+      1.0766745805740356
+    ]
+  },
+  {
+    "model": "DCRNN",
+    "device": "cpu",
+    "status": "PASS",
+    "losses": [
+      1.002930760383606,
+      0.9931439161300659
+    ]
+  },
+  {
+    "model": "DyGrEncoder",
+    "device": "cpu",
+    "status": "PASS",
+    "losses": [
+      1.0034518241882324,
+      0.9980071783065796
+    ]
+  },
+  {
+    "model": "EvolveGCNH",
+    "device": "cpu",
+    "status": "PASS",
+    "losses": [
+      1.1054803133010864,
+      1.106543779373169
+    ]
+  },
+  {
+    "model": "EvolveGCNO",
+    "device": "cpu",
+    "status": "PASS",
+    "losses": [
+      1.1414860486984253,
+      1.116123914718628
+    ]
+  },
+  {
+    "model": "GCLSTM",
+    "device": "cpu",
+    "status": "PASS",
+    "losses": [
+      1.033193588256836,
+      1.023650884628296
+    ]
+  },
+  {
+    "model": "GConvGRU",
+    "device": "cpu",
+    "status": "PASS",
+    "losses": [
+      1.0139944553375244,
+      1.0016026496887207
+    ]
+  },
+  {
+    "model": "GConvLSTM",
+    "device": "cpu",
+    "status": "PASS",
+    "losses": [
+      1.018829345703125,
+      1.0105148553848267
+    ]
+  },
+  {
+    "model": "LRGCN",
+    "device": "cpu",
+    "status": "PASS",
+    "losses": [
+      1.0172380208969116,
+      1.0059410333633423
+    ]
+  },
+  {
+    "model": "MPNNLSTM",
+    "device": "cpu",
+    "status": "PASS",
+    "losses": [
+      1.0308499336242676,
+      1.0164320468902588
+    ]
+  },
+  {
+    "model": "TGCN",
+    "device": "cpu",
+    "status": "PASS",
+    "losses": [
+      1.0139479637145996,
+      1.005242109298706
+    ]
+  },
+  {
+    "model": "A3TGCN",
+    "device": "cuda:0",
+    "status": "PASS",
+    "losses": [
+      1.084773302078247,
+      1.0766745805740356
+    ]
+  },
+  {
+    "model": "DCRNN",
+    "device": "cuda:0",
+    "status": "PASS",
+    "losses": [
+      1.0029308795928955,
+      0.9931439161300659
+    ]
+  },
+  {
+    "model": "DyGrEncoder",
+    "device": "cuda:0",
+    "status": "PASS",
+    "losses": [
+      1.0034520626068115,
+      0.9980071783065796
+    ]
+  },
+  {
+    "model": "EvolveGCNH",
+    "device": "cuda:0",
+    "status": "PASS",
+    "losses": [
+      1.1054803133010864,
+      1.1065436601638794
+    ]
+  },
+  {
+    "model": "EvolveGCNO",
+    "device": "cuda:0",
+    "status": "PASS",
+    "losses": [
+      1.1414860486984253,
+      1.116123914718628
+    ]
+  },
+  {
+    "model": "GCLSTM",
+    "device": "cuda:0",
+    "status": "PASS",
+    "losses": [
+      1.033193588256836,
+      1.023650884628296
+    ]
+  },
+  {
+    "model": "GConvGRU",
+    "device": "cuda:0",
+    "status": "PASS",
+    "losses": [
+      1.0139944553375244,
+      1.0016026496887207
+    ]
+  },
+  {
+    "model": "GConvLSTM",
+    "device": "cuda:0",
+    "status": "PASS",
+    "losses": [
+      1.018829345703125,
+      1.0105149745941162
+    ]
+  },
+  {
+    "model": "LRGCN",
+    "device": "cuda:0",
+    "status": "PASS",
+    "losses": [
+      1.0172381401062012,
+      1.0059410333633423
+    ]
+  },
+  {
+    "model": "MPNNLSTM",
+    "device": "cuda:0",
+    "status": "PASS",
+    "losses": [
+      1.0295696258544922,
+      1.0152794122695923
+    ]
+  },
+  {
+    "model": "TGCN",
+    "device": "cuda:0",
+    "status": "PASS",
+    "losses": [
+      1.01394784450531,
+      1.005242109298706
+    ]
+  }
+]

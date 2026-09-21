@@ -1,0 +1,402 @@
+[
+  {
+    "label": "r0-rate-cpu-a",
+    "data_name": "r0",
+    "mode": "rate",
+    "device": "cpu",
+    "seed": 17,
+    "epochs": 3,
+    "metrics": {
+      "RMSE": 0.2916459068363692,
+      "MAE": 0.2754925712943077
+    },
+    "last_value_baseline": {
+      "RMSE": 0.0013407256226979879,
+      "MAE": 0.0003640338036348112
+    },
+    "snapshots": 28,
+    "nodes": 2335,
+    "edges": 60804,
+    "split_sizes": [
+      23,
+      1,
+      4
+    ],
+    "best_validation_loss": 0.08501070737838745,
+    "calls": [
+      {
+        "split": "train",
+        "loss": 0.10234135389328003,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 0.09648376703262329,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "train",
+        "loss": 0.0963263064622879,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 0.09062948077917099,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "train",
+        "loss": 0.09052077680826187,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 0.08501070737838745,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "test",
+        "loss": 0.08505733497440815,
+        "optimizer_steps": 0
+      }
+    ],
+    "initial_weight_gradients": [
+      {
+        "finite": true,
+        "norm": 2.717099414439872e-05
+      },
+      {
+        "finite": true,
+        "norm": 1.9365237676538527e-05
+      },
+      {
+        "finite": true,
+        "norm": 8.120164238789584e-06
+      }
+    ],
+    "cross_device_max_absolute_prediction_difference": 2.9802322387695312e-08,
+    "peak_cuda_allocated_mb": 31.60791015625,
+    "wall_seconds": 1.0733594999999987,
+    "result_directory": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\not_in_origin\\verification_20260921\\runs\\r0-rate-cpu-a\\rate\\r0\\EvolveGCNH\\17"
+  },
+  {
+    "label": "r0-rate-cpu-b",
+    "data_name": "r0",
+    "mode": "rate",
+    "device": "cpu",
+    "seed": 17,
+    "epochs": 3,
+    "metrics": {
+      "RMSE": 0.2916459068363692,
+      "MAE": 0.2754925712943077
+    },
+    "last_value_baseline": {
+      "RMSE": 0.0013407256226979879,
+      "MAE": 0.0003640338036348112
+    },
+    "snapshots": 28,
+    "nodes": 2335,
+    "edges": 60804,
+    "split_sizes": [
+      23,
+      1,
+      4
+    ],
+    "best_validation_loss": 0.08501070737838745,
+    "calls": [
+      {
+        "split": "train",
+        "loss": 0.10234135389328003,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 0.09648376703262329,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "train",
+        "loss": 0.0963263064622879,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 0.09062948077917099,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "train",
+        "loss": 0.09052077680826187,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 0.08501070737838745,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "test",
+        "loss": 0.08505733497440815,
+        "optimizer_steps": 0
+      }
+    ],
+    "initial_weight_gradients": [
+      {
+        "finite": true,
+        "norm": 2.717099414439872e-05
+      },
+      {
+        "finite": true,
+        "norm": 1.9365237676538527e-05
+      },
+      {
+        "finite": true,
+        "norm": 8.120164238789584e-06
+      }
+    ],
+    "cross_device_max_absolute_prediction_difference": 2.9802322387695312e-08,
+    "peak_cuda_allocated_mb": 31.60791015625,
+    "wall_seconds": 1.0299473999999975,
+    "result_directory": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\not_in_origin\\verification_20260921\\runs\\r0-rate-cpu-b\\rate\\r0\\EvolveGCNH\\17"
+  },
+  {
+    "label": "r0-rate-cuda",
+    "data_name": "r0",
+    "mode": "rate",
+    "device": "cuda:0",
+    "seed": 17,
+    "epochs": 3,
+    "metrics": {
+      "RMSE": 0.2916459068363692,
+      "MAE": 0.2754925712943077
+    },
+    "last_value_baseline": {
+      "RMSE": 0.0013407256226979879,
+      "MAE": 0.0003640338036348112
+    },
+    "snapshots": 28,
+    "nodes": 2335,
+    "edges": 60804,
+    "split_sizes": [
+      23,
+      1,
+      4
+    ],
+    "best_validation_loss": 0.08501070737838745,
+    "calls": [
+      {
+        "split": "train",
+        "loss": 0.10234135389328003,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 0.0964837521314621,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "train",
+        "loss": 0.09632629156112671,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 0.09062948077917099,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "train",
+        "loss": 0.09052077680826187,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 0.08501070737838745,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "test",
+        "loss": 0.08505733124911785,
+        "optimizer_steps": 0
+      }
+    ],
+    "initial_weight_gradients": [
+      {
+        "finite": true,
+        "norm": 2.7170995963388123e-05
+      },
+      {
+        "finite": true,
+        "norm": 1.936523949552793e-05
+      },
+      {
+        "finite": true,
+        "norm": 8.120163329294883e-06
+      }
+    ],
+    "cross_device_max_absolute_prediction_difference": 2.9802322387695312e-08,
+    "peak_cuda_allocated_mb": 61.58349609375,
+    "wall_seconds": 0.9225907000000007,
+    "result_directory": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\not_in_origin\\verification_20260921\\runs\\r0-rate-cuda\\rate\\r0\\EvolveGCNH\\17"
+  },
+  {
+    "label": "r0-count-cpu",
+    "data_name": "r0",
+    "mode": "count",
+    "device": "cpu",
+    "seed": 17,
+    "epochs": 3,
+    "metrics": {
+      "RMSE": 3793.2047796025986,
+      "MAE": 876.1031799316406
+    },
+    "last_value_baseline": {
+      "RMSE": 925.2619265983552,
+      "MAE": 189.87509155273438
+    },
+    "snapshots": 28,
+    "nodes": 2335,
+    "edges": 60804,
+    "split_sizes": [
+      23,
+      1,
+      4
+    ],
+    "best_validation_loss": 9858031.0,
+    "calls": [
+      {
+        "split": "train",
+        "loss": 13934865.0,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 14478261.0,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "train",
+        "loss": 13201007.0,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 11963487.0,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "train",
+        "loss": 12622294.0,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 9858031.0,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "test",
+        "loss": 14388402.5,
+        "optimizer_steps": 0
+      }
+    ],
+    "initial_weight_gradients": [
+      {
+        "finite": true,
+        "norm": 405029.4375
+      },
+      {
+        "finite": true,
+        "norm": 559539.8125
+      },
+      {
+        "finite": true,
+        "norm": 720111.625
+      }
+    ],
+    "cross_device_max_absolute_prediction_difference": 0.00390625,
+    "peak_cuda_allocated_mb": 61.58349609375,
+    "wall_seconds": 1.0419970999999997,
+    "result_directory": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\not_in_origin\\verification_20260921\\runs\\r0-count-cpu\\count\\r0\\EvolveGCNH\\17"
+  },
+  {
+    "label": "r0-count-cuda",
+    "data_name": "r0",
+    "mode": "count",
+    "device": "cuda:0",
+    "seed": 17,
+    "epochs": 3,
+    "metrics": {
+      "RMSE": 3793.2047796025986,
+      "MAE": 876.1031646728516
+    },
+    "last_value_baseline": {
+      "RMSE": 925.2619265983552,
+      "MAE": 189.87509155273438
+    },
+    "snapshots": 28,
+    "nodes": 2335,
+    "edges": 60804,
+    "split_sizes": [
+      23,
+      1,
+      4
+    ],
+    "best_validation_loss": 9858030.0,
+    "calls": [
+      {
+        "split": "train",
+        "loss": 13934866.0,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 14478260.0,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "train",
+        "loss": 13201009.0,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 11963487.0,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "train",
+        "loss": 12622296.0,
+        "optimizer_steps": 1
+      },
+      {
+        "split": "validation",
+        "loss": 9858030.0,
+        "optimizer_steps": 0
+      },
+      {
+        "split": "test",
+        "loss": 14388403.0,
+        "optimizer_steps": 0
+      }
+    ],
+    "initial_weight_gradients": [
+      {
+        "finite": true,
+        "norm": 405029.34375
+      },
+      {
+        "finite": true,
+        "norm": 559539.6875
+      },
+      {
+        "finite": true,
+        "norm": 720111.4375
+      }
+    ],
+    "cross_device_max_absolute_prediction_difference": 0.00439453125,
+    "peak_cuda_allocated_mb": 61.58349609375,
+    "wall_seconds": 0.8187639000000004,
+    "result_directory": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\rescopy\\cocopyres\\benchmark\\not_in_origin\\verification_20260921\\runs\\r0-count-cuda\\count\\r0\\EvolveGCNH\\17"
+  }
+]

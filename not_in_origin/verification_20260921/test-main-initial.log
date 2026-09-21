@@ -1,0 +1,332 @@
+test_checkpoint_maps_from_cpu_to_cuda (test_main.CheckpointTests) ... ERROR
+test_incompatible_configuration_is_reported (test_main.CheckpointTests) ... ERROR
+test_incompatible_state_dict_is_reported (test_main.CheckpointTests) ... ERROR
+test_legacy_model_pt_produces_an_actionable_error (test_main.CheckpointTests) ... ok
+test_loading_passes_an_explicit_map_location (test_main.CheckpointTests) ... ERROR
+test_matching_configuration_is_accepted (test_main.CheckpointTests) ... ERROR
+test_missing_checkpoint_without_legacy_is_reported (test_main.CheckpointTests) ... ok
+test_missing_configuration_field_is_rejected (test_main.CheckpointTests) ... ERROR
+test_missing_metadata_field_is_rejected (test_main.CheckpointTests) ... ERROR
+test_non_mapping_payload_is_rejected (test_main.CheckpointTests) ... ok
+test_payload_is_a_state_dictionary_with_metadata (test_main.CheckpointTests) ... ERROR
+test_restored_parameters_live_on_the_requested_device (test_main.CheckpointTests) ... ERROR
+test_round_trip_reproduces_predictions (test_main.CheckpointTests) ... ERROR
+test_unknown_format_version_is_rejected (test_main.CheckpointTests) ... ERROR
+test_architecture_matches_checkpoint_contract (test_main.CliTests) ... ok
+test_configuration_rejects_non_positive_lengths (test_main.CliTests) ... ok
+test_defaults_match_the_documented_default_command (test_main.CliTests) ... ok
+test_documented_options_are_accepted (test_main.CliTests) ... ok
+test_help_names_model_name_and_hidden_dim_scope (test_main.CliTests) ... ok
+test_unknown_model_lists_accepted_values (test_main.CliTests) ... ok
+test_unknown_option_is_rejected (test_main.CliTests) ... ok
+test_build_model_uses_configured_lengths (test_main.DatasetAndModelTests) ... ok
+test_evolvegcnh_state_is_returned_and_not_on_the_module (test_main.DatasetAndModelTests) ... ok
+test_forecaster_shape_and_state_smoke_for_every_advertised_model (test_main.DatasetAndModelTests) ... FAIL
+test_load_dataset_passes_window_and_prediction_lengths (test_main.DatasetAndModelTests) ... ok
+test_model_names_match_every_advertised_family (test_main.DatasetAndModelTests) ... ok
+test_unknown_model_name_is_rejected (test_main.DatasetAndModelTests) ... ok
+test_empty_partition_is_reported_by_the_runner (test_main.DeviceAndRunnerTests) ... ok
+test_move_snapshot_moves_every_tensor (test_main.DeviceAndRunnerTests) ... ok
+test_reset_never_clobbers_a_learnable_weight_parameter (test_main.DeviceAndRunnerTests) ... ok
+test_runner_does_not_step_without_an_optimizer (test_main.DeviceAndRunnerTests) ... ok
+test_runner_executes_on_cuda_when_available (test_main.DeviceAndRunnerTests) ... ok
+test_runner_performs_one_optimizer_step_per_traversal (test_main.DeviceAndRunnerTests) ... ok
+test_runner_requests_configured_device_for_every_snapshot_tensor (test_main.DeviceAndRunnerTests) ... ok
+test_state_carries_between_snapshots_within_one_traversal (test_main.DeviceAndRunnerTests) ... ok
+test_state_resets_between_traversals (test_main.DeviceAndRunnerTests) ... ok
+test_third_party_evolvegcno_state_is_reset_between_traversals (test_main.DeviceAndRunnerTests) ... ok
+test_untrained_model_initial_state_is_empty (test_main.DeviceAndRunnerTests) ... ok
+test_cpu_resolves (test_main.DeviceResolutionTests) ... ok
+test_garbage_device_is_rejected (test_main.DeviceResolutionTests) ... ok
+test_main_fails_before_loading_data_on_an_unavailable_device (test_main.DeviceResolutionTests) ... skipped 'CUDA is available here, so the failure path is untestable'
+test_unavailable_cuda_is_rejected (test_main.DeviceResolutionTests) ... skipped 'CUDA is available here, so the failure path is untestable'
+test_unknown_backend_is_rejected (test_main.DeviceResolutionTests) ... ok
+test_documented_preparation_commands_run_verbatim_in_order (test_main.DocumentationContractTests)
+Run the README lines as written (relative script path, declared cwd). ... ok
+test_documented_training_command_resolves_and_parses (test_main.DocumentationContractTests) ... ok
+test_every_documented_script_resolves_from_the_repository_root (test_main.DocumentationContractTests) ... ok
+test_graph_section_never_changes_the_working_directory (test_main.DocumentationContractTests) ... ok
+test_readme_documents_the_real_options_and_environment (test_main.DocumentationContractTests) ... ok
+test_readme_does_not_claim_a_frequency_column (test_main.DocumentationContractTests) ... ok
+test_readme_states_hidden_dim_scope (test_main.DocumentationContractTests) ... ok
+test_import_has_no_training_side_effects (test_main.ModuleImportTests) ... ok
+test_module_exposes_main_guard_and_pieces (test_main.ModuleImportTests) ... ok
+test_clear_prediction_artifacts_matches_only_strict_names (test_main.ResultDirectoryTests) ... ok
+test_clear_prediction_artifacts_tolerates_a_missing_directory (test_main.ResultDirectoryTests) ... ok
+test_rerun_removes_predictions_left_by_a_longer_previous_run (test_main.ResultDirectoryTests) ... ERROR
+test_configure_determinism_enables_backend_switches (test_main.SeedTests) ... ok
+test_declared_tolerance_is_positive_and_small (test_main.SeedTests) ... ok
+test_requested_seed_runs_exactly_one_result_directory (test_main.SeedTests) ... ERROR
+test_seed_reproduces_initial_parameters (test_main.SeedTests) ... ok
+test_set_seed_covers_python_numpy_and_torch (test_main.SeedTests) ... ok
+test_two_cpu_runs_with_the_same_seed_match (test_main.SeedTests) ... ERROR
+test_checkpoint_file_is_written_and_legacy_name_is_unused (test_main.SelectionTests) ... ERROR
+test_checkpoint_is_written_only_when_validation_improves (test_main.SelectionTests) ... ERROR
+test_epoch_loop_touches_each_split_the_expected_number_of_times (test_main.SelectionTests) ... ERROR
+test_final_metrics_come_from_the_test_traversal (test_main.SelectionTests) ... ERROR
+test_no_test_access_before_final_evaluation (test_main.SelectionTests) ... ERROR
+test_default_ratios_over_default_snapshots (test_main.SplitTests) ... ok
+test_empty_dataset_is_rejected (test_main.SplitTests) ... ok
+test_empty_partition_is_rejected (test_main.SplitTests) ... ok
+test_invalid_ratios_are_rejected (test_main.SplitTests) ... ok
+test_ratios_that_leave_no_test_room_are_rejected (test_main.SplitTests) ... ok
+test_sizes_are_chronological_and_non_empty (test_main.SplitTests) ... ok
+test_split_docstring_describes_three_partitions (test_main.SplitTests) ... ok
+test_split_reports_empty_partition_before_training (test_main.SplitTests) ... ok
+test_split_slices_a_real_signal_chronologically (test_main.SplitTests) ... ok
+
+======================================================================
+ERROR: test_checkpoint_maps_from_cpu_to_cuda (test_main.CheckpointTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 770, in test_checkpoint_maps_from_cpu_to_cuda
+    restored = load_checkpoint(path, torch.device("cuda"))
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_incompatible_configuration_is_reported (test_main.CheckpointTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 780, in test_incompatible_configuration_is_reported
+    load_checkpoint(path, torch.device("cpu"), expected_config=incompatible)
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_incompatible_state_dict_is_reported (test_main.CheckpointTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 856, in test_incompatible_state_dict_is_reported
+    payload = torch.load(path, map_location="cpu", weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_loading_passes_an_explicit_map_location (test_main.CheckpointTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 757, in test_loading_passes_an_explicit_map_location
+    load_checkpoint(path, device)
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 754, in spy
+    return real_load(*args, **kwargs)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_matching_configuration_is_accepted (test_main.CheckpointTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 786, in test_matching_configuration_is_accepted
+    restored = load_checkpoint(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_missing_configuration_field_is_rejected (test_main.CheckpointTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 846, in test_missing_configuration_field_is_rejected
+    payload = torch.load(path, map_location="cpu", weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_missing_metadata_field_is_rejected (test_main.CheckpointTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 836, in test_missing_metadata_field_is_rejected
+    payload = torch.load(path, map_location="cpu", weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_payload_is_a_state_dictionary_with_metadata (test_main.CheckpointTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 720, in test_payload_is_a_state_dictionary_with_metadata
+    payload = torch.load(path, map_location="cpu", weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_restored_parameters_live_on_the_requested_device (test_main.CheckpointTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 762, in test_restored_parameters_live_on_the_requested_device
+    restored = load_checkpoint(path, torch.device("cpu"))
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_round_trip_reproduces_predictions (test_main.CheckpointTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 737, in test_round_trip_reproduces_predictions
+    restored = load_checkpoint(path, torch.device("cpu"))
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_unknown_format_version_is_rejected (test_main.CheckpointTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 823, in test_unknown_format_version_is_rejected
+    load_checkpoint(path, torch.device("cpu"))
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_rerun_removes_predictions_left_by_a_longer_previous_run (test_main.ResultDirectoryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 606, in test_rerun_removes_predictions_left_by_a_longer_previous_run
+    train_experiment(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 796, in train_experiment
+    restored = load_checkpoint(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_requested_seed_runs_exactly_one_result_directory (test_main.SeedTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 674, in test_requested_seed_runs_exactly_one_result_directory
+    code = main.main(["--seed", "17", "--num_epochs", "1"])
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 829, in main
+    metrics = train_experiment(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 796, in train_experiment
+    restored = load_checkpoint(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_two_cpu_runs_with_the_same_seed_match (test_main.SeedTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 686, in test_two_cpu_runs_with_the_same_seed_match
+    first = train_experiment(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 796, in train_experiment
+    restored = load_checkpoint(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_checkpoint_file_is_written_and_legacy_name_is_unused (test_main.SelectionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 576, in test_checkpoint_file_is_written_and_legacy_name_is_unused
+    train_experiment(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 796, in train_experiment
+    restored = load_checkpoint(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_checkpoint_is_written_only_when_validation_improves (test_main.SelectionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 541, in test_checkpoint_is_written_only_when_validation_improves
+    train_experiment(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 796, in train_experiment
+    restored = load_checkpoint(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_epoch_loop_touches_each_split_the_expected_number_of_times (test_main.SelectionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 490, in test_epoch_loop_touches_each_split_the_expected_number_of_times
+    train_experiment(small_config(num_epochs=3), train, evaluation, test, results_dir=Path(tmp))
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 796, in train_experiment
+    restored = load_checkpoint(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_final_metrics_come_from_the_test_traversal (test_main.SelectionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 558, in test_final_metrics_come_from_the_test_traversal
+    metrics = train_experiment(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 796, in train_experiment
+    restored = load_checkpoint(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+ERROR: test_no_test_access_before_final_evaluation (test_main.SelectionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 503, in test_no_test_access_before_final_evaluation
+    train_experiment(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 796, in train_experiment
+    restored = load_checkpoint(
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\main.py", line 666, in load_checkpoint
+    payload = torch.load(path, map_location=device, weights_only=True)
+  File "D:\conda-envs\JOBSDF\lib\site-packages\torch\serialization.py", line 788, in load
+    raise pickle.UnpicklingError(UNSAFE_MESSAGE + str(e)) from None
+_pickle.UnpicklingError: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71
+
+======================================================================
+FAIL: test_forecaster_shape_and_state_smoke_for_every_advertised_model (test_main.DatasetAndModelTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\�󴴲ο�����\rescopy\cocopyres\benchmark\benchmark\graph_method\tests\test_main.py", line 288, in test_forecaster_shape_and_state_smoke_for_every_advertised_model
+    self.assertEqual(
+AssertionError: {'A3TGCN': 'RuntimeError: Expected all ten[75 chars]pu!'} != {}
++ {}
+- {'A3TGCN': 'RuntimeError: Expected all tensors to be on the same device, but '
+-            'found at least two devices, cuda:0 and cpu!'} : advertised models must run with the pinned libraries: {'A3TGCN': 'RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu!'}
+
+----------------------------------------------------------------------
+Ran 75 tests in 7.702s
+
+FAILED (failures=1, errors=19, skipped=2)
