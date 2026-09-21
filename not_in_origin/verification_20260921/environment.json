@@ -1,0 +1,17 @@
+{
+  "python": "3.8.20 (default, Oct  3 2024, 15:19:54) [MSC v.1929 64 bit (AMD64)]",
+  "executable": "D:\\conda-envs\\JOBSDF\\python.exe",
+  "packages": {
+    "numpy": "1.22.4",
+    "pandas": "1.3.5",
+    "pyarrow": "14.0.1",
+    "torch": "1.13.1",
+    "torch-geometric": "2.4.0",
+    "torch-geometric-temporal": "0.54.0",
+    "torch-scatter": "2.1.1+pt113cu117",
+    "torch-sparse": "0.6.17+pt113cu117"
+  },
+  "cuda": "11.7",
+  "cuda_available": true,
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU"
+}

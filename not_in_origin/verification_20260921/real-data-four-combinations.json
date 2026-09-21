@@ -1,0 +1,58 @@
+[
+  {
+    "nodes": 2335,
+    "times": 36,
+    "edges": 60804,
+    "source_rows": 60804,
+    "snapshots": 28,
+    "splits": {
+      "train": 23,
+      "validation": 1,
+      "test": 4
+    },
+    "data_name": "r0",
+    "mode": "rate"
+  },
+  {
+    "nodes": 2335,
+    "times": 36,
+    "edges": 60804,
+    "source_rows": 60804,
+    "snapshots": 28,
+    "splits": {
+      "train": 23,
+      "validation": 1,
+      "test": 4
+    },
+    "data_name": "r0",
+    "mode": "count"
+  },
+  {
+    "nodes": 16345,
+    "times": 36,
+    "edges": 218840,
+    "source_rows": 218840,
+    "snapshots": 28,
+    "splits": {
+      "train": 23,
+      "validation": 1,
+      "test": 4
+    },
+    "data_name": "region",
+    "mode": "rate"
+  },
+  {
+    "nodes": 16345,
+    "times": 36,
+    "edges": 218840,
+    "source_rows": 218840,
+    "snapshots": 28,
+    "splits": {
+      "train": 23,
+      "validation": 1,
+      "test": 4
+    },
+    "data_name": "region",
+    "mode": "count"
+  }
+]

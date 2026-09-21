@@ -1,0 +1,9 @@
+{
+  "float_metadata_error": "UnpicklingError('Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution.Do it only if you get the file from a trusted source. WeightsUnpickler error: Unsupported operand 71')",
+  "parent_exists": true,
+  "unicode_path_error": "RuntimeError('Parent directory C:\\\\Users\\\\Lenovo\\\\Documents\\\\\u5927\u521b\u53c2\u8003\u8bba\u6587\\\\rescopy\\\\cocopyres\\\\benchmark\\\\not_in_origin\\\\verification_20260921 does not exist.')",
+  "file_handle_roundtrip": [
+    1.0
+  ],
+  "pickle_opcode_71": "BINFLOAT"
+}
