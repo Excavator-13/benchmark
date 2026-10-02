@@ -21,14 +21,14 @@
 
 按量计费即可，不需要包月。建议选择：
 
-| 项目 | 建议 | 说明 |
-|---|---|---|
-| GPU | 1 张 NVIDIA GPU，推荐 24 GB 显存 | A10 24G、RTX 3090/4090 等；不用租多卡。12 GB 可能能跑，但首次租机不建议为省一点费用承担 OOM 风险 |
-| CPU / 内存 | 4-8 vCPU，32 GB 内存 | 预处理和 JSON 加载也会用 CPU 内存；16 GB 可能够，32 GB 更稳妥 |
-| 硬盘 | 50 GB 或以上 | 代码和原始数据约 220 MB，主要空间会被 Conda、PyTorch、pip 缓存、生成数据和结果占用 |
-| 系统 | x86_64 Linux，Ubuntu 20.04/22.04 | 不要选 Windows，也不要选 ARM 机型 |
-| 镜像 | 优先选 PyTorch 2.3 / Python 3.8 / CUDA 12.1 | 没有完全一致的镜像也没关系，下面会新建独立环境 |
-| 网络 | 能访问 GitHub、PyPI、PyTorch 和 `data.pyg.org` | 安装依赖需要下载数 GB 文件 |
+| 项目       | 建议                                           | 说明                                                                                             |
+| ---------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| GPU        | 1 张 NVIDIA GPU，推荐 24 GB 显存               | A10 24G、RTX 3090/4090 等；不用租多卡。12 GB 可能能跑，但首次租机不建议为省一点费用承担 OOM 风险 |
+| CPU / 内存 | 4-8 vCPU，32 GB 内存                           | 预处理和 JSON 加载也会用 CPU 内存；16 GB 可能够，32 GB 更稳妥                                    |
+| 硬盘       | 50 GB 或以上                                   | 代码和原始数据约 220 MB，主要空间会被 Conda、PyTorch、pip 缓存、生成数据和结果占用               |
+| 系统       | x86_64 Linux，Ubuntu 20.04/22.04               | 不要选 Windows，也不要选 ARM 机型                                                                |
+| 镜像       | 优先选 PyTorch 2.3 / Python 3.8 / CUDA 12.1    | 没有完全一致的镜像也没关系，下面会新建独立环境                                                   |
+| 网络       | 能访问 GitHub、PyPI、PyTorch 和 `data.pyg.org` | 安装依赖需要下载数 GB 文件                                                                       |
 
 CUDA 镜像的版本不必与 Python 环境里的 CUDA 运行库字面相同。PyTorch wheel 会自带 CUDA 运行库，关键是宿主机上的 NVIDIA 驱动要够新。本指南使用 CUDA 12.1 wheel，`nvidia-smi` 显示的驱动版本建议不低于 525.60.13。
 
@@ -230,15 +230,15 @@ python -m unittest discover \
 
 仓库中 7 种粒度都有 36 个月的序列，但“粒度-技能”节点数量差异很大：
 
-| 代码 | 论文中的含义 | 时间序列行数 | 是否适合这次云 GPU 实验 |
-|---|---|---:|---|
-| `r0` | 整体劳动力市场 | 2,335 | 最小，但只有一个市场上下文，粒度过粗，对比价值较低 |
-| `region` | 7 个地区 | 16,345 | **推荐：第二小，有实际粒度含义，论文也明确在 GPU 上跑此粒度** |
-| `r1` | 14 个 L1 职业大类 | 32,690 | 也有对比价值，但节点数是 `region` 的 2 倍 |
-| `r2` | 52 个 L2 职业子类 | 121,420 | 资源消耗明显增大，首次租机不优先 |
-| `r1-region` | 地区 x L1 职业 | 228,830 | 较大，不建议作为第一次完整实验 |
-| `r2-region` | 地区 x L2 职业 | 849,940 | 论文都改用 CPU，本次不跑 |
-| `company` | 521 家公司 | 1,216,535 | 论文都改用 CPU，本次不跑 |
+| 代码        | 论文中的含义      | 时间序列行数 | 是否适合这次云 GPU 实验                                       |
+| ----------- | ----------------- | -----------: | ------------------------------------------------------------- |
+| `r0`        | 整体劳动力市场    |        2,335 | 最小，但只有一个市场上下文，粒度过粗，对比价值较低            |
+| `region`    | 7 个地区          |       16,345 | **推荐：第二小，有实际粒度含义，论文也明确在 GPU 上跑此粒度** |
+| `r1`        | 14 个 L1 职业大类 |       32,690 | 也有对比价值，但节点数是 `region` 的 2 倍                     |
+| `r2`        | 52 个 L2 职业子类 |      121,420 | 资源消耗明显增大，首次租机不优先                              |
+| `r1-region` | 地区 x L1 职业    |      228,830 | 较大，不建议作为第一次完整实验                                |
+| `r2-region` | 地区 x L2 职业    |      849,940 | 论文都改用 CPU，本次不跑                                      |
+| `company`   | 521 家公司        |    1,216,535 | 论文都改用 CPU，本次不跑                                      |
 
 原论文的 GNN 主表预测的是**技能需求量**，对应仓库的 `count -> dataset/demand`，不是 `rate -> dataset/proportion`。因此要与论文数值对照，必须用 `count`。
 
@@ -387,9 +387,9 @@ PY
 
 论文附录的“skill demand series with GNN-based methods”表中，EvolveGCN-H 在 Region 粒度的数值是：
 
-| 指标 | 论文报告值 |
-|---|---:|
-| MAE | 30.07 ± 22.97 |
+| 指标 |      论文报告值 |
+| ---- | --------------: |
+| MAE  |   30.07 ± 22.97 |
 | RMSE | 166.34 ± 127.04 |
 
 这些数值只适合做**量级和趋势对照**，不应要求当前分支精确复现，原因是：
@@ -539,3 +539,53 @@ done
 cat benchmark/graph_method/results/count/region/EvolveGCNH/0/metrics.json
 cat benchmark/graph_method/results/count/region/EvolveGCNH/1/metrics.json
 ```
+
+## 本次实际执行记录（与指南的差异与结果）
+
+### 机器环境
+
+- 云厂商：腾讯云
+- GPU：Tesla T4，15 GB 显存
+- 驱动：535.216.01，CUDA Version 12.2
+- 系统：Ubuntu，x86_64
+- 内存：30 GiB
+- 磁盘：79 GB，根目录可用约 59 GB
+- 系统 Python：3.10.12，无 Conda，后自行安装 Miniconda
+
+### 实际执行差异
+
+- GitHub clone 速度很慢，改用镜像：
+  `https://ghfast.top/https://github.com/Excavator-13/benchmark.git`
+- 安装 Miniconda 后，每次新 shell 需要：
+  `source "$HOME/miniconda3/etc/profile.d/conda.sh"`
+- Conda 首次创建环境触发 ToS，需要先执行：
+  `conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main`
+  `conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r`
+- 正式训练前设置：
+  `export CUBLAS_WORKSPACE_CONFIG=:4096:8`
+- T4 15 GB 显存成功跑通 region + count，未 OOM。
+
+### 冒烟测试
+
+- seed 999，1 epoch
+- `real 0m6.064s`
+- RMSE：1488.7095817351349
+- MAE：260.52075576782227
+
+### 正式实验
+
+- seed 0：MAE = 41.080686，RMSE = 238.957775
+- seed 1：MAE = 96.180772，RMSE = 579.504594
+- 汇总：
+  - MAE：mean = 68.630729，population_std = 27.550043
+  - RMSE：mean = 409.231185，population_std = 170.273409
+- 耗时：
+  - seed 0：约 1 分 27 秒
+  - seed 1：约 1 分 27 秒
+  - 总耗时约 3 分钟
+
+### 结果归档
+
+- 已打包：`evolvegcn-region-count-results.tar.gz`
+- 已下载到本地并解压成功
+- 实验后已/应释放腾讯云实例，停止计费
