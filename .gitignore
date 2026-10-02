@@ -12,3 +12,5 @@ benchmark/graph_method/results/
 __pycache__/
 */*/__pycache__/
 */*/*/__pycache__/
+*/*.pdf
+evolvegcn-region-count-results/
