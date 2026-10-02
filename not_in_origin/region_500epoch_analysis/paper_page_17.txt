@@ -1,0 +1,60 @@
+Implementment Details.
+We utilized the Time-series-Library 2 to implement some of the models.
+The hyperparameters were uniformly set as follows: a learning rate of 0.0001, 20 epochs of training,
+a hidden layer dimension of 2048, the GELU activation function, and MSE loss as the loss function.
+Early stopping was employed to prevent overfitting by terminating training early when necessary.
+Data from the first 24 months were used for pre-training, and the model was fine-tuned using the next
+6 months to capture trend changes. Finally, the model was used to infer skill demands for the last 6
+months. All other hyperparameters were kept consistent with those in the original paper. To ensure
+the reliability of our findings, we repeated these experiments four times, using random seeds set to 0,
+1, 2, and 3, respectively.
+Overall Performance
+Table 6 displays the mean and standard deviation results of repeated experi-
+ments on the benchmark models for the job skill demand forecasting task as presented in the main
+text. Initially, we supplement the experimental results at the overall labor market level and regional
+granularity, where the RMSE averages over 1000. In cases of coarser granularity, due to the larger
+base of demand values, the prediction deviations are significant.
+Performance on Skill Demand Series with Structural Breaks
+Table 7 presents the results of
+repeated experiments on forecasting skill demand sequences that have undergone structural breaks.
+Initially, the overall errors are quite pronounced, underscoring the challenge of accurately predicting
+these skills. Moreover, FiLM performs well on most metrics, which further verifies its robustness.
+D.2
+Job Skill Demand Forecasting for Low-Frequency Skills
+In multigranular skill demand sequences, a significant number of skills remain inactive or in low
+frequency over extended periods. These skills might continue to have low demand in the future (indi-
+cating low importance), or they might suddenly gain interest from certain professions or companies,
+leading to rapid growth. In this study, we define low-frequency skills as those that appear fewer
+than twice in the time slices of the training set. Predicting the demand for these skills is challenging
+because their data points are predominantly zero during training, resulting in a lack of effective
+observational data. Therefore, we specifically present the demand prediction results of the existing
+benchmark models for these low-frequency skills.
+Results.
+We continued to test the demand prediction effect on low-frequency skills using the
+benchmark models described in the main text, and the results are shown in Table 8. From this, we
+can draw the following conclusions: Firstly, there is a significant increase in the error on the RRMSE
+metric, indicating that low-demand skills are difficult to predict accurately. Secondly, Koopa has
+the best predictive performance in this scenario. We also found that the performance of SegRNN
+significantly decreases, suggesting that SegRNN’s segment learning approach is not suitable for
+predicting low-frequency skill demands due to a lack of effective observational data, rendering the
+learning segments meaningless.
+D.3
+Skill Co-occurrence Graph Enhanced Job Skill Demand Forecasting
+In the task of job skill demand forecasting, fully leveraging the inter-relationships among different
+skills is beneficial for downstream tasks. Therefore, we construct a prior graph with co-occurrence
+frequency from the training data to include as a dataset component. Given a set of granularities
+i, j, . . . , k, we constructed the skill co-occurrence graph as Gi,j,...,k = (Vi,j,...,k, Ei,j,...,k), where
+Vi,j,...,k is the extended skill set under the multiple granularities. The edge weight ev,v′ ∈Ei,j,...,k
+between nodes v and v′ is determined by the co-occurrence frequency of the node pair v, v′ in
+the job advertisement data for training Ptrain. Specifically, given v = (ai, aj, . . . , ak, s) and
+v′ = (ai′, aj′, ..., ak′, s′), ev,v′ is calculated as:
+ev,v′ =
+X
+p∈Ptrain
+Y
+x∈{ai,aj,...,ak,ai′,aj′,...,ak′,s,s′}
+1p(x ∈p).
+(4)
+This information will serve as prior knowledge, reflecting global inter-skill dependency patterns.
+2https://github.com/thuml/Time-Series-Library
+17

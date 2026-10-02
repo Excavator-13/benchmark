@@ -1,0 +1,277 @@
+Table 11: Performance comparisons on low-frequency skill demand series with GNN-based methods.
+Model
+Market
+Region
+L1-O
+L2-O
+R&L1-O
+R&L2-O
+Company
+MAE
+EvolveGCNH
+35.53±27.13
+2.28±1.74
+1.47±1.13
+0.55±0.42
+0.31±0.23
+0.14±0.11
+0.19±0.15
+EvolveGCNO
+27.87±21.29
+3.35±2.56
+1.69±1.29
+0.57±0.43
+0.31±0.24
+0.27±0.21
+0.17±0.13
+GConvGRU
+63.05±48.16
+3.06±2.34
+0.25±0.19
+0.18±0.14
+0.11±0.09
+0.05±0.04
+0.11±0.09
+TGCN
+7.37±5.63
+2.16±1.65
+0.13±0.1
+0.61±0.46
+0.26±0.2
+0.15±0.12
+0.15±0.11
+GCLSTM
+0.62±0.47
+0.41±0.32
+1.37±1.04
+0.15±0.11
+0.12±0.09
+0.09±0.07
+0.12±0.09
+GConvLSTM
+0.79±0.6
+0.43±0.33
+0.2±0.15
+0.13±0.1
+0.1±0.08
+0.06±0.05
+0.13±0.1
+DyGrEncoder
+1.04±0.79
+0.47±0.36
+0.24±0.18
+0.13±0.1
+0.15±0.11
+0.09±0.07
+0.14±0.11
+RMSE
+EvolveGCNH
+144.53±110.39
+11.08±8.46
+11.65±8.9
+5.52±4.22
+3.48±2.66
+1.7±1.3
+1.81±1.38
+EvolveGCNO
+83.5±63.77
+10.36±7.91
+12.82±9.79
+5.74±4.38
+3.8±2.9
+1.95±1.49
+1.65±1.26
+GConvGRU
+63.06±48.16
+3.65±2.79
+1.19±0.91
+0.87±0.66
+1.59±1.22
+0.81±0.62
+1.72±1.31
+TGCN
+21.13±16.14
+8.89±6.79
+1.13±0.86
+3.12±2.38
+2.32±1.77
+1.11±0.85
+1.78±1.36
+GCLSTM
+1.63±1.24
+2.48±1.89
+2.8±2.14
+0.86±0.66
+1.61±1.23
+0.83±0.63
+1.73±1.32
+GConvLSTM
+1.23±0.94
+2.1±1.6
+1.14±0.87
+0.85±0.65
+1.6±1.22
+0.81±0.62
+1.74±1.33
+DyGrEncoder
+1.49±1.14
+2.12±1.62
+1.15±0.88
+0.86±0.66
+1.59±1.22
+0.81±0.62
+1.73±1.32
+SMAPE(%)
+EvolveGCNH
+47.39±36.19
+42.25±32.27
+34.5±26.35
+25.49±19.47
+20.27±15.48
+12.66±9.67
+21.3±16.27
+EvolveGCNO
+115.04±87.86
+89.67±68.48
+48.24±36.84
+28.83±22.02
+20.7±15.81
+29.63±22.63
+19.09±14.58
+GConvGRU
+131.13±100.15
+105.97±80.93
+26.95±20.58
+23.04±17.6
+13.04±9.96
+6.02±4.6
+11.92±9.1
+TGCN
+83.42±63.71
+48.87±37.32
+11.74±8.97
+28.63±21.87
+14.45±11.04
+16.13±12.32
+15.27±11.67
+GCLSTM
+42.8±32.69
+36.75±28.07
+43.27±33.05
+17.57±13.42
+14.03±10.72
+12.17±9.3
+13.44±10.26
+GConvLSTM
+53.85±41.13
+36.93±28.2
+21.67±16.55
+14.71±11.24
+10.07±7.69
+7.15±5.46
+14.91±11.39
+DyGrEncoder
+62.53±47.76
+39.84±30.43
+26.26±20.06
+15.61±11.92
+17.33±13.23
+12.71±9.7
+16.23±12.39
+RRMSE(%)
+EvolveGCNH
+66.67±50.92
+67.56±51.6
+66.87±51.08
+67.29±51.39
+73.11±55.84
+73.29±55.97
+138.14±105.51
+EvolveGCNO
+66.67±50.92
+67.59±51.63
+66.81±51.03
+67.22±51.34
+69.95±53.43
+71.57±54.66
+119.39±91.18
+GConvGRU
+66.46±50.76
+75.73±57.84
+122.73±93.74
+153.14±116.96
+297.91±227.54
+242.77±185.42
+241.43±184.39
+TGCN
+66.51±50.8
+68.02±51.95
+676.51±516.7
+68.73±52.5
+89.88±68.65
+92.87±70.93
+190.19±145.26
+GCLSTM
+60.79±46.43
+103.27±78.88
+70.15±53.58
+169.24±129.26
+359.25±274.38
+214.34±163.7
+272.3±207.97
+GConvLSTM
+65.93±50.36
+189.03±144.38
+156.39±119.44
+166.51±127.18
+345.76±264.08
+287.94±219.92
+285.4±217.98
+DyGrEncoder
+60.35±46.09
+171.99±131.36
+167.79±128.15
+171.6±131.06
+325.47±248.58
+279.07±213.14
+269.12±205.54
+declines across the overall labor market. However, as the granularity of the forecast becomes finer,
+the model performance improves, and at a finer granularity, the EvolveGCN method outperforms the
+state-of-the-art (SOTA) methods mentioned in the main text considerably. We analyze that the finer
+the granularity, the more accurately the co-occurrence graph reflects the associations between skills,
+while coarser granularity might introduce excessive noise leading to decreased model performance.
+The fine-grained co-occurrence graph accurately reflects the interrelationships between skills at
+different granularities, which aids in enhancing the model’s prediction accuracy. Secondly, we
+find significant differences in the RRMSE metric among these methods, with EvolveGCN showing
+superior performance because it can learn the evolution of GCN parameter weights over time, thus
+capturing the evolving dependencies among edges. Therefore, based on the provided co-occurrence
+graph, it can effectively learn the evolution of skill relationships, which is beneficial for dynamic
+prediction of skill demand.
+For skill demand forecasting in scenarios involving structural breaks, as shown in Table 10, the
+improvements in the methods based on the co-occurrence graph are greater than those in the overall
+skill demand forecasting task. This suggests that skills experiencing structural breaks have strong
+interconnections, and the co-occurrence graph helps the model to identify the patterns of skill
+demand sequences that are likely to undergo structural breaks, thus further enhancing the prediction
+effectiveness for this category of skills.
+In the task of predicting low-frequency skills, as shown in Table 11, methods like GConvLSTM
+significantly outperform EvolveGCN. This is due to the sparse observable data for these skills, which
+leads to sparse connectivity edges on the co-occurrence graph.
+D.4
+Job Skill Demand Proportion Forecasting
+In the main text, we discussed the issue of skill demand prediction. However, consider a scenario
+where the number of skill postings for a particular occupation is very low, leading to a low demand
+for that occupational skills. Nevertheless, these skills might constitute a significant portion of the
+profession’s core competencies. Therefore, using skill demand alone may not adequately measure the
+importance of these skills within the occupation. To address this, we introduce an extended dataset
+that includes the skill demand propotion. We define the skill demand proportion as:
+Ri
+s,t = [Ri
+s,t,ai]ai∈Ai, Ri
+s,t,ai =
+P
+p∈Pt 1(s ∈p) · 1(ai ∈p)
+P
+p∈Pt 1(ai ∈p)
+,
+(5)
+22

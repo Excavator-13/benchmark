@@ -1,0 +1,158 @@
+0
+1000
+2000
+3000
+Logical Analysis
+Cooperation
+Consulting Services
+Product Manager
+0
+50
+100
+150
+200
+Logical Analysis
+Cooperation
+Consulting Services
+Doctor
+(a) The skill demands under two occupations.
+2021-01
+2021-02
+2021-03
+2021-04
+2021-05
+2021-06
+2021-07
+2021-08
+2021-09
+2021-10
+2021-11
+2021-12
+2022-01
+2022-02
+2022-03
+2022-04
+2022-05
+2022-06
+2022-07
+2022-08
+2022-09
+2022-10
+2022-11
+2022-12
+2023-01
+2023-02
+2023-03
+2023-04
+2023-05
+2023-06
+2023-07
+2023-08
+2023-09
+2023-10
+2023-11
+2023-12
+0
+100
+200
+Product Manager-Understanding Ability
+Actual
+Fitted
+Chow Test
+2021-01
+2021-02
+2021-03
+2021-04
+2021-05
+2021-06
+2021-07
+2021-08
+2021-09
+2021-10
+2021-11
+2021-12
+2022-01
+2022-02
+2022-03
+2022-04
+2022-05
+2022-06
+2022-07
+2022-08
+2022-09
+2022-10
+2022-11
+2022-12
+2023-01
+2023-02
+2023-03
+2023-04
+2023-05
+2023-06
+2023-07
+2023-08
+2023-09
+2023-10
+2023-11
+2023-12
+0
+100
+200
+Salesperson-Communication Skill
+Actual
+Fitted
+Chow Test
+(b) Appying the Chow test to two skill demand time series.
+Figure 1: Data analysis on Job-SDF. (a) illustrates the long-tail phenomenon of skill demands under
+the product manager and doctor occupations. (b) illustrates the results under the Chow test for the
+absence (left) and presence (right) of structural breaks.
+regions as Ao1, Ao2, Ac, and Ar, respectively. The demands for skill s at time t under granularity
+i ∈{o1, o2, c, r} is then defined as follows:
+Di
+s,t = [Di
+s,t,ai]ai∈Ai, Di
+s,t,ai =
+X
+p∈Pt
+1(s ∈p) · 1(ai ∈p),
+(1)
+where ai ∈p represents a job advertisement p containing the attribute ai under granularity i. Similarly,
+we can further define skill demands Di,j,...,k
+s,t
+across multiple granularities {i, j, ..., k} by calculating:
+Di,j,...,k
+s,t,a
+=
+X
+p∈Pt
+1(s ∈p) · 1(ai ∈p ∧aj ∈p ∧... ∧ak ∈p),
+(2)
+where a = {ai, aj, ..., ak}, ai ∈Ai, aj ∈Aj, ..., ak ∈Ak, and Di,j,...,k
+s,t
+∈R|Ai||Aj|...|Ak|.
+3.2
+Job Skill Demand Forecasting Tasks
+We study model performance through job skill demand forecasting tasks at different granularities,
+including single and multiple levels. The primary goal of these tasks is to predict future job skill
+demands based on historical time series data of various skills. Formally, we have:
+Definition 1 (Job Skill Demand Forecasting) Given a granularity or a set of granularities g and
+the observed job skill demand series from the previous K timestamps, i.e., {Dg
+:,t−K+1, ..., Dg
+:,t}, the
+goal of job skill demand forecasting is to learn a forecasting model M to predict the demand values
+for the next H timestamps, denoted by { ˆDg
+:,t+1, . . . , ˆDg
+:,t+H}.
+Our dataset includes skill demand time series data for L1-level occupations, L2-level occupations,
+companies, regions, and their combinations. We follow a standard protocol [59] that categorizes all
+time-series data into training, validation, and test sets in chronological order with a ratio of 9:1:2.
+In the main text, we demonstrate results with K set to 6 months and consider H as 3 months to
+evaluate the performance of different forecasting models. More settings and results can be found
+in the Appendix D and our project repository. Based on the Job-SDF dataset, other researchers can
+easily adjust the parameters to suit their research objectives.
+3.3
+Dataset Analysis
+Varying Nature of Skill Demand. The values of skill demand exhibit significant differences and
+generally follow a long-tail distribution. This indicates that, at a specific granularity, only a few skills
+have high demand, while a wide range of skills are required by a limited number of jobs. For instance,
+4
