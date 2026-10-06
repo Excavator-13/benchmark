@@ -20,6 +20,8 @@
 
 Official repository of paper [&#34;Job-SDF: A Multi-Granularity Dataset for Job Skill Demand Forecasting and Benchmarking&#34;](https://arxiv.org/pdf/2406.11920). Please star, watch and fork our repo for the active updates!
 
+Research progress, plans, decisions, and evidence for this fork start at [RESEARCH.md](RESEARCH.md).
+
 ## 1. Overview
 
 <!-- <div style="display: flex; justify-content: center;">

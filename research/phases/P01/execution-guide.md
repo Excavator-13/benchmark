@@ -1,10 +1,10 @@
-# 当前下一步操作指导：先取得可核对的基础证据
+# 第一阶段执行指导：诊断与 baseline 操作
 
 编写日期：2026-10-06。
 
-这份指导落实[第一阶段规划](02_phase_one_plan.md)的最先几步。科研全貌见[路线图](01_research_roadmap.md)。以下命令供后续执行；本次文档编写没有安装依赖、运行数据诊断或训练模型。
+这份指导落实[实验协议](protocol.md)。研究方向见[路线图](../../roadmap.md)，当前任务见[阶段计划](plan.md)，下一动作见[当前状态](../../state.md)。首轮第 3 至 5 节诊断已完成，开发从第 7 节接续；重跑诊断使用新 run ID。
 
-协议以第二份文档第 3 至 6 节的 `P1-count-L6-H3-v2` 为唯一来源。下面的命令实现该版本，更新协议时必须同步核对命令，并为每次运行保存协议快照。
+协议以 `protocol.md` 第 3 至 6 节的 `P1-count-L6-H3-v3` 为唯一来源。v3 仅改变记录布局，科学计算与 v2 一致。下面的命令没有在本次迁移中执行。
 
 ## 1. 这一轮只要做成什么
 
@@ -59,15 +59,15 @@ python -c 'import sys, numpy, pandas, pyarrow; from pathlib import Path; assert 
 ```bash
 set -e
 set -o pipefail
-export JOB_SDF_PHASE1_RUN_ID=phase1-20261006-v2-01
-export JOB_SDF_PHASE1_OUTPUT="experiments_phase1/${JOB_SDF_PHASE1_RUN_ID}"
-mkdir -p experiments_phase1
+export JOB_SDF_PHASE1_RUN_ID=phase1-20261006-v3-01
+export JOB_SDF_PHASE1_OUTPUT="research/runs/${JOB_SDF_PHASE1_RUN_ID}"
+mkdir -p research/runs
 mkdir "$JOB_SDF_PHASE1_OUTPUT"
-cp research_planning/02_phase_one_plan.md "$JOB_SDF_PHASE1_OUTPUT/protocol.md"
-cp research_planning/03_next_steps_guide.md "$JOB_SDF_PHASE1_OUTPUT/execution-guide.md"
+cp research/phases/P01/protocol.md "$JOB_SDF_PHASE1_OUTPUT/protocol.md"
+cp research/phases/P01/execution-guide.md "$JOB_SDF_PHASE1_OUTPUT/execution-guide.md"
 git rev-parse HEAD > "$JOB_SDF_PHASE1_OUTPUT/git-commit.txt"
 git status --short > "$JOB_SDF_PHASE1_OUTPUT/git-status.txt"
-git diff HEAD -- research_planning > "$JOB_SDF_PHASE1_OUTPUT/planning-diff.patch"
+git diff HEAD -- research > "$JOB_SDF_PHASE1_OUTPUT/planning-diff.patch"
 python -m pip freeze > "$JOB_SDF_PHASE1_OUTPUT/environment.txt"
 shasum -a 256 dataset/demand/r0.parquet dataset/demand/region.parquet dataset/graph/r0.parquet dataset/graph/region.parquet > "$JOB_SDF_PHASE1_OUTPUT/source-sha256.txt"
 shasum -a 256 "$JOB_SDF_PHASE1_OUTPUT/protocol.md" "$JOB_SDF_PHASE1_OUTPUT/execution-guide.md" > "$JOB_SDF_PHASE1_OUTPUT/planning-sha256.txt"
@@ -75,7 +75,7 @@ shasum -a 256 "$JOB_SDF_PHASE1_OUTPUT/protocol.md" "$JOB_SDF_PHASE1_OUTPUT/execu
 
 重新打开终端后，激活环境、返回仓库根目录，并重新设置上述两个环境变量指向已经创建的目录。无需再次执行 `mkdir`。
 
-旧指南的 `benchmark/graph_method/results/` 被 Git 忽略，本版改用 `experiments_phase1/`，不移动已有结果。未被忽略仍不等于已备份；第 9 节的打包、校验、提交与同步是本轮收尾步骤。
+旧图 CLI 的 `benchmark/graph_method/results/` 被 Git 忽略，新运行使用 `research/runs/`。正式入口还需保存 provenance、实际命令/脚本和输入/输出身份；本页一次性诊断不代替该入口。未被忽略不等于已入库或备份。
 
 ## 3. 先算五个朴素基线并审计节点构成
 
@@ -98,7 +98,7 @@ CONTEXTS = {"r0": ["r0_id"], "region": ["region_id"]}
 SPLITS = {"train": list(range(19)), "validation": [21],
           "test": list(range(24, 28))}
 L, H = 6, 3
-PROTOCOL = "P1-count-L6-H3-v2"
+PROTOCOL = "P1-count-L6-H3-v3"
 
 def metrics(pred, gold):
     error = pred.astype(np.float64) - gold.astype(np.float64)
@@ -393,7 +393,7 @@ PY
 上面的诊断通过后，再提出第一项实现工作。建议范围仅包含：
 
 - 不依赖 PyG 的规范数据读取、节点身份和时间划分。
-- 五种朴素基线及验证选定的参照，与[第二份文档定义的共享 Ridge](02_phase_one_plan.md#52-共享-ridge主要的稳定学习参照)。
+- 五种朴素基线及验证选定的参照，与[协议定义的共享 Ridge](protocol.md#52-共享-ridge主要的稳定学习参照)。
 - 验证选 lambda、训练期标准化、原始单位评估。
 - 独立结果目录、预测与标签保存、协议快照与数据校验和、预定活跃度组及等权组指标、耗时和归档。
 - 关键协议检查：目标月不跨划分、标签对齐、标准化只拟合训练期、指标可重算、重复运行结果一致。
@@ -404,7 +404,7 @@ PY
 
 ## 8. 什么时候恢复 GPU 实验
 
-当归档比较已对齐，且决定需要回答 EvolveGCN-H 的重复性问题时，参照[原下一轮 GPU 指南](../guides/(2)GPU_SERVER_EVOLVEGCN_NEXT_STEPS_GUIDE.md)第 3 节。
+当归档比较已对齐，且决定需要回答 EvolveGCN-H 的重复性问题时，参照[原下一轮 GPU 指南](../../../guides/(2)GPU_SERVER_EVOLVEGCN_NEXT_STEPS_GUIDE.md)第 3 节。
 
 需要注意该指南的原结果默认目录与当前归档位置不同。在保存有这些归档文件的机器上设置：
 
@@ -425,8 +425,8 @@ export EVOLVEGCN_ORIGINAL_ROOT="$(pwd)/experiments_archive/1st_try_in_phase_fix_
 小规模第一阶段使用全量包和校验文件入库，打包前停止往运行目录写入。下面会拒绝覆盖同名归档：
 
 ```bash
-export JOB_SDF_PHASE1_ARCHIVE="experiments_archive/phase1/${JOB_SDF_PHASE1_RUN_ID}.tar.gz"
-mkdir -p experiments_archive/phase1
+export JOB_SDF_PHASE1_ARCHIVE="research/archives/${JOB_SDF_PHASE1_RUN_ID}.tar.gz"
+mkdir -p research/archives
 python - <<'PY'
 import os
 from pathlib import Path
@@ -434,12 +434,12 @@ from pathlib import Path
 output = Path(os.environ["JOB_SDF_PHASE1_OUTPUT"])
 archive = Path(os.environ["JOB_SDF_PHASE1_ARCHIVE"])
 assert output.is_dir() and (output / "summary.md").is_file()
-assert output == Path("experiments_phase1") / os.environ["JOB_SDF_PHASE1_RUN_ID"]
+assert output == Path("research/runs") / os.environ["JOB_SDF_PHASE1_RUN_ID"]
 assert not archive.exists() and not Path(str(archive) + ".sha256").exists()
 PY
 shasum -a 256 -c "$JOB_SDF_PHASE1_OUTPUT/source-sha256.txt"
 shasum -a 256 -c "$JOB_SDF_PHASE1_OUTPUT/planning-sha256.txt"
-tar -czf "$JOB_SDF_PHASE1_ARCHIVE" -C experiments_phase1 "$JOB_SDF_PHASE1_RUN_ID"
+COPYFILE_DISABLE=1 tar -czf "$JOB_SDF_PHASE1_ARCHIVE" -C research/runs "$JOB_SDF_PHASE1_RUN_ID"
 tar -tzf "$JOB_SDF_PHASE1_ARCHIVE"
 shasum -a 256 "$JOB_SDF_PHASE1_ARCHIVE" > "${JOB_SDF_PHASE1_ARCHIVE}.sha256"
 shasum -a 256 -c "${JOB_SDF_PHASE1_ARCHIVE}.sha256"
@@ -448,8 +448,8 @@ git diff --cached --stat -- "$JOB_SDF_PHASE1_ARCHIVE" "${JOB_SDF_PHASE1_ARCHIVE}
 git commit -m "Archive ${JOB_SDF_PHASE1_RUN_ID}" -- "$JOB_SDF_PHASE1_ARCHIVE" "${JOB_SDF_PHASE1_ARCHIVE}.sha256"
 ```
 
-这些是后续归档操作，本次修改文档不会运行它们。提交后按现有分支流程同步远端，或将包与 SHA256 放到另一个持久位置并在那里核验；尚未同步时状态记为“本地归档，未备份”。取回后以归档内协议快照恢复条件，不使用后来修改的文档替代。未来完整实验还要将预测、标签、模型参数和结果元数据一起打包，本轮诊断日志不能代替它们。
+这些是后续操作，本次迁移不运行它们。封存前确认没有写入进程，commit/push 按当时授权执行。包的入库 commit、备份位置和核验时间写在[外部索引](../../archives/index.md)，不为此改写摘要。解包核验使用新的临时目录，避免覆盖现有运行。取回后使用运行内快照；正式实验还需保存预测、标签、参数和 provenance。
 
-结束时记录三个判断：验证选定的便宜方法能提供怎样的参照；发布图能支持怎样的权重解释；旧 EvolveGCN-H 结果是否与当前任务标签一致。按照第二份文档第 6 节的指标和判据解释结果，不根据测试排名更换参照。记录未完成项，不用结论填补缺失实验。
+结束时记录三个判断：验证选定的便宜方法能提供怎样的参照；发布图能支持怎样的权重解释；旧 EvolveGCN-H 结果是否与当前任务标签一致。按协议第 6 节解释结果，不按测试排名更换参照；更新阶段计划与 state。
 
 完成这些后，项目就有了进入共享 Ridge 实现和图收益验证的具体起点。此时仍不需要扩大到所有模型或所有粒度。
