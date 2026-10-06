@@ -41,7 +41,8 @@ python3 research/archives/migrations/verify_20261006.py
 - 目标提交：`f66959b3dd868ba97a330cf46147212b83a4524b`，包含旧归档历史、原样诊断展开副本与当时两份记录文档。
 - 首次 `git push -u origin xzs` 成功，建立上游；`git ls-remote --heads origin xzs` 独立读取远端引用与目标提交相等。
 - 2026-10-06T18:13:45+08:00 核验：从 `https://raw.githubusercontent.com/Excavator-13/benchmark/f66959b3dd868ba97a330cf46147212b83a4524b/experiments_archive/phase1/phase1-20261006-v2-01.tar.gz` 取回 38,838 字节；SHA256 与本地一致，`cmp` 逐字节相等。不是全新 clone 或完整重训恢复测试。
-- 组织迁移尚未提交；此处不预先填写未来 commit。后续入库身份由 Git 历史及迁移记录追溯，无需记录索引自身的提交号。
+- 组织入库提交：`b094cf13f47f2622f2771f0d766212b0b34fadba`。2026-10-06T18:18:00+08:00 独立读取 `origin/xzs` 指向该提交；从该提交取回 `RESEARCH.md`，与本地 918 字节逐字节一致。组织正文已核验可读。
+- 后续收尾记录通过独立文档提交保存；自身最终 commit 从 Git 历史查证，不为记录自身的 push 反复改写索引。
 
 ## 新记录的保存与恢复
 
