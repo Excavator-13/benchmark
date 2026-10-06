@@ -4,11 +4,13 @@
 
 这份指导落实[第一阶段规划](02_phase_one_plan.md)的最先几步。科研全貌见[路线图](01_research_roadmap.md)。以下命令供后续执行；本次文档编写没有安装依赖、运行数据诊断或训练模型。
 
+协议以第二份文档第 3 至 6 节的 `P1-count-L6-H3-v2` 为唯一来源。下面的命令实现该版本，更新协议时必须同步核对命令，并为每次运行保存协议快照。
+
 ## 1. 这一轮只要做成什么
 
 先完成下面三个结果：
 
-1. `r0/count` 和 `region/count` 的 Zero、LastValue、WindowMean6 基线。
+1. `r0/count` 和 `region/count` 的五项朴素基线、技能/上下文网格审计，以及预定活跃度分层结果。
 2. 按正确上下文统计图覆盖与重复次数，确认原来的边权解释是否适用。
 3. 有 PyTorch 环境时，核对归档 EvolveGCN-H 的标签、指标和逐窗口误差。
 
@@ -36,16 +38,17 @@ ls experiments_archive/1st_try_in_phase_fix_origin/benchmark/graph_method/result
 
 ### 2.2 使用独立的 CPU 环境
 
-已有满足依赖的环境可以直接使用。否则建议新建轻量环境，避免修改旧训练环境：
+本机 base 的 pandas 实测为不完整的 namespace 包（`__file__ is None`，无 `read_parquet`），也未安装 PyArrow，因此这台 Mac 必须先建立并核验独立环境。其他机器只有通过实际 Parquet 读取检查后才能复用已有环境；仅能 `import pandas` 不足以证明可用。
 
 ```bash
 conda create -n job-sdf-baseline python=3.11
 conda activate job-sdf-baseline
-python -m pip install numpy==1.26.4 pandas==2.2.3 pyarrow==17.0.0
-python -c 'import sys, numpy, pandas, pyarrow; print(sys.executable); print(numpy.__version__, pandas.__version__, pyarrow.__version__)'
+python -m pip --version
+python -m pip install --no-cache-dir numpy==1.26.4 pandas==2.2.3 pyarrow==17.0.0
+python -c 'import sys, numpy, pandas, pyarrow; from pathlib import Path; assert Path(sys.prefix).name == "job-sdf-baseline"; assert callable(pandas.read_parquet); print(sys.executable); print(numpy.__version__, pandas.__version__, pyarrow.__version__); print(pandas.read_parquet("dataset/demand/r0.parquet", columns=["skill_id"]).shape)'
 ```
 
-这些是新诊断环境的建议版本，不是旧 GPU 实验的环境复现。暂不安装仓库整个 `requirements.txt`，其中的 CUDA wheel、DGL 和图扩展不是本轮基线所需。
+这些是新诊断环境的建议版本，不是旧 GPU 实验的环境复现。安装始终使用激活环境的 `python -m pip`，`--no-cache-dir` 避免本轮依赖用户 pip 缓存目录权限。暂不安装仓库整个 `requirements.txt`，其中的 CUDA wheel、DGL 和图扩展不是本轮基线所需。
 
 共享 Ridge 实现阶段再加入 sklearn；归档张量核对需要 PyTorch，见第 5 节。若下载失败先处理网络或软件源，不能把安装失败解释为模型不能在 Mac 上运行。
 
@@ -56,19 +59,25 @@ python -c 'import sys, numpy, pandas, pyarrow; print(sys.executable); print(nump
 ```bash
 set -e
 set -o pipefail
-export JOB_SDF_PHASE1_RUN_ID=phase1-20261006-01
-export JOB_SDF_PHASE1_OUTPUT="benchmark/graph_method/results/phase1/${JOB_SDF_PHASE1_RUN_ID}"
-mkdir -p benchmark/graph_method/results/phase1
+export JOB_SDF_PHASE1_RUN_ID=phase1-20261006-v2-01
+export JOB_SDF_PHASE1_OUTPUT="experiments_phase1/${JOB_SDF_PHASE1_RUN_ID}"
+mkdir -p experiments_phase1
 mkdir "$JOB_SDF_PHASE1_OUTPUT"
+cp research_planning/02_phase_one_plan.md "$JOB_SDF_PHASE1_OUTPUT/protocol.md"
+cp research_planning/03_next_steps_guide.md "$JOB_SDF_PHASE1_OUTPUT/execution-guide.md"
 git rev-parse HEAD > "$JOB_SDF_PHASE1_OUTPUT/git-commit.txt"
 git status --short > "$JOB_SDF_PHASE1_OUTPUT/git-status.txt"
+git diff HEAD -- research_planning > "$JOB_SDF_PHASE1_OUTPUT/planning-diff.patch"
 python -m pip freeze > "$JOB_SDF_PHASE1_OUTPUT/environment.txt"
 shasum -a 256 dataset/demand/r0.parquet dataset/demand/region.parquet dataset/graph/r0.parquet dataset/graph/region.parquet > "$JOB_SDF_PHASE1_OUTPUT/source-sha256.txt"
+shasum -a 256 "$JOB_SDF_PHASE1_OUTPUT/protocol.md" "$JOB_SDF_PHASE1_OUTPUT/execution-guide.md" > "$JOB_SDF_PHASE1_OUTPUT/planning-sha256.txt"
 ```
 
 重新打开终端后，激活环境、返回仓库根目录，并重新设置上述两个环境变量指向已经创建的目录。无需再次执行 `mkdir`。
 
-## 3. 先算三个朴素基线
+旧指南的 `benchmark/graph_method/results/` 被 Git 忽略，本版改用 `experiments_phase1/`，不移动已有结果。未被忽略仍不等于已备份；第 9 节的打包、校验、提交与同步是本轮收尾步骤。
+
+## 3. 先算五个朴素基线并审计节点构成
 
 以下一次性诊断不导入图模型。它按规范节点键排序，核对月份、节点身份和数值，采用当前修复版的 `19 / 1 / 4` 窗口划分，输出验证和测试指标。运行前需已设置第 2 节的输出目录。
 
@@ -76,6 +85,7 @@ shasum -a 256 dataset/demand/r0.parquet dataset/demand/region.parquet dataset/gr
 python - <<'PY' | tee "$JOB_SDF_PHASE1_OUTPUT/naive-baselines.log"
 import json
 import platform
+import math
 import time
 from pathlib import Path
 
@@ -88,14 +98,18 @@ CONTEXTS = {"r0": ["r0_id"], "region": ["region_id"]}
 SPLITS = {"train": list(range(19)), "validation": [21],
           "test": list(range(24, 28))}
 L, H = 6, 3
+PROTOCOL = "P1-count-L6-H3-v2"
 
 def metrics(pred, gold):
     error = pred.astype(np.float64) - gold.astype(np.float64)
-    return {"MAE": float(np.abs(error).mean()),
-            "RMSE": float(np.sqrt(np.square(error).mean()))}
+    mse = float(np.square(error).mean())
+    return {"MAE": float(np.abs(error).mean()), "MSE": mse,
+            "RMSE": float(np.sqrt(mse))}
 
 print(json.dumps({"machine": platform.machine(), "system": platform.system(),
-                  "numpy": np.__version__, "pandas": pd.__version__}))
+                  "numpy": np.__version__, "pandas": pd.__version__,
+                  "protocol": PROTOCOL}))
+reference_skills = None
 for name, context in CONTEXTS.items():
     started = time.perf_counter()
     frame = pd.read_parquet(Path("dataset/demand") / f"{name}.parquet")
@@ -110,6 +124,34 @@ for name, context in CONTEXTS.items():
     signal = frame[MONTHS].to_numpy(dtype=np.float32)
     assert signal.shape[1] == 36 and signal.shape[0] > 0
     assert np.isfinite(signal).all() and (signal >= 0).all()
+    skills = sorted(frame["skill_id"].unique().tolist())
+    if reference_skills is not None:
+        assert skills == reference_skills, f"{name}: skill set differs from r0"
+    reference_skills = skills
+    context_counts = {key: int(frame[key].nunique()) for key in context}
+    joint_contexts = len(frame[context].drop_duplicates())
+    expected_nodes = joint_contexts * len(skills)
+    activity = (signal[:, :27] > 0).mean(axis=1)
+    groups = {
+        "inactive": activity == 0,
+        "low": (activity > 0) & (activity <= 1 / 3),
+        "medium": (activity > 1 / 3) & (activity <= 2 / 3),
+        "high": activity > 2 / 3,
+    }
+    assert np.stack(list(groups.values())).sum(axis=0).tolist() == [1] * len(frame)
+    train_mean = signal[:, :27].mean(axis=1, keepdims=True)
+    print(json.dumps({"dataset": name, "skill_id_nunique": len(skills),
+                      "context_id_counts": context_counts,
+                      "joint_contexts": joint_contexts,
+                      "context_cartesian_size": math.prod(context_counts.values()),
+                      "expected_context_skill_nodes": expected_nodes,
+                      "is_complete_context_skill_grid": len(frame) == expected_nodes,
+                      "train_observation_months": MONTHS[:27],
+                      "train_all_zero_fraction": float((activity == 0).mean()),
+                      "full_36_month_all_zero_fraction_diagnostic_only":
+                          float((signal == 0).all(axis=1).mean()),
+                      "activity_group_counts": {k: int(v.sum()) for k, v in groups.items()}},
+                     sort_keys=True))
 
     target_sets = {
         split: {MONTHS[k] for start in starts
@@ -124,6 +166,7 @@ for name, context in CONTEXTS.items():
                       "target_months": {k: sorted(v) for k, v in target_sets.items()}},
                      sort_keys=True))
 
+    validation_mse = {}
     for split in ("validation", "test"):
         starts = SPLITS[split]
         x = np.stack([signal[:, s:s + L] for s in starts])
@@ -132,8 +175,18 @@ for name, context in CONTEXTS.items():
             "Zero": np.zeros_like(gold),
             "LastValue": np.repeat(x[:, :, -1:], H, axis=2),
             "WindowMean6": np.repeat(x.mean(axis=2, keepdims=True), H, axis=2),
+            "TrainMean27": np.broadcast_to(train_mean[None, :, :], gold.shape),
+            "SeasonalNaive12": np.stack([signal[:, s + L - 12:s + L + H - 12]
+                                         for s in starts]),
         }
         for model, pred in predictions.items():
+            assert pred.shape == gold.shape
+            group_metrics = {
+                key: {"nodes": int(mask.sum()),
+                      **metrics(pred[:, mask, :], gold[:, mask, :])}
+                for key, mask in groups.items() if mask.any()
+            }
+            balanced_mae = float(np.mean([row["MAE"] for row in group_metrics.values()]))
             windows = [
                 {"forecast_origin": MONTHS[s + L - 1],
                  "target_months": MONTHS[s + L:s + L + H],
@@ -144,7 +197,18 @@ for name, context in CONTEXTS.items():
                         for h in range(H)}
             print(json.dumps({"dataset": name, "split": split, "model": model,
                               **metrics(pred, gold), "windows": windows,
-                              "horizons": horizons}, sort_keys=True))
+                              "horizons": horizons, "activity_groups": group_metrics,
+                              "balanced_activity_group_MAE": balanced_mae}, sort_keys=True))
+            if split == "validation":
+                validation_mse[model] = metrics(pred, gold)["MSE"]
+        if split == "validation":
+            order = list(predictions)
+            choose = lambda names: min(names, key=lambda key: (validation_mse[key], order.index(key)))
+            print(json.dumps({"dataset": name, "reference_selection": "validation MSE",
+                              "NaiveRef": choose(order),
+                              "NaiveRef6": choose([key for key in order if key != "SeasonalNaive12"]),
+                              "SeasonalNaive12_information_budget": "extra 12-month history"},
+                             sort_keys=True))
     print(json.dumps({"dataset": name,
                       "elapsed_seconds": time.perf_counter() - started}))
 PY
@@ -153,9 +217,12 @@ PY
 检查输出：
 
 - `r0` 预计 2,335 节点，`region` 预计 16,345 节点；若不同，先核对数据版本。
+- 检查真实技能数、上下文数和 `is_complete_context_skill_grid`；全零比例需读输出，不能由行数倍数推测。
 - 验证目标是 2023-04 至 2023-06，测试目标是 2023-07 至 2023-12。
 - 四个测试窗口分别从 2023-07、08、09、10 开始预测未来 3 月。
 - 所有指标有限，基线无需训练或随机初始化。
+
+TrainMean27 使用固定的 2021-01 至 2023-03 均值；SeasonalNaive12 对每个目标月读取去年同月，属于额外历史参照。NaiveRef 与 NaiveRef6 的选择仅依赖验证 MSE，分别对应实用门槛和 6 月输入预算的参照。分组仅使用训练 27 月；完整 36 月全零率仅作描述。
 
 这一轮报告所有预定基线，不根据测试排名临时添加大量规则。整体 RMSE 是平均平方误差的平方根，不是四个窗口 RMSE 的均值。
 
@@ -229,7 +296,7 @@ PY
 在已有 PyTorch 环境中可以直接执行。若使用新建的 Mac CPU 环境，可选安装：
 
 ```bash
-python -m pip install torch==2.3.1
+python -m pip install --no-cache-dir torch==2.3.1
 python -c 'import torch; print(torch.__version__)'
 python -m pip freeze > "$JOB_SDF_PHASE1_OUTPUT/environment-after-torch.txt"
 ```
@@ -326,9 +393,9 @@ PY
 上面的诊断通过后，再提出第一项实现工作。建议范围仅包含：
 
 - 不依赖 PyG 的规范数据读取、节点身份和时间划分。
-- 三种朴素基线与[第二份文档定义的共享 Ridge](02_phase_one_plan.md#52-共享-ridge主要的稳定学习参照)。
+- 五种朴素基线及验证选定的参照，与[第二份文档定义的共享 Ridge](02_phase_one_plan.md#52-共享-ridge主要的稳定学习参照)。
 - 验证选 lambda、训练期标准化、原始单位评估。
-- 独立结果目录、预测与标签保存、配置与数据校验和、分组指标和耗时。
+- 独立结果目录、预测与标签保存、协议快照与数据校验和、预定活跃度组及等权组指标、耗时和归档。
 - 关键协议检查：目标月不跨划分、标签对齐、标准化只拟合训练期、指标可重算、重复运行结果一致。
 
 当前仓库没有这个入口。不要执行 `--model_name Ridge` 或 `--learning_rate ...`，当前图 CLI 不支持它们。后续可以创建一个范围明确的 OpenSpec change，再实现和验证；本次只创建规划文档。
@@ -351,8 +418,38 @@ export EVOLVEGCN_ORIGINAL_ROOT="$(pwd)/experiments_archive/1st_try_in_phase_fix_
 
 ## 9. 第一轮结束时留下什么
 
-本轮独立目录应包含：`git-commit.txt`、`git-status.txt`、`environment.txt`、`source-sha256.txt`、`naive-baselines.log`、`graph-audit.log`。执行第 5 节后另外有 `environment-after-torch.txt` 和 `archive-comparison.log`。
+本轮独立目录应包含：协议与操作指导快照、`git-commit.txt`、`git-status.txt`、`planning-diff.patch`、`environment.txt`、`source-sha256.txt`、`planning-sha256.txt`、`naive-baselines.log`、`graph-audit.log`。执行第 5 节后另外有 `environment-after-torch.txt` 和 `archive-comparison.log`。
 
-结束时记录三个判断：哪种便宜方法提供了可用参照；发布图能支持怎样的权重解释；旧 EvolveGCN-H 结果是否与当前任务标签一致。记录未完成项，不用结论填补缺失实验。
+先在运行目录写入 `summary.md`，记录协议版本、成功/失败/中断状态、完成步骤及未完成项。失败日志同样保留；成功运行需明确技能/上下文与全零率、验证选定的两项参照、图覆盖及归档比较是否通过。
+
+小规模第一阶段使用全量包和校验文件入库，打包前停止往运行目录写入。下面会拒绝覆盖同名归档：
+
+```bash
+export JOB_SDF_PHASE1_ARCHIVE="experiments_archive/phase1/${JOB_SDF_PHASE1_RUN_ID}.tar.gz"
+mkdir -p experiments_archive/phase1
+python - <<'PY'
+import os
+from pathlib import Path
+
+output = Path(os.environ["JOB_SDF_PHASE1_OUTPUT"])
+archive = Path(os.environ["JOB_SDF_PHASE1_ARCHIVE"])
+assert output.is_dir() and (output / "summary.md").is_file()
+assert output == Path("experiments_phase1") / os.environ["JOB_SDF_PHASE1_RUN_ID"]
+assert not archive.exists() and not Path(str(archive) + ".sha256").exists()
+PY
+shasum -a 256 -c "$JOB_SDF_PHASE1_OUTPUT/source-sha256.txt"
+shasum -a 256 -c "$JOB_SDF_PHASE1_OUTPUT/planning-sha256.txt"
+tar -czf "$JOB_SDF_PHASE1_ARCHIVE" -C experiments_phase1 "$JOB_SDF_PHASE1_RUN_ID"
+tar -tzf "$JOB_SDF_PHASE1_ARCHIVE"
+shasum -a 256 "$JOB_SDF_PHASE1_ARCHIVE" > "${JOB_SDF_PHASE1_ARCHIVE}.sha256"
+shasum -a 256 -c "${JOB_SDF_PHASE1_ARCHIVE}.sha256"
+git add -- "$JOB_SDF_PHASE1_ARCHIVE" "${JOB_SDF_PHASE1_ARCHIVE}.sha256"
+git diff --cached --stat -- "$JOB_SDF_PHASE1_ARCHIVE" "${JOB_SDF_PHASE1_ARCHIVE}.sha256"
+git commit -m "Archive ${JOB_SDF_PHASE1_RUN_ID}" -- "$JOB_SDF_PHASE1_ARCHIVE" "${JOB_SDF_PHASE1_ARCHIVE}.sha256"
+```
+
+这些是后续归档操作，本次修改文档不会运行它们。提交后按现有分支流程同步远端，或将包与 SHA256 放到另一个持久位置并在那里核验；尚未同步时状态记为“本地归档，未备份”。取回后以归档内协议快照恢复条件，不使用后来修改的文档替代。未来完整实验还要将预测、标签、模型参数和结果元数据一起打包，本轮诊断日志不能代替它们。
+
+结束时记录三个判断：验证选定的便宜方法能提供怎样的参照；发布图能支持怎样的权重解释；旧 EvolveGCN-H 结果是否与当前任务标签一致。按照第二份文档第 6 节的指标和判据解释结果，不根据测试排名更换参照。记录未完成项，不用结论填补缺失实验。
 
 完成这些后，项目就有了进入共享 Ridge 实现和图收益验证的具体起点。此时仍不需要扩大到所有模型或所有粒度。
