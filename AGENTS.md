@@ -8,25 +8,11 @@ Update the recovery point and next action after meaningful progress and before h
 
 ## Cross-skill delegation pointer
 
-The single handoff between the research records and the OpenSpec workflows is the pointer table at the end of this file. This file is workspace-level guidance, so it is present at the start of every session regardless of which skill is used: read the pointer before starting any workflow, and honour it whichever skill is running.
+Delegations from the research records to the OpenSpec workflows are tracked in `DELEGATION.md` at the repository root. That file holds mutable state; this file holds the stable rules for it.
 
-Rules:
-
-- **Register before starting.** A delegation is registered by a research-side turn, before invoking any OpenSpec workflow — never from inside propose, apply, verify, fix, or archive, which have their own boundaries. Set `Status` to `open` and fill the change name (name only, not path: archiving adds a date prefix and moves the directory), the research task ID, the recycle condition, and the research-side wrap-up that recycle must trigger. Keep at most one `open` delegation.
-- **Close only from read-only evidence.** Set `Status` to `returned` only when `openspec/changes/<change-name>` no longer exists and `openspec/changes/archive/*-<change-name>/verification.md` records `Verdict: PASS` whose verification basis still matches the current implementation. Record the evidence, then do the research-side wrap-up in a research turn.
-- **While `open` is unresolved, a research turn reports and stops.** When maintaining research records, an unresolved `open` delegation means the change is not finished: say so with the read-only evidence and let the user decide. From a research turn, do not run apply, verify, fix, or archive workflows on the user's behalf, do not edit code or move directories, and do not commit or push. This never blocks the change itself: when the user explicitly starts that change's OpenSpec workflow, the session doing that work proceeds normally and leaves the pointer alone.
-- **This is a pointer, not a progress table.** Never mirror OpenSpec task checkboxes here, in `research/state.md`, or in a phase plan. Research task status stays in the phase plan; change-level progress stays in the change directory. An OpenSpec `PASS` is evidence for a research acceptance decision, not the acceptance itself.
-- **Nothing here changes a skill.** Editing this pointer touches project records only. The skills under `.agents/skills/` stay unmodified and remain authoritative for their own workflows.
-
-<!-- Keep exactly one active entry below; use `none` and em dashes when nothing is in flight. -->
-
-| Field | Value |
-| --- | --- |
-| Status | `none` |
-| Change name | — |
-| Research task | — |
-| Registered (timestamp) | — |
-| Delegated to | — |
-| Recycle condition | — |
-| Research-side wrap-up | — |
-| Recycle record | — |
+- Read `DELEGATION.md` at the start of every session, before any skill's workflow, and honour it whichever skill is running.
+- It has exactly one writer: a research-side (research-maintainer) turn. The OpenSpec workflows — propose, apply, verify, fix, archive — neither read nor write it and are never responsible for updating it.
+- Register a delegation before invoking an OpenSpec workflow, never from inside one. Record the change name (name only, not path: archiving adds a date prefix and moves the directory), the research task ID, the completion criterion, and the research-side wrap-up the recycle owes. Keep at most one delegation in flight.
+- While a delegation is `open`, a research turn checks its completion criterion read-only and then either reminds the user that the change is unfinished, or — when the evidence shows it has finished — performs the research-side wrap-up and closes the pointer. It must not run apply, verify, fix, or archive workflows on the user's behalf, edit code, move directories, or commit or push.
+- The pointer is a pointer, not a progress table: never mirror OpenSpec task checkboxes into it, into `research/state.md`, or into a phase plan. Research task status stays in the phase plan; change-level progress stays in the change directory. An OpenSpec `PASS` is evidence for a research acceptance decision, not the acceptance itself.
+- Nothing here changes a skill. The skills under `.agents/skills/` stay unmodified and remain authoritative for their own workflows.
