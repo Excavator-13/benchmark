@@ -11,4 +11,4 @@
 
 总计划描述研究方向；阶段计划是任务和验收状态的权威来源；state 提供当前工作位置和下一动作；decisions 区分候选建议与已接受决定；run 保存执行事实；归档索引维护封存、提交及备份状态。
 
-按 `research-maintainer` skill 维护。运行代码 commit 是历史身份，无需随 HEAD 更新。旧包和包内快照保持封存时内容；后续提交和备份在外部索引记录。
+按仓库内的 [research-maintainer skill](.agents/skills/research-maintainer/SKILL.md)维护，其他 agent 无需依赖本机全局安装；本项目以仓库版本为准。运行代码 commit 是历史身份，无需随 HEAD 更新。旧包和包内快照保持封存时内容；后续提交和备份在外部索引记录。

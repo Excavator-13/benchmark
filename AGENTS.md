@@ -1,6 +1,6 @@
 # Research Handoff
 
-For research work, start with `RESEARCH.md`, then read `research/state.md` and the linked phase plan. Use the `research-maintainer` skill when available; the repository records remain sufficient to recover progress without the previous chat.
+For research work, start with `RESEARCH.md`, then read `research/state.md` and the linked phase plan. Use the bundled `research-maintainer` skill at `.agents/skills/research-maintainer/SKILL.md`; its references are included in the repository. For this project, the versioned repository copy is authoritative when a global copy differs. The repository records remain sufficient to recover progress without the previous chat.
 
 Task and phase status belongs to the phase plan. Record proposed advice separately from accepted decisions. Preserve sealed runs and legacy archives; update later storage and backup status in `research/archives/index.md`. Runtime source commits do not need to match current HEAD.
 
