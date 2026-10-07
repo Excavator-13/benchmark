@@ -1,0 +1,13 @@
+test_existing_run_id_is_rejected (test_runner_cli.FailureAndInterruptionTests.test_existing_run_id_is_rejected) ... ok
+test_malformed_source_preserves_partial_evidence (test_runner_cli.FailureAndInterruptionTests.test_malformed_source_preserves_partial_evidence) ... ok
+test_sigint_marks_interrupted_and_retains_partial (test_runner_cli.FailureAndInterruptionTests.test_sigint_marks_interrupted_and_retains_partial) ... run interrupted; partial evidence retained
+ok
+test_sigkill_leaves_unfinished_running_state (test_runner_cli.FailureAndInterruptionTests.test_sigkill_leaves_unfinished_running_state) ... ok
+test_sigterm_marks_interrupted_and_retains_partial (test_runner_cli.FailureAndInterruptionTests.test_sigterm_marks_interrupted_and_retains_partial) ... run interrupted; partial evidence retained
+ok
+test_unfinished_status_after_hard_termination (test_runner_cli.FailureAndInterruptionTests.test_unfinished_status_after_hard_termination) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 2.456s
+
+OK

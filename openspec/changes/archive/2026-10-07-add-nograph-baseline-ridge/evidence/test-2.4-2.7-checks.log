@@ -1,0 +1,9 @@
+test_align_v2_against_independent_log (test_runner_cli.CheckCommandTests.test_align_v2_against_independent_log) ... ok
+test_align_v2_preserves_and_explains_discrepancy (test_runner_cli.CheckCommandTests.test_align_v2_preserves_and_explains_discrepancy) ... ok
+test_compare_two_same_seed_runs (test_runner_cli.CheckCommandTests.test_compare_two_same_seed_runs) ... ok
+test_recompute_without_source_access_and_preserves_inputs (test_runner_cli.CheckCommandTests.test_recompute_without_source_access_and_preserves_inputs) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.960s
+
+OK

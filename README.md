@@ -174,6 +174,67 @@ files are intentionally rejected with a rerun hint; retrain to produce format 2 
 the corrected split. Earlier metrics from overlapping target periods are not comparable
 to this protocol.
 
+### 4.5 Graph-free CPU baseline (`benchmark.nograph_baseline`)
+
+`benchmark/nograph_baseline/` is an independent CPU entry for the
+`P1-count-L6-H3-v3` protocol (see `research/phases/P01/protocol.md`). It computes
+the five naive baselines and one shared Ridge model for `r0/count` and
+`region/count` without importing graph methods, PyTorch, PyG or DGL. Its only
+required third-party dependencies are NumPy, pandas and PyArrow; scikit-learn is
+an optional backend.
+
+Use the dedicated environment and install only the local dependency list (it does
+**not** require the root `requirements.txt` CUDA/DGL packages):
+
+```bash
+conda activate job-sdf-baseline
+python -m pip install --no-cache-dir -r benchmark/nograph_baseline/requirements.txt
+```
+
+Commands (run from the repository root; every run writes a fresh directory under
+`research/runs/<run_id>/` and refuses to overwrite an existing run ID):
+
+```bash
+# one formal run per dataset, CPU, seed 0, NumPy backend
+python -m benchmark.nograph_baseline run --data-name r0 --mode count --seed 0 \
+    --run-id p01-r0-sharedridge-001
+python -m benchmark.nograph_baseline run --data-name region --mode count --seed 0 \
+    --run-id p01-region-sharedridge-001
+
+# an independent same-seed repetition in a fresh directory
+python -m benchmark.nograph_baseline run --data-name r0 --mode count --seed 0 \
+    --run-id p01-r0-sharedridge-repeat-001
+
+# recompute every metric from saved run artifacts only (no source data, no refit)
+python -m benchmark.nograph_baseline recompute \
+    --run-dir research/runs/p01-r0-sharedridge-001 --run-id p01-r0-recompute-001
+
+# compare two same-seed runs under the CPU relative tolerance of 1e-6
+python -m benchmark.nograph_baseline compare \
+    --run-a research/runs/p01-r0-sharedridge-001 \
+    --run-b research/runs/p01-r0-sharedridge-repeat-001 \
+    --run-id p01-r0-repeat-check-001
+
+# align naive results with the sealed v2 diagnostic (read-only reference)
+python -m benchmark.nograph_baseline align-v2 \
+    --run-dir research/runs/p01-r0-sharedridge-001 \
+    --reference research/runs/phase1-20261006-v2-01/naive-baselines.log \
+    --run-id p01-r0-alignment-001
+```
+
+`run` always executes all five naive methods and the shared Ridge model. Optional
+flags are `--ridge-backend {numpy,sklearn}` and `--clip-nonnegative` (which adds a
+separately labeled `SharedRidgeNonnegative` report that never influences selection).
+Outputs under `research/runs/` are **unsealed and not backed up**: a successful run
+records reproducible evidence only and does not imply scientific acceptance,
+packaging, Git inclusion or backup completion. Archive those steps separately.
+
+Automated tests need no GPU and no repository graph data:
+
+```bash
+python -m unittest discover -s benchmark/nograph_baseline/tests
+```
+
 ## 5 Directory Structure
 
 The expected structure of files is:
@@ -189,6 +250,10 @@ Job-SDF
  |    |    |-- data/                  # generated artifacts (created on demand)
  |    |    |-- results/               # checkpoints, predictions, metrics (created on demand)
  |    |    |-- tests/                 # graph-method unit suite
+ |    |-- nograph_baseline            # graph-free CPU baseline entry (P1-count-L6-H3-v3)
+ |    |    |-- cli.py                 # run / recompute / compare / align-v2 commands
+ |    |    |-- requirements.txt       # NumPy + pandas + PyArrow only
+ |    |    |-- tests/                 # CPU unittest suite with synthetic fixtures
  |-- dataset  # Job-SDF_data
  |    |-- demand
  |    |-- entity_map

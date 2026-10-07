@@ -1,0 +1,11 @@
+# Required third-party dependencies of benchmark/nograph_baseline.
+# Install into the dedicated CPU environment:
+#   conda activate job-sdf-baseline
+#   python -m pip install --no-cache-dir -r benchmark/nograph_baseline/requirements.txt
+#
+# scikit-learn is NOT required.  It is an optional backend for the
+# `run --ridge-backend sklearn` path and is intentionally omitted here so the
+# default NumPy path can be reproduced with only these three packages.
+numpy==1.26.4
+pandas==2.2.3
+pyarrow==17.0.0
