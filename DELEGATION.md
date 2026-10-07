@@ -39,12 +39,12 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 
 | 字段 | 值 |
 | --- | --- |
-| Status | `none` |
-| 变更名 | — |
-| 研究任务 | — |
-| 登记时间 | — |
-| 委派给 | — |
-| 结束判据 | — |
-| 研究侧收尾 | — |
-| 上次核对 | — |
+| Status | `open` |
+| 变更名 | `add-nograph-baseline-ridge` |
+| 研究任务 | P01-T004 |
+| 登记时间 | 2026-10-07T16:20+08:00 |
+| 委派给 | OpenSpec e13 流程（propose → apply → verify-change → archive-change），由用户在其会话中执行；研究侧不代跑 |
+| 结束判据 | 变更目录已归档，且 `openspec/changes/archive/*-add-nograph-baseline-ridge/verification.md` 为 `Verdict: PASS`、Verification Basis 与当前仓库实现一致；该实现覆盖 T004 验收要素：不依赖 PyG/PyTorch 的可复用入口（`r0/count` 与 `region/count`）、训练期 2021-01..2023-03 标准化、仅用验证集原始单位 MSE 选 λ、预测/标签/节点身份/参数/配置保存、指标可独立重算、活跃度与有邻居/无邻居分组、同 seed 重复一致、耗时与峰值内存记录 |
+| 研究侧收尾 | 更新 [阶段计划](research/phases/P01/plan.md) 的 T004 状态与证据链接；按需更新 [state](research/state.md) 的恢复位置与下一动作（不镜像变更级进度）；若 apply/verify 产出正式 run，在 [归档索引](research/archives/index.md) 登记封存/提交/备份状态；判断结果是否影响 D005/D006 待决建议。不代跑工作流、不改代码、不移目录、不 commit/push |
+| 上次核对 | 2026-10-07T16:10+08:00：`openspec/changes/` 无在途变更；仅存遗留归档 `2026-09-16-repair-graph-forecasting-pipeline`（`Verdict: BLOCKED`，早于委托机制，未登记为委托） |
 | 回收记录 | — |
