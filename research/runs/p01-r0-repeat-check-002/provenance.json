@@ -1,0 +1,26 @@
+{
+  "check": "compare",
+  "created": "2026-10-07T17:46:05+08:00",
+  "git": {
+    "commit": "a0fdab4268e5e17b0c96453efd53f01a245f01cc",
+    "dirty": true,
+    "errors": {}
+  },
+  "inputs": {
+    "run_a": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r0-sharedridge-002",
+    "run_a_artifacts": {
+      "metrics.json": "a8f921cf968dcbb5a69596bb9f9c3906d041080a74cb3ae88891d036b4f9542c",
+      "selection.json": "99bfed231dc2c5dd4424948f6bf4d6154d4d02a9923ac62da887d6d806268632",
+      "source-sha256.json": "9c88cd3a09ecbc182b0e79b5573a224c99ec0a2868c6f349c2665174ebc61390"
+    },
+    "run_b": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r0-sharedridge-repeat-002",
+    "run_b_artifacts": {
+      "metrics.json": "624c7ab32a45998ce7d539ed5e7b373d5880d89439d6331aafa3f9c8a9cf05ff",
+      "selection.json": "99bfed231dc2c5dd4424948f6bf4d6154d4d02a9923ac62da887d6d806268632",
+      "source-sha256.json": "15384429671bcc1cf7eaa111cfb560119be46607bd446fcf7e630767fc88e093"
+    }
+  },
+  "run_id": "p01-r0-repeat-check-002",
+  "run_type": "compare",
+  "scientific_acceptance": false
+}

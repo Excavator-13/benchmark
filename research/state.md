@@ -1,35 +1,35 @@
 # 当前状态
 
-更新时间：2026-10-06T18:25:40+08:00。
+更新时间：2026-10-07T20:05+08:00。
 当前阶段：[P01](phases/P01/plan.md)，阶段状态与任务状态以该计划为准。
-当前任务：无正在执行的科研任务。P01-T009 组织维护已完成，下一科研子任务为 P01-T004。
-当前科研执行者：无人执行；本轮组织维护由 Codex 完成。本地分支为 `xzs`，上游 `origin/xzs`。
-本次授权范围：检查并 commit/push 现有状态；通过后整理研究记录为 skill 标准结构；随后按用户要求将 skill 同步到 `.agents/skills/`，沿用组织提交与推送授权。
-本轮科研 run：无。本次是组织迁移，记录于[迁移报告](archives/migrations/20261006-standardize-research.md)。
+当前任务：P01-T004 研究侧验收与委托回收已完成；今天的运行证据已封存，正在完成提交/推送收尾。没有正在执行的新科研任务。
+当前科研执行者：无人执行实验；本轮保存收尾由 Codex 完成。本地分支 `xzs`。baseline 实现与 OpenSpec 归档已提交为 `8273c07a84c879a8f7bdbb61f987f3c94e863e59`；后续保存/交接记录的提交身份从 Git 历史追溯。
+本次授权范围：用户明确要求将应提交/推送的内容全部做完并结束今天的工作。范围为 baseline 实现/规格与 OpenSpec 归档、研究记录、完整证据封存及明确的忽略规则、commit/push 与远端恢复核验；不启动新实验，不改 skill、运行实现、科学协议或原始 run。
+本轮 run：无；读取 OpenSpec 已产出的 run，不重跑实验或独立验证工作流。
 
 ## 恢复位置
 
-- 已完成：旧记录和 13 个诊断文件提交为 `f66959b3dd868ba97a330cf46147212b83a4524b`，首次推送 `origin/xzs` 并建立上游。
-- 已完成组织：标准入口、总计划、阶段计划与协议、state、decisions、archive index、诊断原样移动及路径引用。
-- 最近成功步骤：组织提交 `b094cf13f47f2622f2771f0d766212b0b34fadba` 已 push；独立读取远端引用一致，远端 RESEARCH.md 取回后与本地逐字节一致。
-- 交接记录随后以 `0ae723a` 提交并推送。2026-10-06T18:25:40+08:00 将 [skill](../.agents/skills/research-maintainer/SKILL.md)连同三个 references 和 UI 元数据同步到仓库，校验通过且与全局副本逐字节一致；本项目以后优先使用仓库版本。本次分发提交身份从 Git 历史追溯。
-- 现存证据：[v2 诊断摘要](runs/phase1-20261006-v2-01/summary.md)、[历史 GPU 实验及保存状态](archives/index.md)。
-- 本会话未启动实验进程；历史远端训练进程未另行核验，不推断云实例已释放。
-- 核验：旧包和 13 个诊断文件原样、科学定义不变、活跃链接及脚本语法通过。此次没有启动新的训练或 baseline 实现。
-- 本页记录组织提交之后的交接位置；收尾记录自身的入库身份从 Git 历史追溯，无需把自己的最终 commit 写入本页。
+- `add-nograph-baseline-ridge` 已归档于 [OpenSpec archive](../openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/verification.md)，独立报告为 PASS。回收前重算八类 inventory/content 指纹与报告一致；24 个 run 的 732 个清单成员哈希一致，其余 48 个声明排除项由完整 780 文件指纹覆盖。
+- 按既定 T004 验收完成 [D008 研究侧接受](decisions.md#d008-t004-baseline-研究侧验收)，关闭 [DELEGATION](../DELEGATION.md)。阶段计划记录任务验收，OpenSpec 目录保留变更级进度，不在这里复制其任务表。
+- 科研依据：`p01-r0-sharedridge-002`、`p01-r0-sharedridge-repeat-002`、`p01-region-sharedridge-002`、`p01-region-sharedridge-repeat-002` 及八个关联检查；精确链接与保存状态见[索引](archives/index.md#t004-baseline-运行2026-10-07)。`-001` 为保留历史版本。
+- 两组 NaiveRef/NaiveRef6 均为 LastValue，SharedRidge lambda=1e-4；同 seed 预测最大绝对差均为 0。Ridge 总体测试 MAE/RMSE 均高于 LastValue，只接受它为可重复学习参照，不宣称改善。
+- 本地 CPU 主运行总计 r0 0.435 s、峰值 RSS 143,278,080 bytes；region 0.693 s、307,396,608 bytes。NumPy 默认路径已验收，可选 sklearn 实际运行未核验。
+- T004 的 24 个 run 已封存为独立包，共 41,446,332 bytes；在临时目录解包后 780 个文件哈希与原目录和独立报告一致。可读记录进入 Git，其余展开产物保留本地并按明确范围忽略。提交与远端保存尚待完成，真实状态见[索引](archives/index.md)。[D009](decisions.md#d009-约束证据数量与-git-保存边界)记录本次接受的保存选择及仍待讨论的长期机制。
+- 2026-10-07T19:53+08:00 本地进程只读检查未发现 baseline CLI/worker 或专用环境 Python 进程（搜索命令自身除外），24 个状态文件均为 success/complete；本轮未启动程序。未核验历史远端 GPU 进程或实例释放状态。
+- 原 run、旧包、baseline 实现、科学协议与 OpenSpec 报告保持原样；新建封存包、包外清单和恢复核验脚本，更新记录与忽略规则。验收后 plan/index 与忽略规则的集合指纹变化属于保存收尾，独立报告继续保留其核验时点。
 
 ## 下一可执行动作
 
-下一科研任务为 P01-T004：准备可复用无图 baseline 和共享 Ridge 的范围明确的 OpenSpec proposal。
+动作：按已授权范围提交 baseline 实现/规格和科研证据，推送 `origin/xzs`，独立读取远端引用并取回封存包核验，更新保存事实后提交/同步收尾记录。
 
-前置条件：确认已有协议及入口验收；用户当前授权覆盖组织与 Git 操作，尚未授权本轮直接启动 baseline 实现或训练。
-入口：[执行指导第 7 节](phases/P01/execution-guide.md#7-再下一步开发一个可复用的轻量-baseline-入口)。
-验收：提案覆盖标准化、验证选模、完整保存、分组、指标重算和重复性；通过后按已有 OpenSpec 实现/独立验证流程推进。
+入口：[协议第 6.1 节](phases/P01/protocol.md#61-保存与归档)、[保存索引](archives/index.md)、D009。验收：目标提交包含完整包和可读记录，远端取回可核验、可恢复，索引有真实身份，既有 run 不被改写或丢弃。
+
+科研接续：保持阶段计划已有顺序，准备 P01-T006 的 `r2/count` 同流程扩展范围，再接内部回测；P01-T005 的 EvolveGCN-H 受控诊断在底座通过后也已满足依赖。新实现/实验仍按具体授权与 OpenSpec 流程执行，研究侧先登记新的委托；本轮未启动。
 
 ## 待处理事项
 
-- [D005](decisions.md#d005-补存分层分析的可复查过程)：已有数字摘录，计算脚本和原始输出尚未单独归档。
-- [D006](decisions.md#d006-明确主要改善目标)：完整任务与特定节点组的主张范围尚未决定。
-- [D007](decisions.md#d007-检验低活跃节点与邻居信息的假设)：交叉分布/对照尚未正式执行。
-- P01-T002 和 T005 的剩余审计/复跑见阶段计划，不因这次提交和迁移而完成。
-- 备份身份和核验方法以[索引](archives/index.md)为准；运行摘要中的历史“未推送”不随今天的 push 改写。
+- [D005](decisions.md#d005-补存分层分析的可复查过程)：新 baseline 分层证据已补，旧 EvolveGCN 两个 seed 的分层过程及交叉分布仍未补存。
+- [D006](decisions.md#d006-明确主要改善目标)：完整任务或预定节点组的主张范围仍未决定，不按当前测试结果切换目标。
+- [D007](decisions.md#d007-检验低活跃节点与邻居信息的假设)：交叉分布与公平对照仍待执行。
+- T002 的剩余图审计/解释，以及 T005-T008 的科研工作见阶段计划；P01 尚未完成。
+- T004 封存已核验，提交/备份收尾进行中；已有历史备份核验保留于索引。

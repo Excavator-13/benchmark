@@ -1,0 +1,334 @@
+{
+  "check": "compare",
+  "cpu_relative_tolerance": 1e-06,
+  "identity_checks": {
+    "clip_nonnegative": true,
+    "coverage_identity": true,
+    "dataset": true,
+    "demand_sha256": true,
+    "environment_condition_complete": true,
+    "environment_optional_packages": true,
+    "environment_packages": true,
+    "environment_semantic": true,
+    "identity_evidence_complete": true,
+    "mode": true,
+    "naive_ref": true,
+    "naive_ref6": true,
+    "node_keys_sha256": true,
+    "protocol_sha256": true,
+    "protocol_version": true,
+    "ridge_backend": true,
+    "seed": true,
+    "selected_lambda": true,
+    "semantic_config": true
+  },
+  "identity_evidence": {
+    "config_identity_a": {
+      "clip_nonnegative": false,
+      "lambdas": [
+        0.0001,
+        0.001,
+        0.01,
+        0.1,
+        1.0
+      ],
+      "model_name": "SharedRidge",
+      "naive_methods": [
+        "Zero",
+        "LastValue",
+        "WindowMean6",
+        "TrainMean27",
+        "SeasonalNaive12"
+      ],
+      "protocol_version": "P1-count-L6-H3-v3",
+      "spec": {
+        "clip_nonnegative": false,
+        "data_name": "region",
+        "mode": "count",
+        "ridge_backend": "numpy",
+        "seed": 0
+      }
+    },
+    "config_identity_b": {
+      "clip_nonnegative": false,
+      "lambdas": [
+        0.0001,
+        0.001,
+        0.01,
+        0.1,
+        1.0
+      ],
+      "model_name": "SharedRidge",
+      "naive_methods": [
+        "Zero",
+        "LastValue",
+        "WindowMean6",
+        "TrainMean27",
+        "SeasonalNaive12"
+      ],
+      "protocol_version": "P1-count-L6-H3-v3",
+      "spec": {
+        "clip_nonnegative": false,
+        "data_name": "region",
+        "mode": "count",
+        "ridge_backend": "numpy",
+        "seed": 0
+      }
+    },
+    "environment_identity_a": {
+      "cpu_count": 10,
+      "machine": "arm64",
+      "numpy_blas_config": "{\n  \"Compilers\": {\n    \"c\": {\n      \"name\": \"clang\",\n      \"linker\": \"ld64\",\n      \"version\": \"14.0.0\",\n      \"commands\": \"cc\",\n      \"args\": \"-fno-strict-aliasing, -DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\",\n      \"linker args\": \"-fno-strict-aliasing, -DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\"\n    },\n    \"cython\": {\n      \"name\": \"cython\",\n      \"linker\": \"cython\",\n      \"version\": \"3.0.8\",\n      \"commands\": \"cython\"\n    },\n    \"c++\": {\n      \"name\": \"clang\",\n      \"linker\": \"ld64\",\n      \"version\": \"14.0.0\",\n      \"commands\": \"c++\",\n      \"args\": \"-DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\",\n      \"linker args\": \"-DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\"\n    }\n  },\n  \"Machine Information\": {\n    \"host\": {\n      \"cpu\": \"aarch64\",\n      \"family\": \"aarch64\",\n      \"endian\": \"little\",\n      \"system\": \"darwin\"\n    },\n    \"build\": {\n      \"cpu\": \"aarch64\",\n      \"family\": \"aarch64\",\n      \"endian\": \"little\",\n      \"system\": \"darwin\"\n    }\n  },\n  \"Build Dependencies\": {\n    \"blas\": {\n      \"name\": \"openblas64\",\n      \"found\": true,\n      \"version\": \"0.3.23.dev\",\n      \"detection method\": \"pkgconfig\",\n      \"include directory\": \"/opt/arm64-builds/include\",\n      \"lib directory\": \"/opt/arm64-builds/lib\",\n      \"openblas configuration\": \"USE_64BITINT=1 DYNAMIC_ARCH=1 DYNAMIC_OLDER= NO_CBLAS= NO_LAPACK= NO_LAPACKE= NO_AFFINITY=1 USE_OPENMP= SANDYBRIDGE MAX_THREADS=3\",\n      \"pc file directory\": \"/usr/local/lib/pkgconfig\"\n    },\n    \"lapack\": {\n      \"name\": \"dep4350285776\",\n      \"found\": true,\n      \"version\": \"1.26.4\",\n      \"detection method\": \"internal\",\n      \"include directory\": \"unknown\",\n      \"lib directory\": \"unknown\",\n      \"openblas configuration\": \"unknown\",\n      \"pc file directory\": \"unknown\"\n    }\n  },\n  \"Python Information\": {\n    \"path\": \"/private/var/folders/76/zy5ktkns50v6gt5g8r0sf6sc0000gn/T/cibw-run-iyy0yn4s/cp311-macosx_arm64/build/venv/bin/python\",\n    \"version\": \"3.11\"\n  },\n  \"SIMD Extensions\": {\n    \"baseline\": [\n      \"NEON\",\n      \"NEON_FP16\",\n      \"NEON_VFPV4\",\n      \"ASIMD\"\n    ],\n    \"found\": [\n      \"ASIMDHP\"\n    ],\n    \"not found\": [\n      \"ASIMDFHM\"\n    ]\n  }\n}\n",
+      "optional_packages": {
+        "sklearn": null
+      },
+      "packages": {
+        "numpy": "1.26.4",
+        "pandas": "2.2.3",
+        "pyarrow": "17.0.0"
+      },
+      "pip_freeze": "numpy==1.26.4\npackaging==26.3\npandas==2.2.3\npyarrow==17.0.0\npython-dateutil==2.9.0.post0\npytz==2026.5\nsix==1.17.0\ntzdata==2026.5\n",
+      "platform": "macOS-27.0.1-arm64-arm-64bit",
+      "processor": "arm",
+      "python_version": "3.11.17 (main, Oct  1 2026, 20:09:52) [Clang 20.1.8 ]",
+      "python_version_info": [
+        3,
+        11,
+        17
+      ],
+      "system": "Darwin",
+      "thread_environment": {
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      }
+    },
+    "environment_identity_b": {
+      "cpu_count": 10,
+      "machine": "arm64",
+      "numpy_blas_config": "{\n  \"Compilers\": {\n    \"c\": {\n      \"name\": \"clang\",\n      \"linker\": \"ld64\",\n      \"version\": \"14.0.0\",\n      \"commands\": \"cc\",\n      \"args\": \"-fno-strict-aliasing, -DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\",\n      \"linker args\": \"-fno-strict-aliasing, -DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\"\n    },\n    \"cython\": {\n      \"name\": \"cython\",\n      \"linker\": \"cython\",\n      \"version\": \"3.0.8\",\n      \"commands\": \"cython\"\n    },\n    \"c++\": {\n      \"name\": \"clang\",\n      \"linker\": \"ld64\",\n      \"version\": \"14.0.0\",\n      \"commands\": \"c++\",\n      \"args\": \"-DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\",\n      \"linker args\": \"-DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\"\n    }\n  },\n  \"Machine Information\": {\n    \"host\": {\n      \"cpu\": \"aarch64\",\n      \"family\": \"aarch64\",\n      \"endian\": \"little\",\n      \"system\": \"darwin\"\n    },\n    \"build\": {\n      \"cpu\": \"aarch64\",\n      \"family\": \"aarch64\",\n      \"endian\": \"little\",\n      \"system\": \"darwin\"\n    }\n  },\n  \"Build Dependencies\": {\n    \"blas\": {\n      \"name\": \"openblas64\",\n      \"found\": true,\n      \"version\": \"0.3.23.dev\",\n      \"detection method\": \"pkgconfig\",\n      \"include directory\": \"/opt/arm64-builds/include\",\n      \"lib directory\": \"/opt/arm64-builds/lib\",\n      \"openblas configuration\": \"USE_64BITINT=1 DYNAMIC_ARCH=1 DYNAMIC_OLDER= NO_CBLAS= NO_LAPACK= NO_LAPACKE= NO_AFFINITY=1 USE_OPENMP= SANDYBRIDGE MAX_THREADS=3\",\n      \"pc file directory\": \"/usr/local/lib/pkgconfig\"\n    },\n    \"lapack\": {\n      \"name\": \"dep4350285776\",\n      \"found\": true,\n      \"version\": \"1.26.4\",\n      \"detection method\": \"internal\",\n      \"include directory\": \"unknown\",\n      \"lib directory\": \"unknown\",\n      \"openblas configuration\": \"unknown\",\n      \"pc file directory\": \"unknown\"\n    }\n  },\n  \"Python Information\": {\n    \"path\": \"/private/var/folders/76/zy5ktkns50v6gt5g8r0sf6sc0000gn/T/cibw-run-iyy0yn4s/cp311-macosx_arm64/build/venv/bin/python\",\n    \"version\": \"3.11\"\n  },\n  \"SIMD Extensions\": {\n    \"baseline\": [\n      \"NEON\",\n      \"NEON_FP16\",\n      \"NEON_VFPV4\",\n      \"ASIMD\"\n    ],\n    \"found\": [\n      \"ASIMDHP\"\n    ],\n    \"not found\": [\n      \"ASIMDFHM\"\n    ]\n  }\n}\n",
+      "optional_packages": {
+        "sklearn": null
+      },
+      "packages": {
+        "numpy": "1.26.4",
+        "pandas": "2.2.3",
+        "pyarrow": "17.0.0"
+      },
+      "pip_freeze": "numpy==1.26.4\npackaging==26.3\npandas==2.2.3\npyarrow==17.0.0\npython-dateutil==2.9.0.post0\npytz==2026.5\nsix==1.17.0\ntzdata==2026.5\n",
+      "platform": "macOS-27.0.1-arm64-arm-64bit",
+      "processor": "arm",
+      "python_version": "3.11.17 (main, Oct  1 2026, 20:09:52) [Clang 20.1.8 ]",
+      "python_version_info": [
+        3,
+        11,
+        17
+      ],
+      "system": "Darwin",
+      "thread_environment": {
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      }
+    },
+    "source_identity_a": {
+      "coverage": "c0bed3290be3691fbb07c4834c96e8d567e1f54cdfb2120d8a0846a86b64d87c",
+      "demand": "27a946c787efcd5f1d2b25ca35bebd1392320d9b10920e771405a664db5e4a3f",
+      "node_keys": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+      "protocol": "7c113c83d49f15f6b172d06f83c06ddbe73e5fdffba27f41060acfd50b5d7bb7"
+    },
+    "source_identity_b": {
+      "coverage": "c0bed3290be3691fbb07c4834c96e8d567e1f54cdfb2120d8a0846a86b64d87c",
+      "demand": "27a946c787efcd5f1d2b25ca35bebd1392320d9b10920e771405a664db5e4a3f",
+      "node_keys": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+      "protocol": "7c113c83d49f15f6b172d06f83c06ddbe73e5fdffba27f41060acfd50b5d7bb7"
+    }
+  },
+  "identity_evidence_complete": true,
+  "mae_relative_differences": {
+    "test/LastValue": {
+      "MAE_a": 35.30985010706638,
+      "MAE_b": 35.30985010706638,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "test/SeasonalNaive12": {
+      "MAE_a": 50.95204445804018,
+      "MAE_b": 50.95204445804018,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "test/SharedRidge": {
+      "MAE_a": 47.59835336707471,
+      "MAE_b": 47.59835336707471,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "test/TrainMean27": {
+      "MAE_a": 50.514982989908596,
+      "MAE_b": 50.514982989908596,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "test/WindowMean6": {
+      "MAE_a": 34.56717060093185,
+      "MAE_b": 34.56717060093185,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "test/Zero": {
+      "MAE_a": 166.48165596002855,
+      "MAE_b": 166.48165596002855,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/LastValue": {
+      "MAE_a": 33.379300499643115,
+      "MAE_b": 33.379300499643115,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/SeasonalNaive12": {
+      "MAE_a": 40.61170592433976,
+      "MAE_b": 40.61170592433976,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/SharedRidge": {
+      "MAE_a": 27.92989489877838,
+      "MAE_b": 27.92989489877838,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/TrainMean27": {
+      "MAE_a": 30.898112911842,
+      "MAE_b": 30.898112911842,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/WindowMean6": {
+      "MAE_a": 30.76993312030177,
+      "MAE_b": 30.76993312030177,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/Zero": {
+      "MAE_a": 148.96131334760886,
+      "MAE_b": 148.96131334760886,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    }
+  },
+  "masks_equal": true,
+  "metric_comparison": {
+    "compared_fields": 2490,
+    "extra_fields": [],
+    "failed_fields": [],
+    "label": "metrics",
+    "max_difference_path": null,
+    "max_normalized_difference": 0.0,
+    "missing_fields": [],
+    "require_complete": true,
+    "status": "ok",
+    "tolerance": 1e-06
+  },
+  "missing_evidence": [],
+  "prediction_comparisons": {
+    "test/LastValue": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "test/SeasonalNaive12": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "test/SharedRidge": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "test/TrainMean27": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "test/WindowMean6": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "test/Zero": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/LastValue": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/SeasonalNaive12": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/SharedRidge": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/TrainMean27": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/WindowMean6": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/Zero": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    }
+  },
+  "run_a": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-region-sharedridge-002",
+  "run_b": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-region-sharedridge-repeat-002",
+  "seed_variance_reported": false,
+  "selection_a": 0.0001,
+  "selection_b": 0.0001,
+  "status": "ok",
+  "status_a": "success",
+  "status_b": "success"
+}

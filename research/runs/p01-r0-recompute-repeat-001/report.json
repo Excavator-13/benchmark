@@ -1,0 +1,39 @@
+{
+  "check": "recompute",
+  "comparisons": {
+    "test": {
+      "compared_fields": 966,
+      "extra_fields": [],
+      "failed_fields": [],
+      "label": "recompute:test",
+      "max_difference_path": null,
+      "max_normalized_difference": 0.0,
+      "missing_fields": [],
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    "validation": {
+      "compared_fields": 804,
+      "extra_fields": [],
+      "failed_fields": [],
+      "label": "recompute:validation",
+      "max_difference_path": null,
+      "max_normalized_difference": 0.0,
+      "missing_fields": [],
+      "status": "ok",
+      "tolerance": 1e-12
+    }
+  },
+  "input_run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r0-sharedridge-repeat-001",
+  "methods": [
+    "LastValue",
+    "SeasonalNaive12",
+    "SharedRidge",
+    "TrainMean27",
+    "WindowMean6",
+    "Zero"
+  ],
+  "model_refit": false,
+  "source_data_read": false,
+  "status": "ok"
+}

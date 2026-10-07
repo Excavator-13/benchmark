@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python",
+    "-m",
+    "benchmark.nograph_baseline",
+    "compare",
+    "--run-a",
+    "research/runs/p01-r0-sharedridge-002",
+    "--run-b",
+    "research/runs/p01-r0-sharedridge-repeat-002",
+    "--run-id",
+    "p01-r0-repeat-check-002"
+  ],
+  "cwd": "/Users/watuji/da_chuang/repos/benchmark"
+}

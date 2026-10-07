@@ -1,0 +1,3665 @@
+{
+  "check": "align-v2",
+  "checks": [
+    {
+      "actual": 2335,
+      "expected": 2335,
+      "field": "audit.skill_id_nunique",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1,
+      "expected": 1,
+      "field": "audit.joint_contexts",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1,
+      "expected": 1,
+      "field": "audit.context_cartesian_size",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2335,
+      "expected": 2335,
+      "field": "audit.expected_context_skill_nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.011563169164882228,
+      "expected": 0.011563169164882228,
+      "field": "audit.train_all_zero_fraction",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.006852248394004282,
+      "expected": 0.006852248394004282,
+      "field": "audit.full_36_month_all_zero_fraction_diagnostic_only",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2068,
+      "expected": 2068,
+      "field": "audit.activity_group_counts.high",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 27,
+      "expected": 27,
+      "field": "audit.activity_group_counts.inactive",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 111,
+      "expected": 111,
+      "field": "audit.activity_group_counts.low",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 129,
+      "expected": 129,
+      "field": "audit.activity_group_counts.medium",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": {
+        "r0_id": 1
+      },
+      "expected": {
+        "r0_id": 1
+      },
+      "field": "audit.context_id_counts",
+      "status": "ok"
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "field": "audit.is_complete_context_skill_grid",
+      "status": "ok"
+    },
+    {
+      "actual": [
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2021-05",
+        "2021-06",
+        "2021-07",
+        "2021-08",
+        "2021-09",
+        "2021-10",
+        "2021-11",
+        "2021-12",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2022-05",
+        "2022-06",
+        "2022-07",
+        "2022-08",
+        "2022-09",
+        "2022-10",
+        "2022-11",
+        "2022-12",
+        "2023-01",
+        "2023-02",
+        "2023-03"
+      ],
+      "expected": [
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2021-05",
+        "2021-06",
+        "2021-07",
+        "2021-08",
+        "2021-09",
+        "2021-10",
+        "2021-11",
+        "2021-12",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2022-05",
+        "2022-06",
+        "2022-07",
+        "2022-08",
+        "2022-09",
+        "2022-10",
+        "2022-11",
+        "2022-12",
+        "2023-01",
+        "2023-02",
+        "2023-03"
+      ],
+      "field": "audit.train_observation_months",
+      "status": "ok"
+    },
+    {
+      "actual": 2335,
+      "expected": 2335,
+      "field": "audit.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": {
+        "test": [
+          24,
+          25,
+          26,
+          27
+        ],
+        "train": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18
+        ],
+        "validation": [
+          21
+        ]
+      },
+      "expected": {
+        "test": [
+          24,
+          25,
+          26,
+          27
+        ],
+        "train": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18
+        ],
+        "validation": [
+          21
+        ]
+      },
+      "field": "windows.split_windows",
+      "status": "ok"
+    },
+    {
+      "actual": {
+        "test": [
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "train": [
+          "2021-07",
+          "2021-08",
+          "2021-09",
+          "2021-10",
+          "2021-11",
+          "2021-12",
+          "2022-01",
+          "2022-02",
+          "2022-03",
+          "2022-04",
+          "2022-05",
+          "2022-06",
+          "2022-07",
+          "2022-08",
+          "2022-09",
+          "2022-10",
+          "2022-11",
+          "2022-12",
+          "2023-01",
+          "2023-02",
+          "2023-03"
+        ],
+        "validation": [
+          "2023-04",
+          "2023-05",
+          "2023-06"
+        ]
+      },
+      "expected": {
+        "test": [
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "train": [
+          "2021-07",
+          "2021-08",
+          "2021-09",
+          "2021-10",
+          "2021-11",
+          "2021-12",
+          "2022-01",
+          "2022-02",
+          "2022-03",
+          "2022-04",
+          "2022-05",
+          "2022-06",
+          "2022-07",
+          "2022-08",
+          "2022-09",
+          "2022-10",
+          "2022-11",
+          "2022-12",
+          "2023-01",
+          "2023-02",
+          "2023-03"
+        ],
+        "validation": [
+          "2023-04",
+          "2023-05",
+          "2023-06"
+        ]
+      },
+      "field": "windows.target_months",
+      "status": "ok"
+    },
+    {
+      "actual": "LastValue",
+      "expected": "LastValue",
+      "field": "references.NaiveRef",
+      "status": "ok"
+    },
+    {
+      "actual": "LastValue",
+      "expected": "LastValue",
+      "field": "references.NaiveRef6",
+      "status": "ok"
+    },
+    {
+      "actual": "extra 12-month history",
+      "expected": "extra 12-month history",
+      "field": "references.SeasonalNaive12_information_budget",
+      "status": "ok"
+    },
+    {
+      "actual": 189.8750892219843,
+      "expected": 189.8750892219843,
+      "field": "test.LastValue.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 856109.6095645967,
+      "expected": 856109.6095645967,
+      "field": "test.LastValue.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 925.2619140354782,
+      "expected": 925.2619140354782,
+      "field": "test.LastValue.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 54.94776347361186,
+      "expected": 54.94776347361186,
+      "field": "test.LastValue.balanced_activity_group_MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 170.75802997858673,
+      "expected": 170.75802997858673,
+      "field": "test.LastValue.horizons.h1.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 634055.112633833,
+      "expected": 634055.112633833,
+      "field": "test.LastValue.horizons.h1.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 796.2757767468711,
+      "expected": 796.2757767468711,
+      "field": "test.LastValue.horizons.h1.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 250.64614561027838,
+      "expected": 250.64614561027838,
+      "field": "test.LastValue.horizons.h2.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1424302.9495717345,
+      "expected": 1424302.9495717345,
+      "field": "test.LastValue.horizons.h2.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1193.4416406225043,
+      "expected": 1193.4416406225043,
+      "field": "test.LastValue.horizons.h2.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 148.2210920770878,
+      "expected": 148.2210920770878,
+      "field": "test.LastValue.horizons.h3.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 509970.7664882227,
+      "expected": 509970.7664882227,
+      "field": "test.LastValue.horizons.h3.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 714.1223750088095,
+      "expected": 714.1223750088095,
+      "field": "test.LastValue.horizons.h3.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 214.06906834300452,
+      "expected": 214.06906834300452,
+      "field": "test.LastValue.activity_groups.high.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 966613.6963249516,
+      "expected": 966613.6963249516,
+      "field": "test.LastValue.activity_groups.high.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 983.1651419395175,
+      "expected": 983.1651419395175,
+      "field": "test.LastValue.activity_groups.high.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2068,
+      "expected": 2068,
+      "field": "test.LastValue.activity_groups.high.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.2716049382716049,
+      "expected": 0.2716049382716049,
+      "field": "test.LastValue.activity_groups.inactive.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.7839506172839507,
+      "expected": 0.7839506172839507,
+      "field": "test.LastValue.activity_groups.inactive.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.8854098583616238,
+      "expected": 0.8854098583616238,
+      "field": "test.LastValue.activity_groups.inactive.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 27,
+      "expected": 27,
+      "field": "test.LastValue.activity_groups.inactive.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2.6073573573573574,
+      "expected": 2.6073573573573574,
+      "field": "test.LastValue.activity_groups.low.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 434.99624624624624,
+      "expected": 434.99624624624624,
+      "field": "test.LastValue.activity_groups.low.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 20.856563625061685,
+      "expected": 20.856563625061685,
+      "field": "test.LastValue.activity_groups.low.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 111,
+      "expected": 111,
+      "field": "test.LastValue.activity_groups.low.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2.8430232558139537,
+      "expected": 2.8430232558139537,
+      "field": "test.LastValue.activity_groups.medium.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 81.46188630490956,
+      "expected": 81.46188630490956,
+      "field": "test.LastValue.activity_groups.medium.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 9.025623873445511,
+      "expected": 9.025623873445511,
+      "field": "test.LastValue.activity_groups.medium.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 129,
+      "expected": 129,
+      "field": "test.LastValue.activity_groups.medium.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 183.0549607423269,
+      "expected": 183.0549607423269,
+      "field": "test.LastValue.windows[2023-06].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 889303.0012847966,
+      "expected": 889303.0012847966,
+      "field": "test.LastValue.windows[2023-06].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 943.0286322719987,
+      "expected": 943.0286322719987,
+      "field": "test.LastValue.windows[2023-06].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-07",
+        "2023-08",
+        "2023-09"
+      ],
+      "expected": [
+        "2023-07",
+        "2023-08",
+        "2023-09"
+      ],
+      "field": "test.LastValue.windows[2023-06].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 163.71763026409707,
+      "expected": 163.71763026409707,
+      "field": "test.LastValue.windows[2023-07].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 391688.85538900783,
+      "expected": 391688.85538900783,
+      "field": "test.LastValue.windows[2023-07].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 625.850505623354,
+      "expected": 625.850505623354,
+      "field": "test.LastValue.windows[2023-07].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-08",
+        "2023-09",
+        "2023-10"
+      ],
+      "expected": [
+        "2023-08",
+        "2023-09",
+        "2023-10"
+      ],
+      "field": "test.LastValue.windows[2023-07].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 228.59286224125626,
+      "expected": 228.59286224125626,
+      "field": "test.LastValue.windows[2023-08].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1025642.77958601,
+      "expected": 1025642.77958601,
+      "field": "test.LastValue.windows[2023-08].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1012.7402330242489,
+      "expected": 1012.7402330242489,
+      "field": "test.LastValue.windows[2023-08].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-09",
+        "2023-10",
+        "2023-11"
+      ],
+      "expected": [
+        "2023-09",
+        "2023-10",
+        "2023-11"
+      ],
+      "field": "test.LastValue.windows[2023-08].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 184.13490364025697,
+      "expected": 184.13490364025697,
+      "field": "test.LastValue.windows[2023-09].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1117803.8019985724,
+      "expected": 1117803.8019985724,
+      "field": "test.LastValue.windows[2023-09].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1057.2624092431229,
+      "expected": 1057.2624092431229,
+      "field": "test.LastValue.windows[2023-09].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-10",
+        "2023-11",
+        "2023-12"
+      ],
+      "expected": [
+        "2023-10",
+        "2023-11",
+        "2023-12"
+      ],
+      "field": "test.LastValue.windows[2023-09].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 304.84910778015706,
+      "expected": 304.84910778015706,
+      "field": "test.SeasonalNaive12.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2966332.878229836,
+      "expected": 2966332.878229836,
+      "field": "test.SeasonalNaive12.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1722.304525404795,
+      "expected": 1722.304525404795,
+      "field": "test.SeasonalNaive12.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 87.24708041890645,
+      "expected": 87.24708041890645,
+      "field": "test.SeasonalNaive12.balanced_activity_group_MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 264.54004282655245,
+      "expected": 264.54004282655245,
+      "field": "test.SeasonalNaive12.horizons.h1.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1834356.5177730194,
+      "expected": 1834356.5177730194,
+      "field": "test.SeasonalNaive12.horizons.h1.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1354.384183964439,
+      "expected": 1354.384183964439,
+      "field": "test.SeasonalNaive12.horizons.h1.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 299.85877944325483,
+      "expected": 299.85877944325483,
+      "field": "test.SeasonalNaive12.horizons.h2.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2848229.353426124,
+      "expected": 2848229.353426124,
+      "field": "test.SeasonalNaive12.horizons.h2.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1687.6697998797406,
+      "expected": 1687.6697998797406,
+      "field": "test.SeasonalNaive12.horizons.h2.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 350.1485010706638,
+      "expected": 350.1485010706638,
+      "field": "test.SeasonalNaive12.horizons.h3.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4216412.763490364,
+      "expected": 4216412.763490364,
+      "field": "test.SeasonalNaive12.horizons.h3.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2053.3905530829647,
+      "expected": 2053.3905530829647,
+      "field": "test.SeasonalNaive12.horizons.h3.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 343.915780141844,
+      "expected": 343.915780141844,
+      "field": "test.SeasonalNaive12.activity_groups.high.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 3349300.7356544165,
+      "expected": 3349300.7356544165,
+      "field": "test.SeasonalNaive12.activity_groups.high.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1830.1094873406937,
+      "expected": 1830.1094873406937,
+      "field": "test.SeasonalNaive12.activity_groups.high.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2068,
+      "expected": 2068,
+      "field": "test.SeasonalNaive12.activity_groups.high.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.15432098765432098,
+      "expected": 0.15432098765432098,
+      "field": "test.SeasonalNaive12.activity_groups.inactive.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.35802469135802467,
+      "expected": 0.35802469135802467,
+      "field": "test.SeasonalNaive12.activity_groups.inactive.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.5983516452371671,
+      "expected": 0.5983516452371671,
+      "field": "test.SeasonalNaive12.activity_groups.inactive.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 27,
+      "expected": 27,
+      "field": "test.SeasonalNaive12.activity_groups.inactive.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.8768768768768769,
+      "expected": 1.8768768768768769,
+      "field": "test.SeasonalNaive12.activity_groups.low.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 197.80780780780782,
+      "expected": 197.80780780780782,
+      "field": "test.SeasonalNaive12.activity_groups.low.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 14.064416369256415,
+      "expected": 14.064416369256415,
+      "field": "test.SeasonalNaive12.activity_groups.low.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 111,
+      "expected": 111,
+      "field": "test.SeasonalNaive12.activity_groups.low.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 3.041343669250646,
+      "expected": 3.041343669250646,
+      "field": "test.SeasonalNaive12.activity_groups.medium.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 88.24031007751938,
+      "expected": 88.24031007751938,
+      "field": "test.SeasonalNaive12.activity_groups.medium.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 9.393631357335638,
+      "expected": 9.393631357335638,
+      "field": "test.SeasonalNaive12.activity_groups.medium.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 129,
+      "expected": 129,
+      "field": "test.SeasonalNaive12.activity_groups.medium.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 262.52334047109207,
+      "expected": 262.52334047109207,
+      "field": "test.SeasonalNaive12.windows[2023-06].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1842217.9103497502,
+      "expected": 1842217.9103497502,
+      "field": "test.SeasonalNaive12.windows[2023-06].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1357.28328301418,
+      "expected": 1357.28328301418,
+      "field": "test.SeasonalNaive12.windows[2023-06].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-07",
+        "2023-08",
+        "2023-09"
+      ],
+      "expected": [
+        "2023-07",
+        "2023-08",
+        "2023-09"
+      ],
+      "field": "test.SeasonalNaive12.windows[2023-06].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 264.84610992148464,
+      "expected": 264.84610992148464,
+      "field": "test.SeasonalNaive12.windows[2023-07].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1865665.1675945753,
+      "expected": 1865665.1675945753,
+      "field": "test.SeasonalNaive12.windows[2023-07].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1365.8935418232913,
+      "expected": 1365.8935418232913,
+      "field": "test.SeasonalNaive12.windows[2023-07].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-08",
+        "2023-09",
+        "2023-10"
+      ],
+      "expected": [
+        "2023-08",
+        "2023-09",
+        "2023-10"
+      ],
+      "field": "test.SeasonalNaive12.windows[2023-07].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 300.8725196288365,
+      "expected": 300.8725196288365,
+      "field": "test.SeasonalNaive12.windows[2023-08].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2943530.3103497503,
+      "expected": 2943530.3103497503,
+      "field": "test.SeasonalNaive12.windows[2023-08].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1715.6719704972015,
+      "expected": 1715.6719704972015,
+      "field": "test.SeasonalNaive12.windows[2023-08].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-09",
+        "2023-10",
+        "2023-11"
+      ],
+      "expected": [
+        "2023-09",
+        "2023-10",
+        "2023-11"
+      ],
+      "field": "test.SeasonalNaive12.windows[2023-08].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 391.15446109921487,
+      "expected": 391.15446109921487,
+      "field": "test.SeasonalNaive12.windows[2023-09].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 5213918.124625267,
+      "expected": 5213918.124625267,
+      "field": "test.SeasonalNaive12.windows[2023-09].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2283.4005615803085,
+      "expected": 2283.4005615803085,
+      "field": "test.SeasonalNaive12.windows[2023-09].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-10",
+        "2023-11",
+        "2023-12"
+      ],
+      "expected": [
+        "2023-10",
+        "2023-11",
+        "2023-12"
+      ],
+      "field": "test.SeasonalNaive12.windows[2023-09].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 318.70323355223485,
+      "expected": 318.70323355223485,
+      "field": "test.TrainMean27.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 3294716.460004761,
+      "expected": 3294716.460004761,
+      "field": "test.TrainMean27.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1815.135383381846,
+      "expected": 1815.135383381846,
+      "field": "test.TrainMean27.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 91.02236693045853,
+      "expected": 91.02236693045853,
+      "field": "test.TrainMean27.balanced_activity_group_MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 300.22002314438754,
+      "expected": 300.22002314438754,
+      "field": "test.TrainMean27.horizons.h1.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2611526.674103207,
+      "expected": 2611526.674103207,
+      "field": "test.TrainMean27.horizons.h1.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1616.0218668394332,
+      "expected": 1616.0218668394332,
+      "field": "test.TrainMean27.horizons.h1.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 337.6137141574023,
+      "expected": 337.6137141574023,
+      "field": "test.TrainMean27.horizons.h2.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 3659093.692169118,
+      "expected": 3659093.692169118,
+      "field": "test.TrainMean27.horizons.h2.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1912.8757649594284,
+      "expected": 1912.8757649594284,
+      "field": "test.TrainMean27.horizons.h2.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 318.2759633549148,
+      "expected": 318.2759633549148,
+      "field": "test.TrainMean27.horizons.h3.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 3613529.0137419594,
+      "expected": 3613529.0137419594,
+      "field": "test.TrainMean27.horizons.h3.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1900.9284609742576,
+      "expected": 1900.9284609742576,
+      "field": "test.TrainMean27.horizons.h3.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 359.593173627149,
+      "expected": 359.593173627149,
+      "field": "test.TrainMean27.activity_groups.high.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 3720082.6955337944,
+      "expected": 3720082.6955337944,
+      "field": "test.TrainMean27.activity_groups.high.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1928.7515898979304,
+      "expected": 1928.7515898979304,
+      "field": "test.TrainMean27.activity_groups.high.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2068,
+      "expected": 2068,
+      "field": "test.TrainMean27.activity_groups.high.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.15432098765432098,
+      "expected": 0.15432098765432098,
+      "field": "test.TrainMean27.activity_groups.inactive.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.35802469135802467,
+      "expected": 0.35802469135802467,
+      "field": "test.TrainMean27.activity_groups.inactive.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.5983516452371671,
+      "expected": 0.5983516452371671,
+      "field": "test.TrainMean27.activity_groups.inactive.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 27,
+      "expected": 27,
+      "field": "test.TrainMean27.activity_groups.inactive.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.7174396638509568,
+      "expected": 1.7174396638509568,
+      "field": "test.TrainMean27.activity_groups.low.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 193.8556396137302,
+      "expected": 193.8556396137302,
+      "field": "test.TrainMean27.activity_groups.low.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 13.923205076911358,
+      "expected": 13.923205076911358,
+      "field": "test.TrainMean27.activity_groups.low.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 111,
+      "expected": 111,
+      "field": "test.TrainMean27.activity_groups.low.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2.6245334431798577,
+      "expected": 2.6245334431798577,
+      "field": "test.TrainMean27.activity_groups.medium.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 80.55895013122677,
+      "expected": 80.55895013122677,
+      "field": "test.TrainMean27.activity_groups.medium.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 8.975463783628497,
+      "expected": 8.975463783628497,
+      "field": "test.TrainMean27.activity_groups.medium.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 129,
+      "expected": 129,
+      "field": "test.TrainMean27.activity_groups.medium.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 317.7831581601909,
+      "expected": 317.7831581601909,
+      "field": "test.TrainMean27.windows[2023-06].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2946982.117114033,
+      "expected": 2946982.117114033,
+      "field": "test.TrainMean27.windows[2023-06].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1716.6776392538097,
+      "expected": 1716.6776392538097,
+      "field": "test.TrainMean27.windows[2023-06].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-07",
+        "2023-08",
+        "2023-09"
+      ],
+      "expected": [
+        "2023-07",
+        "2023-08",
+        "2023-09"
+      ],
+      "field": "test.TrainMean27.windows[2023-06].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 302.93164956055415,
+      "expected": 302.93164956055415,
+      "field": "test.TrainMean27.windows[2023-07].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2709842.776840537,
+      "expected": 2709842.776840537,
+      "field": "test.TrainMean27.windows[2023-07].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1646.1600094889127,
+      "expected": 1646.1600094889127,
+      "field": "test.TrainMean27.windows[2023-07].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-08",
+        "2023-09",
+        "2023-10"
+      ],
+      "expected": [
+        "2023-08",
+        "2023-09",
+        "2023-10"
+      ],
+      "field": "test.TrainMean27.windows[2023-07].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 308.51697758578405,
+      "expected": 308.51697758578405,
+      "field": "test.TrainMean27.windows[2023-08].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 3196508.921123209,
+      "expected": 3196508.921123209,
+      "field": "test.TrainMean27.windows[2023-08].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1787.8783295076903,
+      "expected": 1787.8783295076903,
+      "field": "test.TrainMean27.windows[2023-08].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-09",
+        "2023-10",
+        "2023-11"
+      ],
+      "expected": [
+        "2023-09",
+        "2023-10",
+        "2023-11"
+      ],
+      "field": "test.TrainMean27.windows[2023-08].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 345.5811489024103,
+      "expected": 345.5811489024103,
+      "field": "test.TrainMean27.windows[2023-09].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4325532.024941267,
+      "expected": 4325532.024941267,
+      "field": "test.TrainMean27.windows[2023-09].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2079.791341683407,
+      "expected": 2079.791341683407,
+      "field": "test.TrainMean27.windows[2023-09].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-10",
+        "2023-11",
+        "2023-12"
+      ],
+      "expected": [
+        "2023-10",
+        "2023-11",
+        "2023-12"
+      ],
+      "field": "test.TrainMean27.windows[2023-09].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 195.23165092554572,
+      "expected": 195.23165092554572,
+      "field": "test.WindowMean6.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1181454.7324261535,
+      "expected": 1181454.7324261535,
+      "field": "test.WindowMean6.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1086.9474377476372,
+      "expected": 1086.9474377476372,
+      "field": "test.WindowMean6.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 56.24170501891973,
+      "expected": 56.24170501891973,
+      "field": "test.WindowMean6.balanced_activity_group_MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 179.80587167538047,
+      "expected": 179.80587167538047,
+      "field": "test.WindowMean6.horizons.h1.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 891101.4972228734,
+      "expected": 891101.4972228734,
+      "field": "test.WindowMean6.horizons.h1.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 943.9817250470866,
+      "expected": 943.9817250470866,
+      "field": "test.WindowMean6.horizons.h1.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 220.6882423211009,
+      "expected": 220.6882423211009,
+      "field": "test.WindowMean6.horizons.h2.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1497556.559429375,
+      "expected": 1497556.559429375,
+      "field": "test.WindowMean6.horizons.h2.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1223.7469343901846,
+      "expected": 1223.7469343901846,
+      "field": "test.WindowMean6.horizons.h2.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 185.20083878015583,
+      "expected": 185.20083878015583,
+      "field": "test.WindowMean6.horizons.h3.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1155706.1406262126,
+      "expected": 1155706.1406262126,
+      "field": "test.WindowMean6.horizons.h3.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1075.0377391637062,
+      "expected": 1075.0377391637062,
+      "field": "test.WindowMean6.horizons.h3.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 220.17157716553257,
+      "expected": 220.17157716553257,
+      "field": "test.WindowMean6.activity_groups.high.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1333977.3443846316,
+      "expected": 1333977.3443846316,
+      "field": "test.WindowMean6.activity_groups.high.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1154.97936967923,
+      "expected": 1154.97936967923,
+      "field": "test.WindowMean6.activity_groups.high.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2068,
+      "expected": 2068,
+      "field": "test.WindowMean6.activity_groups.high.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.31481481187137555,
+      "expected": 0.31481481187137555,
+      "field": "test.WindowMean6.activity_groups.inactive.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.5411522490252195,
+      "expected": 0.5411522490252195,
+      "field": "test.WindowMean6.activity_groups.inactive.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.7356305112114502,
+      "expected": 0.7356305112114502,
+      "field": "test.WindowMean6.activity_groups.inactive.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 27,
+      "expected": 27,
+      "field": "test.WindowMean6.activity_groups.inactive.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.9662162094480462,
+      "expected": 1.9662162094480462,
+      "field": "test.WindowMean6.activity_groups.low.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 208.1846835931598,
+      "expected": 208.1846835931598,
+      "field": "test.WindowMean6.activity_groups.low.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 14.428606432818098,
+      "expected": 14.428606432818098,
+      "field": "test.WindowMean6.activity_groups.low.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 111,
+      "expected": 111,
+      "field": "test.WindowMean6.activity_groups.low.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2.514211888826941,
+      "expected": 2.514211888826941,
+      "field": "test.WindowMean6.activity_groups.medium.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 66.11563302813343,
+      "expected": 66.11563302813343,
+      "field": "test.WindowMean6.activity_groups.medium.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 8.131152011131844,
+      "expected": 8.131152011131844,
+      "field": "test.WindowMean6.activity_groups.medium.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 129,
+      "expected": 129,
+      "field": "test.WindowMean6.activity_groups.medium.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 238.8528218173219,
+      "expected": 238.8528218173219,
+      "field": "test.WindowMean6.windows[2023-06].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1762099.5639275457,
+      "expected": 1762099.5639275457,
+      "field": "test.WindowMean6.windows[2023-06].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1327.4409832182919,
+      "expected": 1327.4409832182919,
+      "field": "test.WindowMean6.windows[2023-06].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-07",
+        "2023-08",
+        "2023-09"
+      ],
+      "expected": [
+        "2023-07",
+        "2023-08",
+        "2023-09"
+      ],
+      "field": "test.WindowMean6.windows[2023-06].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 184.64028093216464,
+      "expected": 184.64028093216464,
+      "field": "test.WindowMean6.windows[2023-07].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 884943.4356481795,
+      "expected": 884943.4356481795,
+      "field": "test.WindowMean6.windows[2023-07].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 940.7143220171464,
+      "expected": 940.7143220171464,
+      "field": "test.WindowMean6.windows[2023-07].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-08",
+        "2023-09",
+        "2023-10"
+      ],
+      "expected": [
+        "2023-08",
+        "2023-09",
+        "2023-10"
+      ],
+      "field": "test.WindowMean6.windows[2023-07].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 174.06185985095453,
+      "expected": 174.06185985095453,
+      "field": "test.WindowMean6.windows[2023-08].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 871543.545414329,
+      "expected": 871543.545414329,
+      "field": "test.WindowMean6.windows[2023-08].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 933.5649658241942,
+      "expected": 933.5649658241942,
+      "field": "test.WindowMean6.windows[2023-08].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-09",
+        "2023-10",
+        "2023-11"
+      ],
+      "expected": [
+        "2023-09",
+        "2023-10",
+        "2023-11"
+      ],
+      "field": "test.WindowMean6.windows[2023-08].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 183.37164110174186,
+      "expected": 183.37164110174186,
+      "field": "test.WindowMean6.windows[2023-09].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1207232.38471456,
+      "expected": 1207232.38471456,
+      "field": "test.WindowMean6.windows[2023-09].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1098.7412728729907,
+      "expected": 1098.7412728729907,
+      "field": "test.WindowMean6.windows[2023-09].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-10",
+        "2023-11",
+        "2023-12"
+      ],
+      "expected": [
+        "2023-10",
+        "2023-11",
+        "2023-12"
+      ],
+      "field": "test.WindowMean6.windows[2023-09].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 1165.3715917201998,
+      "expected": 1165.3715917201998,
+      "field": "test.Zero.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 22765377.907922912,
+      "expected": 22765377.907922912,
+      "field": "test.Zero.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4771.307777530486,
+      "expected": 4771.307777530486,
+      "field": "test.Zero.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 329.909758684218,
+      "expected": 329.909758684218,
+      "field": "test.Zero.balanced_activity_group_MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1153.2184154175588,
+      "expected": 1153.2184154175588,
+      "field": "test.Zero.horizons.h1.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 21567075.691862956,
+      "expected": 21567075.691862956,
+      "field": "test.Zero.horizons.h1.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4644.03657305398,
+      "expected": 4644.03657305398,
+      "field": "test.Zero.horizons.h1.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1191.0493576017132,
+      "expected": 1191.0493576017132,
+      "field": "test.Zero.horizons.h2.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 23805936.62837259,
+      "expected": 23805936.62837259,
+      "field": "test.Zero.horizons.h2.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4879.132774210248,
+      "expected": 4879.132774210248,
+      "field": "test.Zero.horizons.h2.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1151.8470021413277,
+      "expected": 1151.8470021413277,
+      "field": "test.Zero.horizons.h3.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 22923121.40353319,
+      "expected": 22923121.40353319,
+      "field": "test.Zero.horizons.h3.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4787.809666594234,
+      "expected": 4787.809666594234,
+      "field": "test.Zero.horizons.h3.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1315.6022324306898,
+      "expected": 1315.6022324306898,
+      "field": "test.Zero.activity_groups.high.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 25704605.92122018,
+      "expected": 25704605.92122018,
+      "field": "test.Zero.activity_groups.high.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 5069.970998064997,
+      "expected": 5069.970998064997,
+      "field": "test.Zero.activity_groups.high.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2068,
+      "expected": 2068,
+      "field": "test.Zero.activity_groups.high.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.15432098765432098,
+      "expected": 0.15432098765432098,
+      "field": "test.Zero.activity_groups.inactive.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.35802469135802467,
+      "expected": 0.35802469135802467,
+      "field": "test.Zero.activity_groups.inactive.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.5983516452371671,
+      "expected": 0.5983516452371671,
+      "field": "test.Zero.activity_groups.inactive.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 27,
+      "expected": 27,
+      "field": "test.Zero.activity_groups.inactive.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.542042042042042,
+      "expected": 1.542042042042042,
+      "field": "test.Zero.activity_groups.low.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 195.43843843843842,
+      "expected": 195.43843843843842,
+      "field": "test.Zero.activity_groups.low.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 13.979929843831064,
+      "expected": 13.979929843831064,
+      "field": "test.Zero.activity_groups.low.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 111,
+      "expected": 111,
+      "field": "test.Zero.activity_groups.low.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2.340439276485788,
+      "expected": 2.340439276485788,
+      "field": "test.Zero.activity_groups.medium.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 82.68669250645995,
+      "expected": 82.68669250645995,
+      "field": "test.Zero.activity_groups.medium.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 9.093222338998423,
+      "expected": 9.093222338998423,
+      "field": "test.Zero.activity_groups.medium.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 129,
+      "expected": 129,
+      "field": "test.Zero.activity_groups.medium.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1181.682512491078,
+      "expected": 1181.682512491078,
+      "field": "test.Zero.windows[2023-06].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 22755308.39257673,
+      "expected": 22755308.39257673,
+      "field": "test.Zero.windows[2023-06].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4770.252445371914,
+      "expected": 4770.252445371914,
+      "field": "test.Zero.windows[2023-06].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-07",
+        "2023-08",
+        "2023-09"
+      ],
+      "expected": [
+        "2023-07",
+        "2023-08",
+        "2023-09"
+      ],
+      "field": "test.Zero.windows[2023-06].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 1147.171448965025,
+      "expected": 1147.171448965025,
+      "field": "test.Zero.windows[2023-07].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 21513070.74261242,
+      "expected": 21513070.74261242,
+      "field": "test.Zero.windows[2023-07].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4638.218488020203,
+      "expected": 4638.218488020203,
+      "field": "test.Zero.windows[2023-07].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-08",
+        "2023-09",
+        "2023-10"
+      ],
+      "expected": [
+        "2023-08",
+        "2023-09",
+        "2023-10"
+      ],
+      "field": "test.Zero.windows[2023-07].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 1148.0815132048538,
+      "expected": 1148.0815132048538,
+      "field": "test.Zero.windows[2023-08].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 22156326.076374017,
+      "expected": 22156326.076374017,
+      "field": "test.Zero.windows[2023-08].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4707.050677056071,
+      "expected": 4707.050677056071,
+      "field": "test.Zero.windows[2023-08].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-09",
+        "2023-10",
+        "2023-11"
+      ],
+      "expected": [
+        "2023-09",
+        "2023-10",
+        "2023-11"
+      ],
+      "field": "test.Zero.windows[2023-08].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 1184.550892219843,
+      "expected": 1184.550892219843,
+      "field": "test.Zero.windows[2023-09].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 24636806.42012848,
+      "expected": 24636806.42012848,
+      "field": "test.Zero.windows[2023-09].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4963.547765472645,
+      "expected": 4963.547765472645,
+      "field": "test.Zero.windows[2023-09].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-10",
+        "2023-11",
+        "2023-12"
+      ],
+      "expected": [
+        "2023-10",
+        "2023-11",
+        "2023-12"
+      ],
+      "field": "test.Zero.windows[2023-09].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 185.62655246252677,
+      "expected": 185.62655246252677,
+      "field": "validation.LastValue.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 397984.1727337616,
+      "expected": 397984.1727337616,
+      "field": "validation.LastValue.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 630.8598677469994,
+      "expected": 630.8598677469994,
+      "field": "validation.LastValue.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 53.46289942199558,
+      "expected": 53.46289942199558,
+      "field": "validation.LastValue.balanced_activity_group_MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 185.04668094218417,
+      "expected": 185.04668094218417,
+      "field": "validation.LastValue.horizons.h1.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 437528.92419700214,
+      "expected": 437528.92419700214,
+      "field": "validation.LastValue.horizons.h1.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 661.4596920425327,
+      "expected": 661.4596920425327,
+      "field": "validation.LastValue.horizons.h1.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 174.2098501070664,
+      "expected": 174.2098501070664,
+      "field": "validation.LastValue.horizons.h2.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 358667.8646680942,
+      "expected": 358667.8646680942,
+      "field": "validation.LastValue.horizons.h2.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 598.8888583602923,
+      "expected": 598.8888583602923,
+      "field": "validation.LastValue.horizons.h2.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 197.62312633832977,
+      "expected": 197.62312633832977,
+      "field": "validation.LastValue.horizons.h3.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 397755.72933618847,
+      "expected": 397755.72933618847,
+      "field": "validation.LastValue.horizons.h3.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 630.6787845933843,
+      "expected": 630.6787845933843,
+      "field": "validation.LastValue.horizons.h3.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 209.34235976789168,
+      "expected": 209.34235976789168,
+      "field": "validation.LastValue.activity_groups.high.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 449362.6602192134,
+      "expected": 449362.6602192134,
+      "field": "validation.LastValue.activity_groups.high.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 670.3451799030208,
+      "expected": 670.3451799030208,
+      "field": "validation.LastValue.activity_groups.high.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2068,
+      "expected": 2068,
+      "field": "validation.LastValue.activity_groups.high.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.345679012345679,
+      "expected": 0.345679012345679,
+      "field": "validation.LastValue.activity_groups.inactive.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.9753086419753085,
+      "expected": 1.9753086419753085,
+      "field": "validation.LastValue.activity_groups.inactive.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.405456737852613,
+      "expected": 1.405456737852613,
+      "field": "validation.LastValue.activity_groups.inactive.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 27,
+      "expected": 27,
+      "field": "validation.LastValue.activity_groups.inactive.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.5795795795795795,
+      "expected": 1.5795795795795795,
+      "field": "validation.LastValue.activity_groups.low.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 69.33933933933933,
+      "expected": 69.33933933933933,
+      "field": "validation.LastValue.activity_groups.low.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 8.327024639049613,
+      "expected": 8.327024639049613,
+      "field": "validation.LastValue.activity_groups.low.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 111,
+      "expected": 111,
+      "field": "validation.LastValue.activity_groups.low.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2.5839793281653747,
+      "expected": 2.5839793281653747,
+      "field": "validation.LastValue.activity_groups.medium.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 25.674418604651162,
+      "expected": 25.674418604651162,
+      "field": "validation.LastValue.activity_groups.medium.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 5.066993053542817,
+      "expected": 5.066993053542817,
+      "field": "validation.LastValue.activity_groups.medium.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 129,
+      "expected": 129,
+      "field": "validation.LastValue.activity_groups.medium.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 185.62655246252677,
+      "expected": 185.62655246252677,
+      "field": "validation.LastValue.windows[2023-03].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 397984.1727337616,
+      "expected": 397984.1727337616,
+      "field": "validation.LastValue.windows[2023-03].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 630.8598677469994,
+      "expected": 630.8598677469994,
+      "field": "validation.LastValue.windows[2023-03].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-04",
+        "2023-05",
+        "2023-06"
+      ],
+      "expected": [
+        "2023-04",
+        "2023-05",
+        "2023-06"
+      ],
+      "field": "validation.LastValue.windows[2023-03].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 226.25024982155603,
+      "expected": 226.25024982155603,
+      "field": "validation.SeasonalNaive12.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 846365.5601713062,
+      "expected": 846365.5601713062,
+      "field": "validation.SeasonalNaive12.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 919.9812825113924,
+      "expected": 919.9812825113924,
+      "field": "validation.SeasonalNaive12.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 64.96749283563773,
+      "expected": 64.96749283563773,
+      "field": "validation.SeasonalNaive12.balanced_activity_group_MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 214.4882226980728,
+      "expected": 214.4882226980728,
+      "field": "validation.SeasonalNaive12.horizons.h1.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 561821.7618843683,
+      "expected": 561821.7618843683,
+      "field": "validation.SeasonalNaive12.horizons.h1.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 749.5477048756592,
+      "expected": 749.5477048756592,
+      "field": "validation.SeasonalNaive12.horizons.h1.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 229.21927194860814,
+      "expected": 229.21927194860814,
+      "field": "validation.SeasonalNaive12.horizons.h2.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 951837.6715203426,
+      "expected": 951837.6715203426,
+      "field": "validation.SeasonalNaive12.horizons.h2.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 975.6216846300325,
+      "expected": 975.6216846300325,
+      "field": "validation.SeasonalNaive12.horizons.h2.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 235.04325481798716,
+      "expected": 235.04325481798716,
+      "field": "validation.SeasonalNaive12.horizons.h3.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1025437.2471092077,
+      "expected": 1025437.2471092077,
+      "field": "validation.SeasonalNaive12.horizons.h3.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1012.6387544969863,
+      "expected": 1012.6387544969863,
+      "field": "validation.SeasonalNaive12.horizons.h3.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 255.20164410058027,
+      "expected": 255.20164410058027,
+      "field": "validation.SeasonalNaive12.activity_groups.high.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 955631.828336557,
+      "expected": 955631.828336557,
+      "field": "validation.SeasonalNaive12.activity_groups.high.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 977.5642323328718,
+      "expected": 977.5642323328718,
+      "field": "validation.SeasonalNaive12.activity_groups.high.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2068,
+      "expected": 2068,
+      "field": "validation.SeasonalNaive12.activity_groups.high.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.345679012345679,
+      "expected": 0.345679012345679,
+      "field": "validation.SeasonalNaive12.activity_groups.inactive.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.9753086419753085,
+      "expected": 1.9753086419753085,
+      "field": "validation.SeasonalNaive12.activity_groups.inactive.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.405456737852613,
+      "expected": 1.405456737852613,
+      "field": "validation.SeasonalNaive12.activity_groups.inactive.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 27,
+      "expected": 27,
+      "field": "validation.SeasonalNaive12.activity_groups.inactive.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.6456456456456456,
+      "expected": 1.6456456456456456,
+      "field": "validation.SeasonalNaive12.activity_groups.low.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 113.89189189189189,
+      "expected": 113.89189189189189,
+      "field": "validation.SeasonalNaive12.activity_groups.low.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 10.672014425210072,
+      "expected": 10.672014425210072,
+      "field": "validation.SeasonalNaive12.activity_groups.low.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 111,
+      "expected": 111,
+      "field": "validation.SeasonalNaive12.activity_groups.low.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2.6770025839793283,
+      "expected": 2.6770025839793283,
+      "field": "validation.SeasonalNaive12.activity_groups.medium.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 33.07493540051679,
+      "expected": 33.07493540051679,
+      "field": "validation.SeasonalNaive12.activity_groups.medium.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 5.751081237516715,
+      "expected": 5.751081237516715,
+      "field": "validation.SeasonalNaive12.activity_groups.medium.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 129,
+      "expected": 129,
+      "field": "validation.SeasonalNaive12.activity_groups.medium.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 226.25024982155603,
+      "expected": 226.25024982155603,
+      "field": "validation.SeasonalNaive12.windows[2023-03].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 846365.5601713062,
+      "expected": 846365.5601713062,
+      "field": "validation.SeasonalNaive12.windows[2023-03].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 919.9812825113924,
+      "expected": 919.9812825113924,
+      "field": "validation.SeasonalNaive12.windows[2023-03].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-04",
+        "2023-05",
+        "2023-06"
+      ],
+      "expected": [
+        "2023-04",
+        "2023-05",
+        "2023-06"
+      ],
+      "field": "validation.SeasonalNaive12.windows[2023-03].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 180.80884812674103,
+      "expected": 180.80884812674103,
+      "field": "validation.TrainMean27.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 606931.7529121826,
+      "expected": 606931.7529121826,
+      "field": "validation.TrainMean27.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 779.0582474450691,
+      "expected": 779.0582474450691,
+      "field": "validation.TrainMean27.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 51.96432310337995,
+      "expected": 51.96432310337995,
+      "field": "validation.TrainMean27.balanced_activity_group_MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 163.2490417530533,
+      "expected": 163.2490417530533,
+      "field": "validation.TrainMean27.horizons.h1.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 399310.7597124277,
+      "expected": 399310.7597124277,
+      "field": "validation.TrainMean27.horizons.h1.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 631.9104048141854,
+      "expected": 631.9104048141854,
+      "field": "validation.TrainMean27.horizons.h1.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 184.62555053995752,
+      "expected": 184.62555053995752,
+      "field": "validation.TrainMean27.horizons.h2.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 596404.8406088918,
+      "expected": 596404.8406088918,
+      "field": "validation.TrainMean27.horizons.h2.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 772.2725170617506,
+      "expected": 772.2725170617506,
+      "field": "validation.TrainMean27.horizons.h2.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 194.5519520872123,
+      "expected": 194.5519520872123,
+      "field": "validation.TrainMean27.horizons.h3.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 825079.6584152288,
+      "expected": 825079.6584152288,
+      "field": "validation.TrainMean27.horizons.h3.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 908.338955685172,
+      "expected": 908.338955685172,
+      "field": "validation.TrainMean27.horizons.h3.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 203.93884167042492,
+      "expected": 203.93884167042492,
+      "field": "validation.TrainMean27.activity_groups.high.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 685286.1570985805,
+      "expected": 685286.1570985805,
+      "field": "validation.TrainMean27.activity_groups.high.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 827.8201236371224,
+      "expected": 827.8201236371224,
+      "field": "validation.TrainMean27.activity_groups.high.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2068,
+      "expected": 2068,
+      "field": "validation.TrainMean27.activity_groups.high.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.345679012345679,
+      "expected": 0.345679012345679,
+      "field": "validation.TrainMean27.activity_groups.inactive.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.9753086419753085,
+      "expected": 1.9753086419753085,
+      "field": "validation.TrainMean27.activity_groups.inactive.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.405456737852613,
+      "expected": 1.405456737852613,
+      "field": "validation.TrainMean27.activity_groups.inactive.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 27,
+      "expected": 27,
+      "field": "validation.TrainMean27.activity_groups.inactive.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.5047269499113969,
+      "expected": 1.5047269499113969,
+      "field": "validation.TrainMean27.activity_groups.low.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 107.59054122933611,
+      "expected": 107.59054122933611,
+      "field": "validation.TrainMean27.activity_groups.low.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 10.37258604347711,
+      "expected": 10.37258604347711,
+      "field": "validation.TrainMean27.activity_groups.low.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 111,
+      "expected": 111,
+      "field": "validation.TrainMean27.activity_groups.low.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2.068044780837781,
+      "expected": 2.068044780837781,
+      "field": "validation.TrainMean27.activity_groups.medium.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 14.529354049765962,
+      "expected": 14.529354049765962,
+      "field": "validation.TrainMean27.activity_groups.medium.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 3.8117389797526746,
+      "expected": 3.8117389797526746,
+      "field": "validation.TrainMean27.activity_groups.medium.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 129,
+      "expected": 129,
+      "field": "validation.TrainMean27.activity_groups.medium.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 180.80884812674103,
+      "expected": 180.80884812674103,
+      "field": "validation.TrainMean27.windows[2023-03].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 606931.7529121826,
+      "expected": 606931.7529121826,
+      "field": "validation.TrainMean27.windows[2023-03].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 779.0582474450691,
+      "expected": 779.0582474450691,
+      "field": "validation.TrainMean27.windows[2023-03].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-04",
+        "2023-05",
+        "2023-06"
+      ],
+      "expected": [
+        "2023-04",
+        "2023-05",
+        "2023-06"
+      ],
+      "field": "validation.TrainMean27.windows[2023-03].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 185.12186426574803,
+      "expected": 185.12186426574803,
+      "field": "validation.WindowMean6.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 669875.5796009084,
+      "expected": 669875.5796009084,
+      "field": "validation.WindowMean6.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 818.4592718033736,
+      "expected": 818.4592718033736,
+      "field": "validation.WindowMean6.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 53.137508293672845,
+      "expected": 53.137508293672845,
+      "field": "validation.WindowMean6.balanced_activity_group_MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 168.6242671219644,
+      "expected": 168.6242671219644,
+      "field": "validation.WindowMean6.horizons.h1.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 459335.93169677805,
+      "expected": 459335.93169677805,
+      "field": "validation.WindowMean6.horizons.h1.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 677.7432638520121,
+      "expected": 677.7432638520121,
+      "field": "validation.WindowMean6.horizons.h1.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 190.8411123700775,
+      "expected": 190.8411123700775,
+      "field": "validation.WindowMean6.horizons.h2.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 657302.0670146166,
+      "expected": 657302.0670146166,
+      "field": "validation.WindowMean6.horizons.h2.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 810.7416771170806,
+      "expected": 810.7416771170806,
+      "field": "validation.WindowMean6.horizons.h2.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 195.90021330520224,
+      "expected": 195.90021330520224,
+      "field": "validation.WindowMean6.horizons.h3.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 892988.7400913304,
+      "expected": 892988.7400913304,
+      "field": "validation.WindowMean6.horizons.h3.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 944.980814668388,
+      "expected": 944.980814668388,
+      "field": "validation.WindowMean6.horizons.h3.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 208.819899932052,
+      "expected": 208.819899932052,
+      "field": "validation.WindowMean6.activity_groups.high.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 756357.3866222168,
+      "expected": 756357.3866222168,
+      "field": "validation.WindowMean6.activity_groups.high.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 869.6880973212275,
+      "expected": 869.6880973212275,
+      "field": "validation.WindowMean6.activity_groups.high.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2068,
+      "expected": 2068,
+      "field": "validation.WindowMean6.activity_groups.high.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.345679012345679,
+      "expected": 0.345679012345679,
+      "field": "validation.WindowMean6.activity_groups.inactive.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.9753086419753085,
+      "expected": 1.9753086419753085,
+      "field": "validation.WindowMean6.activity_groups.inactive.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.405456737852613,
+      "expected": 1.405456737852613,
+      "field": "validation.WindowMean6.activity_groups.inactive.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 27,
+      "expected": 27,
+      "field": "validation.WindowMean6.activity_groups.inactive.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.440440444616942,
+      "expected": 1.440440444616942,
+      "field": "validation.WindowMean6.activity_groups.low.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 96.2762766385878,
+      "expected": 96.2762766385878,
+      "field": "validation.WindowMean6.activity_groups.low.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 9.812047525291947,
+      "expected": 9.812047525291947,
+      "field": "validation.WindowMean6.activity_groups.low.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 111,
+      "expected": 111,
+      "field": "validation.WindowMean6.activity_groups.low.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.9440137856767468,
+      "expected": 1.9440137856767468,
+      "field": "validation.WindowMean6.activity_groups.medium.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 12.890180904415024,
+      "expected": 12.890180904415024,
+      "field": "validation.WindowMean6.activity_groups.medium.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 3.590289807858834,
+      "expected": 3.590289807858834,
+      "field": "validation.WindowMean6.activity_groups.medium.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 129,
+      "expected": 129,
+      "field": "validation.WindowMean6.activity_groups.medium.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 185.12186426574803,
+      "expected": 185.12186426574803,
+      "field": "validation.WindowMean6.windows[2023-03].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 669875.5796009084,
+      "expected": 669875.5796009084,
+      "field": "validation.WindowMean6.windows[2023-03].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 818.4592718033736,
+      "expected": 818.4592718033736,
+      "field": "validation.WindowMean6.windows[2023-03].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-04",
+        "2023-05",
+        "2023-06"
+      ],
+      "expected": [
+        "2023-04",
+        "2023-05",
+        "2023-06"
+      ],
+      "field": "validation.WindowMean6.windows[2023-03].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": 1042.729193433262,
+      "expected": 1042.729193433262,
+      "field": "validation.Zero.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 15993006.493647395,
+      "expected": 15993006.493647395,
+      "field": "validation.Zero.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 3999.125716159395,
+      "expected": 3999.125716159395,
+      "field": "validation.Zero.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 295.1969631323705,
+      "expected": 295.1969631323705,
+      "field": "validation.Zero.balanced_activity_group_MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1029.4800856531049,
+      "expected": 1029.4800856531049,
+      "field": "validation.Zero.horizons.h1.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 15208346.97987152,
+      "expected": 15208346.97987152,
+      "field": "validation.Zero.horizons.h1.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 3899.7880685841787,
+      "expected": 3899.7880685841787,
+      "field": "validation.Zero.horizons.h1.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1050.3254817987151,
+      "expected": 1050.3254817987151,
+      "field": "validation.Zero.horizons.h2.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 16055423.182869378,
+      "expected": 16055423.182869378,
+      "field": "validation.Zero.horizons.h2.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4006.921908756069,
+      "expected": 4006.921908756069,
+      "field": "validation.Zero.horizons.h2.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1048.3820128479658,
+      "expected": 1048.3820128479658,
+      "field": "validation.Zero.horizons.h3.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 16715249.318201285,
+      "expected": 16715249.318201285,
+      "field": "validation.Zero.horizons.h3.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4088.42871017721,
+      "expected": 4088.42871017721,
+      "field": "validation.Zero.horizons.h3.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1177.1582849774338,
+      "expected": 1177.1582849774338,
+      "field": "validation.Zero.activity_groups.high.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 18057860.470664088,
+      "expected": 18057860.470664088,
+      "field": "validation.Zero.activity_groups.high.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4249.454137964556,
+      "expected": 4249.454137964556,
+      "field": "validation.Zero.activity_groups.high.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 2068,
+      "expected": 2068,
+      "field": "validation.Zero.activity_groups.high.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 0.345679012345679,
+      "expected": 0.345679012345679,
+      "field": "validation.Zero.activity_groups.inactive.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.9753086419753085,
+      "expected": 1.9753086419753085,
+      "field": "validation.Zero.activity_groups.inactive.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.405456737852613,
+      "expected": 1.405456737852613,
+      "field": "validation.Zero.activity_groups.inactive.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 27,
+      "expected": 27,
+      "field": "validation.Zero.activity_groups.inactive.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.3123123123123124,
+      "expected": 1.3123123123123124,
+      "field": "validation.Zero.activity_groups.low.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 111.90690690690691,
+      "expected": 111.90690690690691,
+      "field": "validation.Zero.activity_groups.low.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 10.57860609470392,
+      "expected": 10.57860609470392,
+      "field": "validation.Zero.activity_groups.low.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 111,
+      "expected": 111,
+      "field": "validation.Zero.activity_groups.low.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1.971576227390181,
+      "expected": 1.971576227390181,
+      "field": "validation.Zero.activity_groups.medium.MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 17.320413436692508,
+      "expected": 17.320413436692508,
+      "field": "validation.Zero.activity_groups.medium.MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 4.1617800802892635,
+      "expected": 4.1617800802892635,
+      "field": "validation.Zero.activity_groups.medium.RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 129,
+      "expected": 129,
+      "field": "validation.Zero.activity_groups.medium.nodes",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 1042.729193433262,
+      "expected": 1042.729193433262,
+      "field": "validation.Zero.windows[2023-03].MAE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 15993006.493647395,
+      "expected": 15993006.493647395,
+      "field": "validation.Zero.windows[2023-03].MSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": 3999.125716159395,
+      "expected": 3999.125716159395,
+      "field": "validation.Zero.windows[2023-03].RMSE",
+      "normalized_difference": 0.0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    {
+      "actual": [
+        "2023-04",
+        "2023-05",
+        "2023-06"
+      ],
+      "expected": [
+        "2023-04",
+        "2023-05",
+        "2023-06"
+      ],
+      "field": "validation.Zero.windows[2023-03].target_months",
+      "status": "ok"
+    },
+    {
+      "actual": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+      "expected": "present",
+      "field": "identity.run_node_keys_sha256",
+      "status": "ok"
+    },
+    {
+      "actual": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+      "expected": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+      "field": "identity.demand_sha256_vs_v2",
+      "status": "ok"
+    }
+  ],
+  "compared_fields": 411,
+  "dataset": "r0",
+  "diagnostic_elapsed_time_compared_as_cost": false,
+  "discrepancies": [],
+  "identity_evidence": {
+    "demand_sha256_matches_v2": true,
+    "identity_check_limitation": "the v2 log reports aggregate counts rather than full canonical node keys, so row-level identity equality is established through the hashed demand source and canonical ordering, not from the log",
+    "run_demand_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+    "run_node_keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+    "run_protocol_sha256": "7c113c83d49f15f6b172d06f83c06ddbe73e5fdffba27f41060acfd50b5d7bb7",
+    "run_source_manifest": {
+      "algorithm": "sha256",
+      "coverage_bundle_sha256": null,
+      "generated": "2026-10-07T17:46:01+08:00",
+      "node_keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+      "run_id": "p01-r0-sharedridge-002",
+      "sources": {
+        "coverage": {
+          "path": "/Users/watuji/da_chuang/repos/benchmark/dataset/graph/r0.parquet",
+          "sha256": "c49bc2ecfddd24ddc7a6c6654fdc7bf2e908820139a987f99a115c11b583aa5b"
+        },
+        "demand": {
+          "path": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r0.parquet",
+          "sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946"
+        },
+        "protocol": {
+          "path": "/Users/watuji/da_chuang/repos/benchmark/research/phases/P01/protocol.md",
+          "sha256": "7c113c83d49f15f6b172d06f83c06ddbe73e5fdffba27f41060acfd50b5d7bb7"
+        }
+      }
+    },
+    "run_source_manifest_present": true,
+    "v2_log_contains_counts_not_full_node_keys": true,
+    "v2_source_sha256_available": true,
+    "v2_source_sha256_demand": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+    "v2_source_sha256_file": "/Users/watuji/da_chuang/repos/benchmark/research/runs/phase1-20261006-v2-01/source-sha256.txt",
+    "v2_source_sha256_sha256": "74239dab0e3d13452d390c7de86e80431cba783285dddc5c72558ef5786b4bea"
+  },
+  "identity_status": "ok",
+  "input_run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r0-sharedridge-002",
+  "limited_findings": [],
+  "reference_path": "/Users/watuji/da_chuang/repos/benchmark/research/runs/phase1-20261006-v2-01/naive-baselines.log",
+  "reference_sha256": "c425bbe165cd32a393f782b290c05f0f74423a695539cdb40fd1a091e25e8367",
+  "reference_unchanged": true,
+  "status": "ok",
+  "tolerance": 1e-12
+}

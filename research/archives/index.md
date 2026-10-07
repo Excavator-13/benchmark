@@ -1,6 +1,6 @@
 # 实验与归档索引
 
-更新日期：2026-10-06。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
+更新日期：2026-10-07。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
 
 ## 已有运行
 
@@ -34,6 +34,59 @@ python3 research/archives/migrations/verify_20261006.py
 ```
 
 旧摘要中的“未推送”描述封存时状态，保持不变。旧 `planning-sha256.txt` 使用原目录路径；迁移后的内容核验由上述脚本按映射完成，不改写封存清单。
+
+## T004 baseline 运行（2026-10-07）
+
+所属任务：P01-T004；协议 `P1-count-L6-H3-v3`。研究验收见 [D008](../decisions.md#d008-t004-baseline-研究侧验收)，独立实现核验见 [PASS 报告](../../openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/verification.md)。以 `-002` 的四个模型 run 和八个检查为本次验收依据；`-001` 保留为历史版本。
+
+以下 24 个 run 的共同保存状态：**sealed，2026-10-07T20:05+08:00 封存与解包核验通过，待提交/推送**。每个包位于 `research/archives/<run-id>.tar.gz`，配套 `.tar.gz.sha256`；实际路径、包 SHA256、字节数和完整成员哈希见 [封存清单](p01-baseline-20261007-manifest.json)。本地展开产物保留；Git 收纳封存包及 summary/provenance/command/report 可读记录，其余展开文件由精确忽略规则排除。
+
+### 模型运行
+
+每个模型 run 含五项朴素基线及共享 Ridge，74 个文件，其中 72 个为清单成员。primary/repeat 均为 seed 0；它们是同条件重复，不是不同初始化样本。
+
+| 数据 / 版本 | Primary 摘要与 Run ID | Repeat 摘要与 Run ID | 执行结果（2026-10-07） | 证据角色 |
+| --- | --- | --- | --- | --- |
+| r0 / 001 | [p01-r0-sharedridge-001](../runs/p01-r0-sharedridge-001/summary.md) | [p01-r0-sharedridge-repeat-001](../runs/p01-r0-sharedridge-repeat-001/summary.md) | 两运行 success/complete | 修复前历史，保留原样 |
+| region / 001 | [p01-region-sharedridge-001](../runs/p01-region-sharedridge-001/summary.md) | [p01-region-sharedridge-repeat-001](../runs/p01-region-sharedridge-repeat-001/summary.md) | 两运行 success/complete | 修复前历史，保留原样 |
+| r0 / 002 | [p01-r0-sharedridge-002](../runs/p01-r0-sharedridge-002/summary.md) | [p01-r0-sharedridge-repeat-002](../runs/p01-r0-sharedridge-repeat-002/summary.md) | 两运行 success/complete，同条件预测最大绝对差 0 | 本次研究验收依据 |
+| region / 002 | [p01-region-sharedridge-002](../runs/p01-region-sharedridge-002/summary.md) | [p01-region-sharedridge-repeat-002](../runs/p01-region-sharedridge-repeat-002/summary.md) | 两运行 success/complete，同条件预测最大绝对差 0 | 本次研究验收依据 |
+
+### 关联分析检查
+
+每行列出两个不同 run；链接是各自不可改写的输出报告。16 个状态文件均为 success/complete；`-002` 的四个重算、两个重复性检查及两个 v2 对齐均为 ok。原始输入 run 与精确命令见各检查目录的 `provenance.json`/`command.json`。
+
+| 检查 | r0 Run ID / 报告 | region Run ID / 报告 | 证据角色 |
+| --- | --- | --- | --- |
+| primary 重算 / 001 | [p01-r0-recompute-primary-001](../runs/p01-r0-recompute-primary-001/report.json) | [p01-region-recompute-primary-001](../runs/p01-region-recompute-primary-001/report.json) | 历史 |
+| repeat 重算 / 001 | [p01-r0-recompute-repeat-001](../runs/p01-r0-recompute-repeat-001/report.json) | [p01-region-recompute-repeat-001](../runs/p01-region-recompute-repeat-001/report.json) | 历史 |
+| 同 seed 比较 / 001 | [p01-r0-repeat-check-001](../runs/p01-r0-repeat-check-001/report.json) | [p01-region-repeat-check-001](../runs/p01-region-repeat-check-001/report.json) | 历史 |
+| v2 对齐 / 001 | [p01-r0-alignment-001](../runs/p01-r0-alignment-001/report.json) | [p01-region-alignment-001](../runs/p01-region-alignment-001/report.json) | 历史 |
+| primary 重算 / 002 | [p01-r0-recompute-primary-002](../runs/p01-r0-recompute-primary-002/report.json) | [p01-region-recompute-primary-002](../runs/p01-region-recompute-primary-002/report.json) | 本次验收；saved-only，不读源数据、不重新拟合 |
+| repeat 重算 / 002 | [p01-r0-recompute-repeat-002](../runs/p01-r0-recompute-repeat-002/report.json) | [p01-region-recompute-repeat-002](../runs/p01-region-recompute-repeat-002/report.json) | 本次验收；saved-only |
+| 同 seed 比较 / 002 | [p01-r0-repeat-check-002](../runs/p01-r0-repeat-check-002/report.json) | [p01-region-repeat-check-002](../runs/p01-region-repeat-check-002/report.json) | 本次验收；所有方法与划分预测最大绝对差 0 |
+| v2 对齐 / 002 | [p01-r0-alignment-002](../runs/p01-r0-alignment-002/report.json) | [p01-region-alignment-002](../runs/p01-region-alignment-002/report.json) | 本次验收；每组 411 字段、零差异 |
+
+### 内容身份与恢复限制
+
+2026-10-07T19:53+08:00 只读核对：780 个文件（排除 Python 缓存），内容合计 76,206,301 bytes；所有 24 个 `artifacts-sha256.json` 的 732 个成员逐文件 SHA256 一致。清单声明排除自身与 `events.jsonl`（共 48 文件）；这些仍包含在 PASS 报告的完整 formal_evidence 指纹中。
+
+- 全集 inventory SHA256：`db042f6104247130bca08595cf192b82e29254b4f32c4d5dc52cffc4fc64276a`。
+- 全集 content SHA256：`0dd5e80a29d0e9767eb7ed981f33b66932ffead3b14c45aadc494227dc945fb5`。
+- 算法：报告的排序相对路径清单与 `path + NUL + file_SHA256 + newline` 聚合规则；是目录内容身份。各 tar 包另有包外 SHA256，见封存清单。
+- 运行代码基准：`a0fdab4268e5e17b0c96453efd53f01a245f01cc` 加执行时保存的 diff、未跟踪源码快照及来源清单。两版身份分别以各自 run 为准；后续修复的 checker 与运行时快照有差异，已由独立报告说明，不回写旧 run。
+- 环境：本地 macOS arm64 CPU，Python 3.11.17、NumPy 1.26.4、pandas 2.2.3、PyArrow 17.0.0；线程设置与完整环境在各模型目录。sklearn 未安装，实际可选后端未验证。
+- 产物定位：模型目录包含 `predictions/`、`gold/`、`models/`、`candidates/`、节点/窗口身份、分组掩码、配置/协议/来源/命令、`metrics.json`、`node-errors.parquet` 与 `measurements.json`。单个目录成员核验依据为其 `artifacts-sha256.json`。
+- 封存核验：24 个包合计 41,446,332 bytes；排除缓存和系统元数据，所有成员为各 run 下的普通文件，拒绝绝对路径、父目录跳转、链接与重复成员。在新的临时目录解包后核对全部 780 文件 SHA256，并与核验报告的全集内容指纹一致；封存前后原目录身份一致。
+- 保存收尾按协议第 6.1 节与 [D009 当前产物保存决定](../decisions.md#d009-约束证据数量与-git-保存边界)执行。源码去重与 skill 长期改进仍待讨论；没有删改原始 run。
+
+恢复完整证据时，在仓库根目录先校验包外 SHA256，再在空的临时目录解包核验。以下命令自动核验全部包并在新临时目录恢复 780 文件，不覆盖现有 run：
+
+```bash
+python3 research/archives/seal_20261007_baseline.py verify
+```
+
+新 clone 的展开目录仅含可读记录。需要持久展开模型产物时，先用上述命令核验，在新建空目录执行 `tar -xzf /absolute/path/to/research/archives/<run-id>.tar.gz -C /new/empty/directory`；输出为 `<run-id>/`。按运行内配置/协议与来源身份重算，不直接覆盖仓库中已有 run。`command.json` 记录原机器的绝对路径，恢复后须映射到实际位置；这不是全新环境重训验证。
 
 ## 远端核验记录
 

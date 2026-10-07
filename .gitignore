@@ -13,3 +13,22 @@ __pycache__/
 */*/__pycache__/
 */*/*/__pycache__/
 */*.pdf
+
+# Complete T004 evidence is sealed in research/archives/<run-id>.tar.gz.
+# Keep readable handoff records; retain expanded artifacts locally.
+/research/runs/p01-r0-sharedridge-00[12]/**
+/research/runs/p01-r0-sharedridge-repeat-00[12]/**
+/research/runs/p01-r0-recompute-primary-00[12]/**
+/research/runs/p01-r0-recompute-repeat-00[12]/**
+/research/runs/p01-r0-repeat-check-00[12]/**
+/research/runs/p01-r0-alignment-00[12]/**
+/research/runs/p01-region-sharedridge-00[12]/**
+/research/runs/p01-region-sharedridge-repeat-00[12]/**
+/research/runs/p01-region-recompute-primary-00[12]/**
+/research/runs/p01-region-recompute-repeat-00[12]/**
+/research/runs/p01-region-repeat-check-00[12]/**
+/research/runs/p01-region-alignment-00[12]/**
+!/research/runs/p01-*/summary.md
+!/research/runs/p01-*/provenance.json
+!/research/runs/p01-*/command.json
+!/research/runs/p01-*/report.json

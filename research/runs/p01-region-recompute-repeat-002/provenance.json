@@ -1,0 +1,26 @@
+{
+  "check": "recompute",
+  "created": "2026-10-07T17:46:10+08:00",
+  "git": {
+    "commit": "a0fdab4268e5e17b0c96453efd53f01a245f01cc",
+    "dirty": true,
+    "errors": {}
+  },
+  "inputs": {
+    "input_artifacts": {
+      "gold/test.npy": "00143fc9ca93cbca51c24e5e3d407d4b46c1831898a0dd721be78a32114819e3",
+      "gold/validation.npy": "3e84911365069f6c04a8f9e8a15151fa7fce73b3b511fea81b6c0e089026f409",
+      "masks.npz": "51629e3f1c5c76d6a096ae47c4e82599190e1a08aaf008661f6ae0bae7371008",
+      "metrics.json": "cd8e159d881eb31142e1919aa649038221ef8f67c19fc823fdc5cd388a14aa96",
+      "nodes.parquet": "75af3fb6261bb058701dc9fd16f38adb580a94e0348f0a40533c05439286a134",
+      "status.json": "ad6595b7bdcab6104e4a02030bd982c8bbfc030c54c3eed099bb73dcdefde190",
+      "windows.json": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf"
+    },
+    "input_run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-region-sharedridge-repeat-002",
+    "input_run_id": "p01-region-sharedridge-repeat-002",
+    "input_status": "success"
+  },
+  "run_id": "p01-region-recompute-repeat-002",
+  "run_type": "recompute",
+  "scientific_acceptance": false
+}
