@@ -39,7 +39,7 @@ python3 research/archives/migrations/verify_20261006.py
 
 所属任务：P01-T004；协议 `P1-count-L6-H3-v3`。研究验收见 [D008](../decisions.md#d008-t004-baseline-研究侧验收)，独立实现核验见 [PASS 报告](../../openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/verification.md)。以 `-002` 的四个模型 run 和八个检查为本次验收依据；`-001` 保留为历史版本。
 
-以下 24 个 run 的共同保存状态：**sealed，2026-10-07T20:05+08:00 封存与解包核验通过，待提交/推送**。每个包位于 `research/archives/<run-id>.tar.gz`，配套 `.tar.gz.sha256`；实际路径、包 SHA256、字节数和完整成员哈希见 [封存清单](p01-baseline-20261007-manifest.json)。本地展开产物保留；Git 收纳封存包及 summary/provenance/command/report 可读记录，其余展开文件由精确忽略规则排除。
+以下 24 个 run 的共同保存状态：**sealed，已提交并 push 至 origin/xzs**。实现提交 `8273c07a84c879a8f7bdbb61f987f3c94e863e59`，证据与科研记录提交 `b72770873f11a66478c3556973393882be501bd8`；push 成功，并独立读取远端引用确认为证据提交。远端恢复未核验，用户明确取消后续恢复检查，不作为今天收尾的前置条件。每个包位于 `research/archives/<run-id>.tar.gz`，配套 `.tar.gz.sha256`；实际路径、包 SHA256、字节数和完整成员哈希见 [封存清单](p01-baseline-20261007-manifest.json)。本地展开产物保留；Git 收纳封存包及 summary/provenance/command/report 可读记录，其余展开文件由精确忽略规则排除。
 
 ### 模型运行
 
