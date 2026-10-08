@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "python",
+    "run",
+    "--data-name",
+    "region",
+    "--mode",
+    "count",
+    "--seed",
+    "0",
+    "--run-id",
+    "p01-region-sharedridge-001"
+  ],
+  "cwd": "/Users/watuji/da_chuang/repos/benchmark",
+  "python": "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python"
+}

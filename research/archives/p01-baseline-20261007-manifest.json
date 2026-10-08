@@ -1,0 +1,141 @@
+{
+  "runs": {
+    "p01-r0-alignment-001": {
+      "bytes": 14353,
+      "package": "research/archives/p01-r0-alignment-001.tar.gz",
+      "member_count": 11
+    },
+    "p01-r0-alignment-002": {
+      "bytes": 15994,
+      "package": "research/archives/p01-r0-alignment-002.tar.gz",
+      "member_count": 11
+    },
+    "p01-r0-recompute-primary-001": {
+      "bytes": 19744,
+      "package": "research/archives/p01-r0-recompute-primary-001.tar.gz",
+      "member_count": 12
+    },
+    "p01-r0-recompute-primary-002": {
+      "bytes": 22385,
+      "package": "research/archives/p01-r0-recompute-primary-002.tar.gz",
+      "member_count": 13
+    },
+    "p01-r0-recompute-repeat-001": {
+      "bytes": 19746,
+      "package": "research/archives/p01-r0-recompute-repeat-001.tar.gz",
+      "member_count": 12
+    },
+    "p01-r0-recompute-repeat-002": {
+      "bytes": 22401,
+      "package": "research/archives/p01-r0-recompute-repeat-002.tar.gz",
+      "member_count": 13
+    },
+    "p01-r0-repeat-check-001": {
+      "bytes": 6855,
+      "package": "research/archives/p01-r0-repeat-check-001.tar.gz",
+      "member_count": 11
+    },
+    "p01-r0-repeat-check-002": {
+      "bytes": 9590,
+      "package": "research/archives/p01-r0-repeat-check-002.tar.gz",
+      "member_count": 11
+    },
+    "p01-r0-sharedridge-001": {
+      "bytes": 1543535,
+      "package": "research/archives/p01-r0-sharedridge-001.tar.gz",
+      "member_count": 74
+    },
+    "p01-r0-sharedridge-002": {
+      "bytes": 1560138,
+      "package": "research/archives/p01-r0-sharedridge-002.tar.gz",
+      "member_count": 74
+    },
+    "p01-r0-sharedridge-repeat-001": {
+      "bytes": 1543745,
+      "package": "research/archives/p01-r0-sharedridge-repeat-001.tar.gz",
+      "member_count": 74
+    },
+    "p01-r0-sharedridge-repeat-002": {
+      "bytes": 1560179,
+      "package": "research/archives/p01-r0-sharedridge-repeat-002.tar.gz",
+      "member_count": 74
+    },
+    "p01-region-alignment-001": {
+      "bytes": 14447,
+      "package": "research/archives/p01-region-alignment-001.tar.gz",
+      "member_count": 11
+    },
+    "p01-region-alignment-002": {
+      "bytes": 16104,
+      "package": "research/archives/p01-region-alignment-002.tar.gz",
+      "member_count": 11
+    },
+    "p01-region-recompute-primary-001": {
+      "bytes": 26770,
+      "package": "research/archives/p01-region-recompute-primary-001.tar.gz",
+      "member_count": 12
+    },
+    "p01-region-recompute-primary-002": {
+      "bytes": 30156,
+      "package": "research/archives/p01-region-recompute-primary-002.tar.gz",
+      "member_count": 13
+    },
+    "p01-region-recompute-repeat-001": {
+      "bytes": 26763,
+      "package": "research/archives/p01-region-recompute-repeat-001.tar.gz",
+      "member_count": 12
+    },
+    "p01-region-recompute-repeat-002": {
+      "bytes": 30181,
+      "package": "research/archives/p01-region-recompute-repeat-002.tar.gz",
+      "member_count": 13
+    },
+    "p01-region-repeat-check-001": {
+      "bytes": 6871,
+      "package": "research/archives/p01-region-repeat-check-001.tar.gz",
+      "member_count": 11
+    },
+    "p01-region-repeat-check-002": {
+      "bytes": 9608,
+      "package": "research/archives/p01-region-repeat-check-002.tar.gz",
+      "member_count": 11
+    },
+    "p01-region-sharedridge-001": {
+      "bytes": 8732855,
+      "package": "research/archives/p01-region-sharedridge-001.tar.gz",
+      "member_count": 74
+    },
+    "p01-region-sharedridge-002": {
+      "bytes": 8740335,
+      "package": "research/archives/p01-region-sharedridge-002.tar.gz",
+      "member_count": 74
+    },
+    "p01-region-sharedridge-repeat-001": {
+      "bytes": 8732988,
+      "package": "research/archives/p01-region-sharedridge-repeat-001.tar.gz",
+      "member_count": 74
+    },
+    "p01-region-sharedridge-repeat-002": {
+      "bytes": 8740589,
+      "package": "research/archives/p01-region-sharedridge-repeat-002.tar.gz",
+      "member_count": 74
+    }
+  },
+  "schema_version": 2,
+  "storage_identity": {
+    "kind": "git_commit",
+    "commit": "b72770873f11a66478c3556973393882be501bd8"
+  },
+  "package_exclusions": [
+    "__pycache__/ (at any depth)",
+    ".DS_Store (at any depth)",
+    "._* (at any depth)"
+  ],
+  "embedded_artifact_manifest_exclusions": [
+    "artifacts-sha256.json",
+    "events.jsonl"
+  ],
+  "historical_verification_report": "openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/verification.md",
+  "sealed_at": "2026-10-07T12:05:05.942308+00:00",
+  "task_id": "P01-T004"
+}

@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "python",
+    "compare",
+    "--run-a",
+    "research/runs/p01-r0-sharedridge-001",
+    "--run-b",
+    "research/runs/p01-r0-sharedridge-repeat-001",
+    "--run-id",
+    "p01-r0-repeat-check-001"
+  ],
+  "cwd": "/Users/watuji/da_chuang/repos/benchmark"
+}

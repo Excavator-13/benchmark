@@ -1,0 +1,6 @@
+test_minimal_dependency_smoke_for_both_schemas (test_runner_cli.CliEndToEndTests.test_minimal_dependency_smoke_for_both_schemas) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.152s
+
+OK

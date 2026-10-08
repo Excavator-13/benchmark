@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "python",
+    "align-v2",
+    "--run-dir",
+    "research/runs/p01-r0-sharedridge-001",
+    "--reference",
+    "research/runs/phase1-20261006-v2-01/naive-baselines.log",
+    "--run-id",
+    "p01-r0-alignment-001"
+  ],
+  "cwd": "/Users/watuji/da_chuang/repos/benchmark"
+}

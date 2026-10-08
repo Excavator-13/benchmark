@@ -1,0 +1,10 @@
+executable: /opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python
+prefix: /opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline
+python: 3.11.17
+numpy: 1.26.4
+pandas: 2.2.3
+pyarrow: 17.0.0
+read_parquet callable: True
+r0 shape: (2335, 1)
+region shape: (16345, 1)
+sklearn installed: False

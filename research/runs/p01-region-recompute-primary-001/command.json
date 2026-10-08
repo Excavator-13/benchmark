@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "python",
+    "recompute",
+    "--run-dir",
+    "research/runs/p01-region-sharedridge-001",
+    "--run-id",
+    "p01-region-recompute-primary-001"
+  ],
+  "cwd": "/Users/watuji/da_chuang/repos/benchmark"
+}

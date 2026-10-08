@@ -1,0 +1,22 @@
+{
+  "check": "align-v2",
+  "created": "2026-10-07T16:40:45+08:00",
+  "git": {
+    "commit": "a0fdab4268e5e17b0c96453efd53f01a245f01cc",
+    "dirty": true,
+    "errors": {}
+  },
+  "inputs": {
+    "input_artifacts": {
+      "audit.json": "2b96f3f2d9b57a1539c848c3d37503ceedafca52fc1fae45e75ed822f6180e62",
+      "metrics.json": "1b424af0182581a864a25364315a95d9c261550338d2b4c821b45e2ee8afc1b4",
+      "windows.json": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf"
+    },
+    "input_run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r0-sharedridge-001",
+    "reference_path": "/Users/watuji/da_chuang/repos/benchmark/research/runs/phase1-20261006-v2-01/naive-baselines.log",
+    "reference_sha256": "c425bbe165cd32a393f782b290c05f0f74423a695539cdb40fd1a091e25e8367"
+  },
+  "run_id": "p01-r0-alignment-001",
+  "run_type": "align-v2",
+  "scientific_acceptance": false
+}

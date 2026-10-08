@@ -1,0 +1,113 @@
+test_all_five_methods_present_with_expected_shapes (test_baselines.NaiveMethodTests.test_all_five_methods_present_with_expected_shapes) ... ok
+test_seasonal_naive_uses_last_year_same_month (test_baselines.NaiveMethodTests.test_seasonal_naive_uses_last_year_same_month) ... ok
+test_trainmean27_is_frozen_training_statistic (test_baselines.NaiveMethodTests.test_trainmean27_is_frozen_training_statistic) ... ok
+test_zero_lastvalue_and_windowmean (test_baselines.NaiveMethodTests.test_zero_lastvalue_and_windowmean) ... ok
+test_exact_tie_uses_protocol_table_order (test_baselines.ReferenceSelectionTests.test_exact_tie_uses_protocol_table_order) ... ok
+test_seasonal_reference_is_labeled_extra_history (test_baselines.ReferenceSelectionTests.test_seasonal_reference_is_labeled_extra_history) ... ok
+test_selection_uses_validation_mse_only (test_baselines.ReferenceSelectionTests.test_selection_uses_validation_mse_only) ... ok
+test_validation_mse_matches_sealed_arithmetic (test_baselines.ReferenceSelectionTests.test_validation_mse_matches_sealed_arithmetic) ... ok
+test_both_endpoints_covered_and_self_loops_excluded (test_coverage.GraphCoverageTests.test_both_endpoints_covered_and_self_loops_excluded) ... ok
+test_missing_coverage_evidence_is_an_error (test_coverage.GraphCoverageTests.test_missing_coverage_evidence_is_an_error) ... ok
+test_same_skill_in_two_regions_is_context_qualified (test_coverage.GraphCoverageTests.test_same_skill_in_two_regions_is_context_qualified) ... ok
+test_unmatched_endpoint_fails_validation (test_coverage.GraphCoverageTests.test_unmatched_endpoint_fails_validation) ... ok
+test_missing_bundle_is_an_error (test_coverage.MaskBundleTests.test_missing_bundle_is_an_error) ... ok
+test_round_trip_with_exact_identity_alignment (test_coverage.MaskBundleTests.test_round_trip_with_exact_identity_alignment) ... ok
+test_wrong_node_keys_are_rejected (test_coverage.MaskBundleTests.test_wrong_node_keys_are_rejected) ... ok
+test_audit_describes_activity_and_zero_fractions (test_data.CanonicalIdentityTests.test_audit_describes_activity_and_zero_fractions) ... ok
+test_duplicate_keys_rejected (test_data.CanonicalIdentityTests.test_duplicate_keys_rejected) ... ok
+test_empty_source_rejected (test_data.CanonicalIdentityTests.test_empty_source_rejected) ... ok
+test_extra_month_rejected (test_data.CanonicalIdentityTests.test_extra_month_rejected) ... ok
+test_missing_month_rejected (test_data.CanonicalIdentityTests.test_missing_month_rejected) ... ok
+test_negative_values_rejected (test_data.CanonicalIdentityTests.test_negative_values_rejected) ... ok
+test_non_integer_keys_rejected (test_data.CanonicalIdentityTests.test_non_integer_keys_rejected) ... ok
+test_nonfinite_values_rejected (test_data.CanonicalIdentityTests.test_nonfinite_values_rejected) ... ok
+test_region_schema_uses_region_id (test_data.CanonicalIdentityTests.test_region_schema_uses_region_id) ... ok
+test_shuffled_parquet_preserves_key_value_alignment (test_data.CanonicalIdentityTests.test_shuffled_parquet_preserves_key_value_alignment) ... ok
+test_all_starts_and_omissions_accounted_for (test_data.WindowConstructionTests.test_all_starts_and_omissions_accounted_for) ... ok
+test_later_test_origin_uses_observed_july_history (test_data.WindowConstructionTests.test_later_test_origin_uses_observed_july_history) ... ok
+test_split_target_months_do_not_overlap (test_data.WindowConstructionTests.test_split_target_months_do_not_overlap) ... ok
+test_true_history_inputs_are_rolling (test_data.WindowConstructionTests.test_true_history_inputs_are_rolling) ... ok
+test_empty_group_reports_null_metrics (test_metrics.ErrorMetricTests.test_empty_group_reports_null_metrics) ... ok
+test_horizon_metrics_per_horizon (test_metrics.ErrorMetricTests.test_horizon_metrics_per_horizon) ... ok
+test_mae_mse_rmse_and_negative_ratio (test_metrics.ErrorMetricTests.test_mae_mse_rmse_and_negative_ratio) ... ok
+test_overall_rmse_is_not_mean_of_window_rmse (test_metrics.ErrorMetricTests.test_overall_rmse_is_not_mean_of_window_rmse) ... ok
+test_context_masks_keyed_by_context_value (test_metrics.GroupedReportTests.test_context_masks_keyed_by_context_value) ... ok
+test_counts_contributions_and_equal_weight_mae (test_metrics.GroupedReportTests.test_counts_contributions_and_equal_weight_mae) ... ok
+test_empty_activity_group_is_excluded (test_metrics.GroupedReportTests.test_empty_activity_group_is_excluded) ... ok
+test_neighbor_groups_partition_nodes (test_metrics.GroupedReportTests.test_neighbor_groups_partition_nodes) ... ok
+test_relative_gain_zero_reference_is_unavailable (test_metrics.GroupedReportTests.test_relative_gain_zero_reference_is_unavailable) ... ok
+test_test_target_month_multiplicities (test_metrics.GroupedReportTests.test_test_target_month_multiplicities) ... ok
+test_table_is_training_mean_ranked_with_key_ties (test_metrics.NodeErrorTableTests.test_table_is_training_mean_ranked_with_key_ties) ... ok
+test_split_report_exposes_every_required_level (test_metrics.SplitReportTests.test_split_report_exposes_every_required_level) ... ok
+test_constant_node_effective_std_is_one_and_finite (test_preprocessing.TrainingStatisticsTests.test_constant_node_effective_std_is_one_and_finite) ... ok
+test_exactly_27_unique_observations (test_preprocessing.TrainingStatisticsTests.test_exactly_27_unique_observations) ... ok
+test_four_activity_boundaries (test_preprocessing.TrainingStatisticsTests.test_four_activity_boundaries) ... ok
+test_later_values_do_not_change_statistics_or_fits (test_preprocessing.TrainingStatisticsTests.test_later_values_do_not_change_statistics_or_fits) ... ok
+test_train_mean27_uses_unique_training_months (test_preprocessing.TrainingStatisticsTests.test_train_mean27_uses_unique_training_months) ... ok
+test_help_lists_stable_commands (test_protocol.CliSurfaceTests.test_help_lists_stable_commands) ... ok
+test_module_relative_default_paths (test_protocol.CliSurfaceTests.test_module_relative_default_paths) ... ok
+test_run_id_safety (test_protocol.CliSurfaceTests.test_run_id_safety) ... ok
+test_supported_datasets_and_modes_are_enforced (test_protocol.CliSurfaceTests.test_supported_datasets_and_modes_are_enforced) ... usage: python -m benchmark.nograph_baseline run [-h] --data-name {r0,region}
+                                                [--mode {count}] [--seed SEED]
+                                                --run-id RUN_ID
+                                                [--ridge-backend {numpy,sklearn}]
+                                                [--clip-nonnegative]
+python -m benchmark.nograph_baseline run: error: argument --data-name: invalid choice: 'r2' (choose from 'r0', 'region')
+usage: python -m benchmark.nograph_baseline run [-h] --data-name {r0,region}
+                                                [--mode {count}] [--seed SEED]
+                                                --run-id RUN_ID
+                                                [--ridge-backend {numpy,sklearn}]
+                                                [--clip-nonnegative]
+python -m benchmark.nograph_baseline run: error: argument --mode: invalid choice: 'rate' (choose from 'count')
+ok
+test_calendar_has_36_continuous_months (test_protocol.SplitTests.test_calendar_has_36_continuous_months) ... ok
+test_second_test_origin_uses_then_observed_history (test_protocol.SplitTests.test_second_test_origin_uses_then_observed_history) ... ok
+test_target_months_are_pairwise_disjoint_and_expected (test_protocol.SplitTests.test_target_months_are_pairwise_disjoint_and_expected) ... ok
+test_window_count_and_split_membership (test_protocol.SplitTests.test_window_count_and_split_membership) ... ok
+test_window_metadata_lists_splits_and_omissions (test_protocol.SplitTests.test_window_metadata_lists_splits_and_omissions) ... ok
+test_all_five_candidates_record_validation_scores (test_ridge.CandidateSelectionTests.test_all_five_candidates_record_validation_scores) ... ok
+test_candidate_scores_use_original_unit_validation_targets (test_ridge.CandidateSelectionTests.test_candidate_scores_use_original_unit_validation_targets) ... ok
+test_changed_test_labels_do_not_change_selection (test_ridge.CandidateSelectionTests.test_changed_test_labels_do_not_change_selection) ... ok
+test_clipped_report_is_separately_labeled (test_ridge.CandidateSelectionTests.test_clipped_report_is_separately_labeled) ... ok
+test_exact_mse_tie_selects_larger_lambda (test_ridge.CandidateSelectionTests.test_exact_mse_tie_selects_larger_lambda) ... ok
+test_selection_uses_validation_mse_not_mae (test_ridge.CandidateSelectionTests.test_selection_uses_validation_mse_not_mae) ... ok
+test_predict_reconstructs_original_units (test_ridge.DesignTests.test_predict_reconstructs_original_units) ... ok
+test_training_sample_count_is_19_times_nodes (test_ridge.DesignTests.test_training_sample_count_is_19_times_nodes) ... ok
+test_larger_lambda_shrinks_weights (test_ridge.NumpyFitTests.test_larger_lambda_shrinks_weights) ... ok
+test_objective_matches_protocol_mean_loss (test_ridge.NumpyFitTests.test_objective_matches_protocol_mean_loss) ... ok
+test_single_shared_weight_matrix_and_bias (test_ridge.NumpyFitTests.test_single_shared_weight_matrix_and_bias) ... ok
+test_sklearn_matches_numpy (test_ridge.OptionalSklearnTests.test_sklearn_matches_numpy) ... skipped 'optional scikit-learn backend is not installed'
+test_align_v2_against_independent_log (test_runner_cli.CheckCommandTests.test_align_v2_against_independent_log) ... ok
+test_align_v2_preserves_and_explains_discrepancy (test_runner_cli.CheckCommandTests.test_align_v2_preserves_and_explains_discrepancy) ... ok
+test_compare_two_same_seed_runs (test_runner_cli.CheckCommandTests.test_compare_two_same_seed_runs) ... ok
+test_recompute_without_source_access_and_preserves_inputs (test_runner_cli.CheckCommandTests.test_recompute_without_source_access_and_preserves_inputs) ... ok
+test_minimal_dependency_smoke_for_both_schemas (test_runner_cli.CliEndToEndTests.test_minimal_dependency_smoke_for_both_schemas) ... ok
+test_public_help_via_subprocess (test_runner_cli.CliEndToEndTests.test_public_help_via_subprocess) ... ok
+test_readme_commands_match_the_parser (test_runner_cli.CliEndToEndTests.test_readme_commands_match_the_parser) ... ok
+test_predictions_do_not_depend_on_coverage_annotation (test_runner_cli.CoverageInvarianceTests.test_predictions_do_not_depend_on_coverage_annotation) ... ok
+test_default_path_does_not_import_sklearn (test_runner_cli.EnvironmentTests.test_default_path_does_not_import_sklearn) ... ok
+test_job_sdf_baseline_reads_parquet_and_records_versions (test_runner_cli.EnvironmentTests.test_job_sdf_baseline_reads_parquet_and_records_versions) ... ok
+test_existing_run_id_is_rejected (test_runner_cli.FailureAndInterruptionTests.test_existing_run_id_is_rejected) ... ok
+test_malformed_source_preserves_partial_evidence (test_runner_cli.FailureAndInterruptionTests.test_malformed_source_preserves_partial_evidence) ... ok
+test_sigint_marks_interrupted_and_retains_partial (test_runner_cli.FailureAndInterruptionTests.test_sigint_marks_interrupted_and_retains_partial) ... run interrupted; partial evidence retained
+ok
+test_sigkill_leaves_unfinished_running_state (test_runner_cli.FailureAndInterruptionTests.test_sigkill_leaves_unfinished_running_state) ... ok
+test_sigterm_marks_interrupted_and_retains_partial (test_runner_cli.FailureAndInterruptionTests.test_sigterm_marks_interrupted_and_retains_partial) ... run interrupted; partial evidence retained
+ok
+test_unfinished_status_after_hard_termination (test_runner_cli.FailureAndInterruptionTests.test_unfinished_status_after_hard_termination) ... ok
+test_clipped_report_is_separate_and_never_selects (test_runner_cli.RunnerArtifactTests.test_clipped_report_is_separate_and_never_selects) ... ok
+test_measurements_record_real_units_and_settings (test_runner_cli.RunnerArtifactTests.test_measurements_record_real_units_and_settings) ... ok
+test_nodes_parquet_is_canonically_ordered (test_runner_cli.RunnerArtifactTests.test_nodes_parquet_is_canonically_ordered) ... ok
+test_numeric_artifacts_load_without_pickle (test_runner_cli.RunnerArtifactTests.test_numeric_artifacts_load_without_pickle) ... ok
+test_reports_cover_all_methods_and_levels (test_runner_cli.RunnerArtifactTests.test_reports_cover_all_methods_and_levels) ... ok
+test_required_artifacts_exist (test_runner_cli.RunnerArtifactTests.test_required_artifacts_exist) ... ok
+test_selected_candidate_scores_match_reported_validation_metrics (test_runner_cli.RunnerArtifactTests.test_selected_candidate_scores_match_reported_validation_metrics) ... ok
+test_selection_frozen_before_test_and_no_test_labels (test_runner_cli.RunnerArtifactTests.test_selection_frozen_before_test_and_no_test_labels) ... ok
+test_shared_ridge_parameters_are_reconstructable (test_runner_cli.RunnerArtifactTests.test_shared_ridge_parameters_are_reconstructable) ... ok
+test_source_and_environment_capture (test_runner_cli.RunnerArtifactTests.test_source_and_environment_capture) ... ok
+test_status_and_immutable_manifest (test_runner_cli.RunnerArtifactTests.test_status_and_immutable_manifest) ... ok
+
+----------------------------------------------------------------------
+Ran 94 tests in 4.750s
+
+OK (skipped=1)

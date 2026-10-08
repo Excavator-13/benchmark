@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Maintainer"
+  short_description: "Maintain research plans, evidence, and agent handoffs"
+  default_prompt: "Use $research-maintainer to resume this research project and maintain its plans, current work, decisions, and experiment provenance."

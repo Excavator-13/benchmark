@@ -1,0 +1,199 @@
+{
+  "check": "compare",
+  "cpu_relative_tolerance": 1e-06,
+  "identity_checks": {
+    "coverage_sha256": true,
+    "dataset": true,
+    "demand_sha256": true,
+    "naive_ref": true,
+    "naive_ref6": true,
+    "node_keys_sha256": true,
+    "protocol_version": true,
+    "same_seed": true,
+    "selected_lambda": true
+  },
+  "identity_evidence": {
+    "node_keys_sha256_a": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+    "node_keys_sha256_b": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa"
+  },
+  "mae_relative_differences": {
+    "test/LastValue": {
+      "MAE_a": 189.8750892219843,
+      "MAE_b": 189.8750892219843,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "test/SeasonalNaive12": {
+      "MAE_a": 304.84910778015706,
+      "MAE_b": 304.84910778015706,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "test/SharedRidge": {
+      "MAE_a": 274.7654314396192,
+      "MAE_b": 274.7654314396192,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "test/TrainMean27": {
+      "MAE_a": 318.70323355223485,
+      "MAE_b": 318.70323355223485,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "test/WindowMean6": {
+      "MAE_a": 195.23165092554572,
+      "MAE_b": 195.23165092554572,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "test/Zero": {
+      "MAE_a": 1165.3715917201998,
+      "MAE_b": 1165.3715917201998,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/LastValue": {
+      "MAE_a": 185.62655246252677,
+      "MAE_b": 185.62655246252677,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/SeasonalNaive12": {
+      "MAE_a": 226.25024982155603,
+      "MAE_b": 226.25024982155603,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/SharedRidge": {
+      "MAE_a": 149.042806326246,
+      "MAE_b": 149.042806326246,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/TrainMean27": {
+      "MAE_a": 180.80884812674103,
+      "MAE_b": 180.80884812674103,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/WindowMean6": {
+      "MAE_a": 185.12186426574803,
+      "MAE_b": 185.12186426574803,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/Zero": {
+      "MAE_a": 1042.729193433262,
+      "MAE_b": 1042.729193433262,
+      "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+      "relative_difference": 0.0,
+      "status": "ok"
+    }
+  },
+  "masks_equal": true,
+  "metric_comparison": {
+    "compared_fields": 1770,
+    "extra_fields": [],
+    "failed_fields": [],
+    "label": "metrics",
+    "max_difference_path": null,
+    "max_normalized_difference": 0.0,
+    "missing_fields": [],
+    "status": "ok",
+    "tolerance": 1e-06
+  },
+  "prediction_comparisons": {
+    "test/LastValue": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "test/SeasonalNaive12": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "test/SharedRidge": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "test/TrainMean27": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "test/WindowMean6": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "test/Zero": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/LastValue": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/SeasonalNaive12": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/SharedRidge": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/TrainMean27": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/WindowMean6": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    },
+    "validation/Zero": {
+      "elementwise_violations": 0,
+      "max_absolute_difference": 0.0,
+      "max_normalized_difference": 0.0,
+      "status": "ok"
+    }
+  },
+  "run_a": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r0-sharedridge-001",
+  "run_b": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r0-sharedridge-repeat-001",
+  "seed_variance_reported": false,
+  "selection_a": 0.0001,
+  "selection_b": 0.0001,
+  "status": "ok",
+  "status_a": "success",
+  "status_b": "success"
+}

@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python",
+    "-m",
+    "benchmark.nograph_baseline",
+    "recompute",
+    "--run-dir",
+    "research/runs/p01-r0-sharedridge-repeat-002",
+    "--run-id",
+    "p01-r0-recompute-repeat-002"
+  ],
+  "cwd": "/Users/watuji/da_chuang/repos/benchmark"
+}

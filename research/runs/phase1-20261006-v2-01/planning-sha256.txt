@@ -1,0 +1,2 @@
+3afe63609055a6f1de712ffb8cf88521d3c5dfa5d0b6450649471dba7b736b43  experiments_phase1/phase1-20261006-v2-01/protocol.md
+c44f7e1dd38cd3cc5cea389f6d89bdc20f1fa6ffee1483858c0c46caea0bcb2d  experiments_phase1/phase1-20261006-v2-01/execution-guide.md
