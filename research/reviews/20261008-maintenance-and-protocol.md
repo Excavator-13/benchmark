@@ -162,6 +162,6 @@
 
 第一轮整理已完成：24 个包原样保留，删除 24 个包外 SHA256 sidecar；包外清单从 960 行改为位置、提交身份、大小、成员数量与排除声明，不维护成员哈希。88 个可读入口原样保留；692 个忽略的展开副本在确认与包内容一致后移除，释放 75,682,683 内容字节。清理 16 个 Finder 元数据和 22 个缓存文件，历史 skill 提案归入 reviews。过程、排除项及恢复限制见[整理记录](../archives/migrations/20261008-evidence-maintenance.md)和[索引](../archives/index.md)。没有做远端恢复核验、commit/push 或新实验。
 
-baseline 主规格、runner/artifacts、checks/CLI 与封存辅助工具已通过 [OpenSpec 归档独立 PASS](../../openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/verification.md)。研究侧核对报告基准及主规格预期同步后，按 [D011](../decisions.md#d011-t010-记录减负研究侧验收)接受 P01-T010 并关闭委托。正式与开发调用分开，检查改为单份 `--report`，相关脏源码保存可恢复内容，落选候选默认只保留分数，Git 包索引 v2 的工具兼容已完成。旧包和可读入口保留，没有新增正式科研运行；软件/记录修改尚未提交/push。
+baseline 主规格、runner/artifacts、checks/CLI 与封存辅助工具已通过 [OpenSpec 归档独立 PASS](../../openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/verification.md)。研究侧核对报告基准及主规格预期同步后，按 [D011](../decisions.md#d011-t010-记录减负研究侧验收)接受 P01-T010 并关闭委托。正式与开发调用分开，检查改为单份 `--report`，相关脏源码保存可恢复内容，落选候选默认只保留分数，Git 包索引 v2 的工具兼容已完成。旧包和可读入口保留，没有新增正式科研运行；整轮减负工作已按用户请求提交并 push，保存事实见[索引](../archives/index.md#t010-软件变更保存事实2026-10-08)。
 
 §7.2 的第二轮历史搬迁仍是可选整理，没有启动，也不阻塞本次政策或后续科研；独立清理清单中涉及个人用途的删除候选仍保留为候选。

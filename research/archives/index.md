@@ -41,7 +41,7 @@ python3 research/archives/migrations/verify_20261006.py
 
 以下 24 个 run 的共同保存状态：**sealed，包与可读入口已提交并 push 至 origin/xzs**。实现提交 `8273c07a84c879a8f7bdbb61f987f3c94e863e59`，证据与科研记录提交 `b72770873f11a66478c3556973393882be501bd8`；当时 push 成功且独立读取远端引用一致。远端恢复未核验，用户取消检查，不作为待办。每个包位于 `research/archives/<run-id>.tar.gz`；位置、大小、成员数量、保存包的 Git commit 与排除项见 [包索引](p01-baseline-20261007-manifest.json)。
 
-2026-10-08 按 [D010](../decisions.md#d010-采用实验记录与保存减负政策) 整理：24 个包字节与上述提交一致，88 个 summary/provenance/command/report 可读入口原样保留；24 个包外 sidecar 删除，包外全成员哈希清单改为简洁索引，692 个一致的忽略展开副本移除。需要数组时从包展开到独立目录。新索引与本次整理记录尚未提交/push，不冒称本次工作已备份；既有包的保存事实不因此改变。过程见[整理记录](migrations/20261008-evidence-maintenance.md)。
+2026-10-08 按 [D010](../decisions.md#d010-采用实验记录与保存减负政策) 整理：24 个包字节与上述提交一致，88 个 summary/provenance/command/report 可读入口原样保留；24 个包外 sidecar 删除，包外全成员哈希清单改为简洁索引，692 个一致的忽略展开副本移除。需要数组时从包展开到独立目录。新索引与整理记录已随本次减负工作提交/push，保存身份见下文 T010；既有包的历史保存事实不变。过程见[整理记录](migrations/20261008-evidence-maintenance.md)。
 
 封存排除任意深度 `__pycache__/`、`.DS_Store`、`._*`；包内 artifact 哈希清单另排除自身和 `events.jsonl`，后两者仍在包中。排除声明是来源信息，随新索引保留。包在 Git 中以其保存提交定位内容，无需包外 SHA256 或全成员哈希表；导出到 Git 外交付时再提供包外 SHA256。
 
@@ -101,7 +101,9 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 
 `reduce-baseline-evidence-overhead` 已在[OpenSpec 目录归档](../../openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/verification.md)，独立报告 PASS；研究侧按 [D011](../decisions.md#d011-t010-记录减负研究侧验收)核对基准并接受。没有新增正式科研 run 或封存包；适用的 T004 历史科学证据保留，格式/软件行为由临时 fixture 与独立报告证明，不把 fixture 当新预测结论。
 
-本次实现、主规格同步和研究侧收尾仍为未提交工作区修改，尚未 push；既有 T004 包的提交/备份事实保持上述记录。本轮只读比对独立基准与更新研究文档，未重跑测试、实验、封存或恢复检查。
+用户随后明确要求提交、推送整轮减负工作。保存提交：`b701585eab9671c9c3aaddf36ece5b0b75acd76a`（58 个文件变更，包含维护者的 skill 修改、协议/当前说明、已验收实现/测试、主规格、OpenSpec 完整归档、包外元数据清理与研究侧收尾）。2026-10-08 正常 `git push origin xzs` 成功，目标为 `git@github.com:Excavator-13/benchmark.git` 的 `xzs`，push 回报 `715d44d..b701585`。没有独立远端取回或恢复核验，不因此追加检查；既有 T004 包的保存身份保留。
+
+本次仅检查提交范围、沿用当前实现仍匹配的独立 PASS，并执行 Git 保存；未重跑测试、实验、封存或恢复检查。后续本页/state 的保存事实更新作为普通文档提交，其自身身份从 Git 历史追溯，不继续生成回执或改写封存材料。
 
 ## 远端核验记录
 
