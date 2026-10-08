@@ -12,6 +12,7 @@ import sys
 import tempfile
 import time
 import unittest
+import uuid
 from pathlib import Path
 
 import numpy as np
@@ -20,6 +21,8 @@ import nb_fixtures as fx
 from benchmark.nograph_baseline import artifacts, checks, cli, protocol, runner
 
 REPO_ROOT = protocol.REPO_ROOT
+DEVELOPMENT_DEFAULT_ROOT = REPO_ROOT / "scratch" / "nograph-baseline"
+FORMAL_DEFAULT_ROOT = REPO_ROOT / "research" / "runs"
 
 
 def _tree_hash(root: Path) -> dict:
@@ -30,6 +33,45 @@ def _tree_hash(root: Path) -> dict:
                 path.read_bytes()
             ).hexdigest()
     return result
+
+
+def _sha256_file(path: Path) -> str:
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def _unique_run_id(prefix: str) -> str:
+    return f"{prefix}-{uuid.uuid4().hex[:12]}"
+
+
+def _git(repo: Path, *args: str) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        ["git", *args], cwd=str(repo), capture_output=True, text=True
+    )
+
+
+def _init_git_repo(root: Path) -> Path:
+    """Create a disposable Git repository so dirty cases are deterministic."""
+    root.mkdir(parents=True, exist_ok=True)
+    _git(root, "init", "-q")
+    _git(root, "config", "user.email", "suite@example.invalid")
+    _git(root, "config", "user.name", "Baseline Suite")
+    _git(root, "config", "commit.gpgsign", "false")
+    return root
+
+
+def _commit_all(repo: Path, message: str = "fixture") -> None:
+    _git(repo, "add", "-A")
+    _git(repo, "commit", "-qm", message)
+
+
+def _clean_development_output(run_dir: Path, scratch_root_existed: bool) -> None:
+    """Remove only the scratch output this suite created."""
+    shutil.rmtree(run_dir, ignore_errors=True)
+    if not scratch_root_existed:
+        try:
+            DEVELOPMENT_DEFAULT_ROOT.rmdir()
+        except OSError:
+            pass
 
 
 def execute_fixture(
@@ -61,13 +103,13 @@ class RunnerArtifactTests(unittest.TestCase):
 
     def test_required_artifacts_exist(self) -> None:
         expected = [
-            "protocol.md",
             "config.json",
             "command.json",
             "provenance.json",
             "git-commit.txt",
             "git-status.txt",
             "git-diff.patch",
+            "code-source.json",
             "environment.json",
             "environment.txt",
             "source-sha256.json",
@@ -91,18 +133,34 @@ class RunnerArtifactTests(unittest.TestCase):
             self.assertTrue(
                 (self.run_dir / relative).exists(), msg=f"missing {relative}"
             )
+        # The protocol is either located by its fixed commit/path reference
+        # (clean committed content) or preserved as a run file.
+        protocol_entry = fx.read_json(self.run_dir / "code-source.json")["protocol"]
+        if (
+            protocol_entry["git_status"] == "committed_clean"
+            and protocol_entry["git_reference"]
+        ):
+            self.assertFalse((self.run_dir / "protocol.md").exists())
+        else:
+            self.assertTrue((self.run_dir / "protocol.md").exists())
         for method in protocol.NAIVE_METHODS + (protocol.MODEL_NAME,):
             for split in ("validation", "test"):
                 self.assertTrue(
                     (self.run_dir / "predictions" / method / f"{split}.npy").exists()
                 )
+        # Losing-candidate arrays are omitted by default; only the score table
+        # and the selected model/preprocessing statistics are persisted.
+        self.assertFalse((self.run_dir / "candidates").exists())
+        _, retain_dir = execute_fixture(
+            self.root / "retain", run_id="retain-run", retain_candidates=True
+        )
         for name in protocol.LAMBDA_CANDIDATES:
             label = f"{name:g}"
             self.assertTrue(
-                (self.run_dir / "candidates" / label / "parameters.npz").exists()
+                (retain_dir / "candidates" / label / "parameters.npz").exists()
             )
             self.assertTrue(
-                (self.run_dir / "candidates" / label / "validation.npy").exists()
+                (retain_dir / "candidates" / label / "validation.npy").exists()
             )
 
     def test_numeric_artifacts_load_without_pickle(self) -> None:
@@ -130,13 +188,113 @@ class RunnerArtifactTests(unittest.TestCase):
         self.assertIn("protocol", sources)
         self.assertIn("coverage", sources)
         self.assertEqual(manifest["algorithm"], "sha256")
+        # The saved-only validators rely on the executing protocol bytes.
+        self.assertEqual(
+            sources["protocol"]["sha256"], _sha256_file(protocol.PROTOCOL_PATH)
+        )
         environment = fx.read_json(self.run_dir / "environment.json")
         self.assertEqual(environment["packages"]["numpy"], np.__version__)
         self.assertTrue(environment["numpy_blas_config"])
         self.assertIn("numpy", environment["pip_freeze"])
-        code_manifest = fx.read_json(self.run_dir / "code-untracked" / "manifest.json")
-        self.assertFalse(code_manifest["tracked_by_git"])
-        self.assertTrue(code_manifest["files"])
+
+        # Scoped source capture: unrelated tests/caches and unrelated records
+        # must never enter the execution snapshot, and the actual protocol path
+        # must be present.
+        code_source = fx.read_json(self.run_dir / "code-source.json")
+        self.assertEqual(code_source["policy"], "P01-records-v2")
+        self.assertEqual(code_source["patch_path"], "git-diff.patch")
+        self.assertEqual(
+            code_source["identity_available"], code_source["commit"] is not None
+        )
+        scope = code_source["runtime_scope"]
+        self.assertTrue(scope)
+        for relative in scope:
+            parts = Path(relative).parts
+            self.assertNotIn("tests", parts, msg=relative)
+            self.assertNotIn("__pycache__", parts, msg=relative)
+        protocol_relative = (
+            protocol.PROTOCOL_PATH.resolve().relative_to(REPO_ROOT.resolve()).as_posix()
+        )
+        self.assertIn(protocol_relative, scope)
+        self.assertEqual(code_source["protocol"]["path"], protocol_relative)
+        self.assertEqual(
+            code_source["protocol"]["sha256"], _sha256_file(protocol.PROTOCOL_PATH)
+        )
+
+        entries = code_source["files"]
+        self.assertTrue(entries)
+        clean_entries = {
+            path: entry
+            for path, entry in entries.items()
+            if entry["git_status"] == "committed_clean"
+        }
+        # Committed runtime source must be located by reference, not copied.
+        self.assertTrue(
+            clean_entries,
+            msg="expected at least one clean committed runtime source file",
+        )
+        for path, entry in entries.items():
+            with self.subTest(path=path):
+                self.assertEqual(entry["path"], path)
+                self.assertIn(
+                    entry["git_status"],
+                    {"committed_clean", "modified", "untracked", "unknown"},
+                )
+                if entry["git_status"] == "committed_clean":
+                    self.assertIsNotNone(entry["git_reference"])
+                    self.assertIsNone(entry["content_saved"])
+                    self.assertEqual(
+                        entry["git_reference"]["sha256"], entry["sha256"]
+                    )
+                if entry["content_saved"]:
+                    saved = self.run_dir / entry["content_saved"]
+                    self.assertTrue(saved.exists(), msg=entry["content_saved"])
+                    self.assertEqual(_sha256_file(saved), entry["sha256"])
+        for name in (
+            "benchmark/nograph_baseline/metrics.py",
+            "benchmark/nograph_baseline/baselines.py",
+            "benchmark/nograph_baseline/coverage.py",
+            "benchmark/nograph_baseline/data.py",
+            "benchmark/nograph_baseline/ridge.py",
+            "benchmark/nograph_baseline/protocol.py",
+        ):
+            if name in clean_entries:
+                self.assertIsNotNone(clean_entries[name]["git_reference"])
+                self.assertIsNone(clean_entries[name]["content_saved"])
+
+        # Dirty/untracked execution content must be recoverable, exercised on a
+        # disposable repository so the result never depends on this checkout.
+        repo = _init_git_repo(self.root / "dirty-repo")
+        (repo / "clean.py").write_text("VALUE = 1\n", encoding="utf-8")
+        (repo / "modified.py").write_text("VALUE = 2\n", encoding="utf-8")
+        _commit_all(repo)
+        (repo / "modified.py").write_text("VALUE = 999\n", encoding="utf-8")
+        (repo / "untracked.py").write_text("VALUE = 3\n", encoding="utf-8")
+        probe = artifacts.RunDirectory(
+            self.root / "dirty-runs", "dirty-probe", "run"
+        ).reserve()
+        record = artifacts.capture_source(
+            probe, repo, runtime_paths=["clean.py", "modified.py", "untracked.py"]
+        )
+        self.assertEqual(record["files"]["clean.py"]["git_status"], "committed_clean")
+        self.assertIsNotNone(record["files"]["clean.py"]["git_reference"])
+        self.assertIsNone(record["files"]["clean.py"]["content_saved"])
+        self.assertEqual(record["files"]["modified.py"]["git_status"], "modified")
+        self.assertIsNone(record["files"]["modified.py"]["content_saved"])
+        self.assertIn("VALUE = 999", (probe.path / "git-diff.patch").read_text())
+        self.assertEqual(record["files"]["untracked.py"]["git_status"], "untracked")
+        self.assertEqual(
+            record["files"]["untracked.py"]["content_saved"],
+            "code-untracked/untracked.py",
+        )
+        self.assertEqual(
+            (probe.path / "code-untracked" / "untracked.py").read_text(),
+            "VALUE = 3\n",
+        )
+        untracked_manifest = fx.read_json(
+            probe.path / "code-untracked" / "manifest.json"
+        )
+        self.assertIn("untracked.py", untracked_manifest["files"])
 
     def test_measurements_record_real_units_and_settings(self) -> None:
         measurements = fx.read_json(self.run_dir / "measurements.json")
@@ -477,14 +635,16 @@ class CheckCommandTests(unittest.TestCase):
         # Disable source-file access entirely.
         fixture["demand_path"].unlink()
         fixture["graph_path"].unlink()
+        report_path = self.root / "reports" / "recompute-001.json"
         result = checks.command_recompute(
             run_dir=run_dir,
-            run_id="recompute-001",
-            runs_root=self.root / "runs",
+            report_path=report_path,
             repo_root=REPO_ROOT,
             command=["python", "-m", "benchmark.nograph_baseline", "recompute"],
         )
         self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["report_path"], str(report_path))
+        self.assertTrue(report_path.exists())
         report = result["report"]
         self.assertFalse(report["source_data_read"])
         self.assertFalse(report["model_refit"])
@@ -492,9 +652,24 @@ class CheckCommandTests(unittest.TestCase):
             self.assertEqual(comparison["status"], "ok")
             self.assertEqual(comparison["max_normalized_difference"], 0.0)
         self.assertEqual(before, _tree_hash(run_dir))
-        check_dir = Path(result["run_dir"])
-        provenance = fx.read_json(check_dir / "provenance.json")
-        self.assertIn("input_artifacts", provenance["inputs"])
+        inputs = result["envelope"]["inputs"]
+        self.assertEqual(inputs["input_run_dir"], str(run_dir))
+        self.assertTrue(inputs["consumed_sha256"])
+
+    def test_legacy_run_id_alias_resolves_to_a_single_report(self) -> None:
+        fixture, run_dir = execute_fixture(self.root, run_id="legacy-base")
+        runs_root = self.root / "runs"
+        result = checks.command_recompute(
+            run_dir=run_dir,
+            run_id="legacy-recompute-001",
+            runs_root=runs_root,
+            repo_root=REPO_ROOT,
+            command=["python", "-m", "benchmark.nograph_baseline", "recompute"],
+        )
+        self.assertEqual(result["report_path"], str(runs_root / "legacy-recompute-001.json"))
+        self.assertEqual(result["status"], "ok")
+        self.assertTrue(Path(result["report_path"]).exists())
+        self.assertNotIn("run_dir", result)
 
     def test_compare_two_same_seed_runs(self) -> None:
         fixture = fx.build_fixture(self.root / "fixture", "r0", node_count=8)
@@ -509,15 +684,17 @@ class CheckCommandTests(unittest.TestCase):
         run_a = Path(runner.execute_run(spec_a)["run_dir"])
         run_b = Path(runner.execute_run(spec_b)["run_dir"])
         before_a, before_b = _tree_hash(run_a), _tree_hash(run_b)
+        report_path = self.root / "reports" / "compare-001.json"
         result = checks.command_compare(
             run_a=run_a,
             run_b=run_b,
-            run_id="compare-001",
-            runs_root=self.root / "runs",
+            report_path=report_path,
             repo_root=REPO_ROOT,
             command=["python", "-m", "benchmark.nograph_baseline", "compare"],
         )
         self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["report_path"], str(report_path))
+        self.assertEqual(result["envelope"]["kind"], "compare")
         report = result["report"]
         self.assertTrue(all(report["identity_checks"].values()))
         self.assertTrue(report["masks_equal"])
@@ -545,15 +722,17 @@ class CheckCommandTests(unittest.TestCase):
         ]["sha256"]
         _write_v2_source_manifest(log, "r0", demand_sha)
         reference_before = hashlib.sha256(log.read_bytes()).hexdigest()
+        report_path = self.root / "reports" / "align-001.json"
         result = checks.command_align_v2(
             run_dir=run_dir,
             reference=log,
-            run_id="align-001",
-            runs_root=self.root / "runs",
+            report_path=report_path,
             repo_root=REPO_ROOT,
             command=["python", "-m", "benchmark.nograph_baseline", "align-v2"],
         )
         self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["report_path"], str(report_path))
+        self.assertEqual(result["envelope"]["kind"], "align-v2")
         report = result["report"]
         self.assertGreater(report["compared_fields"], 50)
         self.assertEqual(report["discrepancies"], [])
@@ -585,8 +764,7 @@ class CheckCommandTests(unittest.TestCase):
         result = checks.command_align_v2(
             run_dir=run_dir,
             reference=log,
-            run_id="align-002",
-            runs_root=self.root / "runs",
+            report_path=self.root / "reports" / "align-002.json",
             repo_root=REPO_ROOT,
             command=["python", "-m", "benchmark.nograph_baseline", "align-v2"],
         )
@@ -930,7 +1108,7 @@ class CliEndToEndTests(unittest.TestCase):
 
     def test_check_command_records_canonical_invocation(self) -> None:
         _, run_dir = execute_fixture(self.root / "chk", run_id="chk-base")
-        runs_root = self.root / "chk" / "runs"
+        report_path = self.root / "chk" / "reports" / "chk-recompute.json"
         completed = subprocess.run(
             [
                 sys.executable,
@@ -939,20 +1117,22 @@ class CliEndToEndTests(unittest.TestCase):
                 "recompute",
                 "--run-dir",
                 str(run_dir),
-                "--run-id",
-                "chk-recompute",
-                "--runs-root",
-                str(runs_root),
+                "--report",
+                str(report_path),
             ],
             cwd=str(REPO_ROOT),
             capture_output=True,
             text=True,
         )
         self.assertEqual(completed.returncode, 0, msg=completed.stderr)
-        command = fx.read_json(runs_root / "chk-recompute" / "command.json")
-        self.assertEqual(command["argv"][0], sys.executable)
+        payload = json.loads(completed.stdout)
+        self.assertEqual(payload["status"], "ok")
+        self.assertEqual(payload["report_path"], str(report_path))
+        self.assertNotIn("run_dir", completed.stdout)
+        report = fx.read_json(report_path)
+        self.assertEqual(report["command"]["argv"][0], sys.executable)
         self.assertEqual(
-            command["argv"][1:4],
+            report["command"]["argv"][1:4],
             ["-m", "benchmark.nograph_baseline", "recompute"],
         )
 
@@ -965,6 +1145,12 @@ class CliEndToEndTests(unittest.TestCase):
             "python -m benchmark.nograph_baseline recompute",
             "python -m benchmark.nograph_baseline compare",
             "python -m benchmark.nograph_baseline align-v2",
+            "--purpose formal",
+            "--purpose development",
+            "--retain-candidates",
+            "--report research/reports/nograph-baseline/p01-r0-recompute-001.json",
+            "scratch/nograph-baseline",
+            "research/reports/nograph-baseline/",
             "conda activate job-sdf-baseline",
             "benchmark/nograph_baseline/requirements.txt",
             "unsealed and not backed up",
@@ -976,8 +1162,24 @@ class CliEndToEndTests(unittest.TestCase):
         commands = set(parser._subparsers._group_actions[0].choices)
         self.assertEqual(commands, {"run", "recompute", "compare", "align-v2"})
         run_help = parser._subparsers._group_actions[0].choices["run"].format_help()
-        for flag in ("--data-name", "--seed", "--run-id", "--ridge-backend"):
+        for flag in (
+            "--data-name",
+            "--seed",
+            "--run-id",
+            "--ridge-backend",
+            "--purpose",
+            "--retain-candidates",
+        ):
             self.assertIn(flag, run_help)
+        for command in ("recompute", "compare", "align-v2"):
+            check_help = parser._subparsers._group_actions[0].choices[
+                command
+            ].format_help()
+            for flag in ("--report", "--run-id"):
+                self.assertIn(flag, check_help, msg=f"{command}: {flag}")
+        # The legacy runs-root alias is documented in the README even though the
+        # parser help hides it behind the run-ID alias.
+        self.assertIn("--runs-root", normalized)
 
 
 class EnvironmentTests(unittest.TestCase):
@@ -1034,33 +1236,38 @@ class CheckAdversarialTests(unittest.TestCase):
         shutil.copytree(self.run_dir, destination)
         return destination
 
-    def _compare(self, a: Path, b: Path, run_id: str) -> dict:
+    def _output_kwargs(self, run_id: str, legacy: bool) -> dict:
+        """Return either an explicit report path or the legacy alias choice."""
+        if legacy:
+            return {"run_id": run_id, "runs_root": self.checks_root}
+        return {"report_path": self.checks_root / f"{run_id}.json"}
+
+    def _compare(self, a: Path, b: Path, run_id: str, *, legacy: bool = False) -> dict:
         return checks.command_compare(
             run_a=a,
             run_b=b,
-            run_id=run_id,
-            runs_root=self.checks_root,
             repo_root=REPO_ROOT,
             command=["probe", "compare"],
+            **self._output_kwargs(run_id, legacy),
         )
 
-    def _recompute(self, run_dir: Path, run_id: str) -> dict:
+    def _recompute(self, run_dir: Path, run_id: str, *, legacy: bool = False) -> dict:
         return checks.command_recompute(
             run_dir=run_dir,
-            run_id=run_id,
-            runs_root=self.checks_root,
             repo_root=REPO_ROOT,
             command=["probe", "recompute"],
+            **self._output_kwargs(run_id, legacy),
         )
 
-    def _align(self, run_dir: Path, reference: Path, run_id: str) -> dict:
+    def _align(
+        self, run_dir: Path, reference: Path, run_id: str, *, legacy: bool = False
+    ) -> dict:
         return checks.command_align_v2(
             run_dir=run_dir,
             reference=reference,
-            run_id=run_id,
-            runs_root=self.checks_root,
             repo_root=REPO_ROOT,
             command=["probe", "align-v2"],
+            **self._output_kwargs(run_id, legacy),
         )
 
     def _mutate_json(self, run_dir: Path, relative: str, mutator) -> None:
@@ -1071,10 +1278,33 @@ class CheckAdversarialTests(unittest.TestCase):
     def test_compare_valid_pair_still_ok(self) -> None:
         result = self._compare(self.run_dir, self.run_dir, "adv-compare-valid")
         self.assertEqual(result["status"], "ok")
+        self.assertEqual(
+            result["report_path"], str(self.checks_root / "adv-compare-valid.json")
+        )
         self.assertTrue(result["report"]["identity_evidence_complete"])
         self.assertTrue(all(result["report"]["identity_checks"].values()))
         for value in result["report"]["identity_checks"].values():
             self.assertIsInstance(value, bool)
+
+    def test_legacy_run_id_alias_writes_single_reports(self) -> None:
+        recompute = self._recompute(self.run_dir, "adv-legacy-recompute", legacy=True)
+        compare = self._compare(
+            self.run_dir, self.run_dir, "adv-legacy-compare", legacy=True
+        )
+        align = self._align(
+            self.run_dir, self.v2_log, "adv-legacy-align", legacy=True
+        )
+        for result, run_id, kind in (
+            (recompute, "adv-legacy-recompute", "recompute"),
+            (compare, "adv-legacy-compare", "compare"),
+            (align, "adv-legacy-align", "align-v2"),
+        ):
+            with self.subTest(check=kind):
+                path = self.checks_root / f"{run_id}.json"
+                self.assertEqual(result["report_path"], str(path))
+                self.assertTrue(path.exists())
+                self.assertEqual(result["envelope"]["kind"], kind)
+                self.assertNotIn("run_dir", result)
 
     def test_compare_rejects_different_backend(self) -> None:
         copy = self._copy("adv-backend")
@@ -1341,13 +1571,17 @@ class RecomputeNullSemanticsTests(unittest.TestCase):
     def tearDownClass(cls) -> None:
         cls._tmp.cleanup()
 
-    def _recompute(self, run_dir: Path, run_id: str) -> dict:
+    def _recompute(self, run_dir: Path, run_id: str, *, legacy: bool = False) -> dict:
+        kwargs = (
+            {"run_id": run_id, "runs_root": self.checks_root}
+            if legacy
+            else {"report_path": self.checks_root / f"{run_id}.json"}
+        )
         return checks.command_recompute(
             run_dir=run_dir,
-            run_id=run_id,
-            runs_root=self.checks_root,
             repo_root=REPO_ROOT,
             command=["probe", "recompute"],
+            **kwargs,
         )
 
     def _copy(self, name: str) -> Path:
@@ -1381,11 +1615,22 @@ class RecomputeNullSemanticsTests(unittest.TestCase):
     def test_intact_zero_reference_fixture_recomputes(self) -> None:
         result = self._recompute(self.run_dir, "null-valid")
         self.assertEqual(result["status"], "ok")
+        self.assertEqual(
+            result["report_path"], str(self.checks_root / "null-valid.json")
+        )
         report = result["report"]
         self.assertGreater(report["comparisons"]["test"]["null_fields"], 0)
         self.assertEqual(report["stored_semantic_problems"], [])
         self.assertEqual(report["recomputed_semantic_problems"], [])
         self.assertEqual(report["gain_semantic_problems"], [])
+
+    def test_legacy_run_id_alias_writes_one_report(self) -> None:
+        result = self._recompute(self.run_dir, "null-legacy", legacy=True)
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(
+            result["report_path"], str(self.checks_root / "null-legacy.json")
+        )
+        self.assertTrue((self.checks_root / "null-legacy.json").exists())
 
     def test_deleted_null_gain_field_fails(self) -> None:
         copy = self._copy("null-gain-deleted")
@@ -1459,6 +1704,1413 @@ class RecomputeNullSemanticsTests(unittest.TestCase):
             {"status": "unavailable", "relative_MAE_gain": 0.5}
         )
         self.assertTrue(gain_problems)
+
+
+class PurposeDeltaTests(unittest.TestCase):
+    """Task 2.1: formal/development purpose, default roots and rejection."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        self.fixture = fx.build_fixture(self.root / "fixture", "r0", node_count=6)
+
+    def tearDown(self) -> None:
+        self._tmp.cleanup()
+
+    def _formal_spec(self, fixture, data_name: str, runs_root: Path, run_id: str):
+        return fx.make_run_spec(
+            runs_root,
+            data_name,
+            fixture["demand_path"],
+            fixture["graph_path"],
+            run_id,
+            purpose="formal",
+        )
+
+    def _development_spec(self, fixture, data_name: str, run_id: str, runs_root):
+        return runner.RunSpec(
+            data_name=data_name,
+            run_id=run_id,
+            mode="count",
+            seed=0,
+            purpose="development",
+            retain_candidates=False,
+            demand_path=str(fixture["demand_path"]),
+            graph_path=str(fixture["graph_path"]),
+            runs_root=None if runs_root is None else str(runs_root),
+            repo_root=str(REPO_ROOT),
+            command=["python", "-m", "benchmark.nograph_baseline", "run"],
+            run_type="run",
+        )
+
+    def _assert_equivalent(self, formal_dir: Path, development_dir: Path) -> None:
+        for method in protocol.NAIVE_METHODS + (protocol.MODEL_NAME,):
+            for split in ("validation", "test"):
+                with self.subTest(method=method, split=split):
+                    formal = np.load(
+                        formal_dir / "predictions" / method / f"{split}.npy",
+                        allow_pickle=False,
+                    )
+                    development = np.load(
+                        development_dir / "predictions" / method / f"{split}.npy",
+                        allow_pickle=False,
+                    )
+                    np.testing.assert_array_equal(formal, development)
+        formal_metrics = fx.read_json(formal_dir / "metrics.json")
+        development_metrics = fx.read_json(development_dir / "metrics.json")
+        self.assertEqual(formal_metrics["methods"], development_metrics["methods"])
+        self.assertEqual(
+            formal_metrics["references"], development_metrics["references"]
+        )
+        self.assertEqual(
+            formal_metrics["relative_gains"], development_metrics["relative_gains"]
+        )
+        formal_selection = fx.read_json(formal_dir / "selection.json")
+        development_selection = fx.read_json(development_dir / "selection.json")
+        self.assertEqual(
+            formal_selection["shared_ridge"]["selected_lambda"],
+            development_selection["shared_ridge"]["selected_lambda"],
+        )
+
+    def test_development_default_root_matches_formal_without_formal_directory(
+        self,
+    ) -> None:
+        run_id = _unique_run_id("delta-dev")
+        formal_id = _unique_run_id("delta-formal")
+        formal_dir = Path(
+            runner.execute_run(
+                self._formal_spec(self.fixture, "r0", self.root / "runs", formal_id)
+            )["run_dir"]
+        )
+        scratch_root_existed = DEVELOPMENT_DEFAULT_ROOT.exists()
+        development_dir = Path(self.root / "unused")
+        try:
+            development_dir = Path(
+                runner.execute_run(
+                    self._development_spec(self.fixture, "r0", run_id, None)
+                )["run_dir"]
+            )
+            self.assertEqual(development_dir.parent, DEVELOPMENT_DEFAULT_ROOT)
+            self.assertTrue(development_dir.exists())
+            self.assertFalse((FORMAL_DEFAULT_ROOT / run_id).exists())
+            status = fx.read_json(development_dir / "status.json")
+            self.assertEqual(status["state"], "success")
+            self.assertEqual(status["purpose"], "development")
+            config = fx.read_json(development_dir / "config.json")
+            self.assertEqual(config["spec"]["purpose"], "development")
+            provenance = fx.read_json(development_dir / "provenance.json")
+            self.assertEqual(provenance["purpose"], "development")
+            self.assertIn("source_capture", provenance)
+            self.assertNotIn("untracked_source", provenance)
+            summary = (development_dir / "summary.md").read_text(encoding="utf-8")
+            self.assertIn("development output; not scientific acceptance", summary)
+            self._assert_equivalent(formal_dir, development_dir)
+        finally:
+            _clean_development_output(development_dir, scratch_root_existed)
+
+    def test_development_root_inside_formal_namespace_is_rejected(self) -> None:
+        run_id = _unique_run_id("delta-reject")
+        spec = self._development_spec(
+            self.fixture, "r0", run_id, FORMAL_DEFAULT_ROOT
+        )
+        with self.assertRaises(runner.RunError):
+            runner.execute_run(spec)
+        self.assertFalse((FORMAL_DEFAULT_ROOT / run_id).exists())
+
+    def test_symlink_alias_to_formal_namespace_is_rejected(self) -> None:
+        run_id = _unique_run_id("delta-alias")
+        alias = self.root / "runs-alias"
+        alias.symlink_to(FORMAL_DEFAULT_ROOT, target_is_directory=True)
+        spec = self._development_spec(self.fixture, "r0", run_id, alias)
+        with self.assertRaises(runner.RunError):
+            runner.execute_run(spec)
+        self.assertFalse((FORMAL_DEFAULT_ROOT / run_id).exists())
+        self.assertFalse((alias / run_id).exists())
+
+    def test_development_with_explicit_temp_root_is_allowed(self) -> None:
+        run_id = _unique_run_id("delta-dev-explicit")
+        development_root = self.root / "development-runs"
+        development_dir = Path(
+            runner.execute_run(
+                self._development_spec(
+                    self.fixture, "r0", run_id, development_root
+                )
+            )["run_dir"]
+        )
+        self.assertEqual(development_dir.parent, development_root)
+        self.assertEqual(
+            fx.read_json(development_dir / "status.json")["purpose"], "development"
+        )
+        self.assertFalse((FORMAL_DEFAULT_ROOT / run_id).exists())
+
+    def test_unknown_purpose_is_rejected(self) -> None:
+        run_id = _unique_run_id("delta-unknown")
+        spec = fx.make_run_spec(
+            self.root / "runs",
+            "r0",
+            self.fixture["demand_path"],
+            self.fixture["graph_path"],
+            run_id,
+            purpose="provisional",
+        )
+        with self.assertRaises(runner.RunError):
+            runner.execute_run(spec)
+        self.assertFalse((self.root / "runs" / run_id).exists())
+
+    def test_region_development_matches_formal(self) -> None:
+        fixture = fx.build_fixture(self.root / "region-fixture", "region", node_count=2)
+        formal_dir = Path(
+            runner.execute_run(
+                self._formal_spec(
+                    fixture, "region", self.root / "region-formal", "region-formal"
+                )
+            )["run_dir"]
+        )
+        development_dir = Path(
+            runner.execute_run(
+                self._development_spec(
+                    fixture, "region", "region-development", self.root / "region-dev"
+                )
+            )["run_dir"]
+        )
+        self.assertEqual(
+            fx.read_json(development_dir / "status.json")["purpose"], "development"
+        )
+        self._assert_equivalent(formal_dir, development_dir)
+
+
+class CandidateRetentionDeltaTests(unittest.TestCase):
+    """Task 2.3: default retention omits losing arrays; opt-in keeps them."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+
+    def tearDown(self) -> None:
+        self._tmp.cleanup()
+
+    def _expect_retention(self, data_name: str, node_count: int, prefix: str) -> None:
+        fixture = fx.build_fixture(
+            self.root / f"{prefix}-fixture", data_name, node_count=node_count
+        )
+        default_dir = Path(
+            runner.execute_run(
+                fx.make_run_spec(
+                    self.root / f"{prefix}-default",
+                    data_name,
+                    fixture["demand_path"],
+                    fixture["graph_path"],
+                    f"{prefix}-default",
+                )
+            )["run_dir"]
+        )
+        retain_dir = Path(
+            runner.execute_run(
+                fx.make_run_spec(
+                    self.root / f"{prefix}-retain",
+                    data_name,
+                    fixture["demand_path"],
+                    fixture["graph_path"],
+                    f"{prefix}-retain",
+                    retain_candidates=True,
+                )
+            )["run_dir"]
+        )
+
+        self.assertFalse((default_dir / "candidates").exists())
+        for run_dir in (default_dir, retain_dir):
+            self.assertTrue((run_dir / "models" / "SharedRidge.npz").exists())
+            self.assertTrue((run_dir / "selection.json").exists())
+
+        default_selection = fx.read_json(default_dir / "selection.json")
+        retain_selection = fx.read_json(retain_dir / "selection.json")
+        for selection in (default_selection, retain_selection):
+            rows = selection["shared_ridge"]["candidate_table"]
+            self.assertEqual(len(rows), len(protocol.LAMBDA_CANDIDATES))
+            self.assertEqual(
+                {row["lambda"] for row in rows},
+                set(protocol.LAMBDA_CANDIDATES),
+            )
+            self.assertIn(
+                selection["shared_ridge"]["selected_lambda"],
+                set(protocol.LAMBDA_CANDIDATES),
+            )
+        selected_lambda = default_selection["shared_ridge"]["selected_lambda"]
+        self.assertEqual(
+            selected_lambda, retain_selection["shared_ridge"]["selected_lambda"]
+        )
+
+        for method in protocol.NAIVE_METHODS + (protocol.MODEL_NAME,):
+            for split in ("validation", "test"):
+                with self.subTest(method=method, split=split):
+                    default_pred = np.load(
+                        default_dir / "predictions" / method / f"{split}.npy",
+                        allow_pickle=False,
+                    )
+                    retain_pred = np.load(
+                        retain_dir / "predictions" / method / f"{split}.npy",
+                        allow_pickle=False,
+                    )
+                    np.testing.assert_array_equal(default_pred, retain_pred)
+        self.assertEqual(
+            fx.read_json(default_dir / "metrics.json")["methods"],
+            fx.read_json(retain_dir / "metrics.json")["methods"],
+        )
+
+        labels = sorted(f"{name:g}" for name in protocol.LAMBDA_CANDIDATES)
+        self.assertEqual(
+            sorted(path.name for path in (retain_dir / "candidates").iterdir()),
+            labels,
+        )
+        for label in labels:
+            self.assertTrue(
+                (retain_dir / "candidates" / label / "parameters.npz").exists()
+            )
+            self.assertTrue(
+                (retain_dir / "candidates" / label / "validation.npy").exists()
+            )
+
+        selected_label = f"{selected_lambda:g}"
+        with np.load(
+            retain_dir / "candidates" / selected_label / "parameters.npz",
+            allow_pickle=False,
+        ) as handle:
+            retained_w = handle["W"]
+            retained_b = handle["b"]
+        for run_dir in (default_dir, retain_dir):
+            with np.load(
+                run_dir / "models" / "SharedRidge.npz", allow_pickle=False
+            ) as handle:
+                weights = handle["W"]
+                bias = handle["b"]
+                mean = handle["node_mean"]
+                effective_std = handle["node_effective_std"]
+                scalar = handle["scalar"]
+            self.assertAlmostEqual(float(scalar[0]), float(selected_lambda))
+            np.testing.assert_allclose(weights, retained_w)
+            np.testing.assert_allclose(bias, retained_b)
+            raw = fixture["signal"][:, 24:30].astype(np.float64)
+            standardized = (raw - mean[:, None]) / effective_std[:, None]
+            prediction = (standardized @ weights + bias) * effective_std[
+                :, None
+            ] + mean[:, None]
+            saved = np.load(
+                run_dir / "predictions" / protocol.MODEL_NAME / "test.npy",
+                allow_pickle=False,
+            )
+            np.testing.assert_allclose(saved[0], prediction, atol=1e-9)
+
+    def test_r0_default_and_retained_candidates(self) -> None:
+        self._expect_retention("r0", 6, "r0")
+
+    def test_region_default_and_retained_candidates(self) -> None:
+        self._expect_retention("region", 2, "region")
+
+
+class SourceCaptureDeltaTests(unittest.TestCase):
+    """Task 2.2: scoped references, scoped patches and untracked fallback."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+
+    def tearDown(self) -> None:
+        self._tmp.cleanup()
+
+    def _repo(self, name: str) -> Path:
+        repo = _init_git_repo(self.root / name)
+        (repo / "pkg").mkdir(parents=True, exist_ok=True)
+        (repo / "pkg" / "clean.py").write_text("VALUE = 1\n", encoding="utf-8")
+        (repo / "pkg" / "modified.py").write_text("VALUE = 2\n", encoding="utf-8")
+        (repo / "protocol.md").write_text("protocol v1\n", encoding="utf-8")
+        _commit_all(repo)
+        return repo
+
+    def _capture(self, repo: Path, run_id: str, **kwargs):
+        run = artifacts.RunDirectory(self.root / "run-dirs", run_id, "run").reserve()
+        return run, artifacts.capture_source(run, repo, **kwargs)
+
+    def test_clean_tracked_files_are_referenced_not_copied(self) -> None:
+        repo = self._repo("clean-repo")
+        run, record = self._capture(
+            repo, "clean", runtime_paths=["pkg/clean.py"]
+        )
+        entry = record["files"]["pkg/clean.py"]
+        self.assertEqual(entry["git_status"], "committed_clean")
+        self.assertIsNotNone(entry["git_reference"])
+        self.assertEqual(entry["git_reference"]["commit"], record["commit"])
+        self.assertEqual(entry["git_reference"]["path"], "pkg/clean.py")
+        self.assertEqual(entry["git_reference"]["sha256"], entry["sha256"])
+        self.assertEqual(entry["sha256"], _sha256_file(repo / "pkg" / "clean.py"))
+        self.assertIsNone(entry["content_saved"])
+        self.assertFalse(record["scoped_dirty"])
+        self.assertFalse((run.path / "code-untracked").exists())
+        self.assertEqual((run.path / "git-diff.patch").read_text(), "")
+
+    def test_modified_tracked_file_is_patched_not_copied(self) -> None:
+        repo = self._repo("modified-repo")
+        (repo / "pkg" / "modified.py").write_text("VALUE = 999\n", encoding="utf-8")
+        run, record = self._capture(
+            repo, "modified", runtime_paths=["pkg/modified.py"]
+        )
+        entry = record["files"]["pkg/modified.py"]
+        self.assertEqual(entry["git_status"], "modified")
+        self.assertIsNone(entry["content_saved"])
+        self.assertIsNotNone(entry["git_reference"])
+        self.assertNotEqual(entry["git_reference"]["sha256"], entry["sha256"])
+        self.assertEqual(entry["sha256"], _sha256_file(repo / "pkg" / "modified.py"))
+        self.assertTrue(record["scoped_dirty"])
+        patch = (run.path / "git-diff.patch").read_text(encoding="utf-8")
+        self.assertIn("VALUE = 999", patch)
+        self.assertGreater(record["patch_bytes"], 0)
+        self.assertFalse((run.path / "code-untracked").exists())
+
+    def test_untracked_file_content_is_saved_and_manifested(self) -> None:
+        repo = self._repo("untracked-repo")
+        (repo / "pkg" / "untracked.py").write_text("NEW = 7\n", encoding="utf-8")
+        run, record = self._capture(
+            repo, "untracked", runtime_paths=["pkg/untracked.py"]
+        )
+        entry = record["files"]["pkg/untracked.py"]
+        self.assertEqual(entry["git_status"], "untracked")
+        self.assertIsNone(entry["git_reference"])
+        self.assertEqual(entry["content_saved"], "code-untracked/pkg/untracked.py")
+        saved = run.path / "code-untracked" / "pkg" / "untracked.py"
+        self.assertEqual(saved.read_text(encoding="utf-8"), "NEW = 7\n")
+        self.assertEqual(_sha256_file(saved), entry["sha256"])
+        self.assertTrue(record["scoped_dirty"])
+        manifest = fx.read_json(run.path / "code-untracked" / "manifest.json")
+        self.assertEqual(manifest["files"], {"pkg/untracked.py": entry["sha256"]})
+
+    def test_protocol_path_is_scoped_and_hashed(self) -> None:
+        repo = self._repo("protocol-repo")
+        run, record = self._capture(
+            repo,
+            "protocol",
+            runtime_paths=["pkg/clean.py"],
+            protocol_path=repo / "protocol.md",
+        )
+        self.assertIn("protocol.md", record["runtime_scope"])
+        self.assertEqual(record["protocol"]["path"], "protocol.md")
+        self.assertEqual(
+            record["protocol"]["sha256"],
+            _sha256_file(repo / "protocol.md"),
+        )
+        self.assertIn("protocol.md", record["files"])
+
+    def test_unavailable_git_identity_saves_content_fallback(self) -> None:
+        plain = self.root / "no-git"
+        plain.mkdir(parents=True, exist_ok=True)
+        (plain / "runtime.py").write_text("X = 1\n", encoding="utf-8")
+        run, record = self._capture(plain, "no-git", runtime_paths=["runtime.py"])
+        self.assertFalse(record["identity_available"])
+        self.assertIsNone(record["commit"])
+        self.assertTrue(record["errors"])
+        entry = record["files"]["runtime.py"]
+        self.assertEqual(entry["git_status"], "unknown")
+        self.assertEqual(entry["content_saved"], "code-untracked/runtime.py")
+        self.assertTrue(entry["unavailable_reason"])
+        self.assertTrue((run.path / "code-untracked" / "runtime.py").exists())
+
+    def test_runtime_scope_excludes_tests_and_caches(self) -> None:
+        scope = artifacts.runtime_source_paths(REPO_ROOT)
+        self.assertTrue(scope)
+        for relative in scope:
+            parts = Path(relative).parts
+            self.assertNotIn("tests", parts, msg=relative)
+            self.assertNotIn("__pycache__", parts, msg=relative)
+            self.assertTrue(relative.startswith("benchmark/"), msg=relative)
+        self.assertIn("benchmark/nograph_baseline/cli.py", scope)
+        self.assertIn("benchmark/nograph_baseline/runner.py", scope)
+        protocol_relative = (
+            protocol.PROTOCOL_PATH.resolve().relative_to(REPO_ROOT.resolve()).as_posix()
+        )
+        self.assertNotIn(protocol_relative, scope)
+
+
+class CheckReportContractTests(unittest.TestCase):
+    """Tasks 3.1/3.2: one exclusive report per check and safe failures."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls._tmp = tempfile.TemporaryDirectory()
+        cls.root = Path(cls._tmp.name)
+        cls.fixture, cls.run_dir = execute_fixture(cls.root, run_id="contract-base")
+        cls.v2_log = _write_v2_log(
+            cls.root / "naive-baselines.log",
+            "r0",
+            cls.fixture["keys"],
+            cls.fixture["signal"],
+            fx.read_json(cls.run_dir / "metrics.json"),
+        )
+        _write_v2_source_manifest(
+            cls.v2_log,
+            "r0",
+            fx.read_json(cls.run_dir / "source-sha256.json")["sources"]["demand"][
+                "sha256"
+            ],
+        )
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls._tmp.cleanup()
+
+    def _recompute(self, run_dir=None, *, report_path=None, run_id=None, runs_root=None):
+        return checks.command_recompute(
+            run_dir=run_dir or self.run_dir,
+            repo_root=REPO_ROOT,
+            command=["probe", "recompute"],
+            report_path=report_path,
+            run_id=run_id,
+            runs_root=runs_root,
+        )
+
+    def _compare(self, a=None, b=None, *, report_path=None, run_id=None, runs_root=None):
+        return checks.command_compare(
+            run_a=a or self.run_dir,
+            run_b=b or self.run_dir,
+            repo_root=REPO_ROOT,
+            command=["probe", "compare"],
+            report_path=report_path,
+            run_id=run_id,
+            runs_root=runs_root,
+        )
+
+    def _align(
+        self, run_dir=None, reference=None, *, report_path=None, run_id=None, runs_root=None
+    ):
+        return checks.command_align_v2(
+            run_dir=run_dir or self.run_dir,
+            reference=reference or self.v2_log,
+            repo_root=REPO_ROOT,
+            command=["probe", "align-v2"],
+            report_path=report_path,
+            run_id=run_id,
+            runs_root=runs_root,
+        )
+
+    def _calls(self):
+        return (
+            ("recompute", "recompute", lambda **kwargs: self._recompute(**kwargs)),
+            ("compare", "compare", lambda **kwargs: self._compare(**kwargs)),
+            ("align", "align-v2", lambda **kwargs: self._align(**kwargs)),
+        )
+
+    def test_three_checks_write_exactly_one_envelope(self) -> None:
+        tolerances = {
+            "recompute": checks.RECOMPUTE_TOLERANCES,
+            "compare": checks.COMPARE_TOLERANCES,
+            "align-v2": checks.ALIGN_TOLERANCES,
+        }
+        for label, kind, call in self._calls():
+            with self.subTest(check=kind):
+                parent = self.root / "reports" / label
+                destination = parent / "nested" / "report.json"
+                before_run = _tree_hash(self.run_dir)
+                before_reference = _sha256_file(self.v2_log)
+                result = call(report_path=destination)
+                self.assertEqual(
+                    set(result), {"report_path", "status", "report", "envelope"}
+                )
+                self.assertEqual(result["report_path"], str(destination))
+                self.assertEqual(result["status"], "ok")
+                self.assertTrue(destination.exists())
+                written = [path for path in parent.rglob("*") if path.is_file()]
+                self.assertEqual(written, [destination])
+                envelope = result["envelope"]
+                self.assertEqual(envelope["version"], checks.REPORT_VERSION)
+                self.assertEqual(envelope["kind"], kind)
+                self.assertEqual(envelope["status"], "ok")
+                self.assertEqual(envelope["errors"], [])
+                self.assertTrue(envelope["created"])
+                self.assertEqual(envelope["command"]["argv"], ["probe", kind])
+                self.assertTrue(envelope["command"]["cwd"])
+                self.assertEqual(
+                    envelope["checker"]["protocol_version"],
+                    protocol.PROTOCOL_VERSION,
+                )
+                source = envelope["checker"]["source"]
+                for key in (
+                    "policy",
+                    "commit",
+                    "identity_available",
+                    "whole_repository_dirty",
+                    "scoped_dirty",
+                    "files",
+                    "scoped_files",
+                    "patch_included",
+                    "source_patch",
+                    "patch_bytes",
+                    "patch_omitted_reason",
+                    "errors",
+                ):
+                    self.assertIn(key, source)
+                self.assertEqual(result["report"], envelope["result"])
+                self.assertEqual(envelope["result"]["status"], "ok")
+                self.assertIn("inputs", envelope)
+                self.assertEqual(envelope["tolerances"], tolerances[kind])
+                self.assertEqual(_tree_hash(self.run_dir), before_run)
+                self.assertEqual(_sha256_file(self.v2_log), before_reference)
+
+    def test_recompute_embeds_recomputed_metrics_and_retains_fields(self) -> None:
+        result = self._recompute(report_path=self.root / "reports" / "embed.json")
+        report = result["report"]
+        self.assertEqual(sorted(report["recomputed_metrics"]), ["test", "validation"])
+        self.assertIn(protocol.MODEL_NAME, report["recomputed_metrics"]["test"])
+        self.assertIn("test", report["recomputed_relative_gains"])
+        self.assertIn("validation", report["recomputed_relative_gains"])
+        for key in (
+            "comparisons",
+            "relative_gains_comparison",
+            "node_error_comparison",
+            "missing_report_fields",
+            "nonfinite_stored_fields",
+            "nonfinite_recomputed_fields",
+            "stored_semantic_problems",
+            "recomputed_semantic_problems",
+            "source_data_read",
+            "model_refit",
+            "status",
+        ):
+            self.assertIn(key, report)
+
+    def test_legacy_run_id_alias_writes_root_id_json(self) -> None:
+        for label, kind, call in self._calls():
+            with self.subTest(check=kind):
+                runs_root = self.root / "alias" / label
+                run_id = f"contract-{label}"
+                result = call(run_id=run_id, runs_root=runs_root)
+                self.assertEqual(result["report_path"], str(runs_root / f"{run_id}.json"))
+                self.assertEqual(result["envelope"]["kind"], kind)
+                self.assertTrue((runs_root / f"{run_id}.json").exists())
+
+    def test_report_and_legacy_run_id_are_mutually_exclusive(self) -> None:
+        for label, kind, call in self._calls():
+            with self.subTest(check=kind):
+                destination = self.root / "reports" / f"mutual-{label}.json"
+                alias = self.root / "mutual-alias" / f"mutual-{label}.json"
+                with self.assertRaises(checks.CheckError):
+                    call(
+                        report_path=destination,
+                        run_id=f"mutual-{label}",
+                        runs_root=alias.parent,
+                    )
+                self.assertFalse(destination.exists())
+                self.assertFalse(alias.exists())
+
+    def test_missing_or_invalid_alias_output_choices_are_rejected(self) -> None:
+        self.assertEqual(
+            checks.default_reports_root(REPO_ROOT),
+            REPO_ROOT / "research" / "reports" / "nograph-baseline",
+        )
+        with self.assertRaises(checks.CheckError):
+            self._recompute()
+        alias_root = self.root / "invalid-alias"
+        for run_id in ("../escape", "nested/id", "..", ""):
+            with self.subTest(run_id=run_id):
+                with self.assertRaises(
+                    (artifacts.ArtifactError, checks.CheckError)
+                ):
+                    self._recompute(run_id=run_id, runs_root=alias_root)
+        self.assertFalse(alias_root.exists())
+
+    def test_existing_destination_is_never_replaced(self) -> None:
+        destination = self.root / "exclusive" / "existing.json"
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(b"original-bytes")
+        for label, kind, call in self._calls():
+            with self.subTest(check=kind):
+                with self.assertRaises(checks.CheckError):
+                    call(report_path=destination)
+                self.assertEqual(destination.read_bytes(), b"original-bytes")
+        self.assertEqual(
+            [path.name for path in destination.parent.iterdir()], ["existing.json"]
+        )
+
+    def test_symlink_destination_is_rejected(self) -> None:
+        target = self.root / "symlink-target.json"
+        target.write_bytes(b"target-bytes")
+        link = self.root / "reports" / "symlink.json"
+        link.parent.mkdir(parents=True, exist_ok=True)
+        link.symlink_to(target)
+        dangling = self.root / "reports" / "dangling.json"
+        dangling.symlink_to(self.root / "absent.json")
+        for label, kind, call in self._calls():
+            for destination in (link, dangling):
+                with self.subTest(check=kind, path=destination.name):
+                    with self.assertRaises(checks.CheckError):
+                        call(report_path=destination)
+            self.assertTrue(link.is_symlink())
+            self.assertTrue(dangling.is_symlink())
+        self.assertEqual(target.read_bytes(), b"target-bytes")
+        self.assertFalse((self.root / "absent.json").exists())
+
+    def test_report_inside_input_run_is_rejected(self) -> None:
+        inside_run = self.run_dir / "report.json"
+        with self.assertRaises(checks.CheckError):
+            self._recompute(report_path=inside_run)
+        with self.assertRaises(checks.CheckError):
+            self._align(report_path=inside_run)
+        with self.assertRaises(checks.CheckError):
+            self._compare(report_path=inside_run)
+        self.assertFalse(inside_run.exists())
+
+        reference_before = _sha256_file(self.v2_log)
+        with self.assertRaises(checks.CheckError):
+            self._align(report_path=self.v2_log)
+        self.assertEqual(_sha256_file(self.v2_log), reference_before)
+
+    def test_missing_input_writes_failure_report_without_mutation(self) -> None:
+        copy = self.root / "contract-missing"
+        shutil.copytree(self.run_dir, copy)
+        (copy / "metrics.json").unlink()
+        before = _tree_hash(copy)
+        destination = self.root / "reports" / "missing-input.json"
+        result = self._recompute(run_dir=copy, report_path=destination)
+        self.assertEqual(result["status"], "failed")
+        self.assertNotEqual(result["status"], "ok")
+        self.assertEqual(result["report"]["status"], "failed")
+        self.assertTrue(result["report"]["error"])
+        self.assertTrue(result["envelope"]["errors"])
+        self.assertEqual(result["envelope"]["status"], "failed")
+        self.assertTrue(destination.exists())
+        self.assertEqual(before, _tree_hash(copy))
+
+        absent = self.root / "no-such-run"
+        failures = (
+            ("recompute", lambda path: self._recompute(run_dir=absent, report_path=path)),
+            ("compare", lambda path: self._compare(a=absent, report_path=path)),
+            ("align", lambda path: self._align(run_dir=absent, report_path=path)),
+        )
+        for label, call in failures:
+            with self.subTest(check=label):
+                report_path = self.root / "reports" / f"failure-{label}.json"
+                failure = call(report_path)
+                self.assertEqual(failure["status"], "failed")
+                self.assertTrue(failure["envelope"]["errors"])
+                self.assertTrue(report_path.exists())
+                self.assertEqual(
+                    fx.read_json(report_path)["status"], "failed"
+                )
+
+    def test_region_schema_recompute_report_and_alias(self) -> None:
+        fixture = fx.build_fixture(
+            self.root / "region-fixture", "region", node_count=2
+        )
+        run_dir = Path(
+            runner.execute_run(
+                fx.make_run_spec(
+                    self.root / "region-runs",
+                    "region",
+                    fixture["demand_path"],
+                    fixture["graph_path"],
+                    "contract-region",
+                )
+            )["run_dir"]
+        )
+        destination = self.root / "reports" / "region-recompute.json"
+        result = self._recompute(run_dir=run_dir, report_path=destination)
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["envelope"]["kind"], "recompute")
+        self.assertIn(protocol.MODEL_NAME, result["report"]["recomputed_metrics"]["test"])
+        alias = self._recompute(
+            run_dir=run_dir, run_id="contract-region", runs_root=self.root / "region-alias"
+        )
+        self.assertEqual(
+            alias["report_path"],
+            str(self.root / "region-alias" / "contract-region.json"),
+        )
+        self.assertEqual(alias["status"], "ok")
+
+    def test_cli_recompute_report_success_and_failure(self) -> None:
+        destination = self.root / "cli" / "report.json"
+        completed = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "benchmark.nograph_baseline",
+                "recompute",
+                "--run-dir",
+                str(self.run_dir),
+                "--report",
+                str(destination),
+            ],
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        payload = json.loads(completed.stdout)
+        self.assertEqual(payload["report_path"], str(destination))
+        self.assertEqual(payload["status"], "ok")
+        self.assertNotIn("run_dir", completed.stdout)
+        self.assertTrue(destination.exists())
+
+        alias_root = self.root / "cli" / "alias"
+        aliased = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "benchmark.nograph_baseline",
+                "recompute",
+                "--run-dir",
+                str(self.run_dir),
+                "--run-id",
+                "cli-alias",
+                "--runs-root",
+                str(alias_root),
+            ],
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(aliased.returncode, 0, msg=aliased.stderr)
+        alias_payload = json.loads(aliased.stdout)
+        self.assertEqual(
+            alias_payload["report_path"], str(alias_root / "cli-alias.json")
+        )
+        self.assertEqual(alias_payload["status"], "ok")
+        self.assertTrue((alias_root / "cli-alias.json").exists())
+
+        missing = self.root / "cli-missing"
+        shutil.copytree(self.run_dir, missing)
+        (missing / "metrics.json").unlink()
+        failure_path = self.root / "cli" / "failure.json"
+        failed = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "benchmark.nograph_baseline",
+                "recompute",
+                "--run-dir",
+                str(missing),
+                "--report",
+                str(failure_path),
+            ],
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+        )
+        self.assertNotEqual(failed.returncode, 0)
+        failure_payload = json.loads(failed.stdout)
+        self.assertEqual(failure_payload["status"], "failed")
+        self.assertEqual(failure_payload["report_path"], str(failure_path))
+        self.assertTrue(failure_path.exists())
+        self.assertEqual(fx.read_json(failure_path)["status"], "failed")
+
+        conflicting = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "benchmark.nograph_baseline",
+                "recompute",
+                "--run-dir",
+                str(self.run_dir),
+                "--report",
+                str(self.root / "cli" / "conflict.json"),
+                "--run-id",
+                "conflict",
+            ],
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+        )
+        self.assertNotEqual(conflicting.returncode, 0)
+        self.assertFalse((self.root / "cli" / "conflict.json").exists())
+
+
+class RepairRegressionTests(unittest.TestCase):
+    """Regression coverage for the V-001..V-005 verification findings.
+
+    Each test would have failed before the corresponding repair.
+    """
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        self.reports = self.root / "reports"
+
+    def tearDown(self) -> None:
+        self._tmp.cleanup()
+
+    def _run_with_protocol(
+        self, repo_root: Path, protocol_file: Path, run_id: str
+    ) -> Path:
+        fixture = fx.build_fixture(self.root / "fixture", "r0", node_count=6)
+        spec = fx.make_run_spec(
+            self.root / "runs",
+            "r0",
+            fixture["demand_path"],
+            fixture["graph_path"],
+            run_id,
+            repo_root=str(repo_root),
+            protocol_path=str(protocol_file),
+        )
+        return Path(runner.execute_run(spec)["run_dir"])
+
+    # -- V-001: clean committed protocol is referenced, not copied ---------
+    def test_clean_committed_protocol_is_referenced_without_a_copy(self) -> None:
+        repo = _init_git_repo(self.root / "clean-protocol-repo")
+        protocol_file = repo / "protocol.md"
+        protocol_file.write_text("clean committed protocol\n", encoding="utf-8")
+        _commit_all(repo)
+        run_dir = self._run_with_protocol(repo, protocol_file, "clean-protocol")
+        source = fx.read_json(run_dir / "code-source.json")
+        self.assertEqual(source["protocol"]["git_status"], "committed_clean")
+        self.assertIsNotNone(source["protocol"]["git_reference"])
+        self.assertEqual(
+            source["protocol"]["git_reference"]["sha256"], source["protocol"]["sha256"]
+        )
+        self.assertEqual(source["protocol"]["sha256"], _sha256_file(protocol_file))
+        self.assertFalse(
+            (run_dir / "protocol.md").exists(),
+            msg="a clean committed protocol must not be duplicated",
+        )
+        # Saved-only source-manifest compatibility is preserved.
+        manifest = fx.read_json(run_dir / "source-sha256.json")
+        self.assertEqual(
+            manifest["sources"]["protocol"]["sha256"], _sha256_file(protocol_file)
+        )
+
+    def test_dirty_untracked_outside_and_unavailable_protocols_are_preserved(
+        self,
+    ) -> None:
+        fixture = fx.build_fixture(self.root / "fixture", "r0", node_count=6)
+
+        def run_with(repo_root: Path, protocol_file: Path, run_id: str) -> Path:
+            spec = fx.make_run_spec(
+                self.root / "runs",
+                "r0",
+                fixture["demand_path"],
+                fixture["graph_path"],
+                run_id,
+                repo_root=str(repo_root),
+                protocol_path=str(protocol_file),
+            )
+            return Path(runner.execute_run(spec)["run_dir"])
+
+        # tracked dirty
+        dirty_repo = _init_git_repo(self.root / "dirty-protocol-repo")
+        dirty_protocol = dirty_repo / "protocol.md"
+        dirty_protocol.write_text("committed protocol\n", encoding="utf-8")
+        _commit_all(dirty_repo)
+        dirty_protocol.write_text("dirty protocol override\n", encoding="utf-8")
+        dirty_run = run_with(dirty_repo, dirty_protocol, "dirty-protocol")
+        self.assertEqual(
+            (dirty_run / "protocol.md").read_text(encoding="utf-8"),
+            "dirty protocol override\n",
+        )
+        self.assertEqual(
+            fx.read_json(dirty_run / "code-source.json")["protocol"]["git_status"],
+            "modified",
+        )
+
+        # untracked
+        untracked_repo = _init_git_repo(self.root / "untracked-protocol-repo")
+        (untracked_repo / "anchor.py").write_text("A = 1\n", encoding="utf-8")
+        _commit_all(untracked_repo)
+        untracked_protocol = untracked_repo / "protocol.md"
+        untracked_protocol.write_text("untracked protocol\n", encoding="utf-8")
+        untracked_run = run_with(untracked_repo, untracked_protocol, "untracked-protocol")
+        self.assertEqual(
+            (untracked_run / "protocol.md").read_text(encoding="utf-8"),
+            "untracked protocol\n",
+        )
+        entry = fx.read_json(untracked_run / "code-source.json")["protocol"]
+        self.assertEqual(entry["git_status"], "untracked")
+        self.assertEqual(entry["content_saved"], "code-untracked/protocol.md")
+
+        # outside the repository
+        outside_repo = _init_git_repo(self.root / "outside-protocol-repo")
+        (outside_repo / "anchor.py").write_text("A = 1\n", encoding="utf-8")
+        _commit_all(outside_repo)
+        outside_protocol = self.root / "outside-protocol.md"
+        outside_protocol.write_text("outside repository protocol\n", encoding="utf-8")
+        outside_run = run_with(outside_repo, outside_protocol, "outside-protocol")
+        self.assertEqual(
+            (outside_run / "protocol.md").read_text(encoding="utf-8"),
+            "outside repository protocol\n",
+        )
+        outside_entry = fx.read_json(outside_run / "code-source.json")["protocol"]
+        self.assertTrue(outside_entry["outside_repository"])
+        self.assertEqual(outside_entry["content_saved"], "protocol.md")
+
+        # unavailable Git
+        plain = self.root / "no-git-protocol"
+        plain.mkdir(parents=True, exist_ok=True)
+        plain_protocol = plain / "protocol.md"
+        plain_protocol.write_text("no git protocol\n", encoding="utf-8")
+        plain_run = run_with(plain, plain_protocol, "unavailable-protocol")
+        self.assertEqual(
+            (plain_run / "protocol.md").read_text(encoding="utf-8"),
+            "no git protocol\n",
+        )
+        plain_source = fx.read_json(plain_run / "code-source.json")
+        self.assertFalse(plain_source["identity_available"])
+        self.assertEqual(plain_source["protocol"]["git_status"], "unknown")
+
+    # -- V-002: malformed/unreadable saved input still yields a report -----
+    def test_malformed_status_writes_one_failure_report(self) -> None:
+        for command, kwargs in (
+            ("recompute", {}),
+            ("compare", {}),
+        ):
+            with self.subTest(command=command):
+                bad = self.root / f"malformed-{command}"
+                bad.mkdir(parents=True)
+                (bad / "status.json").write_text("{invalid", encoding="utf-8")
+                before = _tree_hash(bad)
+                report = self.reports / f"malformed-{command}.json"
+                if command == "recompute":
+                    result = checks.command_recompute(
+                        run_dir=bad,
+                        repo_root=REPO_ROOT,
+                        command=["probe"],
+                        report_path=report,
+                    )
+                else:
+                    result = checks.command_compare(
+                        run_a=bad,
+                        run_b=bad,
+                        repo_root=REPO_ROOT,
+                        command=["probe"],
+                        report_path=report,
+                    )
+                self.assertEqual(result["status"], "failed")
+                self.assertTrue(report.exists())
+                self.assertEqual(result["envelope"]["status"], "failed")
+                self.assertTrue(result["envelope"]["errors"])
+                self.assertEqual(
+                    result["envelope"]["errors"][0]["type"], "JSONDecodeError"
+                )
+                self.assertEqual(_tree_hash(bad), before)
+
+    def test_malformed_status_cli_returns_nonzero_with_a_report(self) -> None:
+        bad = self.root / "malformed-cli"
+        bad.mkdir(parents=True)
+        (bad / "status.json").write_text("{invalid", encoding="utf-8")
+        report = self.reports / "malformed-cli.json"
+        completed = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "benchmark.nograph_baseline",
+                "recompute",
+                "--run-dir",
+                str(bad),
+                "--report",
+                str(report),
+            ],
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+        )
+        self.assertNotEqual(completed.returncode, 0)
+        payload = json.loads(completed.stdout)
+        self.assertEqual(payload["status"], "failed")
+        self.assertEqual(payload["report_path"], str(report))
+        self.assertTrue(report.exists())
+        self.assertEqual(fx.read_json(report)["status"], "failed")
+
+    def test_malformed_metrics_still_writes_an_align_failure_report(self) -> None:
+        run_dir = self.root / "malformed-align"
+        run_dir.mkdir(parents=True)
+        (run_dir / "metrics.json").write_text("{invalid", encoding="utf-8")
+        reference = self.root / "reference.log"
+        reference.write_text('{"dataset": "r0"}\n', encoding="utf-8")
+        report = self.reports / "malformed-align.json"
+        result = checks.command_align_v2(
+            run_dir=run_dir,
+            reference=reference,
+            repo_root=REPO_ROOT,
+            command=["probe"],
+            report_path=report,
+        )
+        self.assertEqual(result["status"], "failed")
+        self.assertEqual(result["envelope"]["errors"][0]["type"], "JSONDecodeError")
+        self.assertTrue(report.exists())
+
+    def test_unreadable_consumed_input_writes_a_failure_report(self) -> None:
+        if not hasattr(os, "geteuid") or os.geteuid() == 0:
+            self.skipTest("file permissions do not restrict this user")
+        _, run_dir = execute_fixture(self.root, run_id="unreadable-input")
+        target = run_dir / "metrics.json"
+        digest = _sha256_file(target)
+        target.chmod(0)
+        try:
+            report = self.reports / "unreadable.json"
+            result = checks.command_recompute(
+                run_dir=run_dir,
+                repo_root=REPO_ROOT,
+                command=["probe"],
+                report_path=report,
+            )
+            self.assertEqual(result["status"], "failed")
+            self.assertEqual(
+                result["envelope"]["errors"][0]["type"], "PermissionError"
+            )
+            self.assertTrue(report.exists())
+        finally:
+            target.chmod(0o644)
+        self.assertEqual(_sha256_file(target), digest)
+
+    def test_unsafe_destination_still_produces_no_output(self) -> None:
+        bad = self.root / "malformed-unsafe"
+        bad.mkdir(parents=True)
+        (bad / "status.json").write_text("{invalid", encoding="utf-8")
+        destination = bad / "inside.json"
+        with self.assertRaises(checks.CheckError):
+            checks.command_recompute(
+                run_dir=bad,
+                repo_root=REPO_ROOT,
+                command=["probe"],
+                report_path=destination,
+            )
+        self.assertFalse(destination.exists())
+
+    # -- V-003: failed Git diff still preserves modified content ----------
+    def _capture(self, repo: Path, run_id: str, runtime_paths):
+        run = artifacts.RunDirectory(self.root / "run-dirs", run_id, "run").reserve()
+        return run, artifacts.capture_source(run, repo, runtime_paths=runtime_paths)
+
+    def _assert_reconstructable(
+        self, repo: Path, run: "artifacts.RunDirectory", record: dict, relative: str
+    ) -> None:
+        """Recover one file from the fixed base commit plus run-owned evidence."""
+        entry = record["files"][relative]
+        if entry["content_saved"]:
+            recovered = (run.path / entry["content_saved"]).read_bytes()
+        else:
+            work = Path(tempfile.mkdtemp(dir=self.root))
+            # Seed every recorded base from the fixed commit only.
+            for sibling in record["runtime_scope"]:
+                probe = subprocess.run(
+                    ["git", "-C", str(repo), "cat-file", "-e",
+                     f"{record['commit']}:{sibling}"],
+                    capture_output=True,
+                )
+                if probe.returncode != 0:
+                    continue
+                base = subprocess.run(
+                    ["git", "-C", str(repo), "show", f"{record['commit']}:{sibling}"],
+                    capture_output=True,
+                    check=True,
+                ).stdout
+                target = work / sibling
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(base)
+            applied = subprocess.run(
+                [
+                    "git",
+                    "apply",
+                    "--unsafe-paths",
+                    str(run.path / (entry["patch_path"] or record["patch_path"])),
+                ],
+                cwd=str(work),
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(
+                applied.returncode, 0, msg=f"{relative}: {applied.stderr}"
+            )
+            target = work / relative
+            recovered = target.read_bytes() if target.exists() else None
+        if recovered is None:
+            self.assertIsNone(entry["sha256"])
+        else:
+            self.assertEqual(hashlib.sha256(recovered).hexdigest(), entry["sha256"])
+
+    def test_ordinary_modified_and_deleted_runtime_reconstruct_from_patch(self) -> None:
+        repo = _init_git_repo(self.root / "reconstruct-repo")
+        modified = repo / "modified.py"
+        modified.write_text("VALUE = 1\n", encoding="utf-8")
+        deleted = repo / "deleted.py"
+        deleted.write_text("GONE = 1\n", encoding="utf-8")
+        _commit_all(repo)
+        modified.write_text("VALUE = 3\n", encoding="utf-8")
+        deleted.unlink()
+
+        run, record = self._capture(repo, "reconstruct", ["modified.py", "deleted.py"])
+        self.assertIsNone(record["files"]["modified.py"]["content_saved"])
+        self.assertIsNone(record["files"]["deleted.py"]["content_saved"])
+        self.assertEqual(record["patch_unusable_paths"], [])
+        self._assert_reconstructable(repo, run, record, "modified.py")
+        self._assert_reconstructable(repo, run, record, "deleted.py")
+
+    def test_binary_marked_runtime_source_reconstructs_from_patch(self) -> None:
+        repo = _init_git_repo(self.root / "binary-diff-repo")
+        used = repo / "used.py"
+        used.write_text("VALUE = 1\n", encoding="utf-8")
+        (repo / ".gitattributes").write_text("used.py -diff\n", encoding="utf-8")
+        _commit_all(repo)
+        used.write_text("VALUE = 2\n", encoding="utf-8")
+
+        run, record = self._capture(repo, "binary-diff", ["used.py"])
+        entry = record["files"]["used.py"]
+        self.assertIsNone(entry["content_saved"])
+        self.assertEqual(record["patch_unusable_paths"], [])
+        self.assertIn(
+            "GIT binary patch",
+            (run.path / record["patch_path"]).read_text(encoding="utf-8"),
+        )
+        self._assert_reconstructable(repo, run, record, "used.py")
+
+    def test_mixed_driver_multi_file_recovers_every_path(self) -> None:
+        repo = _init_git_repo(self.root / "mixed-driver-repo")
+        good = repo / "good.py"
+        broken = repo / "broken.py"
+        good.write_text("VALUE = 1\n", encoding="utf-8")
+        broken.write_text("VALUE = 1\n", encoding="utf-8")
+        (repo / ".gitattributes").write_text("broken.py diff=broken\n", encoding="utf-8")
+        _commit_all(repo)
+        _git(repo, "config", "diff.broken.command", "false")
+        good.write_text("VALUE = 2\n", encoding="utf-8")
+        broken.write_text("VALUE = 2\n", encoding="utf-8")
+
+        run, record = self._capture(repo, "mixed-driver", ["good.py", "broken.py"])
+        # The failing driver must not erase the other path's retained diff.
+        self.assertEqual(record["patch_unusable_paths"], ["broken.py"])
+        self.assertEqual(record["unrecoverable_paths"], [])
+        self.assertEqual(record["files"]["good.py"]["patch_path"], "git-diff.patch")
+        self.assertEqual(
+            record["files"]["broken.py"]["content_saved"], "code-untracked/broken.py"
+        )
+        self.assertGreater(record["patch_bytes"], 0)
+        self._assert_reconstructable(repo, run, record, "good.py")
+        self._assert_reconstructable(repo, run, record, "broken.py")
+
+    def test_mixed_driver_deletion_and_failure_recovers_every_path(self) -> None:
+        repo = _init_git_repo(self.root / "mixed-delete-repo")
+        deleted = repo / "deleted.py"
+        broken = repo / "broken.py"
+        deleted.write_text("GONE = 1\n", encoding="utf-8")
+        broken.write_text("VALUE = 1\n", encoding="utf-8")
+        (repo / ".gitattributes").write_text("broken.py diff=broken\n", encoding="utf-8")
+        _commit_all(repo)
+        _git(repo, "config", "diff.broken.command", "false")
+        deleted.unlink()
+        broken.write_text("VALUE = 2\n", encoding="utf-8")
+
+        run, record = self._capture(repo, "mixed-delete", ["deleted.py", "broken.py"])
+        self.assertEqual(record["patch_unusable_paths"], ["broken.py"])
+        self.assertEqual(record["unrecoverable_paths"], [])
+        self.assertEqual(
+            record["files"]["deleted.py"]["patch_path"], "git-diff.patch"
+        )
+        self.assertIsNone(record["files"]["deleted.py"]["sha256"])
+        self._assert_reconstructable(repo, run, record, "deleted.py")
+        self._assert_reconstructable(repo, run, record, "broken.py")
+
+    def test_external_non_patch_diff_falls_back_to_saved_content(self) -> None:
+        repo = _init_git_repo(self.root / "external-junk-repo")
+        used = repo / "used.py"
+        used.write_text("VALUE = 1\n", encoding="utf-8")
+        (repo / ".gitattributes").write_text(
+            "used.py diff=custom\n", encoding="utf-8"
+        )
+        _commit_all(repo)
+        _git(repo, "config", "diff.custom.command", "printf b/used.py")
+        used.write_text("VALUE = 2\n", encoding="utf-8")
+
+        run, record = self._capture(repo, "external-junk", ["used.py"])
+        entry = record["files"]["used.py"]
+        self.assertEqual(entry["content_saved"], "code-untracked/used.py")
+        self.assertEqual(record["patch_unusable_paths"], ["used.py"])
+        self.assertTrue(entry["unavailable_reason"])
+        self._assert_reconstructable(repo, run, record, "used.py")
+
+    def test_failed_git_diff_preserves_modified_runtime_content(self) -> None:
+        repo = _init_git_repo(self.root / "broken-diff-repo")
+        used = repo / "used.py"
+        used.write_text("VALUE = 1\n", encoding="utf-8")
+        _commit_all(repo)
+        (repo / ".gitattributes").write_text("used.py diff=broken\n", encoding="utf-8")
+        _git(repo, "config", "diff.broken.command", "false")
+        used.write_text("VALUE = 2\n", encoding="utf-8")
+
+        run = artifacts.RunDirectory(self.root / "run-dirs", "diff-failure", "run").reserve()
+        record = artifacts.capture_source(run, repo, runtime_paths=["used.py"])
+        entry = record["files"]["used.py"]
+        self.assertEqual(entry["git_status"], "modified")
+        self.assertTrue(record["errors"].get("scoped_patch"))
+        self.assertEqual(record["patch_bytes"], 0)
+        self.assertEqual(entry["content_saved"], "code-untracked/used.py")
+        self.assertTrue(entry["unavailable_reason"])
+        saved = run.path / "code-untracked" / "used.py"
+        self.assertEqual(saved.read_text(encoding="utf-8"), "VALUE = 2\n")
+        self.assertEqual(_sha256_file(saved), entry["sha256"])
+        manifest = fx.read_json(run.path / "code-untracked" / "manifest.json")
+        self.assertEqual(manifest["files"], {"used.py": entry["sha256"]})
+
+    def test_failed_git_diff_reports_unrecoverable_deletion(self) -> None:
+        repo = _init_git_repo(self.root / "broken-diff-delete")
+        used = repo / "used.py"
+        used.write_text("VALUE = 1\n", encoding="utf-8")
+        _commit_all(repo)
+        (repo / ".gitattributes").write_text("used.py diff=broken\n", encoding="utf-8")
+        _git(repo, "config", "diff.broken.command", "false")
+        used.unlink()
+
+        run = artifacts.RunDirectory(self.root / "run-dirs", "delete-failure", "run").reserve()
+        record = artifacts.capture_source(run, repo, runtime_paths=["used.py"])
+        entry = record["files"]["used.py"]
+        self.assertEqual(entry["git_status"], "modified")
+        self.assertIsNone(entry["content_saved"])
+        self.assertIn("deletion", entry["unavailable_reason"] or "")
+
+    # -- V-004: untracked checker source is not reported scoped-clean -----
+    def test_untracked_checker_source_is_reported_scoped_dirty(self) -> None:
+        repo = _init_git_repo(self.root / "checker-repo")
+        (repo / "anchor.py").write_text("A = 1\n", encoding="utf-8")
+        _commit_all(repo)
+        launcher = repo / "benchmark/nograph_baseline/__main__.py"
+        launcher.parent.mkdir(parents=True, exist_ok=True)
+        launcher.write_text("VALUE = 1\n", encoding="utf-8")
+
+        identity = artifacts.checker_source_identity(repo)
+        self.assertTrue(identity["scoped_state_available"])
+        self.assertTrue(identity["scoped_dirty"])
+        self.assertIn(
+            "benchmark/nograph_baseline/__main__.py", identity["scoped_files"]
+        )
+        self.assertIn(
+            "benchmark/nograph_baseline/__main__.py", identity["untracked_files"]
+        )
+        self.assertEqual(identity["patch_eligible_files"], [])
+        self.assertIn(
+            "benchmark/nograph_baseline/__main__.py", identity["files"]
+        )
+        self.assertEqual(identity["patch_bytes"], 0)
+
+    def test_checker_identity_without_git_reports_unknown_scope(self) -> None:
+        plain = self.root / "no-git-checker"
+        launcher = plain / "benchmark/nograph_baseline/__main__.py"
+        launcher.parent.mkdir(parents=True, exist_ok=True)
+        launcher.write_text("VALUE = 1\n", encoding="utf-8")
+        identity = artifacts.checker_source_identity(plain)
+        self.assertFalse(identity["identity_available"])
+        self.assertFalse(identity["scoped_state_available"])
+        self.assertIsNone(identity["scoped_dirty"])
+        self.assertIsNone(identity["scoped_files"])
+        self.assertTrue(identity["errors"])
+
+    def test_clean_checker_source_is_scoped_clean(self) -> None:
+        repo = _init_git_repo(self.root / "clean-checker-repo")
+        launcher = repo / "benchmark/nograph_baseline/__main__.py"
+        launcher.parent.mkdir(parents=True, exist_ok=True)
+        launcher.write_text("VALUE = 1\n", encoding="utf-8")
+        _commit_all(repo)
+        identity = artifacts.checker_source_identity(repo)
+        self.assertTrue(identity["scoped_state_available"])
+        self.assertFalse(identity["scoped_dirty"])
+        self.assertEqual(identity["scoped_files"], [])
+        self.assertEqual(identity["untracked_files"], [])
+
+    def test_modified_tracked_checker_source_is_scoped_dirty_and_patchable(
+        self,
+    ) -> None:
+        repo = _init_git_repo(self.root / "modified-checker-repo")
+        launcher = repo / "benchmark/nograph_baseline/__main__.py"
+        launcher.parent.mkdir(parents=True, exist_ok=True)
+        launcher.write_text("VALUE = 1\n", encoding="utf-8")
+        _commit_all(repo)
+        launcher.write_text("VALUE = 2\n", encoding="utf-8")
+        identity = artifacts.checker_source_identity(repo)
+        self.assertTrue(identity["scoped_dirty"])
+        self.assertEqual(
+            identity["scoped_files"],
+            ["benchmark/nograph_baseline/__main__.py"],
+        )
+        self.assertEqual(
+            identity["patch_eligible_files"],
+            ["benchmark/nograph_baseline/__main__.py"],
+        )
+        self.assertEqual(identity["untracked_files"], [])
+        self.assertTrue(identity["patch_included"])
+        self.assertIn("VALUE = 2", identity["source_patch"])
+
+    # -- V-005: reports link declared execution IDs ------------------------
+    def test_check_reports_link_declared_execution_ids(self) -> None:
+        fixture = fx.build_fixture(self.root / "fixture", "r0", node_count=6)
+        declared = ("orig-alpha-001", "orig-beta-002")
+        for run_id in declared:
+            spec = fx.make_run_spec(
+                self.root / "runs",
+                "r0",
+                fixture["demand_path"],
+                fixture["graph_path"],
+                run_id,
+            )
+            runner.execute_run(spec)
+        alpha = self.root / "alpha"
+        beta = self.root / "beta"
+        (self.root / "runs" / declared[0]).rename(alpha)
+        (self.root / "runs" / declared[1]).rename(beta)
+
+        before = {str(alpha): _tree_hash(alpha), str(beta): _tree_hash(beta)}
+        compare_path = self.reports / "compare.json"
+        result = checks.command_compare(
+            run_a=alpha,
+            run_b=beta,
+            repo_root=REPO_ROOT,
+            command=["probe"],
+            report_path=compare_path,
+        )
+        self.assertEqual(result["status"], "ok")
+        inputs = result["envelope"]["inputs"]
+        self.assertEqual(inputs["run_a_id"], declared[0])
+        self.assertEqual(inputs["run_b_id"], declared[1])
+        self.assertEqual(inputs["run_a"], str(alpha))
+        self.assertEqual(inputs["run_b"], str(beta))
+        self.assertTrue(inputs["run_a_consumed_sha256"])
+        self.assertTrue(inputs["run_b_consumed_sha256"])
+
+        # Recompute through the same unrelated directory alias keeps the
+        # declared execution ID alongside the current location.
+        recompute_path = self.reports / "recompute.json"
+        recomputed = checks.command_recompute(
+            run_dir=alpha,
+            repo_root=REPO_ROOT,
+            command=["probe"],
+            report_path=recompute_path,
+        )
+        self.assertEqual(recomputed["status"], "ok")
+        self.assertEqual(
+            recomputed["envelope"]["inputs"]["input_run_id"], declared[0]
+        )
+        self.assertEqual(recomputed["envelope"]["inputs"]["input_run_dir"], str(alpha))
+        # The declared IDs must be discoverable in the published report file.
+        text = compare_path.read_text(encoding="utf-8")
+        self.assertIn(declared[0], text)
+        self.assertIn(declared[1], text)
+
+        log = self.root / "naive-baselines.log"
+        _write_v2_log(
+            log,
+            "r0",
+            fixture["keys"],
+            fixture["signal"],
+            fx.read_json(alpha / "metrics.json"),
+        )
+        _write_v2_source_manifest(
+            log,
+            "r0",
+            fx.read_json(alpha / "source-sha256.json")["sources"]["demand"]["sha256"],
+        )
+        align_path = self.reports / "align.json"
+        aligned = checks.command_align_v2(
+            run_dir=alpha,
+            reference=log,
+            repo_root=REPO_ROOT,
+            command=["probe"],
+            report_path=align_path,
+        )
+        self.assertEqual(aligned["status"], "ok")
+        self.assertEqual(aligned["envelope"]["inputs"]["input_run_id"], declared[0])
+        self.assertIn(declared[0], align_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(_tree_hash(alpha), before[str(alpha)])
+        self.assertEqual(_tree_hash(beta), before[str(beta)])
 
 
 if __name__ == "__main__":

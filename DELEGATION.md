@@ -40,11 +40,11 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 | 字段 | 值 |
 | --- | --- |
 | Status | `closed` |
-| 变更名 | `add-nograph-baseline-ridge` |
-| 研究任务 | P01-T004 |
-| 登记时间 | 2026-10-07T16:20+08:00 |
+| 变更名 | `reduce-baseline-evidence-overhead` |
+| 研究任务 | P01-T010 |
+| 登记时间 | 2026-10-08 |
 | 委派给 | OpenSpec e13 流程（propose → apply → verify-change → archive-change），由用户在其会话中执行；研究侧不代跑 |
-| 结束判据 | 变更目录已归档，且 `openspec/changes/archive/*-add-nograph-baseline-ridge/verification.md` 为 `Verdict: PASS`、Verification Basis 与当前仓库实现一致；该实现覆盖 T004 验收要素：不依赖 PyG/PyTorch 的可复用入口（`r0/count` 与 `region/count`）、训练期 2021-01..2023-03 标准化、仅用验证集原始单位 MSE 选 λ、预测/标签/节点身份/参数/配置保存、指标可独立重算、活跃度与有邻居/无邻居分组、同 seed 重复一致、耗时与峰值内存记录 |
-| 研究侧收尾 | 更新 [阶段计划](research/phases/P01/plan.md) 的 T004 状态与证据链接；按需更新 [state](research/state.md) 的恢复位置与下一动作（不镜像变更级进度）；若 apply/verify 产出正式 run，在 [归档索引](research/archives/index.md) 登记封存/提交/备份状态；判断结果是否影响 D005/D006 待决建议。不代跑工作流、不改代码、不移目录、不 commit/push |
-| 上次核对 | 2026-10-07T19:57+08:00：活跃变更目录已不存在；归档 `2026-10-07-add-nograph-baseline-ridge/verification.md` 为 PASS；在研究记录更新前按报告算法重算八类指纹全部一致，归档路径映射回原路径计算。实际实现与 run 满足登记的 T004 验收；核对方法与边界见 D008 |
-| 回收记录 | 2026-10-07：按 [D008](research/decisions.md#d008-t004-baseline-研究侧验收)完成研究侧验收，更新阶段计划 T004、state 与 archive index；登记 24 个 run 的执行/保存事实，D005/D006 保留待决，证据规模建议另记 D009。回收时未代跑工作流、改代码、移动目录或 commit/push；当时运行封存/提交待做、备份未核验。后续用户授权保存收尾，真实封存/提交/备份状态见归档索引，不在本指针另维护进度 |
+| 结束判据 | 活跃变更目录已不存在；`openspec/changes/archive/*-reduce-baseline-evidence-overhead/verification.md` 为 `Verdict: PASS`，Verification Basis 与当前实现一致。覆盖 D010：正式预测材料仍可独立重算、重复执行保留身份、开发输出可隔离、检查仅产生明确报告且不改输入、相关脏执行源码可恢复、落选候选默认只保留验证分数、Git 已覆盖来源可固定引用、schema v2 包索引保留排除声明且辅助工具不依赖 sidecar/全成员表、旧包及可读入口不改；不启动新科研实验或自动恢复演练 |
+| 研究侧收尾 | 依据归档独立报告作 P01-T010 研究接受决定，更新 [阶段计划](research/phases/P01/plan.md)、[state](research/state.md) 恢复点及 review 的软件完成说明；更新 [索引](research/archives/index.md) 对旧工具限制及当前检查入口的说明。按实际产物记录位置与已知保存事实，不镜像变更任务表，不补做实验/封存/commit/push/恢复核验；关闭本指针 |
+| 上次核对 | 2026-10-08：活跃变更目录已不存在；归档 `2026-10-08-reduce-baseline-evidence-overhead/verification.md` 为 PASS，V-001..V-005 均 verified-resolved。研究记录更新前按报告算法核对所有基准一致，规划按原路径标签计算、既有归档集合排除新归档；主规格为预期 delta 同步，方法与范围见 D011 |
+| 回收记录 | 2026-10-08：按 [D011](research/decisions.md#d011-t010-记录减负研究侧验收)接受 P01-T010，更新阶段计划、state、review、索引、执行指导与当前协议的实现验收链接，解除旧工具兼容限制说明。没有新增正式科研 run/封存包；软件和本轮记录仍未提交/push，既有包保存事实保留。不代跑工作流、不改代码、不重跑测试/实验/恢复核验；第二轮迁移仍为可选候选，P01 科研未完成项保留 |

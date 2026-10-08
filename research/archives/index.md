@@ -1,6 +1,6 @@
 # 实验与归档索引
 
-更新日期：2026-10-07。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
+更新日期：2026-10-08。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
 
 ## 已有运行
 
@@ -39,9 +39,13 @@ python3 research/archives/migrations/verify_20261006.py
 
 所属任务：P01-T004；协议 `P1-count-L6-H3-v3`。研究验收见 [D008](../decisions.md#d008-t004-baseline-研究侧验收)，独立实现核验见 [PASS 报告](../../openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/verification.md)。以 `-002` 的四个模型 run 和八个检查为本次验收依据；`-001` 保留为历史版本。
 
-以下 24 个 run 的共同保存状态：**sealed，已提交并 push 至 origin/xzs**。实现提交 `8273c07a84c879a8f7bdbb61f987f3c94e863e59`，证据与科研记录提交 `b72770873f11a66478c3556973393882be501bd8`；push 成功，并独立读取远端引用确认为证据提交。远端恢复未核验，用户明确取消后续恢复检查，不作为今天收尾的前置条件。每个包位于 `research/archives/<run-id>.tar.gz`，配套 `.tar.gz.sha256`；实际路径、包 SHA256、字节数和完整成员哈希见 [封存清单](p01-baseline-20261007-manifest.json)。本地展开产物保留；Git 收纳封存包及 summary/provenance/command/report 可读记录，其余展开文件由精确忽略规则排除。
+以下 24 个 run 的共同保存状态：**sealed，包与可读入口已提交并 push 至 origin/xzs**。实现提交 `8273c07a84c879a8f7bdbb61f987f3c94e863e59`，证据与科研记录提交 `b72770873f11a66478c3556973393882be501bd8`；当时 push 成功且独立读取远端引用一致。远端恢复未核验，用户取消检查，不作为待办。每个包位于 `research/archives/<run-id>.tar.gz`；位置、大小、成员数量、保存包的 Git commit 与排除项见 [包索引](p01-baseline-20261007-manifest.json)。
 
-### 模型运行
+2026-10-08 按 [D010](../decisions.md#d010-采用实验记录与保存减负政策) 整理：24 个包字节与上述提交一致，88 个 summary/provenance/command/report 可读入口原样保留；24 个包外 sidecar 删除，包外全成员哈希清单改为简洁索引，692 个一致的忽略展开副本移除。需要数组时从包展开到独立目录。新索引与本次整理记录尚未提交/push，不冒称本次工作已备份；既有包的保存事实不因此改变。过程见[整理记录](migrations/20261008-evidence-maintenance.md)。
+
+封存排除任意深度 `__pycache__/`、`.DS_Store`、`._*`；包内 artifact 哈希清单另排除自身和 `events.jsonl`，后两者仍在包中。排除声明是来源信息，随新索引保留。包在 Git 中以其保存提交定位内容，无需包外 SHA256 或全成员哈希表；导出到 Git 外交付时再提供包外 SHA256。
+
+### 当前实验依据与历史模型运行
 
 每个模型 run 含五项朴素基线及共享 Ridge，74 个文件，其中 72 个为清单成员。primary/repeat 均为 seed 0；它们是同条件重复，不是不同初始化样本。
 
@@ -52,9 +56,9 @@ python3 research/archives/migrations/verify_20261006.py
 | r0 / 002 | [p01-r0-sharedridge-002](../runs/p01-r0-sharedridge-002/summary.md) | [p01-r0-sharedridge-repeat-002](../runs/p01-r0-sharedridge-repeat-002/summary.md) | 两运行 success/complete，同条件预测最大绝对差 0 | 本次研究验收依据 |
 | region / 002 | [p01-region-sharedridge-002](../runs/p01-region-sharedridge-002/summary.md) | [p01-region-sharedridge-repeat-002](../runs/p01-region-sharedridge-repeat-002/summary.md) | 两运行 success/complete，同条件预测最大绝对差 0 | 本次研究验收依据 |
 
-### 关联分析检查
+### 关联开发与分析检查（旧格式）
 
-每行列出两个不同 run；链接是各自不可改写的输出报告。16 个状态文件均为 success/complete；`-002` 的四个重算、两个重复性检查及两个 v2 对齐均为 ok。原始输入 run 与精确命令见各检查目录的 `provenance.json`/`command.json`。
+每行列出两个旧格式 check run，属于关联检查，不是 16 次独立模型实验；链接是不可改写的输出报告。封存时 16 个状态文件均为 success/complete（现位于包内）；`-002` 的四个重算、两个重复性检查及两个 v2 对齐均为 ok。原始输入与命令见可读 `provenance.json`/`command.json`。新政策不再要求检查拥有完整 run。
 
 | 检查 | r0 Run ID / 报告 | region Run ID / 报告 | 证据角色 |
 | --- | --- | --- | --- |
@@ -73,20 +77,31 @@ python3 research/archives/migrations/verify_20261006.py
 
 - 全集 inventory SHA256：`db042f6104247130bca08595cf192b82e29254b4f32c4d5dc52cffc4fc64276a`。
 - 全集 content SHA256：`0dd5e80a29d0e9767eb7ed981f33b66932ffead3b14c45aadc494227dc945fb5`。
-- 算法：报告的排序相对路径清单与 `path + NUL + file_SHA256 + newline` 聚合规则；是目录内容身份。各 tar 包另有包外 SHA256，见封存清单。
+- 算法：报告的排序相对路径清单与 `path + NUL + file_SHA256 + newline` 聚合规则；是清理前完整展开目录的历史内容身份。原包外 SHA256/全成员表在保存提交的 Git 历史中，当前不重复维护。
 - 运行代码基准：`a0fdab4268e5e17b0c96453efd53f01a245f01cc` 加执行时保存的 diff、未跟踪源码快照及来源清单。两版身份分别以各自 run 为准；后续修复的 checker 与运行时快照有差异，已由独立报告说明，不回写旧 run。
 - 环境：本地 macOS arm64 CPU，Python 3.11.17、NumPy 1.26.4、pandas 2.2.3、PyArrow 17.0.0；线程设置与完整环境在各模型目录。sklearn 未安装，实际可选后端未验证。
-- 产物定位：模型目录包含 `predictions/`、`gold/`、`models/`、`candidates/`、节点/窗口身份、分组掩码、配置/协议/来源/命令、`metrics.json`、`node-errors.parquet` 与 `measurements.json`。单个目录成员核验依据为其 `artifacts-sha256.json`。
+- 产物定位：模型包内包含 `predictions/`、`gold/`、`models/`、`candidates/`、节点/窗口身份、分组掩码、配置/协议/来源/命令、`metrics.json`、`node-errors.parquet` 与 `measurements.json`。包内 `artifacts-sha256.json` 原样保留；当前展开目录仅有可读入口。
 - 封存核验：24 个包合计 41,446,332 bytes；排除缓存和系统元数据，所有成员为各 run 下的普通文件，拒绝绝对路径、父目录跳转、链接与重复成员。在新的临时目录解包后核对全部 780 文件 SHA256，并与核验报告的全集内容指纹一致；封存前后原目录身份一致。
-- 保存收尾按协议第 6.1 节与 [D009 当前产物保存决定](../decisions.md#d009-约束证据数量与-git-保存边界)执行。源码去重与 skill 长期改进仍待讨论；没有删改原始 run。
+- 2026-10-07 保存收尾按当时协议与 [D009](../decisions.md#d009-约束证据数量与-git-保存边界)执行，未删改原始 run。2026-10-08 后续整理按 D010 移除一致的展开副本，保留包与入口；历史报告仍描述其原核验时点，当前目录不再用于重算旧 formal_evidence 全集指纹。
 
-恢复完整证据时，在仓库根目录先校验包外 SHA256，再在空的临时目录解包核验。以下命令自动核验全部包并在新临时目录恢复 780 文件，不覆盖现有 run：
+需要完整模型证据时，按指定 Git 提交与包路径定位，只展开所需包到新的空目录，不覆盖已有 run。例如在仓库根目录，下面创建独立临时目录并展开一个模型包：
 
 ```bash
-python3 research/archives/seal_20261007_baseline.py verify
+P01_RESTORE_DIR=$(mktemp -d)
+tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 ```
 
-新 clone 的展开目录仅含可读记录。需要持久展开模型产物时，先用上述命令核验，在新建空目录执行 `tar -xzf /absolute/path/to/research/archives/<run-id>.tar.gz -C /new/empty/directory`；输出为 `<run-id>/`。按运行内配置/协议与来源身份重算，不直接覆盖仓库中已有 run。`command.json` 记录原机器的绝对路径，恢复后须映射到实际位置；这不是全新环境重训验证。
+输出为 `$P01_RESTORE_DIR/p01-r0-sharedridge-002/`，将此路径作为 checker 的输入。按包内配置/协议与来源身份重算，不直接覆盖已有 run。`command.json` 记录原机器的绝对路径，须映射到实际位置；这是按需展开说明，不是本轮实际恢复核验或全新环境重训验证。
+
+`seal_20261007_baseline.py verify` 已支持当前 schema v2：由索引的固定 Git commit/path 核对包内容身份，检查成员安全、数量与排除声明，再恢复到新的临时位置；不依赖 sidecar 或全成员哈希表。历史 schema v1 的 checksum 验证仍支持。`seal` 是旧 v1 封存功能，仍拒绝覆盖已有产物，不要在精简目录重新 seal。该工具只在明确请求核验时运行，本轮未执行；按需展开可使用上面的单包说明。历史完整元数据仍能从 `b727708...` 查阅。
+
+当前 `recompute`、`compare`、`align-v2` 对完整/已展开模型输入写单份 `--report PATH` JSON（返回 `report_path`），不生成新实验目录或改写输入。旧 `--run-id`/`--runs-root` 检查参数映射为单份报告路径。若原目录只有可读入口，先按实际需要在独立目录展开所需包；不将展开/重算安排成默认恢复检查。命令见[执行指导 §7](../phases/P01/execution-guide.md#7-当前可复用-baseline-入口)。
+
+## T010 软件变更保存事实（2026-10-08）
+
+`reduce-baseline-evidence-overhead` 已在[OpenSpec 目录归档](../../openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/verification.md)，独立报告 PASS；研究侧按 [D011](../decisions.md#d011-t010-记录减负研究侧验收)核对基准并接受。没有新增正式科研 run 或封存包；适用的 T004 历史科学证据保留，格式/软件行为由临时 fixture 与独立报告证明，不把 fixture 当新预测结论。
+
+本次实现、主规格同步和研究侧收尾仍为未提交工作区修改，尚未 push；既有 T004 包的提交/备份事实保持上述记录。本轮只读比对独立基准与更新研究文档，未重跑测试、实验、封存或恢复检查。
 
 ## 远端核验记录
 
@@ -99,10 +114,10 @@ python3 research/archives/seal_20261007_baseline.py verify
 
 ## 新记录的保存与恢复
 
-新 run 位于 `research/runs/<run-id>/`，新包及包外校验位于 `research/archives/`。按[协议第 6.1 节](../phases/P01/protocol.md#61-保存与归档)和 skill 保存来源、协议、配置、命令/脚本、输入/输出、摘要及必要参数。目录存在或未被忽略不等于入库。
+模型实验、改变条件的受控诊断和回测使用 `research/runs/<run-id>/`，按[协议 §6.1](../phases/P01/protocol.md#61-实验记录与产物保存)保留完整科学材料。检查使用关联报告，独立分析使用问题/过程/结果记录，维护使用文档与 Git 历史；临时开发产物在忽略的 `scratch/` 或系统临时目录。保存形式可为文件或必要的包，不默认要求封存。
 
-结束并确认没有写入进程后再封存；失败/中断也保留。解包核验用新的临时目录，恢复遵循运行内快照，避免拿当前协议替代旧快照。后来分析使用新 run 并关联旧记录。大型产物另行确定持久存储，不擅自删预测或上传。
+已提交来源以固定 commit 与相对路径定位，相关未提交内容保留可恢复材料。需要封存时确认没有写入进程、拒绝覆盖并声明排除项；Git 内包以提交定位，Git 外包保留包外 SHA256。恢复遵循执行时内容，不用当前协议替代旧快照；追加分析放外部报告并链接旧实验，仅新实验创建新 run。大型产物另定持久位置，不擅自上传。
 
-完成入库/备份后更新本页的真实位置、身份、核验时间和方法；未核验写明未核验。本页提供外部状态，不修改封存摘要。
+按已知事实更新本页的位置、身份与提交/备份状态；未核验写未核验，不自动成为检查待办。Git 与恢复核验遵循具体授权，本页不改封存摘要或独立报告，也不把存储动作作为科学验收条件。
 
 目录历史和迁移验收见[迁移报告](migrations/20261006-standardize-research.md)。

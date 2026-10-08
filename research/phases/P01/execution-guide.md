@@ -2,9 +2,9 @@
 
 编写日期：2026-10-06。
 
-这份指导落实[实验协议](protocol.md)。研究方向见[路线图](../../roadmap.md)，当前任务见[阶段计划](plan.md)，下一动作见[当前状态](../../state.md)。首轮第 3 至 5 节诊断已完成，开发从第 7 节接续；重跑诊断使用新 run ID。
+这份指导落实[实验协议](protocol.md)。研究方向见[路线图](../../roadmap.md)，当前任务见[阶段计划](plan.md)，下一动作见[当前状态](../../state.md)。首轮第 3 至 5 节诊断及 T004 baseline 已完成；现有入口见第 7 节。第 3 至 5 节保留诊断方法，使用新报告目录，不覆盖旧证据。
 
-协议以 `protocol.md` 第 3 至 6 节的 `P1-count-L6-H3-v3` 为唯一来源。v3 仅改变记录布局，科学计算与 v2 一致。下面的命令没有在本次迁移中执行。
+协议以 `protocol.md` 第 3 至 6 节的 `P1-count-L6-H3-v3` 为唯一科学来源；保存政策为 `P01-records-v2`。科学计算与 v2 一致。本页的命令是操作示例，不代表本轮执行了实验。
 
 ## 1. 这一轮只要做成什么
 
@@ -16,7 +16,7 @@
 
 前两项可以在 Mac 上用 CPU 完成，不需要 PyG、图预处理 JSON 或 GPU。第三项只读现有张量，不训练模型。先不要补新 seed、改 GCN 层数或加入门控。
 
-这轮得到的是诊断日志。共享 Ridge 的可复用入口、完整预测保存和后续模型改造仍是待实现工作。
+首轮得到的是诊断日志；共享 Ridge 的可复用入口和完整预测保存随后已由 T004 验收。新的模型改造和实验仍按阶段计划及具体授权执行。
 
 ## 2. 检查仓库和建立轻量环境
 
@@ -50,32 +50,26 @@ python -c 'import sys, numpy, pandas, pyarrow; from pathlib import Path; assert 
 
 这些是新诊断环境的建议版本，不是旧 GPU 实验的环境复现。安装始终使用激活环境的 `python -m pip`，`--no-cache-dir` 避免本轮依赖用户 pip 缓存目录权限。暂不安装仓库整个 `requirements.txt`，其中的 CUDA wheel、DGL 和图扩展不是本轮基线所需。
 
-共享 Ridge 实现阶段再加入 sklearn；归档张量核对需要 PyTorch，见第 5 节。若下载失败先处理网络或软件源，不能把安装失败解释为模型不能在 Mac 上运行。
+默认共享 Ridge 使用 NumPy，无需 sklearn；可选 sklearn 后端按需要安装。归档张量核对需要 PyTorch，见第 5 节。若下载失败先处理网络或软件源，不能把安装失败解释为模型不能在 Mac 上运行。
 
-### 2.3 创建独立诊断目录
+### 2.3 创建独立分析报告目录
 
-以下块启用遇错停止和管道错误检测。目录已经存在时会停止；重新开始请更换 `JOB_SDF_PHASE1_RUN_ID`，不要覆盖此前记录。
+以下块启用遇错停止和管道错误检测。目录已经存在时会停止；更换分析 ID，不覆盖此前记录。第 3 至 5 节只做已有数据与结果的分析，不创建完整实验 run。临时探索可将路径换为忽略的 `scratch/`；支持科研判断的报告保存到下面的持久分析位置。
 
 ```bash
 set -e
 set -o pipefail
-export JOB_SDF_PHASE1_RUN_ID=phase1-20261006-v3-01
-export JOB_SDF_PHASE1_OUTPUT="research/runs/${JOB_SDF_PHASE1_RUN_ID}"
-mkdir -p research/runs
+export JOB_SDF_PHASE1_ANALYSIS_ID=p01-diagnostic-YYYYMMDD-01
+export JOB_SDF_PHASE1_OUTPUT="research/analyses/${JOB_SDF_PHASE1_ANALYSIS_ID}"
+mkdir -p research/analyses
 mkdir "$JOB_SDF_PHASE1_OUTPUT"
-cp research/phases/P01/protocol.md "$JOB_SDF_PHASE1_OUTPUT/protocol.md"
-cp research/phases/P01/execution-guide.md "$JOB_SDF_PHASE1_OUTPUT/execution-guide.md"
 git rev-parse HEAD > "$JOB_SDF_PHASE1_OUTPUT/git-commit.txt"
-git status --short > "$JOB_SDF_PHASE1_OUTPUT/git-status.txt"
-git diff HEAD -- research > "$JOB_SDF_PHASE1_OUTPUT/planning-diff.patch"
-python -m pip freeze > "$JOB_SDF_PHASE1_OUTPUT/environment.txt"
 shasum -a 256 dataset/demand/r0.parquet dataset/demand/region.parquet dataset/graph/r0.parquet dataset/graph/region.parquet > "$JOB_SDF_PHASE1_OUTPUT/source-sha256.txt"
-shasum -a 256 "$JOB_SDF_PHASE1_OUTPUT/protocol.md" "$JOB_SDF_PHASE1_OUTPUT/execution-guide.md" > "$JOB_SDF_PHASE1_OUTPUT/planning-sha256.txt"
 ```
 
 重新打开终端后，激活环境、返回仓库根目录，并重新设置上述两个环境变量指向已经创建的目录。无需再次执行 `mkdir`。
 
-旧图 CLI 的 `benchmark/graph_method/results/` 被 Git 忽略，新运行使用 `research/runs/`。正式入口还需保存 provenance、实际命令/脚本和输入/输出身份；本页一次性诊断不代替该入口。未被忽略不等于已入库或备份。
+报告中注明问题、输入位置/身份、科学协议与保存政策、执行命令/步骤、使用本指导的固定 commit 和路径。指导或分析脚本有影响计算的未提交修改时，保存该部分内容或 patch；无需复制全部规划和环境。新模型实验使用 `research/runs/`；本页分析不替代正式预测材料。未被忽略不等于已入库或备份。
 
 ## 3. 先算五个朴素基线并审计节点构成
 
@@ -298,7 +292,7 @@ PY
 ```bash
 python -m pip install --no-cache-dir torch==2.3.1
 python -c 'import torch; print(torch.__version__)'
-python -m pip freeze > "$JOB_SDF_PHASE1_OUTPUT/environment-after-torch.txt"
+python -c 'import torch; print(torch.__version__)'
 ```
 
 这里只读取张量，不需要 `torch_geometric_temporal`，也不试图用这个环境重训旧 GPU 实验。第 3、4 节不依赖这一步，安装未完成时可以先完成它们。
@@ -388,19 +382,30 @@ PY
 
 即使修复版弱于简单方法，科研也不需要停止；需要调整的是证据与方法顺序。模型修复的正确性、预测能力和新模块贡献是三个不同问题。
 
-## 7. 再下一步：开发一个可复用的轻量 baseline 入口
+## 7. 当前可复用 baseline 入口
 
-上面的诊断通过后，再提出第一项实现工作。建议范围仅包含：
+`benchmark.nograph_baseline` 已实现不依赖 PyG/PyTorch 的规范读取、五项朴素基线及共享 Ridge，T004 已研究侧验收。默认路径只需 NumPy、pandas、PyArrow；科学定义见[协议](protocol.md)。准确命令和可选参数见 [README](../../../README.md#45-graph-free-cpu-baseline-benchmarknograph_baseline)。
 
-- 不依赖 PyG 的规范数据读取、节点身份和时间划分。
-- 五种朴素基线及验证选定的参照，与[协议定义的共享 Ridge](protocol.md#52-共享-ridge主要的稳定学习参照)。
-- 验证选 lambda、训练期标准化、原始单位评估。
-- 独立结果目录、预测与标签保存、协议快照与数据校验和、预定活跃度组及等权组指标、耗时和归档。
-- 关键协议检查：目标月不跨划分、标签对齐、标准化只拟合训练期、指标可重算、重复运行结果一致。
+```bash
+python -m benchmark.nograph_baseline --help
+python -m benchmark.nograph_baseline run --data-name r0 --mode count --seed 0 --run-id p01-r0-NEW-ID
+```
 
-当前仓库没有这个入口。不要执行 `--model_name Ridge` 或 `--learning_rate ...`，当前图 CLI 不支持它们。后续可以创建一个范围明确的 OpenSpec change，再实现和验证；本次只创建规划文档。
+模型调用必须使用新的 run ID。此命令会执行模型，仅在相应实验已授权时运行。两组现有正式结果见[索引](../../archives/index.md#t004-baseline-运行2026-10-07)；数组已清理时，在独立空目录从包展开，不能对仅有可读入口的 run 目录直接重算。
 
-正式入口完成后，把 `r2/count` 加入同一流程。随后再做训练期内部回测，检查主 baseline 对不同时间起点是否稳定；不把多个重叠窗口当成独立实验。
+记录减负已由 [T010 独立 PASS](../../../openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/verification.md)及 [D011 研究侧验收](../../decisions.md#d011-t010-记录减负研究侧验收)完成。模型默认 `--purpose formal`，临时开发显式使用 `--purpose development`（输出在忽略的 `scratch/nograph-baseline/`）；默认只保存被选模型与完整候选验证分数，研究需要完整候选数组时使用 `--retain-candidates`。已提交源码/协议用固定 commit 与路径定位，相关脏内容保存可恢复材料。
+
+`recompute`、`compare`、`align-v2` 使用 `--report PATH` 生成一份不覆盖已有文件的 JSON 报告，返回 `report_path`；模型仍返回 `run_dir`。旧检查 `--run-id ID`/`--runs-root ROOT` 是单份 `<ROOT>/<ID>.json` 报告的兼容别名，默认报告根为 `research/reports/nograph-baseline/`，不再产生完整 check run。不能同时给 `--report` 和旧 run ID，报告路径不能在输入 run 内。以按需展开的旧包为输入也支持：
+
+```bash
+python -m benchmark.nograph_baseline recompute \
+    --run-dir "$P01_RESTORE_DIR/p01-r0-sharedridge-002" \
+    --report research/reports/nograph-baseline/p01-r0-recompute-NEW-ID.json
+```
+
+`P01_RESTORE_DIR` 的按需展开方法见[索引](../../archives/index.md#内容身份与恢复限制)。仅有可读入口的原目录不含数组，不能直接重算；报告保留输入执行身份、来源、命令、容差和结果/失败信息，不改输入、不重训。
+
+科研接续按计划准备 `r2/count` 扩展，再做训练期内部回测；不把多个重叠窗口当作独立实验。旧图 CLI 不支持 `--model_name Ridge` 或 `--learning_rate ...`。
 
 ## 8. 什么时候恢复 GPU 实验
 
@@ -418,38 +423,12 @@ export EVOLVEGCN_ORIGINAL_ROOT="$(pwd)/experiments_archive/1st_try_in_phase_fix_
 
 ## 9. 第一轮结束时留下什么
 
-本轮独立目录应包含：协议与操作指导快照、`git-commit.txt`、`git-status.txt`、`planning-diff.patch`、`environment.txt`、`source-sha256.txt`、`planning-sha256.txt`、`naive-baselines.log`、`graph-audit.log`。执行第 5 节后另外有 `environment-after-torch.txt` 和 `archive-comparison.log`。
+第 3 至 5 节分析保留 `summary.md`、实际执行的日志和必要输入身份。摘要写明问题、脚本/指导来源、命令与步骤、成功/失败/中断状态、关键结果、容差和限制；使用可定位的已提交脚本时不另存全套源码/协议/环境。独立科学分析保留计算过程与表/图，普通指标检查保留简洁报告。
 
-先在运行目录写入 `summary.md`，记录协议版本、成功/失败/中断状态、完成步骤及未完成项。失败日志同样保留；成功运行需明确技能/上下文与全零率、验证选定的两项参照、图覆盖及归档比较是否通过。
+实际模型实验、改变条件的受控诊断和时间回测按[协议 §6.1](protocol.md#61-实验记录与产物保存)保留完整预测、标签、身份、分组、被选参数与选模记录。不同执行条件单独命名，原始 run 和封存内容不覆盖。
 
-小规模第一阶段使用全量包和校验文件入库，打包前停止往运行目录写入。下面会拒绝覆盖同名归档：
-
-```bash
-export JOB_SDF_PHASE1_ARCHIVE="research/archives/${JOB_SDF_PHASE1_RUN_ID}.tar.gz"
-mkdir -p research/archives
-python - <<'PY'
-import os
-from pathlib import Path
-
-output = Path(os.environ["JOB_SDF_PHASE1_OUTPUT"])
-archive = Path(os.environ["JOB_SDF_PHASE1_ARCHIVE"])
-assert output.is_dir() and (output / "summary.md").is_file()
-assert output == Path("research/runs") / os.environ["JOB_SDF_PHASE1_RUN_ID"]
-assert not archive.exists() and not Path(str(archive) + ".sha256").exists()
-PY
-shasum -a 256 -c "$JOB_SDF_PHASE1_OUTPUT/source-sha256.txt"
-shasum -a 256 -c "$JOB_SDF_PHASE1_OUTPUT/planning-sha256.txt"
-COPYFILE_DISABLE=1 tar -czf "$JOB_SDF_PHASE1_ARCHIVE" -C research/runs "$JOB_SDF_PHASE1_RUN_ID"
-tar -tzf "$JOB_SDF_PHASE1_ARCHIVE"
-shasum -a 256 "$JOB_SDF_PHASE1_ARCHIVE" > "${JOB_SDF_PHASE1_ARCHIVE}.sha256"
-shasum -a 256 -c "${JOB_SDF_PHASE1_ARCHIVE}.sha256"
-git add -- "$JOB_SDF_PHASE1_ARCHIVE" "${JOB_SDF_PHASE1_ARCHIVE}.sha256"
-git diff --cached --stat -- "$JOB_SDF_PHASE1_ARCHIVE" "${JOB_SDF_PHASE1_ARCHIVE}.sha256"
-git commit -m "Archive ${JOB_SDF_PHASE1_RUN_ID}" -- "$JOB_SDF_PHASE1_ARCHIVE" "${JOB_SDF_PHASE1_ARCHIVE}.sha256"
-```
-
-这些是后续操作，本次迁移不运行它们。封存前确认没有写入进程，commit/push 按当时授权执行。包的入库 commit、备份位置和核验时间写在[外部索引](../../archives/index.md)，不为此改写摘要。解包核验使用新的临时目录，避免覆盖现有运行。取回后使用运行内快照；正式实验还需保存预测、标签、参数和 provenance。
+没有默认的“全量包 → 哈希清单 → commit/push → 恢复演练”流水线。需要打包时先确认没有写入进程并使用新路径，声明排除项；Git 内包由提交定位内容，Git 外包保存包外 SHA256。保存位置和已知提交/备份事实记在[外部索引](../../archives/index.md)，不回写包内摘要。Git、备份与恢复核验按具体授权执行。
 
 结束时记录三个判断：验证选定的便宜方法能提供怎样的参照；发布图能支持怎样的权重解释；旧 EvolveGCN-H 结果是否与当前任务标签一致。按协议第 6 节解释结果，不按测试排名更换参照；更新阶段计划与 state。
 
-完成这些后，项目就有了进入共享 Ridge 实现和图收益验证的具体起点。此时仍不需要扩大到所有模型或所有粒度。
+T004 已完成，后续实验范围以阶段计划和具体授权为准。

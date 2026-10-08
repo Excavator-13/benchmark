@@ -4,6 +4,10 @@ The default BLAS thread counts are pinned to 1 *before* NumPy is imported so
 that process-lifetime peak RSS and stage timings are attributable to one
 dataset run and can be repeated under identical conditions.  The public
 commands are ``run``, ``recompute``, ``compare`` and ``align-v2``.
+
+Model executions declare an explicit ``formal``/``development`` purpose.
+Saved-result checks write one exclusive JSON report, chosen with ``--report``
+or the documented legacy ``--run-id``/``--runs-root`` aliases.
 """
 
 from __future__ import annotations
@@ -27,7 +31,7 @@ import subprocess  # noqa: E402
 import sys  # noqa: E402
 import tempfile  # noqa: E402
 from pathlib import Path  # noqa: E402
-from typing import Any, Dict, List, Optional, Sequence  # noqa: E402
+from typing import Any, Dict, List, Mapping, Optional, Sequence  # noqa: E402
 
 from . import protocol  # noqa: E402
 
@@ -45,10 +49,11 @@ def _repo_root(args: argparse.Namespace) -> Path:
     return Path(args.repo_root).resolve() if args.repo_root else protocol.REPO_ROOT
 
 
-def _runs_root(args: argparse.Namespace, repo_root: Path) -> Path:
-    if args.runs_root:
-        return Path(args.runs_root).resolve()
-    return repo_root / "research" / "runs"
+def _reports_root(args: argparse.Namespace, repo_root: Path) -> Path:
+    """Default root for legacy ``--run-id`` check aliases."""
+    if getattr(args, "runs_root", None):
+        return _resolve(args.runs_root, Path.cwd())
+    return repo_root / "research" / "reports" / "nograph-baseline"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -69,7 +74,7 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     run = subparsers.add_parser(
-        "run", help="execute one formal CPU run for a dataset"
+        "run", help="execute one CPU model run for a dataset"
     )
     run.add_argument(
         "--data-name",
@@ -85,6 +90,25 @@ def build_parser() -> argparse.ArgumentParser:
     )
     run.add_argument("--seed", type=int, default=0, help="deterministic seed")
     run.add_argument("--run-id", required=True, help="fresh run directory name")
+    run.add_argument(
+        "--purpose",
+        default="formal",
+        choices=("formal", "development"),
+        help=(
+            "execution purpose: formal writes research/runs (default); "
+            "development writes scratch/nograph-baseline and is not "
+            "scientific evidence"
+        ),
+    )
+    run.add_argument(
+        "--retain-candidates",
+        action="store_true",
+        help=(
+            "also persist every Ridge candidate's parameters and validation "
+            "predictions; by default only the selected model is persisted and "
+            "the candidate score table is kept in selection.json"
+        ),
+    )
     run.add_argument(
         "--ridge-backend",
         default="numpy",
@@ -110,8 +134,7 @@ def build_parser() -> argparse.ArgumentParser:
         "recompute", help="recompute saved metrics from a completed run only"
     )
     recompute.add_argument("--run-dir", required=True)
-    recompute.add_argument("--run-id", required=True)
-    recompute.add_argument("--runs-root", default=None, help=argparse.SUPPRESS)
+    _add_report_output_options(recompute)
     recompute.set_defaults(handler=_handle_recompute)
 
     compare = subparsers.add_parser(
@@ -119,8 +142,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     compare.add_argument("--run-a", required=True)
     compare.add_argument("--run-b", required=True)
-    compare.add_argument("--run-id", required=True)
-    compare.add_argument("--runs-root", default=None, help=argparse.SUPPRESS)
+    _add_report_output_options(compare)
     compare.set_defaults(handler=_handle_compare)
 
     align = subparsers.add_parser(
@@ -128,11 +150,36 @@ def build_parser() -> argparse.ArgumentParser:
     )
     align.add_argument("--run-dir", required=True)
     align.add_argument("--reference", required=True)
-    align.add_argument("--run-id", required=True)
-    align.add_argument("--runs-root", default=None, help=argparse.SUPPRESS)
+    _add_report_output_options(align)
     align.set_defaults(handler=_handle_align_v2)
 
     return parser
+
+
+def _add_report_output_options(parser: argparse.ArgumentParser) -> None:
+    """Add the exclusive single-report output choice shared by all checks."""
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
+        "--report",
+        default=None,
+        help="explicit JSON report path (created exclusively; never overwritten)",
+    )
+    group.add_argument(
+        "--run-id",
+        default=None,
+        help=(
+            "legacy alias producing one <runs-root>/<run-id>.json report "
+            "(default root: research/reports/nograph-baseline/)"
+        ),
+    )
+    parser.add_argument(
+        "--runs-root",
+        default=None,
+        help=(
+            "legacy report root override used with --run-id (default: "
+            "research/reports/nograph-baseline/)"
+        ),
+    )
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -160,10 +207,13 @@ def _canonical_command(args: argparse.Namespace) -> List[str]:
 
 
 def _handle_run(args: argparse.Namespace) -> int:
-    from .artifacts import validate_run_id
+    from .artifacts import default_runs_root, validate_run_id
 
     repo_root = _repo_root(args)
-    runs_root = _runs_root(args, repo_root)
+    if args.runs_root:
+        runs_root = _resolve(args.runs_root, Path.cwd())
+    else:
+        runs_root = default_runs_root(repo_root, args.purpose)
     validate_run_id(args.run_id)
     run_type = "run"
     launcher_cwd = Path.cwd()
@@ -172,6 +222,8 @@ def _handle_run(args: argparse.Namespace) -> int:
         "run_id": args.run_id,
         "mode": args.mode,
         "seed": int(args.seed),
+        "purpose": args.purpose,
+        "retain_candidates": bool(args.retain_candidates),
         "ridge_backend": args.ridge_backend,
         "clip_nonnegative": bool(args.clip_nonnegative),
         "demand_path": _resolve(args.demand_path, launcher_cwd).as_posix()
@@ -259,51 +311,63 @@ def _launch_worker(
     return returncode
 
 
+def _check_output(
+    args: argparse.Namespace, repo_root: Path
+) -> Dict[str, Any]:
+    """Resolve the exclusive report output choice for one check command."""
+    report_path = _resolve(args.report, Path.cwd()) if args.report else None
+    runs_root = _reports_root(args, repo_root) if args.run_id else None
+    return {"report_path": report_path, "run_id": args.run_id, "runs_root": runs_root}
+
+
+def _print_check_result(result: Mapping[str, Any]) -> int:
+    print(
+        json.dumps(
+            {"report_path": result["report_path"], "status": result["status"]}
+        )
+    )
+    return 0 if result["status"] == "ok" else 1
+
+
 def _handle_recompute(args: argparse.Namespace) -> int:
     from .checks import command_recompute
 
     repo_root = _repo_root(args)
-    runs_root = _runs_root(args, repo_root)
+    output = _check_output(args, repo_root)
     result = command_recompute(
         run_dir=_resolve(args.run_dir, Path.cwd()),
-        run_id=args.run_id,
-        runs_root=runs_root,
         repo_root=repo_root,
         command=_canonical_command(args),
+        **output,
     )
-    print(json.dumps({"run_dir": result["run_dir"], "status": result["status"]}))
-    return 0 if result["status"] == "ok" else 1
+    return _print_check_result(result)
 
 
 def _handle_compare(args: argparse.Namespace) -> int:
     from .checks import command_compare
 
     repo_root = _repo_root(args)
-    runs_root = _runs_root(args, repo_root)
+    output = _check_output(args, repo_root)
     result = command_compare(
         run_a=_resolve(args.run_a, Path.cwd()),
         run_b=_resolve(args.run_b, Path.cwd()),
-        run_id=args.run_id,
-        runs_root=runs_root,
         repo_root=repo_root,
         command=_canonical_command(args),
+        **output,
     )
-    print(json.dumps({"run_dir": result["run_dir"], "status": result["status"]}))
-    return 0 if result["status"] == "ok" else 1
+    return _print_check_result(result)
 
 
 def _handle_align_v2(args: argparse.Namespace) -> int:
     from .checks import command_align_v2
 
     repo_root = _repo_root(args)
-    runs_root = _runs_root(args, repo_root)
+    output = _check_output(args, repo_root)
     result = command_align_v2(
         run_dir=_resolve(args.run_dir, Path.cwd()),
         reference=_resolve(args.reference, Path.cwd()),
-        run_id=args.run_id,
-        runs_root=runs_root,
         repo_root=repo_root,
         command=_canonical_command(args),
+        **output,
     )
-    print(json.dumps({"run_dir": result["run_dir"], "status": result["status"]}))
-    return 0 if result["status"] == "ok" else 1
+    return _print_check_result(result)

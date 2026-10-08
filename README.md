@@ -191,43 +191,99 @@ conda activate job-sdf-baseline
 python -m pip install --no-cache-dir -r benchmark/nograph_baseline/requirements.txt
 ```
 
-Commands (run from the repository root; every run writes a fresh directory under
-`research/runs/<run_id>/` and refuses to overwrite an existing run ID):
+Commands (run from the repository root; every model run writes a fresh directory
+and refuses to overwrite an existing run ID):
 
 ```bash
 # one formal run per dataset, CPU, seed 0, NumPy backend
 python -m benchmark.nograph_baseline run --data-name r0 --mode count --seed 0 \
-    --run-id p01-r0-sharedridge-001
+    --run-id p01-r0-sharedridge-001 --purpose formal
 python -m benchmark.nograph_baseline run --data-name region --mode count --seed 0 \
-    --run-id p01-region-sharedridge-001
+    --run-id p01-region-sharedridge-001 --purpose formal
 
 # an independent same-seed repetition in a fresh directory
 python -m benchmark.nograph_baseline run --data-name r0 --mode count --seed 0 \
-    --run-id p01-r0-sharedridge-repeat-001
+    --run-id p01-r0-sharedridge-repeat-001 --purpose formal
+
+# a disposable development invocation (ignored scratch/nograph-baseline/, never
+# inside research/runs/); add --retain-candidates to keep losing Ridge arrays
+python -m benchmark.nograph_baseline run --data-name r0 --mode count --seed 0 \
+    --run-id probe-r0 --purpose development --retain-candidates
 
 # recompute every metric from saved run artifacts only (no source data, no refit)
 python -m benchmark.nograph_baseline recompute \
-    --run-dir research/runs/p01-r0-sharedridge-001 --run-id p01-r0-recompute-001
+    --run-dir research/runs/p01-r0-sharedridge-001 \
+    --report research/reports/nograph-baseline/p01-r0-recompute-001.json
 
 # compare two same-seed runs under the CPU relative tolerance of 1e-6
 python -m benchmark.nograph_baseline compare \
     --run-a research/runs/p01-r0-sharedridge-001 \
     --run-b research/runs/p01-r0-sharedridge-repeat-001 \
-    --run-id p01-r0-repeat-check-001
+    --report research/reports/nograph-baseline/p01-r0-repeat-check-001.json
 
 # align naive results with the sealed v2 diagnostic (read-only reference)
 python -m benchmark.nograph_baseline align-v2 \
     --run-dir research/runs/p01-r0-sharedridge-001 \
     --reference research/runs/phase1-20261006-v2-01/naive-baselines.log \
-    --run-id p01-r0-alignment-001
+    --report research/reports/nograph-baseline/p01-r0-alignment-001.json
 ```
 
 `run` always executes all five naive methods and the shared Ridge model. Optional
-flags are `--ridge-backend {numpy,sklearn}` and `--clip-nonnegative` (which adds a
-separately labeled `SharedRidgeNonnegative` report that never influences selection).
-Outputs under `research/runs/` are **unsealed and not backed up**: a successful run
-records reproducible evidence only and does not imply scientific acceptance,
-packaging, Git inclusion or backup completion. Archive those steps separately.
+flags are `--purpose {formal,development}`, `--ridge-backend {numpy,sklearn}`,
+`--clip-nonnegative` (which adds a separately labeled `SharedRidgeNonnegative`
+report that never influences selection) and `--retain-candidates` (which also
+persists every losing Ridge candidate's parameters and validation predictions;
+by default only the selected model is persisted and `selection.json` still keeps
+the complete scalar candidate score table).
+
+**Formal vs development.** `--purpose formal` (the default) writes
+`research/runs/<run_id>/`; `--purpose development` writes the ignored
+`scratch/nograph-baseline/<run_id>/` and labels the run as development rather
+than scientific acceptance evidence. A development invocation is rejected
+before any directory is created if its output root resolves inside
+`research/runs/`, including through a symlink alias. Purpose never changes
+fitting, reference selection or metric definitions.
+
+**Provenance.** Committed runtime source and the protocol are located by fixed
+commit and repository-relative path (`git-commit.txt`, `code-source.json`)
+instead of copied snapshots; scoped staged/unstaged execution changes are saved
+as `git-diff.patch` and necessary untracked runtime/protocol content under
+`code-untracked/`. Unrelated research records, tests and caches are excluded,
+and an unavailable Git identity is recorded explicitly with a content fallback.
+A clean run records commit/path/SHA256 references without copying source.
+
+**Check reports.** `recompute`, `compare` and `align-v2` each write exactly one
+exclusive JSON report at the requested `--report` path. The documented legacy
+`--run-id ID`/`--runs-root ROOT` flags remain supported as aliases and resolve
+to a single `<ROOT>/<ID>.json` report (default root
+`research/reports/nograph-baseline/`); supplying both choices fails before
+writing. Reports embed the command, checker source identity, consumed-input
+identities, documented tolerances, status and recomputed metrics. A report is
+never overwritten, checks never read source demand/graph data or fit a model,
+and input run directories are left byte-for-byte unchanged. A missing or
+invalid saved input still produces a failure report and a nonzero exit; an
+invalid output destination produces no output.
+
+Outputs under `research/runs/` are **unsealed and not backed up**: a successful
+run records reproducible evidence only and does not imply scientific
+acceptance, packaging, Git inclusion or backup completion. Model and check
+commands never invoke sealing, Git, network or recovery actions; those
+maintenance steps are separately requested.
+
+The T004 archive helper is used only as an explicitly requested maintenance
+action:
+
+```bash
+# verify the sealed T004 packages against the Git commit recorded in the index
+python research/archives/seal_20261007_baseline.py verify
+```
+
+It accepts the schema-v2 index (Git commit/path identity plus exclusion
+declarations, no sidecars or full member hash tables) and still verifies the
+historical schema-v1 index with its checksums. It never overwrites a sealed
+package and never restores into `research/runs/`. A package exported outside
+Git must be delivered with its own external SHA256; no export framework is
+provided.
 
 Automated tests need no GPU and no repository graph data:
 

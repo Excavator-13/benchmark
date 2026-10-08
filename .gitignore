@@ -14,8 +14,11 @@ __pycache__/
 */*/*/__pycache__/
 */*.pdf
 
+# Disposable fixtures and development probes; curated experiments use research/runs.
+/scratch/
+
 # Complete T004 evidence is sealed in research/archives/<run-id>.tar.gz.
-# Keep readable handoff records; retain expanded artifacts locally.
+# Keep readable handoff records; restore expanded artifacts separately when needed.
 /research/runs/p01-r0-sharedridge-00[12]/**
 /research/runs/p01-r0-sharedridge-repeat-00[12]/**
 /research/runs/p01-r0-recompute-primary-00[12]/**

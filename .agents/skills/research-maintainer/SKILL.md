@@ -1,6 +1,6 @@
 ---
 name: research-maintainer
-description: "Maintain a research project's roadmap, phase plans, current work, decisions, reproducible evidence, and archives across agent sessions. Use to initialize or normalize research records, resume partial work, capture new findings, or prepare handoffs and archival records. Does not authorize experiments, repository migration, commits, or pushes beyond the user's scope."
+description: "Maintain a research project's roadmap, phase plans, current work, decisions, and reproducible experiment provenance across agent sessions. Use to initialize or normalize research records, resume partial work, capture new findings, or prepare handoffs. Records known storage, commit, and backup state as facts; sealing, backup, and recovery procedures run only on explicit request. Does not authorize experiments, repository migration, commits, or pushes beyond the user's scope."
 ---
 
 # Research Maintainer
@@ -13,7 +13,7 @@ description: "Maintain a research project's roadmap, phase plans, current work, 
 
 - 初始化、规范化或新增记录：读 [records.md](references/records.md)，使用其目录、字段和模板。
 - 接手、部分完成、中断、新建议或阶段变更：读 [transitions.md](references/transitions.md)。
-- 封存、核验、提交、推送或恢复：读 [archive-and-git.md](references/archive-and-git.md)。
+- 用户明确要求封存、提交、推送或恢复核验时：读 [archive-and-git.md](references/archive-and-git.md)；未要求时不读、不执行。
 
 仅阅读当前动作需要的参考文件；不要每轮重建全部目录。
 
@@ -23,10 +23,29 @@ description: "Maintain a research project's roadmap, phase plans, current work, 
 2. **恢复依据来自文件和证据。** 聊天内容可补充上下文，重要结果、决定和交接位置需落盘。摘要中的推断不得升级为已验证事实。
 3. **按子任务维护进度。** 一轮运行成功不等于任务完成，一个任务完成不等于阶段完成。依照各自验收条件分别判断。
 4. **新建议有状态。** 发现先登记证据和候选建议；接受后才更新受影响的计划。普通任务内的执行细节可按已有授权决定，不把每项建议都变成审批流程。
-5. **运行、封存、提交和备份分别记录。** 成功运行可能尚未封存；已提交可能尚未备份。各状态需要自己的核验依据。
+5. **运行、封存、提交和备份分别陈述。** 成功运行可能尚未封存；已提交可能尚未备份。这是陈述纪律：不得用其中一个冒充另一个。它不要求本轮为每一项补做核验——核验按用户请求进行，没有核验依据时如实写“未核验”。
 6. **运行来源是历史身份。** 运行代码基准 commit 加实际差异/脚本身份用于复现，不要求等于当前 HEAD。封存包不包含自己的 SHA256 或入库 commit；由包外清单或 Git 历史记录。
 7. **封存证据保持不变。** 后续分析、解释修订和更改协议使用新记录，通过链接关联旧证据。可修改的是当前计划、状态和外部索引。
 8. **沿用授权边界。** 维护用户已授权工作的记录是常规收尾，不反复询问已明确的权限。使用本 skill 本身不授权租机、启动实验、迁移文件、commit、push 或其他外部写入；根据本次请求和已有授权判断。
+
+## 按请求停止
+
+记录维护容易扩张成无限工作：每读一条规则都能找到“还可以再核验一次”的下一步。每个请求都有明确的完成点；到达后结束本轮，不追加用户没有要求的检查、打包、Git 操作或核验。
+
+**普通交接完成于：** 当前任务位置、主要结果、必要证据位置、未解决问题和下一动作已记录。未知事项可以保持未知，如实写明即可，不自动升级为阻塞或待办。
+
+| 用户请求 | 默认做到 | 不自动追加 |
+| --- | --- | --- |
+| 更新科研状态 | 读当前计划与相关结果，更新必要记录，报告下一动作 | 打包、封存、commit/push、恢复核验 |
+| 记录这次实验 | 记录问题、条件、来源 commit、关键结果和产物位置；已有来源材料直接引用 | 重建来源、重算哈希、新建完整 run 目录 |
+| commit/push 后结束 | 按授权范围提交并推送，简短报告后结束 | 远端下载、全新 clone、恢复演练、追加回执 |
+| 这个结果还不能完整复现 | 记录具体缺失和限制 | 重跑、追溯补齐，或据此阻止交接 |
+| 核验备份能否恢复 | 按该次明确范围执行恢复检查 | 扩大到其他 run、其他存储或全部历史 |
+| 停，不检查了 | 停止本轮自行启动的检查，记录取消，保存恢复点 | 安排下次自动续跑，或把取消项改写成补做任务 |
+
+用户明确要求 commit/push 时，同一个 agent 可在本会话执行普通 Git 操作，不必换会话；但该请求不附带封存、下载、全新 clone、恢复演练或额外回执。被取消的检查不进入待办。仍在运行的实验按用户指示另行处理。
+
+若项目已有 runner、流程或独立验证产出 provenance、核验报告或清单，在它覆盖本次对象、且所依据的实现、数据、配置和范围仍然适用时直接引用；不重复执行、不重新推导，也不为此另建一套记录。已不适用时，只注明不适用的部分并交给对应的验证流程，既不沿用过期结论，也不自行重跑整套验证。
 
 ## 选择动作
 
@@ -52,11 +71,11 @@ description: "Maintain a research project's roadmap, phase plans, current work, 
 
 核对真实产物和进程后，更新任务状态、证据链接、未解决项、建议、精确恢复位置及下一动作。无法完成某项核验时记录原因，不补写为成功。
 
-重要实验/分析保存过程与输出；封存和 Git 操作按授权及 `archive-and-git.md` 执行。目录已存在或文件未被忽略都不能证明已入库。
+重要实验/分析保存过程与输出；封存和 Git 操作按授权及 `archive-and-git.md` 执行。目录已存在或文件未被忽略都不能证明已入库。到达“按请求停止”的完成点即结束本轮，不再追加检查。
 
 ## 结束时的简短报告
 
-向用户说明本次完成的具体子任务、证据位置、尚未完成的部分及下一动作。涉及产物时同时报告封存/提交/备份状态；新建议注明待讨论还是已接受。不要把维护记录描述为完成了实验或整个阶段。
+向用户说明本次完成的具体子任务、证据位置、尚未完成的部分及下一动作。涉及产物时按已知事实报告封存/提交/备份状态，未核验的照实写“未核验”，不因此当场补做核验；新建议注明待讨论还是已接受。不要把维护记录描述为完成了实验或整个阶段。
 
 ## 核验第一版或后续修改
 
@@ -67,3 +86,4 @@ description: "Maintain a research project's roadmap, phase plans, current work, 
 - 后续新增 commit 时，旧运行代码身份仍有效，不产生要求摘要包含自身入库 commit 的循环。
 - 封存后完成 push 时，备份状态在外部索引更新，封存摘要不被重写。
 - 运行中断时，记录最后成功位置和现存产物，恢复不会覆盖旧输出。
+- 用户要求结束工作时，本轮不新增检查项，未知的保持未知，且不把取消项写成待办。

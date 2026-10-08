@@ -1,26 +1,24 @@
 # 当前状态
 
-更新时间：2026-10-07T20:16+08:00。
+更新时间：2026-10-08。
 当前阶段：[P01](phases/P01/plan.md)，阶段状态与任务状态以该计划为准。
-当前任务：P01-T004 研究侧验收与委托回收已完成；今天的实现、运行证据和科研记录已提交/push，本日工作结束。没有正在执行的新科研任务。
-当前科研执行者：无人执行实验；本轮保存收尾由 Codex 完成。本地分支 `xzs`。baseline 实现与 OpenSpec 归档已提交为 `8273c07a84c879a8f7bdbb61f987f3c94e863e59`；后续保存/交接记录的提交身份从 Git 历史追溯。
-本次授权范围：用户要求提交/push 并结束今天的工作，随后明确取消后续远端恢复核验；push 成功即足够收尾。未启动新实验，未修改 skill、运行实现、科学协议或原始 run。
-本轮 run：无；读取 OpenSpec 已产出的 run，不重跑实验或独立验证工作流。
+当前任务：P01-T010 记录减负与第一轮净化已接受、委托已回收；本轮研究侧收尾完成，没有启动下一项科研任务。任务状态以阶段计划为准，不镜像 OpenSpec 任务表。
+当前科研执行者：本轮没有执行实验；研究侧验收与文档收尾由 Codex 完成，本地分支 `xzs`。skill 修订已由维护者完成并保留；T004 的实现与证据保存身份见归档索引。T010 软件与记录仍为未提交工作区修改。
+本次授权范围：用户告知 OpenSpec 已完成，按既有委托只读检查结束判据并作研究侧验收、更新记录和关闭指针。未代跑 apply/verify/fix/archive，未改代码、启动实验、改变科学定义、commit/push 或续跑取消的恢复检查。
+本轮 run：无；委托回收与研究侧交接不创建实验 run。
 
 ## 恢复位置
 
-- `add-nograph-baseline-ridge` 已归档于 [OpenSpec archive](../openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/verification.md)，独立报告为 PASS。回收前重算八类 inventory/content 指纹与报告一致；24 个 run 的 732 个清单成员哈希一致，其余 48 个声明排除项由完整 780 文件指纹覆盖。
-- 按既定 T004 验收完成 [D008 研究侧接受](decisions.md#d008-t004-baseline-研究侧验收)，关闭 [DELEGATION](../DELEGATION.md)。阶段计划记录任务验收，OpenSpec 目录保留变更级进度，不在这里复制其任务表。
-- 科研依据：`p01-r0-sharedridge-002`、`p01-r0-sharedridge-repeat-002`、`p01-region-sharedridge-002`、`p01-region-sharedridge-repeat-002` 及八个关联检查；精确链接与保存状态见[索引](archives/index.md#t004-baseline-运行2026-10-07)。`-001` 为保留历史版本。
-- 两组 NaiveRef/NaiveRef6 均为 LastValue，SharedRidge lambda=1e-4；同 seed 预测最大绝对差均为 0。Ridge 总体测试 MAE/RMSE 均高于 LastValue，只接受它为可重复学习参照，不宣称改善。
-- 本地 CPU 主运行总计 r0 0.435 s、峰值 RSS 143,278,080 bytes；region 0.693 s、307,396,608 bytes。NumPy 默认路径已验收，可选 sklearn 实际运行未核验。
-- T004 的 24 个 run 已封存为独立包，共 41,446,332 bytes；在本地临时目录解包后 780 个文件哈希与原目录和独立报告一致。证据与科研记录提交 `b72770873f11a66478c3556973393882be501bd8` 已 push，远端引用已独立读取确认。远端恢复未核验；用户取消后续检查，下载已停止。可读记录进入 Git，其余展开产物保留本地并按明确范围忽略，真实位置见[索引](archives/index.md)。
-- 2026-10-07T19:53+08:00 本地进程只读检查未发现 baseline CLI/worker 或专用环境 Python 进程（搜索命令自身除外），24 个状态文件均为 success/complete；本轮未启动程序。未核验历史远端 GPU 进程或实例释放状态。
-- 原 run、旧包、baseline 实现、科学协议与 OpenSpec 报告保持原样；新建封存包、包外清单和恢复核验脚本，更新记录与忽略规则。验收后 plan/index 与忽略规则的集合指纹变化属于保存收尾，独立报告继续保留其核验时点。
+- 2026-10-08：按 [D010](decisions.md#d010-采用实验记录与保存减负政策)采用 `P01-records-v2`，已更新协议 §6.1/§9、计划和执行指导；科学版本仍为 v3。研究论证与执行说明见[review §9](reviews/20261008-maintenance-and-protocol.md#9-采用与执行记录2026-10-08)，新版 skill 已完成，本轮不改 skill。
+- 第一轮整理见[记录](archives/migrations/20261008-evidence-maintenance.md)：24 个包和 88 个可读入口原样保留，移除一致的忽略展开副本与缓存；删除 T004 sidecar，全成员哈希清单改为位置/提交/大小/数量与排除声明。检查需要完整输入，按需在独立目录从包展开；`verify` 工具已支持 schema v2 与历史 v1，恢复核验仍仅按明确请求执行。此次修改尚未提交/push。
+- `reduce-baseline-evidence-overhead` 已[归档独立 PASS](../openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/verification.md)，五项发现均为 verified-resolved。研究侧在记录更新前比对全部报告基准，主规格为预期 delta 同步；按 [D011](decisions.md#d011-t010-记录减负研究侧验收)接受 T010 并关闭 [DELEGATION](../DELEGATION.md)。报告分轮验证证据与可选 sklearn 限制保留，不重跑全套；科研记录的后续更新不回写历史报告。
+- 当前软件已落实 formal/development 输出隔离、单份 `--report` 检查及旧参数别名、相关脏源码恢复、固定来源引用、默认候选产物减量和 Git 包索引兼容；当前入口见[执行指导 §7](phases/P01/execution-guide.md#7-当前可复用-baseline-入口)与[索引](archives/index.md)。没有新增正式科研 run 或封存包，临时软件 fixture 不作为新科学结论。
+- T004 已按 [D008](decisions.md#d008-t004-baseline-研究侧验收)接受，旧变更归档 PASS 和核验方法仍保留。科研依据是四个 `-002` 模型执行及八个关联检查；两组 NaiveRef/NaiveRef6 均为 LastValue、Ridge lambda=1e-4、同 seed 预测差为 0，总体测试误差高于 LastValue，不宣称改善。成本、来源与保存事实见[索引](archives/index.md#t004-baseline-运行2026-10-07)。
+- 2026-10-08 清理前只读进程列表未发现本地 baseline/封存进程（搜索自身除外）；本轮未启动实验，未核验历史远端 GPU 状态。旧包、包内内容、可读入口和 OpenSpec 历史报告原样保留；当前精简目录不再用于原报告的完整展开证据指纹。取消的远端恢复检查不续跑。
 
 ## 下一可执行动作
 
-本日已结束，没有待执行的 Git 或恢复检查。下一会话先从阶段计划恢复科研位置，不自动继续本次取消的检查。
+本次组织工作与委托回收已结束，无在途委托；没有自动 Git 或恢复检查待办。第二轮历史迁移与用途未确认的清理项仍为可选候选，不阻塞科研，也不自动启动。
 
 科研接续：保持阶段计划已有顺序，准备 P01-T006 的 `r2/count` 同流程扩展范围，再接内部回测；P01-T005 的 EvolveGCN-H 受控诊断在底座通过后也已满足依赖。新实现/实验仍按具体授权与 OpenSpec 流程执行，研究侧先登记新的委托；本轮未启动。
 
@@ -31,4 +29,4 @@
 - [D007](decisions.md#d007-检验低活跃节点与邻居信息的假设)：交叉分布与公平对照仍待执行。
 - T002 的剩余图审计/解释，以及 T005-T008 的科研工作见阶段计划；P01 尚未完成。
 - T004 已封存、提交/push；远端恢复未核验，用户取消检查，不列为待补任务。
-- 用户认为 research-maintainer 应主要记录运行代码身份，并退出 Git 管理职责；本轮未修改 skill，意见见 D009 后续记录。
+- D009 的长期建议由 D010 接续，T010 已按 D011 接受；独立清理清单的用途待确认项仍为候选，不升级为必须完成的任务。当前软件和研究记录修改尚未提交/push，不把独立 PASS 当作备份完成。

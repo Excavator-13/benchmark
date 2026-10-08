@@ -1,14 +1,18 @@
 """Saved-run analysis commands: recompute, compare and immutable v2 alignment.
 
 None of these commands fits a model, reads source demand/graph data, or alters
-its input runs.  Each reserves a fresh check-type run directory holding its
-linked input hashes, command, report and terminal status.
+its input runs.  Each writes exactly one exclusive JSON report carrying its
+command, checker source identity, consumed-input identities, tolerances,
+status/results/errors and embedded recomputed metrics.  No check-type run
+directory, source snapshot, environment copy, sidecar or artifact hash table is
+produced.
 """
 
 from __future__ import annotations
 
 import json
 import math
+import os
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
@@ -20,6 +24,12 @@ from .data import sha256_file
 #: Normalized tolerances used by saved-run checks.
 CPU_RELATIVE_TOLERANCE = 1e-6
 DIAGNOSTIC_RELATIVE_TOLERANCE = 1e-12
+
+#: Version of the single-report envelope written by every check command.
+REPORT_VERSION = 1
+
+#: Default root for the legacy ``--run-id`` report alias.
+DEFAULT_REPORTS_ROOT = ("research", "reports", "nograph-baseline")
 
 
 class CheckError(RuntimeError):
@@ -45,46 +55,168 @@ def _load_npz(path: Path) -> Dict[str, np.ndarray]:
         return {name: np.asarray(handle[name]) for name in handle.files}
 
 
-def _check_run(run_id: str, run_type: str, runs_root: Path) -> artifacts.RunDirectory:
-    artifacts.validate_run_id(run_id)
-    run = artifacts.RunDirectory(runs_root, run_id, run_type)
-    return run.reserve()
+def default_reports_root(repo_root: Path) -> Path:
+    """Return the documented default root for legacy run-ID report aliases."""
+    return Path(repo_root).joinpath(*DEFAULT_REPORTS_ROOT)
 
 
-def _write_check_provenance(
-    run: artifacts.RunDirectory,
+def resolve_report_path(
+    *,
+    report_path: Optional[Path] = None,
+    run_id: Optional[str] = None,
+    runs_root: Optional[Path] = None,
+    repo_root: Optional[Path] = None,
+) -> Path:
+    """Resolve the exclusive output choice for one check command.
+
+    ``report_path`` and the legacy ``run_id``/``runs_root`` alias are mutually
+    exclusive and one of them is required.
+    """
+    if report_path is not None and run_id is not None:
+        raise CheckError(
+            "a check accepts either an explicit report path or a legacy run ID, "
+            "not both"
+        )
+    if report_path is not None:
+        return Path(report_path)
+    if run_id is None:
+        raise CheckError("a report path or a legacy run ID is required")
+    try:
+        artifacts.validate_run_id(run_id)
+    except artifacts.ArtifactError as exc:
+        raise CheckError(str(exc)) from exc
+    if runs_root is None:
+        runs_root = default_reports_root(
+            Path(repo_root) if repo_root is not None else protocol.REPO_ROOT
+        )
+    return Path(runs_root) / f"{run_id}.json"
+
+
+def _reject_unsafe_destination(
+    destination: Path, inputs: Sequence[Any]
+) -> None:
+    """Refuse an output that already exists or resolves inside an input run.
+
+    Each input entry is ``(label, path, kind)`` where ``kind`` is ``"dir"`` for
+    an input run directory (output must not fall inside it) or ``"file"`` for a
+    read-only reference (output must merely not replace it).
+    """
+    if destination.exists() or destination.is_symlink():
+        raise CheckError(
+            "report destination already exists and will not be replaced: "
+            f"{destination}"
+        )
+    resolved = destination.resolve()
+    for label, raw, kind in inputs:
+        if raw is None:
+            continue
+        resolved_input = Path(raw).resolve()
+        if resolved == resolved_input:
+            raise CheckError(
+                f"report path {destination} resolves to the {label} input"
+            )
+        if kind != "dir":
+            continue
+        if resolved_input in resolved.parents:
+            raise CheckError(
+                f"report path {destination} resolves inside the {label} input "
+                f"{raw}"
+            )
+
+
+def _write_report(destination: Path, envelope: Mapping[str, Any]) -> Path:
+    """Publish one complete JSON report with exclusive creation."""
+    destination = Path(destination)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    text = json.dumps(dict(envelope), indent=2, sort_keys=True, ensure_ascii=False)
+    flags = os.O_CREAT | os.O_EXCL | os.O_WRONLY
+    try:
+        descriptor = os.open(destination, flags, 0o644)
+    except FileExistsError as exc:
+        raise CheckError(
+            "report destination already exists and will not be replaced: "
+            f"{destination}"
+        ) from exc
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+            handle.write(text + "\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+    except BaseException:
+        try:
+            os.unlink(destination)
+        except OSError:  # pragma: no cover - best-effort cleanup
+            pass
+        raise
+    return destination
+
+
+def _envelope(
+    kind: str,
     *,
     command: Sequence[str],
-    inputs: Mapping[str, Any],
-    check: str,
     repo_root: Path,
-) -> None:
-    run.write_json(
-        "command.json",
-        {"argv": list(command), "cwd": str(Path.cwd())},
-    )
-    run.write_json(
-        "config.json",
-        {"check": check, "protocol_version": protocol.PROTOCOL_VERSION},
-    )
-    git = artifacts.capture_git(repo_root)
-    artifacts.write_git_snapshot(run, git)
-    run.write_json(
-        "provenance.json",
-        {
-            "run_id": run.run_id,
-            "run_type": run.run_type,
-            "check": check,
-            "created": _now(),
-            "git": {
-                "commit": git.get("commit"),
-                "dirty": git.get("dirty"),
-                "errors": git.get("errors"),
-            },
-            "inputs": dict(inputs),
-            "scientific_acceptance": False,
+    inputs: Mapping[str, Any],
+    tolerances: Mapping[str, Any],
+    status: str,
+    result: Mapping[str, Any],
+    errors: Sequence[Any],
+) -> Dict[str, Any]:
+    """Assemble the documented single-report envelope."""
+    return {
+        "version": REPORT_VERSION,
+        "kind": kind,
+        "created": _now(),
+        "status": status,
+        "command": {"argv": list(command), "cwd": str(Path.cwd())},
+        "checker": {
+            "protocol_version": protocol.PROTOCOL_VERSION,
+            "source": artifacts.checker_source_identity(Path(repo_root)),
         },
+        "inputs": dict(inputs),
+        "tolerances": dict(tolerances),
+        "result": dict(result),
+        "errors": list(errors),
+    }
+
+
+def _failure_envelope(
+    kind: str,
+    *,
+    command: Sequence[str],
+    repo_root: Path,
+    inputs: Mapping[str, Any],
+    tolerances: Mapping[str, Any],
+    exc: BaseException,
+) -> Dict[str, Any]:
+    """Build the honest failure report for an unusable saved input."""
+    error = {
+        "type": type(exc).__name__,
+        "message": str(exc),
+    }
+    result = {"status": "failed", "error": error}
+    return _envelope(
+        kind,
+        command=command,
+        repo_root=repo_root,
+        inputs=inputs,
+        tolerances=tolerances,
+        status="failed",
+        result=result,
+        errors=[error],
     )
+
+
+def _finish(destination: Path, envelope: Dict[str, Any]) -> Dict[str, Any]:
+    """Publish a report and return the public command result."""
+    _write_report(destination, envelope)
+    return {
+        "report_path": str(destination),
+        "status": envelope["status"],
+        "report": envelope["result"],
+        "envelope": envelope,
+    }
+
 
 
 def _now() -> str:
@@ -114,12 +246,17 @@ def _equal_present(left: Any, right: Any) -> bool:
     return left is not None and right is not None and left == right
 
 
-#: Run-spec fields that identify one invocation rather than the protocol
-#: configuration compared for same-condition reproducibility.
+#: Run-spec fields that identify one invocation or persistence choice rather
+#: than the scientific condition compared for same-condition reproducibility.
+#: ``purpose`` and ``retain_candidates`` only select the output root and whether
+#: losing candidate arrays are kept, so two otherwise identical executions still
+#: compare as the same condition.
 _CONFIG_IDENTITY_EXCLUSIONS = frozenset(
     {
         "run_id",
         "run_type",
+        "purpose",
+        "retain_candidates",
         "command",
         "launcher_cwd",
         "demand_path",
@@ -525,68 +662,81 @@ def validate_report_semantics(payload: Any, *, label: str = "report") -> List[Di
 # ---------------------------------------------------------------------------
 # recompute
 # ---------------------------------------------------------------------------
+RECOMPUTE_CONSUMED_INPUTS = (
+    "metrics.json",
+    "nodes.parquet",
+    "masks.npz",
+    "windows.json",
+    "gold/validation.npy",
+    "gold/test.npy",
+    "status.json",
+    "node-errors.parquet",
+    "models/TrainMean27.npz",
+)
+
+RECOMPUTE_TOLERANCES = {
+    "metric_relative": DIAGNOSTIC_RELATIVE_TOLERANCE,
+    "definition": "abs(a-b) / max(1, abs(a), abs(b))",
+}
+
+
 def command_recompute(
     *,
     run_dir: Path,
-    run_id: str,
-    runs_root: Path,
     repo_root: Path,
     command: Sequence[str],
+    report_path: Optional[Path] = None,
+    run_id: Optional[str] = None,
+    runs_root: Optional[Path] = None,
 ) -> Dict[str, Any]:
-    """Recompute every saved metric from a completed run directory only."""
+    """Recompute every saved metric from a completed run directory only.
+
+    The explicit ``report_path`` and the legacy ``run_id``/``runs_root`` alias
+    are mutually exclusive and one is required; both produce one JSON report.
+    """
     run_dir = Path(run_dir)
-    if not run_dir.exists():
-        raise CheckError(f"input run directory does not exist: {run_dir}")
-    status = _read_json(run_dir / "status.json")
-    metrics_document = _read_json(run_dir / "metrics.json")
-    nodes = _read_nodes(run_dir / "nodes.parquet")
-    key_columns = [column for column in nodes.columns if column != "node_index"]
-    masks = _load_npz(run_dir / "masks.npz")
-    windows_meta = _read_json(run_dir / "windows.json")
-    splits = windows_meta["splits"]
-
-    activity_masks = {
-        name: masks[f"activity_{name}"]
-        for name in protocol.ACTIVITY_GROUP_NAMES
-        if f"activity_{name}" in masks
-    }
-    constant_masks = {
-        "constant_train27": masks["constant_train27"],
-        "nonconstant_train27": ~masks["constant_train27"],
-    }
-    neighbor_masks = {
-        "has_nonself_neighbor": masks["has_nonself_neighbor"],
-        "no_nonself_neighbor": ~masks["has_nonself_neighbor"],
-    }
-    context_values = nodes[key_columns[0]].to_numpy()
-    context_masks_map = metrics.context_masks(context_values)
-
-    check = _check_run(run_id, "recompute", runs_root)
+    destination = resolve_report_path(
+        report_path=report_path, run_id=run_id, runs_root=runs_root, repo_root=repo_root
+    )
+    _reject_unsafe_destination(destination, [("run", run_dir, "dir")])
+    inputs: Dict[str, Any] = {"input_run_dir": str(run_dir)}
     try:
-        _write_check_provenance(
-            check,
-            command=command,
-            check="recompute",
-            repo_root=repo_root,
-            inputs={
-                "input_run_dir": str(run_dir),
-                "input_run_id": status.get("run_id"),
-                "input_status": status.get("state"),
-                "input_artifacts": _hash_tree(
-                    run_dir,
-                    [
-                        "metrics.json",
-                        "nodes.parquet",
-                        "masks.npz",
-                        "windows.json",
-                        "gold/validation.npy",
-                        "gold/test.npy",
-                        "status.json",
-                    ],
-                ),
-            },
-        )
-        check.append_event("recompute_started", input_run=str(run_dir))
+        if not run_dir.exists():
+            raise CheckError(f"input run directory does not exist: {run_dir}")
+        # Consumed-input identity and status parsing belong to the failure-report
+        # contract: an unreadable or malformed saved input still yields one
+        # informative report at a safe destination.
+        inputs["consumed_sha256"] = _hash_tree(run_dir, RECOMPUTE_CONSUMED_INPUTS)
+        status = _read_json(run_dir / "status.json")
+        if not isinstance(status, Mapping):
+            raise CheckError(
+                f"required artifact is not a status object: {run_dir / 'status.json'}"
+            )
+        inputs["input_run_id"] = status.get("run_id")
+        inputs["input_status"] = status.get("state")
+        metrics_document = _read_json(run_dir / "metrics.json")
+        nodes = _read_nodes(run_dir / "nodes.parquet")
+        key_columns = [column for column in nodes.columns if column != "node_index"]
+        masks = _load_npz(run_dir / "masks.npz")
+        windows_meta = _read_json(run_dir / "windows.json")
+        splits = windows_meta["splits"]
+
+        activity_masks = {
+            name: masks[f"activity_{name}"]
+            for name in protocol.ACTIVITY_GROUP_NAMES
+            if f"activity_{name}" in masks
+        }
+        constant_masks = {
+            "constant_train27": masks["constant_train27"],
+            "nonconstant_train27": ~masks["constant_train27"],
+        }
+        neighbor_masks = {
+            "has_nonself_neighbor": masks["has_nonself_neighbor"],
+            "no_nonself_neighbor": ~masks["has_nonself_neighbor"],
+        }
+        context_values = nodes[key_columns[0]].to_numpy()
+        context_masks_map = metrics.context_masks(context_values)
+
         recomputed: Dict[str, Dict[str, Any]] = {"validation": {}, "test": {}}
         for split in ("validation", "test"):
             gold = _load_npy(run_dir / "gold" / f"{split}.npy")
@@ -610,6 +760,13 @@ def command_recompute(
                     neighbor_masks=neighbor_masks,
                 )
                 recomputed[split][method] = report
+        inputs["consumed_prediction_sha256"] = {
+            f"predictions/{method}/{split}.npy": sha256_file(
+                run_dir / "predictions" / method / f"{split}.npy"
+            )
+            for split in ("validation", "test")
+            for method in sorted(recomputed[split])
+        }
         stored = metrics_document.get("methods")
         missing_report_fields: List[str] = [
             field
@@ -675,7 +832,6 @@ def command_recompute(
                 tolerance=DIAGNOSTIC_RELATIVE_TOLERANCE,
                 label="recompute:relative_gains",
             )
-            check.write_json("recomputed-relative-gains.json", recomputed_gains)
         else:
             gains_comparison = {
                 "label": "recompute:relative_gains",
@@ -697,7 +853,6 @@ def command_recompute(
         # error sums against freshly reduced saved predictions.
         node_error_comparison = _compare_node_error_tables(run_dir, key_columns)
 
-        check.write_json("recomputed-metrics.json", recomputed)
         failed = [
             name
             for name, comparison in comparisons.items()
@@ -717,13 +872,10 @@ def command_recompute(
             or gain_semantic_problems
         ):
             failed.append("report_semantics")
-        report = {
+        result = {
             "check": "recompute",
             "input_run_dir": str(run_dir),
-            "methods": sorted(
-                method
-                for method in recomputed["test"].keys()
-            ),
+            "methods": sorted(method for method in recomputed["test"].keys()),
             "comparisons": comparisons,
             "relative_gains_comparison": gains_comparison,
             "node_error_comparison": node_error_comparison,
@@ -735,29 +887,32 @@ def command_recompute(
             "stored_semantic_problems": stored_semantic_problems,
             "recomputed_semantic_problems": recomputed_semantic_problems,
             "gain_semantic_problems": gain_semantic_problems,
+            "recomputed_metrics": recomputed,
+            "recomputed_relative_gains": recomputed_gains,
             "source_data_read": False,
             "model_refit": False,
-            "status": "ok" if not failed else "mismatch",
         }
-        check.write_json("report.json", report)
-        check.write_text(
-            "summary.md",
-            f"# Recompute check {run_id}\n\n"
-            f"- Input run: `{run_dir}`\n"
-            f"- Methods: {', '.join(report['methods']) or 'none'}\n"
-            f"- Relative-gain fields compared: "
-            f"{gains_comparison.get('compared_fields')}\n"
-            f"- Per-node rows compared: "
-            f"{node_error_comparison.get('compared_rows')}\n"
-            f"- Result: {report['status']}\n"
-            f"- Source demand/graph data was not read and no model was fit.\n",
+        result["status"] = "ok" if not failed else "mismatch"
+        envelope = _envelope(
+            "recompute",
+            command=command,
+            repo_root=repo_root,
+            inputs=inputs,
+            tolerances=RECOMPUTE_TOLERANCES,
+            status=result["status"],
+            result=result,
+            errors=[],
         )
-        check.set_status("success" if not failed else "failed", stage="complete")
-        check.finalize_artifacts_manifest()
-        return {"run_dir": str(check.path), "status": report["status"], "report": report}
-    except BaseException as exc:  # noqa: BLE001
-        check.set_status("failed", stage="recompute", error=repr(exc))
-        raise
+    except BaseException as exc:  # noqa: BLE001 - a usable destination still gets a report
+        envelope = _failure_envelope(
+            "recompute",
+            command=command,
+            repo_root=repo_root,
+            inputs=inputs,
+            tolerances=RECOMPUTE_TOLERANCES,
+            exc=exc,
+        )
+    return _finish(destination, envelope)
 
 
 def _read_nodes(path: Path) -> "Any":
@@ -922,55 +1077,73 @@ def _compare_node_error_tables(
 # ---------------------------------------------------------------------------
 # compare
 # ---------------------------------------------------------------------------
+COMPARE_CONSUMED_INPUTS = (
+    "metrics.json",
+    "selection.json",
+    "source-sha256.json",
+    "config.json",
+    "environment.json",
+    "masks.npz",
+    "status.json",
+)
+
+COMPARE_TOLERANCES = {
+    "cpu_relative": CPU_RELATIVE_TOLERANCE,
+    "definition": "abs(a-b) / max(1, abs(a), abs(b))",
+}
+
+
 def command_compare(
     *,
     run_a: Path,
     run_b: Path,
-    run_id: str,
-    runs_root: Path,
     repo_root: Path,
     command: Sequence[str],
+    report_path: Optional[Path] = None,
+    run_id: Optional[str] = None,
+    runs_root: Optional[Path] = None,
 ) -> Dict[str, Any]:
     """Compare two same-seed runs and apply the CPU agreement criterion."""
     run_a, run_b = Path(run_a), Path(run_b)
-    for label, run_dir in (("a", run_a), ("b", run_b)):
-        if not run_dir.exists():
-            raise CheckError(f"run {label} does not exist: {run_dir}")
-    status_a = _read_json(run_a / "status.json")
-    status_b = _read_json(run_b / "status.json")
-    metrics_a = _read_json(run_a / "metrics.json")
-    metrics_b = _read_json(run_b / "metrics.json")
-    config_a = _read_json(run_a / "config.json")
-    config_b = _read_json(run_b / "config.json")
-    selection_a = _read_json(run_a / "selection.json")
-    selection_b = _read_json(run_b / "selection.json")
-    # Source and environment manifests are mandatory identity evidence; read
-    # them tolerantly so a missing file is recorded as incomplete rather than
-    # silently treated as agreement.
-    source_a = _read_optional_json(run_a / "source-sha256.json")
-    source_b = _read_optional_json(run_b / "source-sha256.json")
-    environment_a = _read_optional_json(run_a / "environment.json")
-    environment_b = _read_optional_json(run_b / "environment.json")
-
-    check = _check_run(run_id, "compare", runs_root)
+    destination = resolve_report_path(
+        report_path=report_path, run_id=run_id, runs_root=runs_root, repo_root=repo_root
+    )
+    _reject_unsafe_destination(
+        destination,
+        [("run-a", run_a, "dir"), ("run-b", run_b, "dir")],
+    )
+    inputs: Dict[str, Any] = {
+        "run_a": str(run_a),
+        "run_b": str(run_b),
+    }
     try:
-        _write_check_provenance(
-            check,
-            command=command,
-            check="compare",
-            repo_root=repo_root,
-            inputs={
-                "run_a": str(run_a),
-                "run_b": str(run_b),
-                "run_a_artifacts": _hash_tree(
-                    run_a, ["metrics.json", "selection.json", "source-sha256.json"]
-                ),
-                "run_b_artifacts": _hash_tree(
-                    run_b, ["metrics.json", "selection.json", "source-sha256.json"]
-                ),
-            },
-        )
-        check.append_event("compare_started")
+        for label, run_dir in (("a", run_a), ("b", run_b)):
+            if not run_dir.exists():
+                raise CheckError(f"run {label} does not exist: {run_dir}")
+        inputs["run_a_consumed_sha256"] = _hash_tree(run_a, COMPARE_CONSUMED_INPUTS)
+        inputs["run_b_consumed_sha256"] = _hash_tree(run_b, COMPARE_CONSUMED_INPUTS)
+        status_a = _read_json(run_a / "status.json")
+        status_b = _read_json(run_b / "status.json")
+        # Link the declared execution identities, not only the current input
+        # locations: aliased or relocated runs still report their real run IDs.
+        inputs["run_a_id"] = status_a.get("run_id")
+        inputs["run_b_id"] = status_b.get("run_id")
+        inputs["run_a_status"] = status_a.get("state")
+        inputs["run_b_status"] = status_b.get("state")
+        metrics_a = _read_json(run_a / "metrics.json")
+        metrics_b = _read_json(run_b / "metrics.json")
+        config_a = _read_json(run_a / "config.json")
+        config_b = _read_json(run_b / "config.json")
+        selection_a = _read_json(run_a / "selection.json")
+        selection_b = _read_json(run_b / "selection.json")
+        # Source and environment manifests are mandatory identity evidence; read
+        # them tolerantly so a missing file is recorded as incomplete rather than
+        # silently treated as agreement.
+        source_a = _read_optional_json(run_a / "source-sha256.json")
+        source_b = _read_optional_json(run_b / "source-sha256.json")
+        environment_a = _read_optional_json(run_a / "environment.json")
+        environment_b = _read_optional_json(run_b / "environment.json")
+
         spec_a = config_a.get("spec", {}) if isinstance(config_a, Mapping) else {}
         spec_b = config_b.get("spec", {}) if isinstance(config_b, Mapping) else {}
         source_identity_a = _source_identity(source_a)
@@ -1140,6 +1313,14 @@ def command_compare(
                     or float(normalized.max()) <= CPU_RELATIVE_TOLERANCE
                     else "mismatch",
                 }
+        inputs["consumed_prediction_sha256"] = {
+            f"run_{label}:predictions/{method}/{split}.npy": sha256_file(
+                run_dir / "predictions" / method / f"{split}.npy"
+            )
+            for label, run_dir in (("a", run_a), ("b", run_b))
+            for split in ("validation", "test")
+            for method in methods
+        }
         metric_comparison = compare_number_sets(
             flatten_numbers(metrics_a.get("methods", {})),
             flatten_numbers(metrics_b.get("methods", {})),
@@ -1208,23 +1389,26 @@ def command_compare(
             "seed_variance_reported": False,
             "status": "ok" if overall_ok else "mismatch",
         }
-        check.write_json("report.json", report)
-        check.write_text(
-            "summary.md",
-            f"# Compare check {run_id}\n\n"
-            f"- Run A: `{run_a}`\n- Run B: `{run_b}`\n"
-            f"- Result: {report['status']}\n"
-            f"- Semantic config, recorded environment, protocol/source identities and\n"
-            f"  masks are compared before arrays; missing identity evidence is\n"
-            f"  incomplete rather than agreement, and disagreement is reported as an\n"
-            f"  execution difference, not seed variance.\n",
+        envelope = _envelope(
+            "compare",
+            command=command,
+            repo_root=repo_root,
+            inputs=inputs,
+            tolerances=COMPARE_TOLERANCES,
+            status=report["status"],
+            result=report,
+            errors=[],
         )
-        check.set_status("success" if overall_ok else "failed", stage="complete")
-        check.finalize_artifacts_manifest()
-        return {"run_dir": str(check.path), "status": report["status"], "report": report}
-    except BaseException as exc:  # noqa: BLE001
-        check.set_status("failed", stage="compare", error=repr(exc))
-        raise
+    except BaseException as exc:  # noqa: BLE001 - a usable destination still gets a report
+        envelope = _failure_envelope(
+            "compare",
+            command=command,
+            repo_root=repo_root,
+            inputs=inputs,
+            tolerances=COMPARE_TOLERANCES,
+            exc=exc,
+        )
+    return _finish(destination, envelope)
 
 
 # ---------------------------------------------------------------------------
@@ -1259,48 +1443,63 @@ def parse_v2_reference(path: Path) -> Dict[str, Any]:
     return {"records": records, "by_dataset": by_dataset}
 
 
+ALIGN_CONSUMED_INPUTS = (
+    "metrics.json",
+    "audit.json",
+    "windows.json",
+    "source-sha256.json",
+)
+
+ALIGN_TOLERANCES = {
+    "diagnostic_relative": DIAGNOSTIC_RELATIVE_TOLERANCE,
+    "definition": "abs(a-b) / max(1, abs(a), abs(b))",
+}
+
+
 def command_align_v2(
     *,
     run_dir: Path,
     reference: Path,
-    run_id: str,
-    runs_root: Path,
     repo_root: Path,
     command: Sequence[str],
+    report_path: Optional[Path] = None,
+    run_id: Optional[str] = None,
+    runs_root: Optional[Path] = None,
 ) -> Dict[str, Any]:
     """Align a completed run's na\"ive results with the immutable v2 diagnostic."""
     run_dir, reference = Path(run_dir), Path(reference)
-    if not run_dir.exists():
-        raise CheckError(f"input run directory does not exist: {run_dir}")
-    if not reference.exists():
-        raise CheckError(f"v2 reference log does not exist: {reference}")
-    reference_sha256 = sha256_file(reference)
-    parsed = parse_v2_reference(reference)
-    metrics_document = _read_json(run_dir / "metrics.json")
-    audit = _read_json(run_dir / "audit.json")
-    windows_meta = _read_json(run_dir / "windows.json")
-    dataset = metrics_document["dataset"]
-    bucket = parsed["by_dataset"].get(dataset)
-    if bucket is None:
-        raise CheckError(f"v2 reference log has no records for dataset {dataset!r}")
-
-    check = _check_run(run_id, "align-v2", runs_root)
+    destination = resolve_report_path(
+        report_path=report_path, run_id=run_id, runs_root=runs_root, repo_root=repo_root
+    )
+    _reject_unsafe_destination(
+        destination,
+        [("run", run_dir, "dir"), ("reference", reference, "file")],
+    )
+    inputs: Dict[str, Any] = {
+        "input_run_dir": str(run_dir),
+        "reference_path": str(reference),
+    }
     try:
-        _write_check_provenance(
-            check,
-            command=command,
-            check="align-v2",
-            repo_root=repo_root,
-            inputs={
-                "input_run_dir": str(run_dir),
-                "reference_path": str(reference),
-                "reference_sha256": reference_sha256,
-                "input_artifacts": _hash_tree(
-                    run_dir, ["metrics.json", "audit.json", "windows.json"]
-                ),
-            },
-        )
-        check.append_event("align_v2_started", reference=str(reference))
+        if not run_dir.exists():
+            raise CheckError(f"input run directory does not exist: {run_dir}")
+        if not reference.exists():
+            raise CheckError(f"v2 reference log does not exist: {reference}")
+        inputs["input_consumed_sha256"] = _hash_tree(run_dir, ALIGN_CONSUMED_INPUTS)
+        reference_sha256 = sha256_file(reference)
+        inputs["reference_sha256"] = reference_sha256
+        parsed = parse_v2_reference(reference)
+        metrics_document = _read_json(run_dir / "metrics.json")
+        # Link the declared execution identity in addition to the input location.
+        inputs["input_run_id"] = metrics_document.get("run_id")
+        audit = _read_json(run_dir / "audit.json")
+        windows_meta = _read_json(run_dir / "windows.json")
+        dataset = metrics_document["dataset"]
+        bucket = parsed["by_dataset"].get(dataset)
+        if bucket is None:
+            raise CheckError(
+                f"v2 reference log has no records for dataset {dataset!r}"
+            )
+
         checks: List[Dict[str, Any]] = []
 
         def add_scalar(field: str, expected: Any, actual: Any, *, numeric: bool = True) -> None:
@@ -1632,22 +1831,23 @@ def command_align_v2(
             "diagnostic_elapsed_time_compared_as_cost": False,
             "status": status,
         }
-        check.write_json("report.json", report)
-        check.write_text(
-            "summary.md",
-            f"# align-v2 check {run_id}\n\n"
-            f"- Input run: `{run_dir}`\n- Reference: `{reference}`\n"
-            f"- Compared fields: {len(checks)}\n"
-            f"- Discrepancies: {len(discrepancies)}\n"
-            f"- Limited identity findings: {len(limited_findings)}\n"
-            f"- Result: {report['status']}\n\n"
-            "The reference log is read-only and was not modified. Diagnostic\n"
-            "elapsed time is not compared with the new entry's measured cost.\n"
-            "Source-identity contradictions are findings, not silent agreement.\n",
+        envelope = _envelope(
+            "align-v2",
+            command=command,
+            repo_root=repo_root,
+            inputs=inputs,
+            tolerances=ALIGN_TOLERANCES,
+            status=report["status"],
+            result=report,
+            errors=[],
         )
-        check.set_status("success" if status == "ok" else "failed", stage="complete")
-        check.finalize_artifacts_manifest()
-        return {"run_dir": str(check.path), "status": report["status"], "report": report}
-    except BaseException as exc:  # noqa: BLE001
-        check.set_status("failed", stage="align-v2", error=repr(exc))
-        raise
+    except BaseException as exc:  # noqa: BLE001 - a usable destination still gets a report
+        envelope = _failure_envelope(
+            "align-v2",
+            command=command,
+            repo_root=repo_root,
+            inputs=inputs,
+            tolerances=ALIGN_TOLERANCES,
+            exc=exc,
+        )
+    return _finish(destination, envelope)

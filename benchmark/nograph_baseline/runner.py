@@ -35,12 +35,14 @@ class RunInterrupted(RuntimeError):
 
 @dataclass
 class RunSpec:
-    """Resolved configuration for one formal model run."""
+    """Resolved configuration for one model run."""
 
     data_name: str
     run_id: str
     mode: str = "count"
     seed: int = 0
+    purpose: str = "formal"
+    retain_candidates: bool = False
     ridge_backend: str = "numpy"
     clip_nonnegative: bool = False
     demand_path: Optional[str] = None
@@ -120,12 +122,13 @@ def execution_settings(seed: int) -> Dict[str, Any]:
 
 
 def execute_run(spec: RunSpec) -> Dict[str, Any]:
-    """Execute one formal run inside the current (isolated worker) process."""
+    """Execute one model run inside the current (isolated worker) process."""
     protocol.validate_dataset_mode(spec.data_name, spec.mode)
     protocol.validate_split_assertions()
     artifacts.validate_run_id(spec.run_id)
     repo_root = Path(spec.repo_root) if spec.repo_root else protocol.REPO_ROOT
-    runs_root = Path(spec.runs_root) if spec.runs_root else artifacts.runs_root(repo_root)
+    runs_root = _resolve_runs_root(spec, repo_root)
+    _validate_purpose(spec, repo_root, runs_root)
     protocol_path = Path(spec.protocol_path) if spec.protocol_path else protocol.PROTOCOL_PATH
     demand_path = Path(spec.demand_path) if spec.demand_path else protocol.demand_path(spec.data_name)
     graph_path = Path(spec.graph_path) if spec.graph_path else None
@@ -137,7 +140,7 @@ def execute_run(spec: RunSpec) -> Dict[str, Any]:
     total_started = time.perf_counter()
     failure: Optional[Dict[str, Any]] = None
     try:
-        run.set_status("running", stage=stage)
+        run.set_status("running", stage=stage, purpose=spec.purpose)
         run.write_json(
             "config.json",
             {
@@ -163,24 +166,41 @@ def execute_run(spec: RunSpec) -> Dict[str, Any]:
                 ),
             },
         )
+        stage = "source_capture"
+        git = artifacts.capture_git(repo_root)
+        artifacts.write_git_snapshot(run, git)
+        source = artifacts.capture_source(
+            run, repo_root, protocol_path=protocol_path
+        )
+        environment = artifacts.capture_environment(repo_root)
+        run.write_json("environment.json", environment)
+        artifacts.write_environment_snapshot(run, environment)
+
         stage = "protocol_snapshot"
-        if protocol_path.exists():
-            protocol_sha256 = _sha256(protocol_path)
+        protocol_sha256 = _sha256(protocol_path) if protocol_path.exists() else None
+        protocol_entry = (
+            source.get("protocol") if isinstance(source, Mapping) else None
+        )
+        reusable_protocol = bool(
+            isinstance(protocol_entry, Mapping)
+            and protocol_entry.get("git_status") == "committed_clean"
+            and protocol_entry.get("git_reference")
+        )
+        if reusable_protocol:
+            # The recorded commit/path locates the exact executing bytes, so no
+            # duplicate protocol file is written.
+            run.append_event(
+                "protocol_referenced",
+                commit=protocol_entry["git_reference"]["commit"],
+                path=protocol_entry["git_reference"]["path"],
+            )
+        elif protocol_path.exists():
             run.copy_file(protocol_path, "protocol.md")
         else:
-            protocol_sha256 = None
             run.write_text(
                 "protocol.md",
                 f"protocol snapshot unavailable at {protocol_path}\n",
             )
-
-        stage = "source_capture"
-        git = artifacts.capture_git(repo_root)
-        artifacts.write_git_snapshot(run, git)
-        untracked = artifacts.capture_untracked_source(run, repo_root)
-        environment = artifacts.capture_environment(repo_root)
-        run.write_json("environment.json", environment)
-        artifacts.write_environment_snapshot(run, environment)
 
         stage = "demand_read"
         started = time.perf_counter()
@@ -428,6 +448,7 @@ def execute_run(spec: RunSpec) -> Dict[str, Any]:
             {
                 "run_id": spec.run_id,
                 "run_type": spec.run_type,
+                "purpose": spec.purpose,
                 "dataset": spec.data_name,
                 "mode": spec.mode,
                 "seed": spec.seed,
@@ -439,7 +460,7 @@ def execute_run(spec: RunSpec) -> Dict[str, Any]:
                     "identity_available": git.get("identity_available"),
                     "errors": git.get("errors"),
                 },
-                "untracked_source": untracked,
+                "source_capture": source,
                 "node_keys_sha256": demand.identity_payload()["node_keys_sha256"],
                 "nodes": demand.node_count,
                 "source_sha256": demand.source_sha256,
@@ -485,6 +506,7 @@ def execute_run(spec: RunSpec) -> Dict[str, Any]:
         run.set_status(
             "success",
             stage="complete",
+            purpose=spec.purpose,
             total_seconds=durations["total"],
             nodes=demand.node_count,
         )
@@ -588,6 +610,35 @@ def _save_masks(run: artifacts.RunDirectory, stats: ridge.TrainingStats, cov: co
     run.save_npz("masks.npz", **arrays)
 
 
+def _resolve_runs_root(spec: RunSpec, repo_root: Path) -> Path:
+    """Resolve the output root for the declared execution purpose."""
+    if spec.runs_root:
+        return Path(spec.runs_root)
+    return artifacts.default_runs_root(repo_root, spec.purpose)
+
+
+def _validate_purpose(spec: RunSpec, repo_root: Path, runs_root: Path) -> None:
+    """Reject unknown purposes and development output inside formal records.
+
+    Paths are resolved (including symlink aliases) before any directory is
+    created, so a development invocation can never write into the formal
+    ``research/runs`` namespace.
+    """
+    if spec.purpose not in artifacts.PURPOSES:
+        raise RunError(
+            f"unknown execution purpose {spec.purpose!r}; expected one of "
+            f"{', '.join(artifacts.PURPOSES)}"
+        )
+    if spec.purpose != "development":
+        return
+    formal_root = artifacts.formal_runs_root(repo_root)
+    if artifacts.is_within(runs_root, formal_root):
+        raise RunError(
+            "development output root resolves inside the formal "
+            f"experiment namespace {formal_root}: {runs_root}"
+        )
+
+
 def _save_model_artifacts(
     run: artifacts.RunDirectory,
     spec: RunSpec,
@@ -621,26 +672,29 @@ def _save_model_artifacts(
         ),
         std_ddof=np.array([0], dtype=np.int64),
     )
-    for candidate in candidates:
-        label = f"{float(candidate['lambda']):g}"
-        run.save_npz(
-            f"candidates/{label}/parameters.npz",
-            W=np.asarray(candidate["W"], dtype=np.float64),
-            b=np.asarray(candidate["b"], dtype=np.float64),
-            scalar=np.array(
-                [
-                    float(candidate["lambda"]),
-                    float(candidate["alpha"]),
-                    float(candidate["M"]),
-                    float(candidate["objective"]),
-                ],
-                dtype=np.float64,
-            ),
-        )
-        run.save_npy(
-            f"candidates/{label}/validation.npy",
-            np.asarray(candidate["validation_predictions"], dtype=np.float64),
-        )
+    # Losing-candidate parameters and validation predictions are omitted by
+    # default; every candidate's scalar score row remains in selection.json.
+    if spec.retain_candidates:
+        for candidate in candidates:
+            label = f"{float(candidate['lambda']):g}"
+            run.save_npz(
+                f"candidates/{label}/parameters.npz",
+                W=np.asarray(candidate["W"], dtype=np.float64),
+                b=np.asarray(candidate["b"], dtype=np.float64),
+                scalar=np.array(
+                    [
+                        float(candidate["lambda"]),
+                        float(candidate["alpha"]),
+                        float(candidate["M"]),
+                        float(candidate["objective"]),
+                    ],
+                    dtype=np.float64,
+                ),
+            )
+            run.save_npy(
+                f"candidates/{label}/validation.npy",
+                np.asarray(candidate["validation_predictions"], dtype=np.float64),
+            )
 
 
 def _save_predictions(
@@ -720,6 +774,12 @@ def _summary_text(
         "",
         f"- Dataset: `{spec.data_name}/{spec.mode}`",
         f"- Protocol: `{protocol.PROTOCOL_VERSION}`",
+        f"- Purpose: `{spec.purpose}`"
+        + (
+            " (development output; not scientific acceptance evidence)"
+            if spec.purpose == "development"
+            else " (formal experiment)"
+        ),
         f"- Nodes: {demand.node_count}",
         f"- Seed: {spec.seed} (CPU, NumPy backend `{spec.ridge_backend}`)",
         f"- NaiveRef: `{references['NaiveRef']}` (validation MSE, frozen)",
