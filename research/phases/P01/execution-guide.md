@@ -409,7 +409,16 @@ python -m benchmark.nograph_baseline recompute \
 
 ## 8. 什么时候恢复 GPU 实验
 
-当归档比较已对齐，且决定需要回答 EvolveGCN-H 的重复性问题时，参照[原下一轮 GPU 指南](../../../guides/(2)GPU_SERVER_EVOLVEGCN_NEXT_STEPS_GUIDE.md)第 3 节。
+当归档比较已对齐，且决定需要回答 EvolveGCN-H 的重复性问题时，准备 T005 的受控复跑。原结果提交为 `950a1d8febbf992b8bda061d35f03107d0b18478`，GPU 为 Tesla T4，环境名为 `job-sdf`。优先保留原机器/环境；新机器需从历史日志核对依赖和设备，不能仅凭环境名认定条件相同。旧指南的前篇环境安装文档未入库，不能依赖其中缺失链接重建环境。
+
+在独立仓库检出原提交，训练前确认代码、CUDA 和确定性条件；以下只是准备命令，不启动训练：
+
+```bash
+conda activate job-sdf
+git rev-parse HEAD
+python -c 'import torch; print(torch.__version__, torch.cuda.is_available())'
+export CUBLAS_WORKSPACE_CONFIG=:4096:8
+```
 
 需要注意该指南的原结果默认目录与当前归档位置不同。在保存有这些归档文件的机器上设置：
 
@@ -417,9 +426,11 @@ python -m benchmark.nograph_baseline recompute \
 export EVOLVEGCN_ORIGINAL_ROOT="$(pwd)/experiments_archive/1st_try_in_phase_fix_origin/benchmark/graph_method/results/count/region/EvolveGCNH"
 ```
 
-复跑训练应使用原提交 `950a1d8febbf992b8bda061d35f03107d0b18478` 的独立仓库、原条件和新输出目录。归档目录需要同步到服务器后才能在那里使用；不要假定本机路径在服务器上存在。
+归档目录需要同步到服务器后才能在那里使用；不要假定本机路径在服务器上存在。缺少生成数据时，只准备 `region/count`，先核对保存 gold 与任务标签、重算原指标并对齐 LastValue；不要为准备复跑生成全部 14 组数据。
 
-同 seed 的近似重复结果先核对成功，再补其他 seed。同设备条件无法恢复时，明确记录差异，将新实验作为新环境结果。状态预热、输入归一化和学习率调整另建实验，不覆盖原始结果。
+复跑 seed 1 保持 L=6、H=3、500 epoch，使用新输出目录并拒绝覆盖。旧 CLI 按模式/粒度/模型/seed 决定默认路径，直接重跑会覆盖结果；应通过训练函数显式指定独立 `results_dir`。原提交下的训练及比较示例保留于[历史指南 §3](../../archives/legacy-development/GPU_SERVER_EVOLVEGCN_NEXT_STEPS_GUIDE.md#3-在独立目录复跑-seed-1)，读取原结果时使用上面的归档路径。实际执行仍需该实验的授权，并按当前协议保存来源、条件、预测/标签、参数、选模与日志，不照搬旧指南的默认打包收尾。
+
+同 seed 的近似重复结果先核对成功，再决定是否补其他 seed。比较逐窗口预测最大差、标签一致性与总体指标，微小浮点差不直接等同于失败；明显差异先核对源码、数据、依赖、GPU 与确定性设置。同设备条件无法恢复时，明确记录差异，将新实验作为新环境结果。状态预热、输入归一化和学习率调整另建实验，不覆盖原始结果。
 
 ## 9. 第一轮结束时留下什么
 

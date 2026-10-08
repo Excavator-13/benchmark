@@ -16,7 +16,7 @@
 - seed 0：MAE 41.080686，RMSE 238.957775。
 - seed 1：MAE 96.180772，RMSE 579.504594。
 - 没有同 seed 复跑，不能由两个运行认定初始化方差或稳定平均性能。
-- 历史说明前半是指南，末尾才是实际执行；旧源码修复报告见[首次核验](../../not_in_origin/verification_20260921/REPORT.md)和[修复后核验](../../not_in_origin/fix_verification_20260921/REPORT.md)。它们不替代当前版本核验。
+- 历史说明前半是指南，末尾才是实际执行；旧源码修复报告见[首次核验](legacy-development/verification_20260921/REPORT.md)和[修复后核验](legacy-development/fix_verification_20260921/REPORT.md)。它们不替代当前版本核验。
 
 ### 第一阶段诊断的范围
 
@@ -30,10 +30,9 @@
 
 ```bash
 shasum -a 256 -c experiments_archive/phase1/phase1-20261006-v2-01.tar.gz.sha256
-python3 research/archives/migrations/verify_20261006.py
 ```
 
-旧摘要中的“未推送”描述封存时状态，保持不变。旧 `planning-sha256.txt` 使用原目录路径；迁移后的内容核验由上述脚本按映射完成，不改写封存清单。
+旧摘要中的“未推送”描述封存时状态，保持不变。旧 `planning-sha256.txt` 使用原目录路径；首次标准化的内容核验由 `verify_20261006.py` 按当时映射完成，不改写封存清单。该脚本包含相对旧基准的全工作树不变断言，后续实现与整理已超出其适用时点，不能作为当前 HEAD 的全仓库检查，限制见[本次映射](migrations/20261008-legacy-cleanup.md)。
 
 ## T004 baseline 运行（2026-10-07）
 
@@ -104,6 +103,14 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 用户随后明确要求提交、推送整轮减负工作。保存提交：`b701585eab9671c9c3aaddf36ece5b0b75acd76a`（58 个文件变更，包含维护者的 skill 修改、协议/当前说明、已验收实现/测试、主规格、OpenSpec 完整归档、包外元数据清理与研究侧收尾）。2026-10-08 正常 `git push origin xzs` 成功，目标为 `git@github.com:Excavator-13/benchmark.git` 的 `xzs`，push 回报 `715d44d..b701585`。没有独立远端取回或恢复核验，不因此追加检查；既有 T004 包的保存身份保留。
 
 本次仅检查提交范围、沿用当前实现仍匹配的独立 PASS，并执行 Git 保存；未重跑测试、实验、封存或恢复检查。后续本页/state 的保存事实更新作为普通文档提交，其自身身份从 Git 历史追溯，不继续生成回执或改写封存材料。
+
+## T011 历史整理（2026-10-08）
+
+按 [D012](../decisions.md#d012-完成剩余历史与参考材料整理)完成剩余清理；旧/新路径见[迁移记录](migrations/20261008-legacy-cleanup.md)。开发历史见[入口](legacy-development/README.md)，探索历史见[入口](legacy-exploration/README.md)，上游参考及本地文献见[说明](../../references/README.md)。
+
+195 个 tracked 文件与整理前 `e36e374` 的对应内容逐字节一致，删除范围仅三个失效探针/预览；活跃链接/锚点检查通过，当前指导示例仅做语法检查，`git diff --check` 通过。dataset、运行实现（除移走两份历史探索来源）、封存包、run 与 OpenSpec 归档不变，不运行实验、完整测试或恢复演练。本地 PDF 原样改位置并继续忽略，其他 ignored 内容不删除；PDF 本身不随 Git 备份。
+
+迁移与入口更新已在本地完成，尚待本轮提交/push；既有内容可从原 Git 路径追溯。没有新 run、封存包或哈希清单，也不把纯路径变化当作新软件行为验证。
 
 ## 远端核验记录
 

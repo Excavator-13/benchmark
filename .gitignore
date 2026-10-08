@@ -13,6 +13,7 @@ __pycache__/
 */*/__pycache__/
 */*/*/__pycache__/
 */*.pdf
+/references/literature/*.pdf
 
 # Disposable fixtures and development probes; curated experiments use research/runs.
 /scratch/

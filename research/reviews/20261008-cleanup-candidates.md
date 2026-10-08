@@ -1,9 +1,9 @@
 # 仓库清理候选清单
 
-日期：2026-10-08。状态：**部分首批整理已执行，其余仍为候选**。
+日期：2026-10-08。状态：**本次授权的清理与历史归类已完成**。
 与[协议减负方案](20261008-maintenance-and-protocol.md)配套。本清单主要回答与本次证据膨胀无关、仍可整理的东西；baseline 冗余展开副本在主报告另述。
 
-后续执行：已清理下列 16 个 `.DS_Store` 与两个 baseline 缓存目录（22 文件）；根目录历史 skill 建议已迁至 [reviews](20261008-research-maintainer-redesign.md)。下表是原候选盘点，不代表这些路径仍存在。用途未确认的预览/探针、notebook、个人配置与文献保留；第二轮迁移未启动。精确事实见[整理记录](../archives/migrations/20261008-evidence-maintenance.md)。新版政策仅取消 T004 的 24 个包外 sidecar 和全成员哈希清单，其他历史封存包/校验仍保留。
+执行结果：首轮已清理下列 16 个 `.DS_Store` 与两个 baseline 缓存目录（22 文件），根目录历史 skill 建议已迁至 [reviews](20261008-research-maintainer-redesign.md)，见[首轮记录](../archives/migrations/20261008-evidence-maintenance.md)。用户随后授权剩余整理：三个失效预览/探针已删除；核验/探索历史、图和来源脚本、上游参考与旧 GPU 指南已归类，活跃入口已更新；本地论文移到文献目录并继续忽略，个人配置和缓存保留，没有删除 ignored 文件。旧/新路径及限制见[第二轮记录](../archives/migrations/20261008-legacy-cleanup.md)。下表保留原候选盘点，不是当前待办，也不代表旧路径仍存在；未选择批量删除的材料有意保留。封存包及历史校验保留。
 
 大小为本机 `du` 近似占用，非精确内容字节数。“未发现引用”限于本轮仓库文本搜索，不保证外部机器/人工操作没有依赖。Git 跟踪情况是当前事实，不代表历史上是否曾存在。
 
@@ -20,7 +20,7 @@
 
 tracked 候选删除属于普通当前树修改，内容仍可从既有 Git 历史追溯；不需要为这些临时工具另外封存实验包。
 
-16 个现存 `.DS_Store` 的精确路径：
+首轮盘点的 16 个 `.DS_Store` 路径（已在首轮处理，本轮不删除 ignored 文件）：
 
 ```text
 .DS_Store
@@ -52,7 +52,7 @@ experiments_archive/1st_try_in_phase_fix_origin/benchmark/graph_method/results/c
 | `not_in_origin/NeurIPS-2024-job-sdf-a-multi-granularity-dataset-for-job-skill-demand-forecasting-and-benchmarking-Paper-Datasets_and_Benchmarks_Track.pdf` | ignored / 428 KiB 量级 | 正在研究的数据集论文，属于文献资料。可移入文献管理器或固定 literature 位置；不当作无用文件删除，当前路线图涉及该本地 PDF 的观察 |
 | `.vscode/settings.json` | ignored / 4 KiB 量级 | 仅本机 conda/editor 设置。可保留个人工作配置；只在本人不再使用时删除，不属于科研垃圾 |
 
-以上路径是整理建议，不要求这次都新增目录。只删除确认无用的几项也能收拢根目录；保留参考资料时再创建对应目录。
+以上是原盘点建议；第二轮已选择保留并归类参考资料、旧指南和论文，编辑器配置原处保留。
 
 ## 3. 适合归类，不能整批删除
 
