@@ -4,6 +4,8 @@ For research work, start with `RESEARCH.md`, then read `research/state.md` and t
 
 Task and phase status belongs to the phase plan. Record proposed advice separately from accepted decisions. Preserve sealed runs and legacy archives; update later storage and backup status in `research/archives/index.md`. Runtime source commits do not need to match current HEAD.
 
+Storage and backup status entries describe artifacts — runs, sealed packages, delivered analyses, implementation and acceptance batches — not the record files themselves. Index, state, plan and decision files are ordinary versioned documents whose commit identity is read from Git history: when a commit is part of the same authorized action, write save status without that commit's own hash (for example "saved by this document commit; identity traced from Git history"), and keep the concrete save-status commit hash only in `research/archives/index.md`. Never add a follow-up commit whose only purpose is to restate that a record was committed.
+
 Update the recovery point and next action after meaningful progress and before handing off. Research bookkeeping does not authorize experiments, scientific protocol changes, commits, or pushes beyond current or existing user authorization. Use the existing OpenSpec workflows for implementation and independent verification when applicable.
 
 ## Cross-skill delegation pointer
