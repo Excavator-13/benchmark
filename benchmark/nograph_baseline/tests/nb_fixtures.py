@@ -29,6 +29,13 @@ def region_keys(regions: int, skills: int) -> List[Tuple[int, int]]:
     ]
 
 
+def r2_keys(contexts: int, skills: int) -> List[Tuple[int, int]]:
+    """Return the ``(r2_id, skill_id)`` grid with one skill per context."""
+    return [
+        (context, skill) for context in range(contexts) for skill in range(skills)
+    ]
+
+
 def synthetic_signal(
     node_count: int,
     seed: int = 0,
@@ -136,11 +143,21 @@ def build_fixture(
     constant_rows: Sequence[int] = (1, 2),
     shuffle_seed: Optional[int] = 7,
     graph_rows: Optional[Sequence[Sequence[int]]] = None,
+    contexts: int = 3,
+    skills: int = 2,
 ) -> Dict[str, Any]:
-    """Create a complete demand+graph fixture and return its description."""
+    """Create a complete demand+graph fixture and return its description.
+
+    ``node_count`` sizes the r0/region fixtures.  The r2 fixture is sized by the
+    explicit ``contexts`` and ``skills`` grid so that the same ``skill_id`` is
+    deliberately repeated across ``r2_id`` contexts.
+    """
     if data_name == "r0":
         keys = r0_keys(node_count)
         context = [0]
+    elif data_name == "r2":
+        keys = r2_keys(contexts, skills)
+        context = list(range(contexts))
     else:
         keys = region_keys(node_count, 2)
         context = list(range(node_count))
@@ -157,6 +174,18 @@ def build_fixture(
                 [context[0], 1, 2],
                 [context[0], 2, 2],
             ]
+        elif data_name == "r2":
+            # A non-self edge in the first context, a self-loop for the same
+            # skill in the second context and untouched isolated nodes: merging
+            # contexts would incorrectly cover the second context's nodes.
+            if skills >= 2:
+                graph_rows = [[context[0], 0, 1], [context[0], 1, 1]]
+                if len(context) > 1:
+                    graph_rows.append([context[1], 1, 1])
+            else:
+                graph_rows = [[context[0], 0, 0]]
+                if len(context) > 1:
+                    graph_rows.append([context[1], 0, 0])
         else:
             # Region fixtures have only two skills; keep every endpoint valid.
             graph_rows = [

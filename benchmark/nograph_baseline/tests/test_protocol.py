@@ -86,14 +86,48 @@ class CliSurfaceTests(unittest.TestCase):
     def test_supported_datasets_and_modes_are_enforced(self) -> None:
         parser = cli.build_parser()
         run_help = parser._subparsers._group_actions[0].choices["run"].format_help()
-        self.assertIn("{r0,region}", run_help)
+        self.assertIn("{r0,r2,region}", run_help)
         self.assertIn("{count}", run_help)
+        for data_name in ("r0", "r2", "region"):
+            with self.subTest(data_name=data_name):
+                parsed = parser.parse_args(
+                    ["run", "--data-name", data_name, "--run-id", "x"]
+                )
+                self.assertEqual(parsed.data_name, data_name)
+                self.assertEqual(parsed.mode, "count")
         with self.assertRaises(SystemExit):
-            parser.parse_args(["run", "--data-name", "r2", "--run-id", "x"])
+            parser.parse_args(["run", "--data-name", "r3", "--run-id", "x"])
         with self.assertRaises(SystemExit):
             parser.parse_args(
                 ["run", "--data-name", "r0", "--mode", "rate", "--run-id", "x"]
             )
+
+    def test_r2_default_paths_and_node_keys(self) -> None:
+        self.assertEqual(protocol.SUPPORTED_DATASETS["r2"], ("r2_id",))
+        self.assertEqual(protocol.context_columns("r2"), ("r2_id",))
+        self.assertEqual(protocol.node_key_columns("r2"), ("r2_id", "skill_id"))
+        self.assertEqual(
+            protocol.demand_path("r2"), protocol.DEMAND_DIR / "r2.parquet"
+        )
+        self.assertEqual(
+            protocol.graph_path("r2"), protocol.GRAPH_DIR / "r2.parquet"
+        )
+        # r0/region identities keep their original key schema.
+        self.assertEqual(protocol.node_key_columns("r0"), ("r0_id", "skill_id"))
+        self.assertEqual(
+            protocol.node_key_columns("region"), ("region_id", "skill_id")
+        )
+        with self.assertRaises(protocol.ProtocolError):
+            protocol.node_key_columns("r3")
+
+    def test_scientific_and_record_versions_are_unchanged(self) -> None:
+        self.assertEqual(protocol.PROTOCOL_VERSION, "P1-count-L6-H3-v3")
+        self.assertEqual(protocol.SUPPORTED_MODES, ("count",))
+        self.assertEqual(protocol.SPLITS["validation"], (21,))
+        self.assertEqual(protocol.SPLITS["test"], (24, 25, 26, 27))
+        protocol.validate_split_assertions()
+        with self.assertRaises(protocol.ProtocolError):
+            protocol.windows_for_split("outside-protocol")
 
     def test_module_relative_default_paths(self) -> None:
         self.assertEqual(

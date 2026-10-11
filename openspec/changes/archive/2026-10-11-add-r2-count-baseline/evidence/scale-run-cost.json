@@ -1,0 +1,117 @@
+{
+  "dataset": "r2",
+  "environment": {
+    "cpu_count": 10,
+    "numpy_blas_config": "{\n  \"Compilers\": {\n    \"c\": {\n      \"name\": \"clang\",\n      \"linker\": \"ld64\",\n      \"version\": \"14.0.0\",\n      \"commands\": \"cc\",\n      \"args\": \"-fno-strict-aliasing, -DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\",\n      \"linker args\": \"-fno-strict-aliasing, -DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\"\n    },\n    \"cython\": {\n      \"name\": \"cython\",\n      \"linker\": \"cython\",\n      \"version\": \"3.0.8\",\n      \"commands\": \"cython\"\n    },\n    \"c++\": {\n      \"name\": \"clang\",\n      \"linker\": \"ld64\",\n      \"version\": \"14.0.0\",\n      \"commands\": \"c++\",\n      \"args\": \"-DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\",\n      \"linker args\": \"-DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\"\n    }\n  },\n  \"Machine Information\": {\n    \"host\": {\n      \"cpu\": \"aarch64\",\n      \"family\": \"aarch64\",\n      \"endian\": \"little\",\n      \"system\": \"darwin\"\n    },\n    \"build\": {\n      \"cpu\": \"aarch64\",\n      \"family\": \"aarch64\",\n      \"endian\": \"little\",\n      \"system\": \"darwin\"\n    }\n  },\n  \"Build Dependencies\": {\n    \"blas\": {\n      \"name\": \"openblas64\",\n      \"found\": true,\n      \"version\": \"0.3.23.dev\",\n      \"detection method\": \"pkgconfig\",\n      \"include directory\": \"/opt/arm64-builds/include\",\n      \"lib directory\": \"/opt/arm64-builds/lib\",\n      \"openblas configuration\": \"USE_64BITINT=1 DYNAMIC_ARCH=1 DYNAMIC_OLDER= NO_CBLAS= NO_LAPACK= NO_LAPACKE= NO_AFFINITY=1 USE_OPENMP= SANDYBRIDGE MAX_THREADS=3\",\n      \"pc file directory\": \"/usr/local/lib/pkgconfig\"\n    },\n    \"lapack\": {\n      \"name\": \"dep4350285776\",\n      \"found\": true,\n      \"version\": \"1.26.4\",\n      \"detection method\": \"internal\",\n      \"include directory\": \"unknown\",\n      \"lib directory\": \"unknown\",\n      \"openblas configuration\": \"unknown\",\n      \"pc file directory\": \"unknown\"\n    }\n  },\n  \"Python Information\": {\n    \"path\": \"/private/var/folders/76/zy5ktkns50v6gt5g8r0sf6sc0000gn/T/cibw-run-iyy0yn4s/cp311-macosx_arm64/build/venv/bin/python\",\n    \"version\": \"3.11\"\n  },\n  \"SIMD Extensions\": {\n    \"baseline\": [\n      \"NEON\",\n      \"NEON_FP16\",\n      \"NEON_VFPV4\",\n      \"ASIMD\"\n    ],\n    \"found\": [\n      \"ASIMDHP\"\n    ],\n    \"not found\": [\n      \"ASIMDFHM\"\n    ]\n  }\n}\n",
+    "packages": {
+      "numpy": "1.26.4",
+      "pandas": "2.2.3",
+      "pyarrow": "17.0.0"
+    },
+    "platform": "macOS-27.0.1-arm64-arm-64bit",
+    "processor": "arm",
+    "python": "3.11.17 (main, Oct  1 2026, 20:09:52) [Clang 20.1.8 ]"
+  },
+  "evidence_kind": "synthetic r2-scale development cost measurement",
+  "expected_training_samples_M": 2306980,
+  "formal_run": false,
+  "inputs": {
+    "contexts": {
+      "r2_id": 52
+    },
+    "covered_nodes": 104000,
+    "demand_bytes": 3379697,
+    "demand_path": "scratch/r2-scale-fixture/demand/r2.parquet",
+    "demand_sha256": "e09134fad7b29498bf3d8afe74af541876b251edd6d29a618b43871e5ebb9a26",
+    "graph_bytes": 22040,
+    "graph_path": "scratch/r2-scale-fixture/graph/r2.parquet",
+    "graph_sha256": "517d029328e254e9f82c4b28c53f03c38a7f42becfad48e6a5015f3dbe981ae9",
+    "grid_complete": true,
+    "isolated_nodes": 17420,
+    "months": 36,
+    "nodes": 121420,
+    "run_demand_sha256": "e09134fad7b29498bf3d8afe74af541876b251edd6d29a618b43871e5ebb9a26",
+    "run_node_keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+    "unique_node_keys": 121420
+  },
+  "inside_research_runs": false,
+  "limitations": [
+    "synthetic fixed-seed fixture, not the real r2 dataset",
+    "one development execution, not a formal run and not a performance threshold",
+    "single-machine macOS arm64 measurement; no cross-machine comparison"
+  ],
+  "measurements": {
+    "dataset": "r2",
+    "device": "cpu",
+    "diagnostic_elapsed_times_used": false,
+    "execution_settings": {
+      "blas_thread_environment": {
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "device": "cpu",
+      "randomized_behavior": "none: naive rules and shared Ridge are deterministic",
+      "seed": 0
+    },
+    "mode": "count",
+    "peak_memory": {
+      "bytes": 1300463616,
+      "method": "resource.getrusage(RUSAGE_SELF).ru_maxrss",
+      "native_unit": "bytes",
+      "native_value": 1300463616,
+      "status": "ok"
+    },
+    "run_id": "r2-scale-dev-001",
+    "stage_definitions": {
+      "coverage_read": "read and annotate neighbour coverage evidence",
+      "demand_read": "read and validate the demand Parquet source",
+      "metrics_output": "metric reduction and artifact writing",
+      "naive_prediction": "five na\u00efve methods, no optimization",
+      "preprocessing": "frozen statistics and standardized design matrices",
+      "ridge_fit": "all candidate SharedRidge fits",
+      "ridge_selection": "validation-only lambda selection",
+      "selected_model_inference": "selected-model validation/test prediction"
+    },
+    "timings_seconds": {
+      "coverage_read": 0.0753240839985665,
+      "demand_read": 0.13677129200004856,
+      "metrics_output": 0.9250521670001035,
+      "naive_prediction": 0.012303250001423294,
+      "preprocessing": 0.11100979200273287,
+      "reference_selection": 0.01122729199778405,
+      "ridge_fit": 0.487069041999348,
+      "ridge_selection": 9.915998816723004e-06,
+      "selected_model_inference": 0.00835387500046636,
+      "total": 2.33876062499985
+    },
+    "totals_seconds": {
+      "data_reading": 0.21209537599861505,
+      "fitting": 0.487069041999348,
+      "inference": 0.00835387500046636,
+      "total": 2.33876062499985
+    }
+  },
+  "purpose": "development",
+  "reproduction_command": "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python -m benchmark.nograph_baseline run --data-name r2 --mode count --seed 0 --run-id r2-scale-dev-001 --purpose development --ridge-backend numpy --demand-path scratch/r2-scale-fixture/demand/r2.parquet --graph-path scratch/r2-scale-fixture/graph/r2.parquet --runs-root scratch/r2-scale-run",
+  "run_dir": "scratch/r2-scale-run/r2-scale-dev-001",
+  "scientific_conclusion": false,
+  "seed": 0,
+  "selected_lambda": 1.0,
+  "status": {
+    "nodes": 121420,
+    "purpose": "development",
+    "run_id": "r2-scale-dev-001",
+    "run_type": "run",
+    "stage": "complete",
+    "state": "success",
+    "total_seconds": 2.33876062499985,
+    "updated": "2026-10-11T18:09:25+08:00"
+  },
+  "synthetic": true,
+  "training_samples_M": 2306980,
+  "wall_clock_seconds_from_time_p": 2.56,
+  "worker_model": "public `python -m benchmark.nograph_baseline run`; CLI launches an independent `benchmark.nograph_baseline._worker` process"
+}

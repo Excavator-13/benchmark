@@ -240,3 +240,20 @@ legacy ID：D-002。
 范围与边界：把 `r2/count` 加入同一无图 baseline 入口（上下文列 `r2_id`，CLI `--data-name`、检查命令、测试与文档同步），复用现有读取、训练期标准化、五项朴素基线、共享 Ridge、验证选模、固定活跃度/邻居分组与产物格式；不改科学协议、选模/分组/收益门槛，不改 `r0`/`region` 历史结果、旧封存包或包内内容。正式 `r2/count` 运行与保存需用户单独授权；实现与独立 PASS 只作为 T006 的实现证据，不等于 T006 的实验验收。P01-T006 任务状态保持 `todo`。
 
 影响：T006 的实现改由 OpenSpec 变更承载；底座 -> `r2` -> 内部回测顺序与 D006/D007/D015 的规划范围不变；本决定不启动实验、封存、commit/push 或恢复核验。
+
+## D017: T006 r2/count 实现研究侧验收与委托回收
+
+提出及接受日期：2026-10-11。状态：`accepted`。
+来源：用户告知 OpenSpec 侧结束；依据归档独立报告 [verification.md](../openspec/changes/archive/2026-10-11-add-r2-count-baseline/verification.md)（`Verdict: PASS`）与 [DELEGATION](../DELEGATION.md) 的两条结束判据，完成 [D016](#d016-委派-t006-r2count-扩展给-openspec) 登记委托的研究侧回收。
+
+核对（记录更新前，只读）：活跃变更目录已不存在；归档报告为 PASS。按报告 40 文件清单重算 SHA256（`openspec/changes/add-r2-count-baseline/**` 映射到归档目录后比较），39 个与当前工作区实现一致、无缺失文件；唯一差异是主规格 `openspec/specs/nograph-baseline-entry/spec.md`，报告已明示归档时的主规格同步不计入 pre-archive 指纹，其 diff 为 r2 delta 的预期同步。未发现实现文件被事后改写。
+
+决定：接受该变更作为 **P01-T006 的实现就绪证据**——`r2/count` 可经同一无图入口运行，身份/活跃度/图覆盖审计、五项朴素基线、仅验证集选模的 SharedRidge、固定分组、产物与 `recompute`/`compare`/`align-v2` 检查及 development 成本路径均有证据；`r0`/`region` 行为、历史 run 与封存包未改。按 DELEGATION 的"研究侧收尾"字段关闭委托指针。
+
+T006 任务状态改为 `in_progress`（实现部分完成）。剩余研究项：真实 `r2/count` 的身份/活跃度/图审计、正式 run 与产物保存、实测成本；这些需要用户单独授权。实现 PASS 不等于 T006 完成，也不产生任何预测或图收益结论。
+
+限制：报告的规模证据来自合成 fixture 与 `--purpose development` 运行（121,420 节点、52 上下文，读取/拟合/推理合计约 2.1 秒），不是真实 r2 成本或科学结论；可选 sklearn 未执行；真实 r2 数据、旧运行与封存包未被该变更读取或改动。
+
+保存状态：实现、测试、文档、主规格与归档变更目录在报告核验时即处于未提交状态；本轮记录更新同样未提交、未封存、未做备份或恢复核验。
+
+影响：T006 -> T007 顺序保留；正式 `r2/count` run 与保存需另行授权；本决定不 commit/push、不启动实验、不改科学协议。

@@ -114,6 +114,7 @@ CLIPPED_MODEL_NAME = "SharedRidgeNonnegative"
 #: Dataset name -> context id column(s) preceding ``skill_id``.
 SUPPORTED_DATASETS: Mapping[str, Tuple[str, ...]] = {
     "r0": ("r0_id",),
+    "r2": ("r2_id",),
     "region": ("region_id",),
 }
 SUPPORTED_MODES: Tuple[str, ...] = ("count",)

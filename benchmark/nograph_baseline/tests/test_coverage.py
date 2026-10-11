@@ -302,5 +302,161 @@ class MaskBundleTests(unittest.TestCase):
         )
 
 
+class R2CoverageTests(unittest.TestCase):
+    """P01-T006: r2 coverage stays context-qualified and provenance-checked."""
+
+    SOURCE_SHA = "b" * 64
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        self.key_array = np.asarray(fx.r2_keys(2, 3), dtype=np.int64)
+
+    def tearDown(self) -> None:
+        self._tmp.cleanup()
+
+    def test_non_self_edge_covers_both_ends_only_in_its_context(self) -> None:
+        rows = [[0, 0, 1], [1, 1, 1]]  # edge in context 0, self-loop in context 1
+        path = fx.write_graph(self.root / "r2.parquet", "r2", rows)
+        result = coverage.load_graph_coverage("r2", self.key_array, graph_path=path)
+        # (0, 0) and (0, 1) are covered; the same skill in context 1 is not.
+        np.testing.assert_array_equal(
+            result.mask, np.array([True, True, False, False, False, False])
+        )
+        self.assertEqual(result.provenance["self_loop_rows"], 1)
+        self.assertEqual(result.provenance["non-self rows used"], 1)
+        self.assertEqual(result.provenance["covered_nodes"], 2)
+        self.assertEqual(result.provenance["key_columns"], ["r2_id", "skill_id"])
+        self.assertEqual(result.provenance["nodes"], 6)
+        self.assertFalse(result.provenance["used_for_forecasting"])
+        groups = coverage.coverage_groups(result.mask)
+        self.assertEqual(int(groups["has_nonself_neighbor"].sum()), 2)
+        self.assertEqual(int(groups["no_nonself_neighbor"].sum()), 4)
+
+    def test_self_loop_alone_never_supplies_a_neighbour(self) -> None:
+        rows = [[0, 0, 0], [1, 2, 2]]
+        path = fx.write_graph(self.root / "selfloops.parquet", "r2", rows)
+        result = coverage.load_graph_coverage("r2", self.key_array, graph_path=path)
+        self.assertEqual(result.provenance["self_loop_rows"], 2)
+        self.assertFalse(result.mask.any())
+
+    def test_unknown_context_or_endpoint_fails_validation(self) -> None:
+        unknown_context = fx.write_graph(
+            self.root / "context.parquet", "r2", [[7, 0, 1]]
+        )
+        with self.assertRaises(coverage.CoverageError):
+            coverage.load_graph_coverage(
+                "r2", self.key_array, graph_path=unknown_context
+            )
+        unknown_endpoint = fx.write_graph(
+            self.root / "endpoint.parquet", "r2", [[0, 0, 99]]
+        )
+        with self.assertRaises(coverage.CoverageError):
+            coverage.load_graph_coverage(
+                "r2", self.key_array, graph_path=unknown_endpoint
+            )
+
+    def test_graph_without_r2_id_column_fails_validation(self) -> None:
+        # A table using another dataset's context column cannot qualify r2 keys.
+        wrong_columns = fx.write_graph(
+            self.root / "wrong-cols.parquet", "r0", [[0, 0, 1]]
+        )
+        with self.assertRaises(coverage.CoverageError):
+            coverage.load_graph_coverage(
+                "r2", self.key_array, graph_path=wrong_columns
+            )
+
+    def test_mask_bundle_round_trip_records_r2_provenance(self) -> None:
+        path = self.root / "r2-mask.npz"
+        mask = np.array([True, False, True, False, False, True])
+        record = coverage.save_mask_bundle(
+            path,
+            "r2",
+            self.key_array,
+            mask,
+            {
+                "definition": coverage.COVERAGE_DEFINITION,
+                "source": "raw_graph_parquet",
+                "source_path": "dataset/graph/r2.parquet",
+                "source_sha256": self.SOURCE_SHA,
+            },
+        )
+        loaded = coverage.load_mask_bundle(path, "r2", self.key_array)
+        np.testing.assert_array_equal(loaded.mask, mask)
+        self.assertEqual(loaded.provenance["dataset"], "r2")
+        self.assertEqual(loaded.provenance["key_columns"], ["r2_id", "skill_id"])
+        self.assertEqual(loaded.provenance["source_sha256"], self.SOURCE_SHA)
+        self.assertEqual(loaded.provenance["bundle_sha256"], record["bundle_sha256"])
+        self.assertEqual(loaded.covered, 3)
+
+    def _write_raw_bundle(self, path: Path, *, metadata, mask=None, keys=None) -> Path:
+        with open(path, "wb") as handle:
+            np.savez(
+                handle,
+                mask=np.array([True, False, True, False, False, True], dtype=bool)
+                if mask is None
+                else mask,
+                node_keys=self.key_array if keys is None else keys,
+                metadata=np.array(json.dumps(metadata)),
+            )
+        return path
+
+    def _metadata(self, **overrides) -> dict:
+        metadata = {
+            "dataset": "r2",
+            "key_columns": ["r2_id", "skill_id"],
+            "definition": coverage.COVERAGE_DEFINITION,
+            "provenance": {
+                "source": "raw_graph_parquet",
+                "source_path": "dataset/graph/r2.parquet",
+                "source_sha256": self.SOURCE_SHA,
+            },
+        }
+        metadata.update(overrides)
+        return metadata
+
+    def test_mask_bundle_wrong_dataset_or_schema_is_rejected(self) -> None:
+        wrong_dataset = self._write_raw_bundle(
+            self.root / "wrongds.npz", metadata=self._metadata(dataset="region")
+        )
+        with self.assertRaises(coverage.CoverageError):
+            coverage.load_mask_bundle(wrong_dataset, "r2", self.key_array)
+        wrong_schema = self._write_raw_bundle(
+            self.root / "wrongschema.npz",
+            metadata=self._metadata(key_columns=["region_id", "skill_id"]),
+        )
+        with self.assertRaises(coverage.CoverageError):
+            coverage.load_mask_bundle(wrong_schema, "r2", self.key_array)
+
+    def test_mask_bundle_wrong_keys_missing_provenance_or_semantics_fail(self) -> None:
+        other_keys = np.asarray(fx.r2_keys(2, 3), dtype=np.int64)
+        other_keys[0, 1] = 99
+        wrong_keys = self._write_raw_bundle(
+            self.root / "wrongkeys.npz", metadata=self._metadata(), keys=other_keys
+        )
+        with self.assertRaises(coverage.CoverageError):
+            coverage.load_mask_bundle(wrong_keys, "r2", self.key_array)
+        no_source = self._write_raw_bundle(
+            self.root / "nosource.npz",
+            metadata=self._metadata(provenance={"source": "raw_graph_parquet"}),
+        )
+        with self.assertRaises(coverage.CoverageError):
+            coverage.load_mask_bundle(no_source, "r2", self.key_array)
+        bad_semantics = self._write_raw_bundle(
+            self.root / "semantics.npz",
+            metadata=self._metadata(
+                definition="self-loops count as neighbours; ignore contexts"
+            ),
+        )
+        with self.assertRaises(coverage.CoverageError):
+            coverage.load_mask_bundle(bad_semantics, "r2", self.key_array)
+        wrong_id = self._write_raw_bundle(
+            self.root / "wrongid.npz",
+            metadata=self._metadata(definition_id="some-other-coverage"),
+        )
+        with self.assertRaises(coverage.CoverageError):
+            coverage.load_mask_bundle(wrong_id, "r2", self.key_array)
+
+
 if __name__ == "__main__":
     unittest.main()

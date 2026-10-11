@@ -125,6 +125,16 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 
 保存状态：随 2026-10-11 文档提交入库（提交身份从 Git 历史追溯）；**未封存，异地备份与远端恢复未核验**。不是实验 run，不作封存，不修改既有 24 个 T004 包、旧 run、可读入口或 OpenSpec 归档。需要完整模型数组时仍按上文展开旧包。探针依赖装在本机 conda 环境 `job-sdf-baseline`（torch 2.14.1、torch-geometric 2.8.0.post1、torch_sparse/torch_scatter 源码编译、torch_geometric_temporal 0.56.2），不是归档 GPU 实验环境。
 
+## T006 r2/count 实现证据（2026-10-11）
+
+所属任务 P01-T006。OpenSpec 变更 `add-r2-count-baseline` 已归档，独立报告为 [`Verdict: PASS`](../../openspec/changes/archive/2026-10-11-add-r2-count-baseline/verification.md)；研究侧按 [D017](../decisions.md#d017-t006-r2count-实现研究侧验收与委托回收) 接受其实现就绪证据，并关闭 [DELEGATION](../../DELEGATION.md) 指针。
+
+回收时只读核对：活跃变更目录已不存在；按报告 40 文件清单重算 SHA256（变更目录映射到归档路径），39 个与当前工作区实现一致，无缺失；唯一差异是主规格 `openspec/specs/nograph-baseline-entry/spec.md`，即报告明确排除在 pre-archive 指纹外的归档同步。
+
+证据性质与限制：`r2/count` 的入口/检查/成本证据来自临时 fixture 与 `--purpose development` 运行（合成 121,420 节点、52 上下文，读取/拟合/推理合计约 2.1 秒），**不是真实 r2 实验、成本或预测结论**；可选 sklearn 未执行。真实 `r2` 审计、正式 run、产物保存与实测成本需用户另行授权。没有新 run、封存包或备份核验；既有 24 个 T004 包、旧 run、旧 OpenSpec 归档与科学协议未改。
+
+保存状态：实现、测试、文档、主规格与归档变更目录在报告核验时即未提交，回收记录更新同样**未提交、未封存、未做备份核验**；提交身份从 Git 历史追溯。
+
 ## my-change PR 合入（2026-10-11 接手记录）
 
 用户告知此前已向 `my-change` 发起 PR。本轮只读本地 Git：合并提交 `7cbfe561285b1118c09e3e2510e1e2d711fe7432` 记录 PR #9（`Excavator-13/xzs`），提交时间为 2026-10-08，父提交为 `341e7f8` 与 `98e9fbe`。本地 `xzs`、`my-change` 和缓存的 `origin/my-change` 均指向该合并提交；缓存的 `origin/xzs` 为 `98e9fbe`。合并提交与 `98e9fbe` 的文件树差异为空，后者含此前维护、T010/T011 及保存状态记录。

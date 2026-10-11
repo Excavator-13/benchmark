@@ -62,8 +62,8 @@ def build_parser() -> argparse.ArgumentParser:
         prog="python -m benchmark.nograph_baseline",
         description=(
             "Graph-free CPU baseline entry for the P1-count-L6-H3-v3 protocol "
-            "(r0/count and region/count). Uses only NumPy, pandas and PyArrow on "
-            "the default path."
+            "(r0/count, region/count and r2/count). Uses only NumPy, pandas and "
+            "PyArrow on the default path."
         ),
     )
     parser.add_argument(
