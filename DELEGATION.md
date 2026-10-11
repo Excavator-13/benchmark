@@ -39,12 +39,19 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 
 | 字段 | 值 |
 | --- | --- |
-| Status | `closed` |
-| 变更名 | `reduce-baseline-evidence-overhead` |
-| 研究任务 | P01-T010 |
-| 登记时间 | 2026-10-08 |
+| Status | `open` |
+| 变更名 | `add-r2-count-baseline`（拟用名；若 propose 采用其他名字，研究侧更新本表） |
+| 研究任务 | P01-T006 |
+| 登记时间 | 2026-10-11 |
 | 委派给 | OpenSpec e13 流程（propose → apply → verify-change → archive-change），由用户在其会话中执行；研究侧不代跑 |
-| 结束判据 | 活跃变更目录已不存在；`openspec/changes/archive/*-reduce-baseline-evidence-overhead/verification.md` 为 `Verdict: PASS`，Verification Basis 与当前实现一致。覆盖 D010：正式预测材料仍可独立重算、重复执行保留身份、开发输出可隔离、检查仅产生明确报告且不改输入、相关脏执行源码可恢复、落选候选默认只保留验证分数、Git 已覆盖来源可固定引用、schema v2 包索引保留排除声明且辅助工具不依赖 sidecar/全成员表、旧包及可读入口不改；不启动新科研实验或自动恢复演练 |
-| 研究侧收尾 | 依据归档独立报告作 P01-T010 研究接受决定，更新 [阶段计划](research/phases/P01/plan.md)、[state](research/state.md) 恢复点及 review 的软件完成说明；更新 [索引](research/archives/index.md) 对旧工具限制及当前检查入口的说明。按实际产物记录位置与已知保存事实，不镜像变更任务表，不补做实验/封存/commit/push/恢复核验；关闭本指针 |
-| 上次核对 | 2026-10-08：活跃变更目录已不存在；归档 `2026-10-08-reduce-baseline-evidence-overhead/verification.md` 为 PASS，V-001..V-005 均 verified-resolved。研究记录更新前按报告算法核对所有基准一致，规划按原路径标签计算、既有归档集合排除新归档；主规格为预期 delta 同步，方法与范围见 D011 |
-| 回收记录 | 2026-10-08：按 [D011](research/decisions.md#d011-t010-记录减负研究侧验收)接受 P01-T010，更新阶段计划、state、review、索引、执行指导与当前协议的实现验收链接，解除旧工具兼容限制说明。没有新增正式科研 run/封存包；软件和本轮记录仍未提交/push，既有包保存事实保留。不代跑工作流、不改代码、不重跑测试/实验/恢复核验；第二轮迁移仍为可选候选，P01 科研未完成项保留 |
+| 结束判据 | 活跃变更目录已不存在；`openspec/changes/archive/*-add-r2-count-baseline/verification.md` 为 `Verdict: PASS`，Verification Basis 与当前实现一致。覆盖 T006 的实现验收：`r2/count` 可经同一无图入口运行，含身份/活跃度/图审计、五项朴素基线、训练期标准化、验证选模、固定活跃度与邻居分组、完整产物、重算/同条件重复检查与成本记录；不改变科学协议与选模/分组/收益门槛，不改 `r0`/`region` 历史结果、旧封存包或包内内容 |
+| 研究侧收尾 | 依据归档独立报告作 P01-T006 研究接受判断，更新阶段计划、state、索引与执行指导的入口说明。若正式 `r2/count` run 尚未获用户授权，只把 PASS 作为实现证据，不把它当实验验收；不代跑工作流、不改代码、不封存、不 commit/push、不做恢复核验；关闭本指针 |
+| 上次核对 | 2026-10-11（登记时）：活跃变更目录尚未创建；`benchmark/nograph_baseline` 的 `SUPPORTED_DATASETS` 仅 `r0`/`region`，CLI `--data-name` choices 亦为 `{r0,region}`，`tests/test_protocol.py` 断言 `r2` 被拒；`dataset/demand/r2.parquet` 与 `dataset/graph/r2.parquet` 存在。未运行任何 r2 分析 |
+| 回收记录 | 尚未回收 |
+
+### 建议变更范围（供 propose 参考，不构成研究验收）
+
+- 在无图 baseline 入口加入 `r2/count`：上下文列 `r2_id`，沿用现有读取、标准化、五项基线、共享 Ridge、验证选模、固定分组与产物格式。
+- 同步 CLI `--data-name` choices、检查命令、README/执行指导入口与对应测试（含原先断言 `r2` 被拒的测试）。
+- 保持 `r0`/`region` 行为与产物不变；不新增科学协议、不改收益门槛。
+- 正式 `r2/count` 运行与保存需用户单独授权；实现与独立验证本身不启动正式科研 run。
