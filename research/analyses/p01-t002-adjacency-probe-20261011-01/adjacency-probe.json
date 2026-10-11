@@ -1,0 +1,739 @@
+{
+  "config": {
+    "hidden_dim": 8,
+    "in_channels": 6,
+    "num_edges": 92,
+    "num_nodes": 32,
+    "pred_length": 3
+  },
+  "elapsed_seconds": 0.09409929100002046,
+  "environment": {
+    "device": "cpu",
+    "platform": "macOS-27.0.1-arm64-arm-64bit",
+    "python": "3.11.17",
+    "torch": "2.14.1",
+    "torch_geometric": "2.8.0.post1"
+  },
+  "full_forecast_head": {
+    "EvolveGCNH|base_vs_ring_shifted": {
+      "forecast_max_abs_diff": 0.6957911252975464,
+      "forecast_shape": [
+        32,
+        3
+      ]
+    },
+    "GConvGRU|base_random": {
+      "forecast_max_abs_diff_vs_base": 0.0,
+      "forecast_shape": [
+        32,
+        3
+      ]
+    },
+    "GConvGRU|empty": {
+      "forecast_max_abs_diff_vs_base": 0.0,
+      "forecast_shape": [
+        32,
+        3
+      ]
+    },
+    "GConvGRU|ring": {
+      "forecast_max_abs_diff_vs_base": 0.0,
+      "forecast_shape": [
+        32,
+        3
+      ]
+    },
+    "GConvGRU|ring_shifted": {
+      "forecast_max_abs_diff_vs_base": 0.0,
+      "forecast_shape": [
+        32,
+        3
+      ]
+    },
+    "GConvGRU|same_adjacency_repeat": {
+      "forecast_max_abs_diff": 0.0
+    },
+    "GConvGRU|star": {
+      "forecast_max_abs_diff_vs_base": 0.0,
+      "forecast_shape": [
+        32,
+        3
+      ]
+    },
+    "GConvLSTM|base_vs_ring_shifted": {
+      "forecast_max_abs_diff": 0.0,
+      "forecast_shape": [
+        32,
+        3
+      ]
+    },
+    "status": "ok"
+  },
+  "models": {
+    "EvolveGCNH": {
+      "adjacency_trials": {
+        "K=1|base_random": {
+          "cheb_lins_counts": [],
+          "configured_K": null,
+          "import_mode": "repository models.evolvegcnh",
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "output_shapes": {
+            "h": [
+              32,
+              6
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=1|empty": {
+          "cheb_lins_counts": [],
+          "configured_K": null,
+          "import_mode": "repository models.evolvegcnh",
+          "layer_max_abs_diff_vs_base": 3.1013944149017334,
+          "layer_mean_abs_diff_vs_base": 0.49971047043800354,
+          "output_shapes": {
+            "h": [
+              32,
+              6
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 3.1013944149017334,
+              "mean_abs_diff": 0.49971047043800354
+            }
+          }
+        },
+        "K=1|ring": {
+          "cheb_lins_counts": [],
+          "configured_K": null,
+          "import_mode": "repository models.evolvegcnh",
+          "layer_max_abs_diff_vs_base": 2.0281758308410645,
+          "layer_mean_abs_diff_vs_base": 0.41742953658103943,
+          "output_shapes": {
+            "h": [
+              32,
+              6
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 2.0281758308410645,
+              "mean_abs_diff": 0.41742953658103943
+            }
+          }
+        },
+        "K=1|ring_shifted": {
+          "cheb_lins_counts": [],
+          "configured_K": null,
+          "import_mode": "repository models.evolvegcnh",
+          "layer_max_abs_diff_vs_base": 2.474125862121582,
+          "layer_mean_abs_diff_vs_base": 0.4733412265777588,
+          "output_shapes": {
+            "h": [
+              32,
+              6
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 2.474125862121582,
+              "mean_abs_diff": 0.4733412265777588
+            }
+          }
+        },
+        "K=1|star": {
+          "cheb_lins_counts": [],
+          "configured_K": null,
+          "import_mode": "repository models.evolvegcnh",
+          "layer_max_abs_diff_vs_base": 3.4002251625061035,
+          "layer_mean_abs_diff_vs_base": 0.49823734164237976,
+          "output_shapes": {
+            "h": [
+              32,
+              6
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 3.4002251625061035,
+              "mean_abs_diff": 0.49823734164237976
+            }
+          }
+        }
+      },
+      "controls": {}
+    },
+    "GConvGRU": {
+      "adjacency_trials": {
+        "K=1|base_random": {
+          "cheb_lins_counts": [
+            1
+          ],
+          "configured_K": 1,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "output_shapes": {
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=1|empty": {
+          "cheb_lins_counts": [
+            1
+          ],
+          "configured_K": 1,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "output_shapes": {
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=1|ring": {
+          "cheb_lins_counts": [
+            1
+          ],
+          "configured_K": 1,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "output_shapes": {
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=1|ring_shifted": {
+          "cheb_lins_counts": [
+            1
+          ],
+          "configured_K": 1,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "output_shapes": {
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=1|star": {
+          "cheb_lins_counts": [
+            1
+          ],
+          "configured_K": 1,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "output_shapes": {
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=2|base_random": {
+          "cheb_lins_counts": [
+            2
+          ],
+          "configured_K": 2,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "output_shapes": {
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=2|empty": {
+          "cheb_lins_counts": [
+            2
+          ],
+          "configured_K": 2,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 1.4038159847259521,
+          "layer_mean_abs_diff_vs_base": 0.1755824089050293,
+          "output_shapes": {
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 1.4038159847259521,
+              "mean_abs_diff": 0.1755824089050293
+            }
+          }
+        },
+        "K=2|ring": {
+          "cheb_lins_counts": [
+            2
+          ],
+          "configured_K": 2,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 1.458425521850586,
+          "layer_mean_abs_diff_vs_base": 0.20248843729496002,
+          "output_shapes": {
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 1.458425521850586,
+              "mean_abs_diff": 0.20248843729496002
+            }
+          }
+        },
+        "K=2|ring_shifted": {
+          "cheb_lins_counts": [
+            2
+          ],
+          "configured_K": 2,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 1.3873255252838135,
+          "layer_mean_abs_diff_vs_base": 0.18457335233688354,
+          "output_shapes": {
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 1.3873255252838135,
+              "mean_abs_diff": 0.18457335233688354
+            }
+          }
+        },
+        "K=2|star": {
+          "cheb_lins_counts": [
+            2
+          ],
+          "configured_K": 2,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 1.4275596141815186,
+          "layer_mean_abs_diff_vs_base": 0.1800776869058609,
+          "output_shapes": {
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 1.4275596141815186,
+              "mean_abs_diff": 0.1800776869058609
+            }
+          }
+        }
+      },
+      "controls": {
+        "K=1|same_adjacency_repeat": {
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=2|same_adjacency_repeat": {
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "per_output_key": {
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        }
+      }
+    },
+    "GConvLSTM": {
+      "adjacency_trials": {
+        "K=1|base_random": {
+          "cheb_lins_counts": [
+            1
+          ],
+          "configured_K": 1,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "output_shapes": {
+            "c": [
+              32,
+              8
+            ],
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "c": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            },
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=1|empty": {
+          "cheb_lins_counts": [
+            1
+          ],
+          "configured_K": 1,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "output_shapes": {
+            "c": [
+              32,
+              8
+            ],
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "c": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            },
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=1|ring": {
+          "cheb_lins_counts": [
+            1
+          ],
+          "configured_K": 1,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "output_shapes": {
+            "c": [
+              32,
+              8
+            ],
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "c": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            },
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=1|ring_shifted": {
+          "cheb_lins_counts": [
+            1
+          ],
+          "configured_K": 1,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "output_shapes": {
+            "c": [
+              32,
+              8
+            ],
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "c": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            },
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=1|star": {
+          "cheb_lins_counts": [
+            1
+          ],
+          "configured_K": 1,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "output_shapes": {
+            "c": [
+              32,
+              8
+            ],
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "c": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            },
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=2|base_random": {
+          "cheb_lins_counts": [
+            2
+          ],
+          "configured_K": 2,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "output_shapes": {
+            "c": [
+              32,
+              8
+            ],
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "c": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            },
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=2|empty": {
+          "cheb_lins_counts": [
+            2
+          ],
+          "configured_K": 2,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 1.386426329612732,
+          "layer_mean_abs_diff_vs_base": 0.18950358033180237,
+          "output_shapes": {
+            "c": [
+              32,
+              8
+            ],
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "c": {
+              "max_abs_diff": 1.386426329612732,
+              "mean_abs_diff": 0.18950358033180237
+            },
+            "h": {
+              "max_abs_diff": 0.7517299652099609,
+              "mean_abs_diff": 0.09787961840629578
+            }
+          }
+        },
+        "K=2|ring": {
+          "cheb_lins_counts": [
+            2
+          ],
+          "configured_K": 2,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 1.2752735614776611,
+          "layer_mean_abs_diff_vs_base": 0.20763781666755676,
+          "output_shapes": {
+            "c": [
+              32,
+              8
+            ],
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "c": {
+              "max_abs_diff": 1.2752735614776611,
+              "mean_abs_diff": 0.20763781666755676
+            },
+            "h": {
+              "max_abs_diff": 0.7236052751541138,
+              "mean_abs_diff": 0.10570019483566284
+            }
+          }
+        },
+        "K=2|ring_shifted": {
+          "cheb_lins_counts": [
+            2
+          ],
+          "configured_K": 2,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 1.5381397008895874,
+          "layer_mean_abs_diff_vs_base": 0.2007562220096588,
+          "output_shapes": {
+            "c": [
+              32,
+              8
+            ],
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "c": {
+              "max_abs_diff": 1.5381397008895874,
+              "mean_abs_diff": 0.2007562220096588
+            },
+            "h": {
+              "max_abs_diff": 0.7861946225166321,
+              "mean_abs_diff": 0.10356909781694412
+            }
+          }
+        },
+        "K=2|star": {
+          "cheb_lins_counts": [
+            2
+          ],
+          "configured_K": 2,
+          "import_mode": "package-import",
+          "layer_max_abs_diff_vs_base": 1.2490150928497314,
+          "layer_mean_abs_diff_vs_base": 0.19144196808338165,
+          "output_shapes": {
+            "c": [
+              32,
+              8
+            ],
+            "h": [
+              32,
+              8
+            ]
+          },
+          "per_output_key": {
+            "c": {
+              "max_abs_diff": 1.2490150928497314,
+              "mean_abs_diff": 0.19144196808338165
+            },
+            "h": {
+              "max_abs_diff": 0.604941189289093,
+              "mean_abs_diff": 0.097819022834301
+            }
+          }
+        }
+      },
+      "controls": {
+        "K=1|same_adjacency_repeat": {
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "per_output_key": {
+            "c": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            },
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        },
+        "K=2|same_adjacency_repeat": {
+          "layer_max_abs_diff_vs_base": 0.0,
+          "layer_mean_abs_diff_vs_base": 0.0,
+          "per_output_key": {
+            "c": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            },
+            "h": {
+              "max_abs_diff": 0.0,
+              "mean_abs_diff": 0.0
+            }
+          }
+        }
+      }
+    }
+  },
+  "probe_id": "p01-t002-adjacency-probe-20261011-01",
+  "protocol": "P1-count-L6-H3-v3",
+  "question": "does each model's output actually depend on the adjacency?",
+  "seed": 20261011,
+  "tolerance": 1e-06
+}

@@ -1,0 +1,375 @@
+{
+  "analysis_id": "p01-t002-graph-semantics-20261011-01",
+  "numpy": "1.26.4",
+  "pandas": "2.2.3",
+  "protocol": "P1-count-L6-H3-v3",
+  "python": "3.11.17",
+  "question": "context-qualified graph degree, directionality and coverage",
+  "records_policy": "P01-records-v2",
+  "results": {
+    "r0": {
+      "consistency_with_existing_coverage_json": {
+        "matches": true,
+        "saved_covered_nodes": 314
+      },
+      "context_columns": [
+        "r0_id"
+      ],
+      "context_count": 1,
+      "covered_nodes": 314,
+      "cross_context_skill_projection_legacy_explanation_only": {
+        "directed_rows_per_pair": {
+          "all_even_counts": true,
+          "max": 2,
+          "mean": 2.0,
+          "median": 2.0,
+          "min": 2,
+          "share_equal_to_two": 1.0
+        },
+        "distinct_skills_in_projection": 314,
+        "distinct_undirected_skill_pairs": 30402,
+        "is_forecasting_graph": false,
+        "note": "contexts are dropped and directions are summed here; the count per unordered skill pair is the number of directed (row_id, col_id) rows across all contexts. For a single-context dataset this is exactly 2 because both directions are shipped, so it is a symmetric duplicate count, not an advertising co-occurrence frequency."
+      },
+      "dataset": "r0",
+      "edges_with_reverse_present": 60804,
+      "exact_duplicate_rows": 0,
+      "graph_columns": [
+        "r0_id",
+        "row_id",
+        "col_id"
+      ],
+      "graph_directed_rows": 60804,
+      "graph_unique_directed_rows": 60804,
+      "in_degree_all_nodes": {
+        "histogram": {
+          "0": 2021,
+          "1": 0,
+          "16-31": 3,
+          "2-3": 0,
+          "32-63": 11,
+          "4-7": 0,
+          "64-inf": 300,
+          "8-15": 0
+        },
+        "max": 312,
+        "mean": 26.040256959314775,
+        "median": 0.0,
+        "nodes": 2335,
+        "quantiles": {
+          "max": 312,
+          "p50": 0.0,
+          "p90": 151.5999999999999,
+          "p99": 280.65999999999985
+        }
+      },
+      "isolated_nodes": 2021,
+      "neighbor_coverage": 0.13447537473233404,
+      "nonself_directed_edges": 60804,
+      "nonself_undirected_edges": 30402,
+      "out_degree_all_nodes": {
+        "histogram": {
+          "0": 2021,
+          "1": 0,
+          "16-31": 3,
+          "2-3": 0,
+          "32-63": 11,
+          "4-7": 0,
+          "64-inf": 300,
+          "8-15": 0
+        },
+        "max": 312,
+        "mean": 26.040256959314775,
+        "median": 0.0,
+        "nodes": 2335,
+        "quantiles": {
+          "max": 312,
+          "p50": 0.0,
+          "p90": 151.5999999999999,
+          "p99": 280.65999999999985
+        }
+      },
+      "per_context": {
+        "(0,)": {
+          "covered_nodes": 314,
+          "directed_edge_rows_unique": 60804,
+          "edges_with_reverse_present": 60804,
+          "isolated_nodes": 2021,
+          "nonself_directed_edges": 60804,
+          "reverse_edge_ratio": 1.0,
+          "self_loop_rows": 0,
+          "task_nodes": 2335,
+          "undirected_unique_edges": 30402
+        }
+      },
+      "reverse_edge_ratio": 1.0,
+      "self_loop_unique_edges": 0,
+      "sink_nodes_with_in_degree_zero_but_covered": 0,
+      "skill_count": 2335,
+      "source_nodes_with_out_degree_zero_but_covered": 0,
+      "task_nodes": 2335,
+      "undirected_degree_all_nodes": {
+        "histogram": {
+          "0": 2021,
+          "1": 0,
+          "16-31": 3,
+          "2-3": 0,
+          "32-63": 11,
+          "4-7": 0,
+          "64-inf": 300,
+          "8-15": 0
+        },
+        "max": 312,
+        "mean": 26.040256959314775,
+        "median": 0.0,
+        "nodes": 2335,
+        "quantiles": {
+          "max": 312,
+          "p50": 0.0,
+          "p90": 151.5999999999999,
+          "p99": 280.65999999999985
+        }
+      },
+      "undirected_degree_covered_nodes_only": {
+        "histogram": {
+          "0": 0,
+          "1": 0,
+          "16-31": 3,
+          "2-3": 0,
+          "32-63": 11,
+          "4-7": 0,
+          "64-inf": 300,
+          "8-15": 0
+        },
+        "max": 312,
+        "mean": 193.64331210191082,
+        "median": 203.0,
+        "nodes": 314,
+        "quantiles": {
+          "max": 312,
+          "p50": 203.0,
+          "p90": 275.0,
+          "p99": 304.61
+        }
+      }
+    },
+    "region": {
+      "consistency_with_existing_coverage_json": {
+        "matches": true,
+        "saved_covered_nodes": 2185
+      },
+      "context_columns": [
+        "region_id"
+      ],
+      "context_count": 7,
+      "covered_nodes": 2185,
+      "cross_context_skill_projection_legacy_explanation_only": {
+        "directed_rows_per_pair": {
+          "all_even_counts": true,
+          "max": 14,
+          "mean": 7.1982106440365765,
+          "median": 6.0,
+          "min": 2,
+          "share_equal_to_two": 0.21488717847510033
+        },
+        "distinct_skills_in_projection": 314,
+        "distinct_undirected_skill_pairs": 30402,
+        "is_forecasting_graph": false,
+        "note": "contexts are dropped and directions are summed here; the count per unordered skill pair is the number of directed (row_id, col_id) rows across all contexts. For a single-context dataset this is exactly 2 because both directions are shipped, so it is a symmetric duplicate count, not an advertising co-occurrence frequency."
+      },
+      "dataset": "region",
+      "edges_with_reverse_present": 218840,
+      "exact_duplicate_rows": 0,
+      "graph_columns": [
+        "region_id",
+        "row_id",
+        "col_id"
+      ],
+      "graph_directed_rows": 218840,
+      "graph_unique_directed_rows": 218840,
+      "in_degree_all_nodes": {
+        "histogram": {
+          "0": 14160,
+          "1": 7,
+          "16-31": 222,
+          "2-3": 24,
+          "32-63": 390,
+          "4-7": 69,
+          "64-inf": 1373,
+          "8-15": 100
+        },
+        "max": 305,
+        "mean": 13.388803915570511,
+        "median": 0.0,
+        "nodes": 16345,
+        "quantiles": {
+          "max": 305,
+          "p50": 0.0,
+          "p90": 41.0,
+          "p99": 215.0
+        }
+      },
+      "isolated_nodes": 14160,
+      "neighbor_coverage": 0.1336800244723157,
+      "nonself_directed_edges": 218840,
+      "nonself_undirected_edges": 109420,
+      "out_degree_all_nodes": {
+        "histogram": {
+          "0": 14160,
+          "1": 7,
+          "16-31": 222,
+          "2-3": 24,
+          "32-63": 390,
+          "4-7": 69,
+          "64-inf": 1373,
+          "8-15": 100
+        },
+        "max": 305,
+        "mean": 13.388803915570511,
+        "median": 0.0,
+        "nodes": 16345,
+        "quantiles": {
+          "max": 305,
+          "p50": 0.0,
+          "p90": 41.0,
+          "p99": 215.0
+        }
+      },
+      "per_context": {
+        "(0,)": {
+          "covered_nodes": 306,
+          "directed_edge_rows_unique": 11400,
+          "edges_with_reverse_present": 11400,
+          "isolated_nodes": 2029,
+          "nonself_directed_edges": 11400,
+          "reverse_edge_ratio": 1.0,
+          "self_loop_rows": 0,
+          "task_nodes": 2335,
+          "undirected_unique_edges": 5700
+        },
+        "(1,)": {
+          "covered_nodes": 314,
+          "directed_edge_rows_unique": 49180,
+          "edges_with_reverse_present": 49180,
+          "isolated_nodes": 2021,
+          "nonself_directed_edges": 49180,
+          "reverse_edge_ratio": 1.0,
+          "self_loop_rows": 0,
+          "task_nodes": 2335,
+          "undirected_unique_edges": 24590
+        },
+        "(2,)": {
+          "covered_nodes": 314,
+          "directed_edge_rows_unique": 26936,
+          "edges_with_reverse_present": 26936,
+          "isolated_nodes": 2021,
+          "nonself_directed_edges": 26936,
+          "reverse_edge_ratio": 1.0,
+          "self_loop_rows": 0,
+          "task_nodes": 2335,
+          "undirected_unique_edges": 13468
+        },
+        "(3,)": {
+          "covered_nodes": 314,
+          "directed_edge_rows_unique": 43080,
+          "edges_with_reverse_present": 43080,
+          "isolated_nodes": 2021,
+          "nonself_directed_edges": 43080,
+          "reverse_edge_ratio": 1.0,
+          "self_loop_rows": 0,
+          "task_nodes": 2335,
+          "undirected_unique_edges": 21540
+        },
+        "(4,)": {
+          "covered_nodes": 314,
+          "directed_edge_rows_unique": 43372,
+          "edges_with_reverse_present": 43372,
+          "isolated_nodes": 2021,
+          "nonself_directed_edges": 43372,
+          "reverse_edge_ratio": 1.0,
+          "self_loop_rows": 0,
+          "task_nodes": 2335,
+          "undirected_unique_edges": 21686
+        },
+        "(5,)": {
+          "covered_nodes": 310,
+          "directed_edge_rows_unique": 18278,
+          "edges_with_reverse_present": 18278,
+          "isolated_nodes": 2025,
+          "nonself_directed_edges": 18278,
+          "reverse_edge_ratio": 1.0,
+          "self_loop_rows": 0,
+          "task_nodes": 2335,
+          "undirected_unique_edges": 9139
+        },
+        "(6,)": {
+          "covered_nodes": 313,
+          "directed_edge_rows_unique": 26594,
+          "edges_with_reverse_present": 26594,
+          "isolated_nodes": 2022,
+          "nonself_directed_edges": 26594,
+          "reverse_edge_ratio": 1.0,
+          "self_loop_rows": 0,
+          "task_nodes": 2335,
+          "undirected_unique_edges": 13297
+        }
+      },
+      "reverse_edge_ratio": 1.0,
+      "self_loop_unique_edges": 0,
+      "sink_nodes_with_in_degree_zero_but_covered": 0,
+      "skill_count": 2335,
+      "source_nodes_with_out_degree_zero_but_covered": 0,
+      "task_nodes": 16345,
+      "undirected_degree_all_nodes": {
+        "histogram": {
+          "0": 14160,
+          "1": 7,
+          "16-31": 222,
+          "2-3": 24,
+          "32-63": 390,
+          "4-7": 69,
+          "64-inf": 1373,
+          "8-15": 100
+        },
+        "max": 305,
+        "mean": 13.388803915570511,
+        "median": 0.0,
+        "nodes": 16345,
+        "quantiles": {
+          "max": 305,
+          "p50": 0.0,
+          "p90": 41.0,
+          "p99": 215.0
+        }
+      },
+      "undirected_degree_covered_nodes_only": {
+        "histogram": {
+          "0": 0,
+          "1": 7,
+          "16-31": 222,
+          "2-3": 24,
+          "32-63": 390,
+          "4-7": 69,
+          "64-inf": 1373,
+          "8-15": 100
+        },
+        "max": 305,
+        "mean": 100.15560640732265,
+        "median": 89.0,
+        "nodes": 2185,
+        "quantiles": {
+          "max": 305,
+          "p50": 89.0,
+          "p90": 201.60000000000014,
+          "p99": 277.3199999999997
+        }
+      }
+    }
+  },
+  "sources_sha256": {
+    "dataset/demand/r0.parquet": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+    "dataset/demand/region.parquet": "27a946c787efcd5f1d2b25ca35bebd1392320d9b10920e771405a664db5e4a3f",
+    "dataset/graph/r0.parquet": "c49bc2ecfddd24ddc7a6c6654fdc7bf2e908820139a987f99a115c11b583aa5b",
+    "dataset/graph/region.parquet": "c0bed3290be3691fbb07c4834c96e8d567e1f54cdfb2120d8a0846a86b64d87c"
+  }
+}

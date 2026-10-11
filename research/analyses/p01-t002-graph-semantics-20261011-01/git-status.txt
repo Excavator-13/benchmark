@@ -1,0 +1,5 @@
+ M research/archives/index.md
+ M research/decisions.md
+ M research/phases/P01/plan.md
+ M research/state.md
+?? research/analyses/

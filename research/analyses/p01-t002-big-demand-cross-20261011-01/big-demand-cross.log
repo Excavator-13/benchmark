@@ -1,0 +1,25 @@
+{"wrote": "/Users/watuji/da_chuang/repos/benchmark/research/analyses/p01-t002-big-demand-cross-20261011-01/big-demand-cross.json"}
+===== r0
+primary top10% nodes: 234 train demand share: 0.759
+  LastValue overall MAE 189.8751
+    large|covered n 9 train_demand_share 0.0137 abs_contrib 0.0267 sq_contrib 0.0542 MAE 1314.5185
+    large|isolated n 225 train_demand_share 0.7453 abs_contrib 0.6707 sq_contrib 0.9193 MAE 1321.513
+    rest|covered n 305 train_demand_share 0.0405 abs_contrib 0.0436 sq_contrib 0.0028 MAE 63.4068
+    rest|isolated n 1796 train_demand_share 0.2005 abs_contrib 0.259 sq_contrib 0.0237 MAE 63.9466
+  SharedRidge overall MAE 274.7654
+    large|covered n 9 train_demand_share 0.0137 abs_contrib 0.0387 sq_contrib 0.0801 MAE 2761.6067
+    large|isolated n 225 train_demand_share 0.7453 abs_contrib 0.7191 sq_contrib 0.9039 MAE 2050.4813
+    rest|covered n 305 train_demand_share 0.0405 abs_contrib 0.0355 sq_contrib 0.0018 MAE 74.7602
+    rest|isolated n 1796 train_demand_share 0.2005 abs_contrib 0.2066 sq_contrib 0.0142 MAE 73.81
+===== region
+primary top10% nodes: 1635 train demand share: 0.8296
+  LastValue overall MAE 35.3099
+    large|covered n 126 train_demand_share 0.0287 abs_contrib 0.0356 sq_contrib 0.0651 MAE 162.9656
+    large|isolated n 1509 train_demand_share 0.8009 abs_contrib 0.6471 sq_contrib 0.908 MAE 247.4869
+    rest|covered n 2059 train_demand_share 0.0255 abs_contrib 0.0436 sq_contrib 0.0027 MAE 12.2212
+    rest|isolated n 12651 train_demand_share 0.1449 abs_contrib 0.2737 sq_contrib 0.0242 MAE 12.4879
+  SharedRidge overall MAE 47.5984
+    large|covered n 126 train_demand_share 0.0287 abs_contrib 0.0457 sq_contrib 0.0864 MAE 282.2552
+    large|isolated n 1509 train_demand_share 0.8009 abs_contrib 0.7188 sq_contrib 0.901 MAE 370.5838
+    rest|covered n 2059 train_demand_share 0.0255 abs_contrib 0.0316 sq_contrib 0.0013 MAE 11.9383
+    rest|isolated n 12651 train_demand_share 0.1449 abs_contrib 0.2039 sq_contrib 0.0112 MAE 12.5396
