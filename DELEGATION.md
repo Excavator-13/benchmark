@@ -47,7 +47,7 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 | 结束判据 | 活跃变更目录已不存在；`openspec/changes/archive/*-add-r2-count-baseline/verification.md` 为 `Verdict: PASS`，Verification Basis 与当前实现一致。覆盖 T006 的实现验收：`r2/count` 可经同一无图入口运行，含身份/活跃度/图审计、五项朴素基线、训练期标准化、验证选模、固定活跃度与邻居分组、完整产物、重算/同条件重复检查与成本记录；不改变科学协议与选模/分组/收益门槛，不改 `r0`/`region` 历史结果、旧封存包或包内内容 |
 | 研究侧收尾 | 依据归档独立报告作 P01-T006 研究接受判断，更新阶段计划、state、索引与执行指导的入口说明。若正式 `r2/count` run 尚未获用户授权，只把 PASS 作为实现证据，不把它当实验验收；不代跑工作流、不改代码、不封存、不 commit/push、不做恢复核验；关闭本指针 |
 | 上次核对 | 2026-10-11（回收）：活跃变更目录已不存在；归档 `2026-10-11-add-r2-count-baseline/verification.md` 为 `Verdict: PASS`。按报告 40 文件清单重算 SHA256（变更目录路径映射到归档位置），39 个与当前工作区实现一致，无缺失文件；唯一差异是主规格 `openspec/specs/nograph-baseline-entry/spec.md`（报告已明示归档时的主规格同步不计入 pre-archive 指纹，diff 为 r2 delta 的预期同步）。 |
-| 回收记录 | 2026-10-11：按 [D017](research/decisions.md#d017-t006-r2count-实现研究侧验收与委托回收)接受 T006 的实现就绪证据，更新阶段计划、state、索引与执行指导入口说明，关闭本指针。T006 改为 `in_progress`：真实 `r2` 身份/活跃度/图审计、正式 run 与产物保存、实测成本仍需用户另行授权；实现 PASS 不是实验验收。实现/测试/文档/主规格与归档变更目录仍未提交，没有新增科研 run、封存或恢复核验。不代跑工作流、不改代码。 |
+| 回收记录 | 2026-10-11：按 [D017](research/decisions.md#d017-t006-r2count-实现研究侧验收与委托回收)接受 T006 的实现就绪证据，更新阶段计划、state、索引与执行指导入口说明，关闭本指针。T006 改为 `in_progress`：真实 `r2` 身份/活跃度/图审计、正式 run 与产物保存、实测成本仍需用户另行授权；实现 PASS 不是实验验收。实现、测试、文档、主规格、归档变更目录与本次回收记录已随 `7f6b5e4e66d0457a9151f47456c178cac082ca96` 入库并 push `origin/xzs`；本行后续的保存状态更新随随后一次文档提交，提交身份从 Git 历史追溯。没有新增科研 run、封存或备份核验。不代跑工作流、不改代码。 |
 
 ### 建议变更范围（供 propose 参考，不构成研究验收）
 
