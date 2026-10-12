@@ -1,6 +1,6 @@
 # 实验与归档索引
 
-更新日期：2026-10-11。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
+更新日期：2026-10-12。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
 
 ## 已有运行
 
@@ -131,9 +131,23 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 
 回收时只读核对：活跃变更目录已不存在；按报告 40 文件清单重算 SHA256（变更目录映射到归档路径），39 个与当前工作区实现一致，无缺失；唯一差异是主规格 `openspec/specs/nograph-baseline-entry/spec.md`，即报告明确排除在 pre-archive 指纹外的归档同步。
 
-证据性质与限制：`r2/count` 的入口/检查/成本证据来自临时 fixture 与 `--purpose development` 运行（合成 121,420 节点、52 上下文，读取/拟合/推理合计约 2.1 秒），**不是真实 r2 实验、成本或预测结论**；可选 sklearn 未执行。真实 `r2` 审计、正式 run、产物保存与实测成本需用户另行授权。没有新 run、封存包或备份核验；既有 24 个 T004 包、旧 run、旧 OpenSpec 归档与科学协议未改。
+证据性质与限制：`r2/count` 的入口/检查/成本证据来自临时 fixture 与 `--purpose development` 运行（合成 121,420 节点、52 上下文，读取/拟合/推理合计约 2.1 秒），**不是真实 r2 实验、成本或预测结论**；可选 sklearn 未执行。真实 `r2` 审计、正式 run、产物保存与实测成本随后于 2026-10-12 完成，见下节。没有新 run、封存包或备份核验；既有 24 个 T004 包、旧 run、旧 OpenSpec 归档与科学协议未改。
 
 保存状态：实现、测试、文档、主规格与归档变更目录随 `7f6b5e4e66d0457a9151f47456c178cac082ca96` 提交并 push `origin/xzs`（此前在报告核验时未提交）。**未封存，备份与远端恢复未核验**；提交身份从 Git 历史追溯。
+
+## T006 r2/count 运行与保存（2026-10-12）
+
+所属任务 P01-T006；研究侧验收见 [D018](../decisions.md#d018-t006-r2count-研究侧验收)，审计与分析见 [r2 审计报告](../analyses/p01-t006-r2-audit-20261012-01/report.md)。两个正式 run 均为 `--purpose formal`、seed 0、本机 CPU（`job-sdf-baseline`）：
+
+| Run ID | 执行结果 | 保存包 | 包内成员 | 包外 SHA256 |
+| --- | --- | --- | ---: | --- |
+| `p01-r2-sharedridge-001` | success | `research/archives/p01-r2-sharedridge-001.tar.gz`（27,627,768 bytes） | 40 | 不需要（包在 Git 内，内容身份为保存它的提交） |
+| `p01-r2-sharedridge-repeat-001` | success | `research/archives/p01-r2-sharedridge-repeat-001.tar.gz`（27,627,856 bytes） | 40 | 同上 |
+
+- 打包排除 `__pycache__/`、`.DS_Store`、`._*`；核验方式：解包到新的临时目录后 `diff -r` 与 `research/runs/<run-id>/` 一致（内容与成员数 40 均相同）。包在 Git 内，内容身份由保存它的提交承担，提交身份从 Git 历史追溯，不另建包外清单或 sidecar。
+- 可读入口 `summary.md`、`provenance.json`、`command.json` 随 run 目录入库；`predictions/`、`gold/`、`node-errors.parquet`、`masks.npz`、`nodes.parquet`、`models/` 等展开数组**仅保留在本机**并被 `.gitignore` 忽略，需要时按上面的包在独立目录展开。
+- 关联 saved-only 检查报告（入 Git）：`research/reports/nograph-baseline/p01-r2-recompute-primary-001.json`、`p01-r2-recompute-repeat-001.json`、`p01-r2-repeat-check-001.json`。
+- 备份状态：包与可读入口随 2026-10-12 的 push 到 `origin/xzs`；**未做独立远端取回或恢复核验**。原始 run 源码身份见各 run 的 `provenance.json`（固定 commit 加相关差异）。
 
 ## my-change PR 合入（2026-10-11 接手记录）
 
