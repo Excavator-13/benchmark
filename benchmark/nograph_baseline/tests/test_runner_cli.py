@@ -810,16 +810,20 @@ def _write_v2_log(
         "high": activity > 2 / 3,
     }
     train_mean = signal[:, :27].mean(axis=1, keepdims=True)
+    context_column = protocol.node_key_columns(data_name)[0]
+    context_values = sorted({int(key[0]) for key in keys})
+    skill_values = sorted({int(key[1]) for key in keys})
+    expected_nodes = len(context_values) * len(skill_values)
     lines.append(
         {
             "dataset": data_name,
             "nodes": len(keys),
-            "skill_id_nunique": len({key[1] for key in keys}),
-            "context_id_counts": {protocol.node_key_columns(data_name)[0]: 1},
-            "joint_contexts": 1,
-            "context_cartesian_size": 1,
-            "expected_context_skill_nodes": len(keys),
-            "is_complete_context_skill_grid": True,
+            "skill_id_nunique": len(skill_values),
+            "context_id_counts": {context_column: len(context_values)},
+            "joint_contexts": len(context_values),
+            "context_cartesian_size": len(context_values),
+            "expected_context_skill_nodes": expected_nodes,
+            "is_complete_context_skill_grid": len(keys) == expected_nodes,
             "train_observation_months": months[:27],
             "train_all_zero_fraction": float((activity == 0).mean()),
             "full_36_month_all_zero_fraction_diagnostic_only": float(
@@ -992,9 +996,12 @@ class CliEndToEndTests(unittest.TestCase):
         )
         return blocker_dir
 
-    def test_minimal_dependency_smoke_for_both_schemas(self) -> None:
+    def test_minimal_dependency_smoke_for_all_schemas(self) -> None:
+        import pandas as pd
+
         r0 = fx.build_fixture(self.root / "r0", "r0", node_count=6)
         region = fx.build_fixture(self.root / "region", "region", node_count=3)
+        r2 = fx.build_fixture(self.root / "r2", "r2", contexts=2, skills=3)
         blocker_dir = self._install_blocker()
         runs_root = self.root / "runs"
         environment = dict(os.environ)
@@ -1004,6 +1011,7 @@ class CliEndToEndTests(unittest.TestCase):
         for data_name, fixture, run_id in (
             ("r0", r0, "smoke-r0"),
             ("region", region, "smoke-region"),
+            ("r2", r2, "smoke-r2"),
         ):
             completed = subprocess.run(
                 [
@@ -1048,6 +1056,15 @@ class CliEndToEndTests(unittest.TestCase):
             self.assertEqual(
                 coverage_record["source_path"], str(fixture["graph_path"])
             )
+            if data_name == "r2":
+                frame = pd.read_parquet(run_dir / "nodes.parquet")
+                self.assertEqual(
+                    list(frame.columns), ["node_index", "r2_id", "skill_id"]
+                )
+                self.assertEqual(
+                    frame[["r2_id", "skill_id"]].to_numpy().tolist(),
+                    [list(key) for key in fixture["keys"]],
+                )
 
     def test_recorded_command_is_canonical_and_replayable(self) -> None:
         fixture = fx.build_fixture(self.root / "cmd", "r0", node_count=6)
@@ -3111,6 +3128,957 @@ class RepairRegressionTests(unittest.TestCase):
 
         self.assertEqual(_tree_hash(alpha), before[str(alpha)])
         self.assertEqual(_tree_hash(beta), before[str(beta)])
+
+
+# ---------------------------------------------------------------------------
+# P01-T006: r2/count through the same graph-free CPU entry
+# ---------------------------------------------------------------------------
+
+R2_CONTEXTS = 3
+R2_SKILLS = 4
+CONTEXT_COLUMN_NAMES = ("r0_id", "region_id", "r2_id")
+
+
+def _r2_fixture(
+    root: Path,
+    *,
+    contexts: int = R2_CONTEXTS,
+    skills: int = R2_SKILLS,
+    seed: int = 13,
+    name: str = "fixture",
+    **kwargs,
+) -> dict:
+    return fx.build_fixture(
+        root / name, "r2", contexts=contexts, skills=skills, seed=seed, **kwargs
+    )
+
+
+def _public_run_argv(
+    data_name: str, fixture: dict, run_id: str, runs_root: Path, *, purpose: str = "development"
+) -> list:
+    return [
+        sys.executable,
+        "-m",
+        "benchmark.nograph_baseline",
+        "run",
+        "--data-name",
+        data_name,
+        "--mode",
+        "count",
+        "--seed",
+        "0",
+        "--run-id",
+        run_id,
+        "--purpose",
+        purpose,
+        "--runs-root",
+        str(runs_root),
+        "--demand-path",
+        str(fixture["demand_path"]),
+        "--graph-path",
+        str(fixture["graph_path"]),
+    ]
+
+
+def _run_public_entry(argv) -> subprocess.CompletedProcess:
+    return subprocess.run(argv, cwd=str(REPO_ROOT), capture_output=True, text=True)
+
+
+def _schema_paths(payload, prefix: str = "root") -> set:
+    """Return JSON field paths with list indices and context keys collapsed."""
+    if isinstance(payload, dict):
+        paths = set()
+        for key, value in payload.items():
+            label = (
+                "<context>"
+                if key in CONTEXT_COLUMN_NAMES or str(key).isdigit()
+                else str(key)
+            )
+            paths |= _schema_paths(value, f"{prefix}.{label}")
+        return paths
+    if isinstance(payload, list):
+        paths = set()
+        for value in payload:
+            paths |= _schema_paths(value, f"{prefix}[]")
+        return paths
+    return {prefix}
+
+
+def _relative_files(root: Path) -> set:
+    return {
+        path.relative_to(root).as_posix() for path in Path(root).rglob("*") if path.is_file()
+    }
+
+
+class R2DevelopmentRunTests(unittest.TestCase):
+    """Tasks 2.3/3.1: two r2 development runs through the public CLI."""
+
+    RUN_IDS = ("r2-cli-alpha", "r2-cli-beta")
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls._tmp = tempfile.TemporaryDirectory()
+        cls.root = Path(cls._tmp.name)
+        cls.runs_root = cls.root / "runs"
+        cls.fixture = _r2_fixture(cls.root)
+        cls.signal = cls.fixture["signal"]
+        cls.keys = cls.fixture["keys"]
+        for run_id in cls.RUN_IDS:
+            completed = _run_public_entry(
+                _public_run_argv("r2", cls.fixture, run_id, cls.runs_root)
+            )
+            if completed.returncode != 0:
+                raise AssertionError(
+                    f"r2 public CLI run {run_id} failed:\n"
+                    f"{completed.stdout}\n{completed.stderr}"
+                )
+        cls.run_dirs = tuple(cls.runs_root / run_id for run_id in cls.RUN_IDS)
+        cls.r0_fixture = fx.build_fixture(
+            cls.root / "fixture-r0", "r0", node_count=6, seed=13
+        )
+        r0_completed = _run_public_entry(
+            _public_run_argv("r0", cls.r0_fixture, "r0-cli-schema", cls.runs_root)
+        )
+        if r0_completed.returncode != 0:
+            raise AssertionError(
+                f"r0 public CLI run failed:\n{r0_completed.stdout}\n{r0_completed.stderr}"
+            )
+        cls.r0_run_dir = cls.runs_root / "r0-cli-schema"
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls._tmp.cleanup()
+
+    def test_development_runs_stay_outside_formal_namespace(self) -> None:
+        for run_dir in self.run_dirs:
+            with self.subTest(run=run_dir.name):
+                status = fx.read_json(run_dir / "status.json")
+                self.assertEqual(status["state"], "success")
+                self.assertEqual(status["purpose"], "development")
+                self.assertEqual(run_dir.parent, self.runs_root)
+                self.assertFalse(artifacts.is_within(run_dir, FORMAL_DEFAULT_ROOT))
+                self.assertEqual(
+                    fx.read_json(run_dir / "provenance.json")["purpose"], "development"
+                )
+                self.assertEqual(
+                    fx.read_json(run_dir / "config.json")["spec"]["purpose"],
+                    "development",
+                )
+
+    def test_required_r2_artifacts_and_pickle_free_arrays(self) -> None:
+        expected = [
+            "config.json",
+            "command.json",
+            "provenance.json",
+            "git-commit.txt",
+            "git-status.txt",
+            "git-diff.patch",
+            "code-source.json",
+            "environment.json",
+            "environment.txt",
+            "source-sha256.json",
+            "nodes.parquet",
+            "windows.json",
+            "audit.json",
+            "masks.npz",
+            "node-errors.parquet",
+            "coverage.json",
+            "gold/validation.npy",
+            "gold/test.npy",
+            "gold/dtype.json",
+            "models/SharedRidge.npz",
+            "models/TrainMean27.npz",
+            "selection.json",
+            "metrics.json",
+            "measurements.json",
+            "artifacts-sha256.json",
+            "events.jsonl",
+            "summary.md",
+            "status.json",
+        ]
+        for run_dir in self.run_dirs:
+            for relative in expected:
+                self.assertTrue(
+                    (run_dir / relative).exists(),
+                    msg=f"{run_dir.name}: missing {relative}",
+                )
+            for method in protocol.NAIVE_METHODS + (protocol.MODEL_NAME,):
+                for split in ("validation", "test"):
+                    self.assertTrue(
+                        (run_dir / "predictions" / method / f"{split}.npy").exists()
+                    )
+            for path in sorted(run_dir.rglob("*.npy")):
+                with self.subTest(path=path.name):
+                    np.load(path, allow_pickle=False)
+            for path in sorted(run_dir.rglob("*.npz")):
+                with self.subTest(path=path.name):
+                    with np.load(path, allow_pickle=False) as handle:
+                        for name in handle.files:
+                            np.asarray(handle[name])
+
+    def test_r2_identity_and_gold_alignment(self) -> None:
+        import pandas as pd
+
+        validation_starts = protocol.SPLITS["validation"]
+        test_starts = protocol.SPLITS["test"]
+        expected_validation = np.stack(
+            [self.signal[:, s + 6 : s + 9] for s in validation_starts]
+        )
+        expected_test = np.stack([self.signal[:, s + 6 : s + 9] for s in test_starts])
+        for run_dir in self.run_dirs:
+            with self.subTest(run=run_dir.name):
+                frame = pd.read_parquet(run_dir / "nodes.parquet")
+                self.assertEqual(
+                    list(frame.columns), ["node_index", "r2_id", "skill_id"]
+                )
+                self.assertEqual(
+                    frame["node_index"].tolist(), list(range(len(frame)))
+                )
+                self.assertEqual(len(frame), len(self.keys))
+                self.assertEqual(
+                    [
+                        tuple(int(value) for value in row)
+                        for row in frame[["r2_id", "skill_id"]].to_numpy()
+                    ],
+                    self.keys,
+                )
+                np.testing.assert_array_equal(
+                    np.load(run_dir / "gold" / "validation.npy", allow_pickle=False),
+                    expected_validation,
+                )
+                np.testing.assert_array_equal(
+                    np.load(run_dir / "gold" / "test.npy", allow_pickle=False),
+                    expected_test,
+                )
+                node_errors = pd.read_parquet(run_dir / "node-errors.parquet")
+                self.assertIn("r2_id", node_errors.columns)
+                self.assertIn("context", node_errors.columns)
+                self.assertEqual(
+                    len(node_errors),
+                    (len(protocol.NAIVE_METHODS) + 1) * 2 * len(self.keys),
+                )
+                np.testing.assert_array_equal(
+                    node_errors["context"].to_numpy(),
+                    node_errors["r2_id"].to_numpy(),
+                )
+
+    def test_windows_masks_and_selection_contract(self) -> None:
+        for run_dir in self.run_dirs:
+            with self.subTest(run=run_dir.name):
+                windows = fx.read_json(run_dir / "windows.json")
+                self.assertEqual(windows["n_windows"], 28)
+                self.assertEqual(windows["splits"]["train"], list(range(19)))
+                self.assertEqual(windows["splits"]["validation"], [21])
+                self.assertEqual(windows["splits"]["test"], [24, 25, 26, 27])
+                self.assertEqual(windows["omitted_starts"], [19, 20, 22, 23])
+
+                selection = fx.read_json(run_dir / "selection.json")
+                self.assertEqual(selection["training_samples_M"], 19 * len(self.keys))
+                self.assertEqual(
+                    selection["expected_training_samples_M"],
+                    selection["training_samples_M"],
+                )
+                table = selection["shared_ridge"]["candidate_table"]
+                self.assertEqual(len(table), len(protocol.LAMBDA_CANDIDATES))
+                self.assertEqual(
+                    {row["lambda"] for row in table},
+                    set(protocol.LAMBDA_CANDIDATES),
+                )
+                for row in table:
+                    self.assertAlmostEqual(row["alpha"], row["lambda"] * row["M"])
+                    self.assertIsNotNone(row["validation_MSE"])
+                expected = min(
+                    table, key=lambda row: (row["validation_MSE"], -row["lambda"])
+                )
+                self.assertEqual(
+                    selection["shared_ridge"]["selected_lambda"], expected["lambda"]
+                )
+
+                # One saved mask set is shared by every method; r2 coverage is
+                # context-qualified, so only (0, 0) and (0, 1) have a neighbour.
+                expected_coverage = np.zeros(len(self.keys), dtype=bool)
+                expected_coverage[0] = True
+                expected_coverage[1] = True
+                with np.load(run_dir / "masks.npz", allow_pickle=False) as masks:
+                    stacked = np.stack(
+                        [
+                            np.asarray(masks[f"activity_{name}"], dtype=bool)
+                            for name in protocol.ACTIVITY_GROUP_NAMES
+                        ]
+                    ).sum(axis=0)
+                    np.testing.assert_array_equal(
+                        stacked, np.ones(len(self.keys), dtype=stacked.dtype)
+                    )
+                    np.testing.assert_array_equal(
+                        np.asarray(masks["has_nonself_neighbor"], dtype=bool),
+                        expected_coverage,
+                    )
+
+                metrics = fx.read_json(run_dir / "metrics.json")
+                model_report = metrics["methods"]["test"][protocol.MODEL_NAME]
+                self.assertEqual(
+                    sorted(model_report["contexts"]), ["0", "1", "2"]
+                )
+                self.assertEqual(len(metrics["methods"]["validation"][protocol.MODEL_NAME]["windows"]), 1)
+                for method in protocol.NAIVE_METHODS + (protocol.MODEL_NAME,):
+                    report = metrics["methods"]["test"][method]
+                    self.assertEqual(len(report["windows"]), 4)
+                    self.assertEqual(len(report["horizons"]), protocol.HORIZON)
+                    self.assertEqual(
+                        report["neighbor_groups"]["has_nonself_neighbor"]["nodes"], 2
+                    )
+                    self.assertEqual(
+                        report["neighbor_groups"]["no_nonself_neighbor"]["nodes"],
+                        len(self.keys) - 2,
+                    )
+                self.assertEqual(
+                    metrics["methods"]["test"][protocol.MODEL_NAME][
+                        "target_month_multiplicities"
+                    ]["2023-09"],
+                    3,
+                )
+
+    def test_normalization_uses_unique_27_training_months(self) -> None:
+        train = self.signal[:, :27].astype(np.float64)
+        expected_std = train.std(axis=1, ddof=0)
+        expected_effective = np.where(expected_std == 0, 1.0, expected_std)
+        for run_dir in self.run_dirs:
+            with self.subTest(run=run_dir.name):
+                with np.load(
+                    run_dir / "models" / "SharedRidge.npz", allow_pickle=False
+                ) as handle:
+                    mean = handle["node_mean"]
+                    std = handle["node_std"]
+                    effective_std = handle["node_effective_std"]
+                    constant_mask = handle["constant_mask"]
+                    std_ddof = handle["std_ddof"]
+                np.testing.assert_allclose(mean, train.mean(axis=1), rtol=0, atol=0)
+                np.testing.assert_allclose(std, expected_std, rtol=0, atol=0)
+                np.testing.assert_allclose(
+                    effective_std, expected_effective, rtol=0, atol=0
+                )
+                np.testing.assert_array_equal(constant_mask, expected_std == 0)
+                self.assertEqual(int(std_ddof[0]), 0)
+                self.assertTrue(constant_mask.any())
+                self.assertTrue(np.all(effective_std[constant_mask] == 1.0))
+
+    def test_output_schema_matches_r0(self) -> None:
+        r2_dir = self.run_dirs[0]
+        r0_dir = self.r0_run_dir
+        self.assertEqual(_relative_files(r2_dir), _relative_files(r0_dir))
+        for relative in (
+            "metrics.json",
+            "selection.json",
+            "audit.json",
+            "windows.json",
+            "status.json",
+            "config.json",
+            "provenance.json",
+            "measurements.json",
+            "coverage.json",
+        ):
+            with self.subTest(relative=relative):
+                self.assertEqual(
+                    _schema_paths(fx.read_json(r2_dir / relative)),
+                    _schema_paths(fx.read_json(r0_dir / relative)),
+                )
+        metrics = fx.read_json(r2_dir / "metrics.json")
+        self.assertEqual(metrics["dataset"], "r2")
+        audit = fx.read_json(r2_dir / "audit.json")
+        self.assertEqual(audit["context_id_counts"], {"r2_id": 3})
+        self.assertEqual(audit["key_columns"], ["r2_id", "skill_id"])
+        self.assertTrue(audit["is_complete_context_skill_grid"])
+
+    def test_recompute_r2_saved_metrics_without_source_or_refit(self) -> None:
+        run_dir = self.run_dirs[0]
+        before = _tree_hash(run_dir)
+        demand_backup = self.fixture["demand_path"].read_bytes()
+        graph_backup = self.fixture["graph_path"].read_bytes()
+        self.fixture["demand_path"].unlink()
+        self.fixture["graph_path"].unlink()
+        try:
+            report_path = self.root / "reports" / "r2-recompute.json"
+            result = checks.command_recompute(
+                run_dir=run_dir,
+                report_path=report_path,
+                repo_root=REPO_ROOT,
+                command=["probe", "recompute", "r2"],
+            )
+        finally:
+            self.fixture["demand_path"].write_bytes(demand_backup)
+            self.fixture["graph_path"].write_bytes(graph_backup)
+        self.assertEqual(result["status"], "ok")
+        report = result["report"]
+        self.assertFalse(report["source_data_read"])
+        self.assertFalse(report["model_refit"])
+        for split, comparison in report["comparisons"].items():
+            with self.subTest(split=split):
+                self.assertEqual(comparison["status"], "ok")
+                self.assertEqual(comparison["max_normalized_difference"], 0.0)
+        self.assertEqual(report["relative_gains_comparison"]["status"], "ok")
+        self.assertEqual(report["node_error_comparison"]["status"], "ok")
+        recomputed = report["recomputed_metrics"]
+        self.assertIn(protocol.MODEL_NAME, recomputed["test"])
+        self.assertEqual(
+            sorted(recomputed["test"][protocol.MODEL_NAME]["contexts"]),
+            ["0", "1", "2"],
+        )
+        self.assertEqual(len(recomputed["test"][protocol.MODEL_NAME]["windows"]), 4)
+        self.assertEqual(len(recomputed["test"][protocol.MODEL_NAME]["horizons"]), 3)
+        self.assertIn("activity_groups", recomputed["test"][protocol.MODEL_NAME])
+        self.assertIn("neighbor_groups", recomputed["test"][protocol.MODEL_NAME])
+        self.assertEqual(
+            result["envelope"]["inputs"]["input_run_id"], self.RUN_IDS[0]
+        )
+        self.assertEqual(before, _tree_hash(run_dir))
+
+    def test_compare_two_same_seed_r2_runs(self) -> None:
+        run_a, run_b = self.run_dirs
+        before_a, before_b = _tree_hash(run_a), _tree_hash(run_b)
+        result = checks.command_compare(
+            run_a=run_a,
+            run_b=run_b,
+            report_path=self.root / "reports" / "r2-compare.json",
+            repo_root=REPO_ROOT,
+            command=["probe", "compare", "r2"],
+        )
+        self.assertEqual(result["status"], "ok")
+        report = result["report"]
+        self.assertTrue(report["identity_checks"]["dataset"])
+        self.assertTrue(report["identity_checks"]["node_keys_sha256"])
+        self.assertTrue(all(report["identity_checks"].values()))
+        self.assertTrue(report["masks_equal"])
+        self.assertFalse(report["seed_variance_reported"])
+        for comparison in report["prediction_comparisons"].values():
+            self.assertEqual(comparison["status"], "ok")
+            self.assertLessEqual(comparison["max_absolute_difference"], 1e-6)
+        for difference in report["mae_relative_differences"].values():
+            self.assertLessEqual(difference["relative_difference"], 1e-6)
+        self.assertEqual(before_a, _tree_hash(run_a))
+        self.assertEqual(before_b, _tree_hash(run_b))
+
+
+class R2InformationBoundaryTests(unittest.TestCase):
+    """Task 2.4: r2 frozen statistics, selection and coverage invariance."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        self.fixture = _r2_fixture(
+            self.root, contexts=2, skills=3, seed=21, name="boundary-fixture"
+        )
+
+    def tearDown(self) -> None:
+        self._tmp.cleanup()
+
+    def _run(
+        self, name: str, signal: np.ndarray, *, graph: Optional[Path] = None, retain_candidates: bool = False
+    ) -> Path:
+        demand = fx.write_demand(
+            self.root / f"{name}-demand.parquet", "r2", self.fixture["keys"], signal
+        )
+        spec = fx.make_run_spec(
+            self.root / f"{name}-runs",
+            "r2",
+            demand,
+            graph if graph is not None else self.fixture["graph_path"],
+            name,
+            retain_candidates=retain_candidates,
+        )
+        return Path(runner.execute_run(spec)["run_dir"])
+
+    def test_post_training_values_leave_frozen_statistics_and_candidates(self) -> None:
+        base_signal = self.fixture["signal"].copy()
+        shifted = base_signal.copy()
+        rng = np.random.default_rng(99)
+        shifted[:, 27:] = rng.integers(0, 40, size=(shifted.shape[0], 9))
+        self.assertFalse(np.array_equal(shifted[:, 27:], base_signal[:, 27:]))
+        base = self._run("frozen-base", base_signal, retain_candidates=True)
+        variant = self._run("frozen-late", shifted, retain_candidates=True)
+
+        with np.load(
+            base / "models" / "SharedRidge.npz", allow_pickle=False
+        ) as first, np.load(
+            variant / "models" / "SharedRidge.npz", allow_pickle=False
+        ) as second:
+            for key in ("node_mean", "node_std", "node_effective_std", "constant_mask"):
+                np.testing.assert_array_equal(first[key], second[key])
+        with np.load(base / "masks.npz", allow_pickle=False) as first, np.load(
+            variant / "masks.npz", allow_pickle=False
+        ) as second:
+            self.assertEqual(sorted(first.files), sorted(second.files))
+            for key in first.files:
+                np.testing.assert_array_equal(first[key], second[key])
+        for label in sorted(f"{value:g}" for value in protocol.LAMBDA_CANDIDATES):
+            with np.load(
+                base / "candidates" / label / "parameters.npz", allow_pickle=False
+            ) as first, np.load(
+                variant / "candidates" / label / "parameters.npz", allow_pickle=False
+            ) as second:
+                with self.subTest(candidate=label):
+                    np.testing.assert_array_equal(first["W"], second["W"])
+                    np.testing.assert_array_equal(first["b"], second["b"])
+        # The change was real: it moved the frozen validation targets.
+        self.assertFalse(
+            np.array_equal(
+                np.load(base / "gold" / "validation.npy", allow_pickle=False),
+                np.load(variant / "gold" / "validation.npy", allow_pickle=False),
+            )
+        )
+
+    def test_test_only_changes_preserve_lambda_and_naive_references(self) -> None:
+        base_signal = self.fixture["signal"].copy()
+        shifted = base_signal.copy()
+        rng = np.random.default_rng(7)
+        shifted[:, 30:] = rng.integers(0, 40, size=(shifted.shape[0], 6))
+        self.assertFalse(np.array_equal(shifted[:, 30:], base_signal[:, 30:]))
+        base = self._run("selection-base", base_signal)
+        variant = self._run("selection-test", shifted)
+        base_selection = fx.read_json(base / "selection.json")
+        variant_selection = fx.read_json(variant / "selection.json")
+        self.assertEqual(base_selection, variant_selection)
+        self.assertEqual(
+            base_selection["shared_ridge"]["selected_lambda"],
+            variant_selection["shared_ridge"]["selected_lambda"],
+        )
+        self.assertEqual(
+            base_selection["naive_references"], variant_selection["naive_references"]
+        )
+        # Only the test targets moved.
+        self.assertFalse(
+            np.array_equal(
+                np.load(base / "gold" / "test.npy", allow_pickle=False),
+                np.load(variant / "gold" / "test.npy", allow_pickle=False),
+            )
+        )
+
+    def test_valid_coverage_changes_leave_predictions_and_selection(self) -> None:
+        signal = self.fixture["signal"]
+        sparse_graph = fx.write_graph(
+            self.root / "sparse-graph.parquet", "r2", [[0, 0, 1]]
+        )
+        dense_graph = fx.write_graph(
+            self.root / "dense-graph.parquet",
+            "r2",
+            [[0, 0, 1], [0, 1, 2], [1, 0, 0]],
+        )
+        sparse = self._run("coverage-sparse", signal, graph=sparse_graph)
+        dense = self._run("coverage-dense", signal, graph=dense_graph)
+        for method in protocol.NAIVE_METHODS + (protocol.MODEL_NAME,):
+            for split in ("validation", "test"):
+                with self.subTest(method=method, split=split):
+                    np.testing.assert_array_equal(
+                        np.load(
+                            sparse / "predictions" / method / f"{split}.npy",
+                            allow_pickle=False,
+                        ),
+                        np.load(
+                            dense / "predictions" / method / f"{split}.npy",
+                            allow_pickle=False,
+                        ),
+                    )
+        self.assertEqual(
+            fx.read_json(sparse / "selection.json"),
+            fx.read_json(dense / "selection.json"),
+        )
+        self.assertEqual(
+            fx.read_json(sparse / "coverage.json")["covered_nodes"], 2
+        )
+        self.assertEqual(
+            fx.read_json(dense / "coverage.json")["covered_nodes"], 3
+        )
+        sparse_metrics = fx.read_json(sparse / "metrics.json")
+        dense_metrics = fx.read_json(dense / "metrics.json")
+        self.assertNotEqual(
+            sparse_metrics["methods"]["test"][protocol.MODEL_NAME]["neighbor_groups"][
+                "has_nonself_neighbor"
+            ]["MAE"],
+            dense_metrics["methods"]["test"][protocol.MODEL_NAME]["neighbor_groups"][
+                "has_nonself_neighbor"
+            ]["MAE"],
+        )
+
+
+class R2AlignV2Tests(unittest.TestCase):
+    """Task 3.2/3.3: r2 alignment against independent v2-format references."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        self.fixture = _r2_fixture(
+            self.root, contexts=2, skills=3, seed=29, name="align-fixture"
+        )
+        self.run_dir = Path(
+            runner.execute_run(
+                fx.make_run_spec(
+                    self.root / "align-runs",
+                    "r2",
+                    self.fixture["demand_path"],
+                    self.fixture["graph_path"],
+                    "r2-align-base",
+                )
+            )["run_dir"]
+        )
+
+    def tearDown(self) -> None:
+        self._tmp.cleanup()
+
+    def _write_reference(self, log_path: Path, *, dataset: str = "r2", perturb=None) -> Path:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        if dataset == "r2":
+            keys, signal = self.fixture["keys"], self.fixture["signal"]
+        else:
+            keys, signal = fx.r0_keys(4), fx.synthetic_signal(4, seed=5)
+        log = _write_v2_log(
+            log_path,
+            dataset,
+            keys,
+            signal,
+            fx.read_json(self.run_dir / "metrics.json"),
+            perturb=perturb,
+        )
+        demand_sha = fx.read_json(self.run_dir / "source-sha256.json")["sources"][
+            "demand"
+        ]["sha256"]
+        _write_v2_source_manifest(log, dataset, demand_sha)
+        return log
+
+    def _align(self, reference: Path, name: str) -> dict:
+        return checks.command_align_v2(
+            run_dir=self.run_dir,
+            reference=reference,
+            report_path=self.root / "reports" / f"{name}.json",
+            repo_root=REPO_ROOT,
+            command=["probe", "align-v2", "r2"],
+        )
+
+    def test_r2_reference_aligns_without_reading_source_data(self) -> None:
+        log = self._write_reference(self.root / "ref-ok" / "naive-baselines.log")
+        reference_before = hashlib.sha256(log.read_bytes()).hexdigest()
+        # Alignment consumes only saved evidence: remove the synthetic sources.
+        self.fixture["demand_path"].unlink()
+        self.fixture["graph_path"].unlink()
+        result = self._align(log, "r2-align-ok")
+        self.assertEqual(result["status"], "ok")
+        report = result["report"]
+        self.assertGreater(report["compared_fields"], 50)
+        self.assertEqual(report["discrepancies"], [])
+        self.assertEqual(report["tolerance"], 1e-12)
+        self.assertTrue(
+            report["identity_evidence"]["v2_log_contains_counts_not_full_node_keys"]
+        )
+        self.assertTrue(report["identity_evidence"]["demand_sha256_matches_v2"])
+        self.assertFalse(report["diagnostic_elapsed_time_compared_as_cost"])
+        self.assertEqual(
+            hashlib.sha256(log.read_bytes()).hexdigest(), reference_before
+        )
+
+    def test_reference_without_r2_records_fails_with_a_report(self) -> None:
+        log = self._write_reference(
+            self.root / "ref-r0-only" / "naive-baselines.log", dataset="r0"
+        )
+        before_run = _tree_hash(self.run_dir)
+        reference_before = hashlib.sha256(log.read_bytes()).hexdigest()
+        destination = self.root / "reports" / "r2-no-records.json"
+        result = self._align(log, "r2-no-records")
+        self.assertEqual(result["status"], "failed")
+        self.assertNotEqual(result["status"], "ok")
+        self.assertTrue(destination.exists())
+        self.assertEqual(fx.read_json(destination)["status"], "failed")
+        self.assertTrue(result["envelope"]["errors"])
+        self.assertIn("r2", json.dumps(result["envelope"]))
+        self.assertEqual(_tree_hash(self.run_dir), before_run)
+        self.assertEqual(
+            hashlib.sha256(log.read_bytes()).hexdigest(), reference_before
+        )
+
+    def test_missing_source_manifest_reports_limited(self) -> None:
+        log = self._write_reference(self.root / "ref-full" / "naive-baselines.log")
+        bare = self.root / "bare-reference"
+        bare.mkdir()
+        shutil.copy(log, bare / "naive-baselines.log")
+        result = self._align(bare / "naive-baselines.log", "r2-limited")
+        self.assertEqual(result["status"], "limited")
+        self.assertEqual(result["report"]["identity_status"], "limited")
+        self.assertTrue(result["report"]["limited_findings"])
+        self.assertNotEqual(result["status"], "ok")
+
+    def test_source_identity_mismatch_is_reported(self) -> None:
+        log = self._write_reference(
+            self.root / "ref-identity" / "naive-baselines.log"
+        )
+        self._mutate_json(
+            self.run_dir,
+            "source-sha256.json",
+            lambda payload: payload["sources"]["demand"].__setitem__(
+                "sha256", "0" * 64
+            ),
+        )
+        result = self._align(log, "r2-identity")
+        self.assertEqual(result["status"], "mismatch")
+        self.assertEqual(result["report"]["identity_status"], "mismatch")
+        self.assertTrue(
+            any(
+                row["field"] == "identity.demand_sha256_vs_v2"
+                for row in result["report"]["discrepancies"]
+            )
+        )
+
+    def test_metric_discrepancy_is_preserved_without_tolerance_relaxation(self) -> None:
+        log = self._write_reference(
+            self.root / "ref-perturb" / "naive-baselines.log",
+            perturb=("validation", "LastValue", "MAE", 1e-6),
+        )
+        reference_before = hashlib.sha256(log.read_bytes()).hexdigest()
+        result = self._align(log, "r2-perturb")
+        self.assertEqual(result["status"], "mismatch")
+        self.assertEqual(result["report"]["tolerance"], 1e-12)
+        self.assertTrue(result["report"]["discrepancies"])
+        finding = result["report"]["discrepancies"][0]
+        self.assertIn("expected", finding)
+        self.assertIn("actual", finding)
+        self.assertEqual(
+            hashlib.sha256(log.read_bytes()).hexdigest(), reference_before
+        )
+
+    @staticmethod
+    def _mutate_json(run_dir: Path, relative: str, mutator) -> None:
+        payload = fx.read_json(run_dir / relative)
+        mutator(payload)
+        (run_dir / relative).write_text(json.dumps(payload), encoding="utf-8")
+
+
+class R2CheckContractTests(unittest.TestCase):
+    """Task 3.3: r2 check negatives, exclusive reports and nonzero exits."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls._tmp = tempfile.TemporaryDirectory()
+        cls.root = Path(cls._tmp.name)
+        cls.fixture = _r2_fixture(
+            cls.root, contexts=2, skills=3, seed=31, name="contract-fixture"
+        )
+        cls.run_dir = Path(
+            runner.execute_run(
+                fx.make_run_spec(
+                    cls.root / "contract-runs",
+                    "r2",
+                    cls.fixture["demand_path"],
+                    cls.fixture["graph_path"],
+                    "r2-contract-base",
+                )
+            )["run_dir"]
+        )
+        cls.reports = cls.root / "contract-reports"
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls._tmp.cleanup()
+
+    def _copy(self, name: str) -> Path:
+        destination = self.root / name
+        shutil.copytree(self.run_dir, destination)
+        return destination
+
+    def _recompute(self, run_dir: Path, name: str) -> dict:
+        return checks.command_recompute(
+            run_dir=run_dir,
+            report_path=self.reports / f"{name}.json",
+            repo_root=REPO_ROOT,
+            command=["probe", "recompute"],
+        )
+
+    def _compare(self, first: Path, second: Path, name: str) -> dict:
+        return checks.command_compare(
+            run_a=first,
+            run_b=second,
+            report_path=self.reports / f"{name}.json",
+            repo_root=REPO_ROOT,
+            command=["probe", "compare"],
+        )
+
+    @staticmethod
+    def _mutate_json(run_dir: Path, relative: str, mutator) -> None:
+        payload = fx.read_json(run_dir / relative)
+        mutator(payload)
+        (run_dir / relative).write_text(json.dumps(payload), encoding="utf-8")
+
+    @staticmethod
+    def _flip_saved_mask(run_dir: Path) -> None:
+        path = run_dir / "masks.npz"
+        with np.load(path, allow_pickle=False) as handle:
+            arrays = {name: np.asarray(handle[name]) for name in handle.files}
+        arrays["has_nonself_neighbor"] = ~arrays["has_nonself_neighbor"]
+        np.savez(path, **arrays)
+
+    def test_compare_rejects_saved_identity_or_mask_mismatch(self) -> None:
+        identity_copy = self._copy("r2-identity-copy")
+        self._mutate_json(
+            identity_copy,
+            "source-sha256.json",
+            lambda payload: payload.__setitem__("node_keys_sha256", "0" * 64),
+        )
+        identity_result = self._compare(
+            self.run_dir, identity_copy, "r2-identity-mismatch"
+        )
+        self.assertEqual(identity_result["status"], "mismatch")
+        self.assertFalse(
+            identity_result["report"]["identity_checks"]["node_keys_sha256"]
+        )
+
+        mask_copy = self._copy("r2-mask-copy")
+        self._flip_saved_mask(mask_copy)
+        mask_result = self._compare(self.run_dir, mask_copy, "r2-mask-mismatch")
+        self.assertEqual(mask_result["status"], "mismatch")
+        self.assertFalse(mask_result["report"]["masks_equal"])
+
+    def test_recompute_rejects_prediction_or_metric_beyond_tolerance(self) -> None:
+        prediction_copy = self._copy("r2-prediction-copy")
+        path = prediction_copy / "predictions" / "Zero" / "test.npy"
+        np.save(path, np.load(path, allow_pickle=False) + 1.0)
+        prediction_result = self._recompute(
+            prediction_copy, "r2-prediction-mismatch"
+        )
+        self.assertEqual(prediction_result["status"], "mismatch")
+        self.assertNotEqual(
+            prediction_result["report"]["comparisons"]["test"]["status"], "ok"
+        )
+
+        metric_copy = self._copy("r2-metric-copy")
+        self._mutate_json(
+            metric_copy,
+            "metrics.json",
+            lambda payload: payload["methods"]["test"][
+                protocol.MODEL_NAME
+            ].__setitem__(
+                "MAE",
+                payload["methods"]["test"][protocol.MODEL_NAME]["MAE"] + 1.0,
+            ),
+        )
+        metric_result = self._recompute(metric_copy, "r2-metric-mismatch")
+        self.assertEqual(metric_result["status"], "mismatch")
+
+    def test_report_collision_and_inside_input_are_rejected(self) -> None:
+        collision_dir = self.reports / "collision"
+        collision_dir.mkdir(parents=True, exist_ok=True)
+        destination = collision_dir / "collision.json"
+        destination.write_bytes(b"original-bytes")
+        with self.assertRaises(checks.CheckError):
+            checks.command_recompute(
+                run_dir=self.run_dir,
+                report_path=destination,
+                repo_root=REPO_ROOT,
+                command=["probe"],
+            )
+        with self.assertRaises(checks.CheckError):
+            checks.command_compare(
+                run_a=self.run_dir,
+                run_b=self.run_dir,
+                report_path=destination,
+                repo_root=REPO_ROOT,
+                command=["probe"],
+            )
+        self.assertEqual(destination.read_bytes(), b"original-bytes")
+        self.assertEqual(
+            [path.name for path in collision_dir.iterdir()], ["collision.json"]
+        )
+
+        inside = self.run_dir / "report.json"
+        with self.assertRaises(checks.CheckError):
+            checks.command_recompute(
+                run_dir=self.run_dir,
+                report_path=inside,
+                repo_root=REPO_ROOT,
+                command=["probe"],
+            )
+        with self.assertRaises(checks.CheckError):
+            checks.command_compare(
+                run_a=self.run_dir,
+                run_b=self.run_dir,
+                report_path=inside,
+                repo_root=REPO_ROOT,
+                command=["probe"],
+            )
+        self.assertFalse(inside.exists())
+
+    def test_cli_returns_nonzero_for_r2_failed_mismatch_and_limited(self) -> None:
+        no_record_log = self.root / "cli-ref" / "naive-baselines.log"
+        no_record_log.parent.mkdir(parents=True, exist_ok=True)
+        _write_v2_log(
+            no_record_log,
+            "r0",
+            fx.r0_keys(4),
+            fx.synthetic_signal(4, seed=5),
+            {},
+        )
+        align_failed = _run_public_entry(
+            [
+                sys.executable,
+                "-m",
+                "benchmark.nograph_baseline",
+                "align-v2",
+                "--run-dir",
+                str(self.run_dir),
+                "--reference",
+                str(no_record_log),
+                "--report",
+                str(self.reports / "cli-failed.json"),
+            ]
+        )
+        self.assertNotEqual(align_failed.returncode, 0)
+        self.assertEqual(json.loads(align_failed.stdout)["status"], "failed")
+
+        mask_copy = self._copy("r2-cli-mask-copy")
+        self._flip_saved_mask(mask_copy)
+        compare_mismatch = _run_public_entry(
+            [
+                sys.executable,
+                "-m",
+                "benchmark.nograph_baseline",
+                "compare",
+                "--run-a",
+                str(self.run_dir),
+                "--run-b",
+                str(mask_copy),
+                "--report",
+                str(self.reports / "cli-mismatch.json"),
+            ]
+        )
+        self.assertNotEqual(compare_mismatch.returncode, 0)
+        self.assertEqual(json.loads(compare_mismatch.stdout)["status"], "mismatch")
+
+        full_dir = self.root / "cli-full"
+        full_dir.mkdir(parents=True, exist_ok=True)
+        log = _write_v2_log(
+            full_dir / "naive-baselines.log",
+            "r2",
+            self.fixture["keys"],
+            self.fixture["signal"],
+            fx.read_json(self.run_dir / "metrics.json"),
+        )
+        demand_sha = fx.read_json(self.run_dir / "source-sha256.json")["sources"][
+            "demand"
+        ]["sha256"]
+        _write_v2_source_manifest(log, "r2", demand_sha)
+        bare = self.root / "cli-bare"
+        bare.mkdir()
+        shutil.copy(log, bare / "naive-baselines.log")
+        align_limited = _run_public_entry(
+            [
+                sys.executable,
+                "-m",
+                "benchmark.nograph_baseline",
+                "align-v2",
+                "--run-dir",
+                str(self.run_dir),
+                "--reference",
+                str(bare / "naive-baselines.log"),
+                "--report",
+                str(self.reports / "cli-limited.json"),
+            ]
+        )
+        self.assertNotEqual(align_limited.returncode, 0)
+        self.assertEqual(json.loads(align_limited.stdout)["status"], "limited")
 
 
 if __name__ == "__main__":

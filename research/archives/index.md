@@ -1,6 +1,6 @@
 # 实验与归档索引
 
-更新日期：2026-10-08。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
+更新日期：2026-10-12。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
 
 ## 已有运行
 
@@ -111,6 +111,49 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 195 个 tracked 文件与整理前 `e36e374` 的对应内容逐字节一致，删除范围仅三个失效探针/预览；活跃链接/锚点检查通过，当前指导示例仅做语法检查，`git diff --check` 通过。dataset、运行实现（除移走两份历史探索来源）、封存包、run 与 OpenSpec 归档不变，不运行实验、完整测试或恢复演练。本地 PDF 原样改位置并继续忽略，其他 ignored 内容不删除；PDF 本身不随 Git 备份。
 
 迁移与入口更新保存于 `77598faef8d90bff621456786ca27b045b3122fb`，2026-10-08 正常 `git push origin xzs` 成功，回报 `e36e374..77598fa`；没有独立远端取回或恢复核验。既有内容可从原 Git 路径追溯。没有新 run、封存包或哈希清单，也不把纯路径变化当作新软件行为验证。本页与 state 的保存状态更新随普通文档提交同步，自身提交身份从 Git 历史追溯，不继续新增回执。
+
+## T002 分析与检查产物（2026-10-11）
+
+所属任务 P01-T002，按 [D013](../decisions.md#d013-优先收尾-t002-的候选范围) 收尾、[D014](../decisions.md#d014-t002-数据与图语义审计研究侧验收) 接受。四项产物位于 `research/analyses/`，各自含 report、脚本或准确命令、结果 JSON/log 与输入身份文件（`source-sha256.txt`、`git-commit.txt`，探针另含 `environment.txt`）：
+
+| 产物 | 内容 |
+| --- | --- |
+| [p01-t002-graph-semantics-20261011-01](../analyses/p01-t002-graph-semantics-20261011-01/report.md) | 场景内入/出度、无向邻居度、反向边比例、覆盖与场景边数 |
+| [p01-t002-graph-time-source-20261011-01](../analyses/p01-t002-graph-time-source-20261011-01/report.md) | 图构建时间来源查证与固定图历史回测限制 |
+| [p01-t002-big-demand-cross-20261011-01](../analyses/p01-t002-big-demand-cross-20261011-01/report.md) | 训练期大需求 × 活跃度 × 邻居覆盖 × 误差贡献交叉 |
+| [p01-t002-adjacency-probe-20261011-01](../analyses/p01-t002-adjacency-probe-20261011-01/report.md) | GConvGRU/GConvLSTM（`K=1`）与 EvolveGCNH 的邻接敏感性 |
+
+保存状态：随 2026-10-11 文档提交入库（提交身份从 Git 历史追溯）；**未封存，异地备份与远端恢复未核验**。不是实验 run，不作封存，不修改既有 24 个 T004 包、旧 run、可读入口或 OpenSpec 归档。需要完整模型数组时仍按上文展开旧包。探针依赖装在本机 conda 环境 `job-sdf-baseline`（torch 2.14.1、torch-geometric 2.8.0.post1、torch_sparse/torch_scatter 源码编译、torch_geometric_temporal 0.56.2），不是归档 GPU 实验环境。
+
+## T006 r2/count 实现证据（2026-10-11）
+
+所属任务 P01-T006。OpenSpec 变更 `add-r2-count-baseline` 已归档，独立报告为 [`Verdict: PASS`](../../openspec/changes/archive/2026-10-11-add-r2-count-baseline/verification.md)；研究侧按 [D017](../decisions.md#d017-t006-r2count-实现研究侧验收与委托回收) 接受其实现就绪证据，并关闭 [DELEGATION](../../DELEGATION.md) 指针。
+
+回收时只读核对：活跃变更目录已不存在；按报告 40 文件清单重算 SHA256（变更目录映射到归档路径），39 个与当前工作区实现一致，无缺失；唯一差异是主规格 `openspec/specs/nograph-baseline-entry/spec.md`，即报告明确排除在 pre-archive 指纹外的归档同步。
+
+证据性质与限制：`r2/count` 的入口/检查/成本证据来自临时 fixture 与 `--purpose development` 运行（合成 121,420 节点、52 上下文，读取/拟合/推理合计约 2.1 秒），**不是真实 r2 实验、成本或预测结论**；可选 sklearn 未执行。真实 `r2` 审计、正式 run、产物保存与实测成本随后于 2026-10-12 完成，见下节。没有新 run、封存包或备份核验；既有 24 个 T004 包、旧 run、旧 OpenSpec 归档与科学协议未改。
+
+保存状态：实现、测试、文档、主规格与归档变更目录随 `7f6b5e4e66d0457a9151f47456c178cac082ca96` 提交并 push `origin/xzs`（此前在报告核验时未提交）。**未封存，备份与远端恢复未核验**；提交身份从 Git 历史追溯。
+
+## T006 r2/count 运行与保存（2026-10-12）
+
+所属任务 P01-T006；研究侧验收见 [D018](../decisions.md#d018-t006-r2count-研究侧验收)，审计与分析见 [r2 审计报告](../analyses/p01-t006-r2-audit-20261012-01/report.md)。两个正式 run 均为 `--purpose formal`、seed 0、本机 CPU（`job-sdf-baseline`）：
+
+| Run ID | 执行结果 | 保存包 | 包内成员 | 包外 SHA256 |
+| --- | --- | --- | ---: | --- |
+| `p01-r2-sharedridge-001` | success | `research/archives/p01-r2-sharedridge-001.tar.gz`（27,627,768 bytes） | 40 | 不需要（包在 Git 内，内容身份为保存它的提交） |
+| `p01-r2-sharedridge-repeat-001` | success | `research/archives/p01-r2-sharedridge-repeat-001.tar.gz`（27,627,856 bytes） | 40 | 同上 |
+
+- 打包排除 `__pycache__/`、`.DS_Store`、`._*`；核验方式：解包到新的临时目录后 `diff -r` 与 `research/runs/<run-id>/` 一致（内容与成员数 40 均相同）。包在 Git 内，内容身份由保存它的提交承担，提交身份从 Git 历史追溯，不另建包外清单或 sidecar。
+- 可读入口 `summary.md`、`provenance.json`、`command.json` 随 run 目录入库；`predictions/`、`gold/`、`node-errors.parquet`、`masks.npz`、`nodes.parquet`、`models/` 等展开数组**仅保留在本机**并被 `.gitignore` 忽略，需要时按上面的包在独立目录展开。
+- 关联 saved-only 检查报告（入 Git）：`research/reports/nograph-baseline/p01-r2-recompute-primary-001.json`、`p01-r2-recompute-repeat-001.json`、`p01-r2-repeat-check-001.json`。
+- 备份状态：包与可读入口随 2026-10-12 的 push 到 `origin/xzs`；**未做独立远端取回或恢复核验**。原始 run 源码身份见各 run 的 `provenance.json`（固定 commit 加相关差异）。
+
+## my-change PR 合入（2026-10-11 接手记录）
+
+用户告知此前已向 `my-change` 发起 PR。本轮只读本地 Git：合并提交 `7cbfe561285b1118c09e3e2510e1e2d711fe7432` 记录 PR #9（`Excavator-13/xzs`），提交时间为 2026-10-08，父提交为 `341e7f8` 与 `98e9fbe`。本地 `xzs`、`my-change` 和缓存的 `origin/my-change` 均指向该合并提交；缓存的 `origin/xzs` 为 `98e9fbe`。合并提交与 `98e9fbe` 的文件树差异为空，后者含此前维护、T010/T011 及保存状态记录。
+
+这是本地合并历史及缓存引用的证据，未联网核验当前远端状态、PR 页面或产物恢复。既有封存包、运行源码身份与历史备份核验记录保持原样；没有新 run、封存、commit/push 或恢复检查。
 
 ## 远端核验记录
 

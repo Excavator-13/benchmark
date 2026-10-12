@@ -384,14 +384,15 @@ PY
 
 ## 7. 当前可复用 baseline 入口
 
-`benchmark.nograph_baseline` 已实现不依赖 PyG/PyTorch 的规范读取、五项朴素基线及共享 Ridge，T004 已研究侧验收。默认路径只需 NumPy、pandas、PyArrow；科学定义见[协议](protocol.md)。准确命令和可选参数见 [README](../../../README.md#45-graph-free-cpu-baseline-benchmarknograph_baseline)。
+`benchmark.nograph_baseline` 已实现不依赖 PyG/PyTorch 的规范读取、五项朴素基线及共享 Ridge，T004 已研究侧验收。当前入口支持三种 count 粒度：`r0/count`、`region/count` 与 `r2/count`，上下文键分别为 `r0_id`、`region_id`、`r2_id`，与 `skill_id` 组成节点身份。默认路径只需 NumPy、pandas、PyArrow；科学定义见[协议](protocol.md)。准确命令和可选参数见 [README](../../../README.md#45-graph-free-cpu-baseline-benchmarknograph_baseline)。
 
 ```bash
 python -m benchmark.nograph_baseline --help
 python -m benchmark.nograph_baseline run --data-name r0 --mode count --seed 0 --run-id p01-r0-NEW-ID
+python -m benchmark.nograph_baseline run --data-name r2 --mode count --seed 0 --run-id probe-r2 --purpose development
 ```
 
-模型调用必须使用新的 run ID。此命令会执行模型，仅在相应实验已授权时运行。两组现有正式结果见[索引](../../archives/index.md#t004-baseline-运行2026-10-07)；数组已清理时，在独立空目录从包展开，不能对仅有可读入口的 run 目录直接重算。
+模型调用必须使用新的 run ID。此命令会执行模型，仅在相应实验已授权时运行。两组现有正式结果见[索引](../../archives/index.md#t004-baseline-运行2026-10-07)；数组已清理时，在独立空目录从包展开，不能对仅有可读入口的 run 目录直接重算。`r2/count` 的正式 run 与保存同样需用户单独授权；上面的 `--purpose development` 只写忽略的 `scratch/nograph-baseline/`，属于实现/开发证据，不是正式 r2 实验或科研验收，也不改变已接受的 `r0`/`region` 证据。
 
 记录减负已由 [T010 独立 PASS](../../../openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/verification.md)及 [D011 研究侧验收](../../decisions.md#d011-t010-记录减负研究侧验收)完成。模型默认 `--purpose formal`，临时开发显式使用 `--purpose development`（输出在忽略的 `scratch/nograph-baseline/`）；默认只保存被选模型与完整候选验证分数，研究需要完整候选数组时使用 `--retain-candidates`。已提交源码/协议用固定 commit 与路径定位，相关脏内容保存可恢复材料。
 
@@ -403,9 +404,9 @@ python -m benchmark.nograph_baseline recompute \
     --report research/reports/nograph-baseline/p01-r0-recompute-NEW-ID.json
 ```
 
-`P01_RESTORE_DIR` 的按需展开方法见[索引](../../archives/index.md#内容身份与恢复限制)。仅有可读入口的原目录不含数组，不能直接重算；报告保留输入执行身份、来源、命令、容差和结果/失败信息，不改输入、不重训。
+`P01_RESTORE_DIR` 的按需展开方法见[索引](../../archives/index.md#内容身份与恢复限制)。仅有可读入口的原目录不含数组，不能直接重算；报告保留输入执行身份、来源、命令、容差和结果/失败信息，不改输入、不重训。三个检查同样支持保存的 `r2` 结果并保留 `r2_id` 身份；`align-v2` 的参考必须含被检查数据的记录：历史封存 v2 日志只有 `r0`/`region`，不新增 `r2` 记录也不改写，因此 r2 对齐使用独立的、含 r2 记录的 v2-format 参考；缺 r2 记录的参考显式失败，缺来源身份保持 `limited`。
 
-科研接续按计划准备 `r2/count` 扩展，再做训练期内部回测；不把多个重叠窗口当作独立实验。旧图 CLI 不支持 `--model_name Ridge` 或 `--learning_rate ...`。
+无图入口现支持 `r2/count` 的同一流程；其实现与对齐证据来自临时 fixture/development，不是正式 r2 run 或科研验收。正式 `r2/count` 运行与保存需用户单独授权，独立验证与研究侧验收由相应流程另行完成（研究侧实现验收见 [D017](../../decisions.md#d017-t006-r2count-实现研究侧验收与委托回收)）。科研接续再做训练期内部回测；不把多个重叠窗口当作独立实验。旧图 CLI 不支持 `--model_name Ridge` 或 `--learning_rate ...`。
 
 ## 8. 什么时候恢复 GPU 实验
 

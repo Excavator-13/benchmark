@@ -1,0 +1,7 @@
+4ada154773b8678ae7d25b42e36a8309a51490bbe9fe059f015bb61724ed4c3c  dataset/demand/r2.parquet
+4cc1f399dd9061920179ade34d018fcbd58c3e00bb40f303b91e9aba99f9e12c  dataset/graph/r2.parquet
+8b3fc0c5b20f9d739934c89eff277716db4efeb9e670cc6059a40c4a80e07190  research/runs/p01-r2-sharedridge-001/metrics.json
+31a37a3e16b322c3a99975cd58de61f123e88b2c33bb05b7382eeaa608d6640e  research/runs/p01-r2-sharedridge-001/coverage.json
+fdc99eb278e6121992d67c665f0901841dd2caca5f3f52407f68af1213d7f216  research/reports/nograph-baseline/p01-r2-recompute-primary-001.json
+e23c25f6a6bc14f51d76b286c4409a9c82575f0d1b9daa3a8dab3a24a13d714e  research/reports/nograph-baseline/p01-r2-recompute-repeat-001.json
+3aeac7c5ebd2aac94c2042db79f87972a7c8c1aea4563bc5e1d36fa0e5fc894b  research/reports/nograph-baseline/p01-r2-repeat-check-001.json

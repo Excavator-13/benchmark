@@ -178,8 +178,11 @@ to this protocol.
 
 `benchmark/nograph_baseline/` is an independent CPU entry for the
 `P1-count-L6-H3-v3` protocol (see `research/phases/P01/protocol.md`). It computes
-the five naive baselines and one shared Ridge model for `r0/count` and
-`region/count` without importing graph methods, PyTorch, PyG or DGL. Its only
+the five naive baselines and one shared Ridge model for `r0/count`,
+`region/count` and `r2/count` without importing graph methods, PyTorch, PyG or
+DGL. Count granularity is selected with `--data-name`; the context key is
+`r0_id`, `region_id` or `r2_id` respectively, always paired with `skill_id` to
+form the node identity. Its only
 required third-party dependencies are NumPy, pandas and PyArrow; scikit-learn is
 an optional backend.
 
@@ -209,6 +212,12 @@ python -m benchmark.nograph_baseline run --data-name r0 --mode count --seed 0 \
 # inside research/runs/); add --retain-candidates to keep losing Ridge arrays
 python -m benchmark.nograph_baseline run --data-name r0 --mode count --seed 0 \
     --run-id probe-r0 --purpose development --retain-candidates
+
+# the third supported granularity, r2/count (context key r2_id); the same
+# development rules apply. A formal r2 run and its research acceptance require
+# separate authorization and are not started by implementation/verification work.
+python -m benchmark.nograph_baseline run --data-name r2 --mode count --seed 0 \
+    --run-id probe-r2 --purpose development
 
 # recompute every metric from saved run artifacts only (no source data, no refit)
 python -m benchmark.nograph_baseline recompute \
@@ -262,7 +271,20 @@ identities, documented tolerances, status and recomputed metrics. A report is
 never overwritten, checks never read source demand/graph data or fit a model,
 and input run directories are left byte-for-byte unchanged. A missing or
 invalid saved input still produces a failure report and a nonzero exit; an
-invalid output destination produces no output.
+invalid output destination produces no output. All three checks accept saved
+`r2` results under the same report contract and preserve `r2_id` identities.
+`align-v2` requires the supplied immutable reference to contain records for the
+run's dataset: the historical sealed v2 log holds `r0`/`region` records only and
+is never rewritten, so `r2` alignment uses a separate v2-format reference that
+includes `r2`; a reference without `r2` records fails explicitly rather than
+being accepted, and a reference without source identity stays `limited`.
+
+**r2 authorization.** The `r2/count` path reuses the same protocol, selection,
+grouping and artifact contract as `r0`/`region`; adding it changes no scientific
+definition and no accepted `r0`/`region` evidence. Formal `r2/count` execution,
+saving and research acceptance remain separately authorized research actions,
+and software/development checks do not constitute a formal r2 experiment or a
+scientific conclusion.
 
 Outputs under `research/runs/` are **unsealed and not backed up**: a successful
 run records reproducible evidence only and does not imply scientific

@@ -1,0 +1,31 @@
+{"wrote": "/Users/watuji/da_chuang/repos/benchmark/research/analyses/p01-t002-adjacency-probe-20261011-01/adjacency-probe.json", "elapsed_seconds": 0.09409929100002046}
+GConvGRU    K=1|base_random          layer_max_abs_diff=0.000e+00
+GConvGRU    K=1|ring                 layer_max_abs_diff=0.000e+00
+GConvGRU    K=1|ring_shifted         layer_max_abs_diff=0.000e+00
+GConvGRU    K=1|empty                layer_max_abs_diff=0.000e+00
+GConvGRU    K=1|star                 layer_max_abs_diff=0.000e+00
+GConvGRU    K=2|base_random          layer_max_abs_diff=0.000e+00
+GConvGRU    K=2|ring                 layer_max_abs_diff=1.458e+00
+GConvGRU    K=2|ring_shifted         layer_max_abs_diff=1.387e+00
+GConvGRU    K=2|empty                layer_max_abs_diff=1.404e+00
+GConvGRU    K=2|star                 layer_max_abs_diff=1.428e+00
+GConvGRU    K=1|same_adjacency_repeat layer_max_abs_diff=0.000e+00
+GConvGRU    K=2|same_adjacency_repeat layer_max_abs_diff=0.000e+00
+GConvLSTM   K=1|base_random          layer_max_abs_diff=0.000e+00
+GConvLSTM   K=1|ring                 layer_max_abs_diff=0.000e+00
+GConvLSTM   K=1|ring_shifted         layer_max_abs_diff=0.000e+00
+GConvLSTM   K=1|empty                layer_max_abs_diff=0.000e+00
+GConvLSTM   K=1|star                 layer_max_abs_diff=0.000e+00
+GConvLSTM   K=2|base_random          layer_max_abs_diff=0.000e+00
+GConvLSTM   K=2|ring                 layer_max_abs_diff=1.275e+00
+GConvLSTM   K=2|ring_shifted         layer_max_abs_diff=1.538e+00
+GConvLSTM   K=2|empty                layer_max_abs_diff=1.386e+00
+GConvLSTM   K=2|star                 layer_max_abs_diff=1.249e+00
+GConvLSTM   K=1|same_adjacency_repeat layer_max_abs_diff=0.000e+00
+GConvLSTM   K=2|same_adjacency_repeat layer_max_abs_diff=0.000e+00
+EvolveGCNH  K=1|base_random          layer_max_abs_diff=0.000e+00
+EvolveGCNH  K=1|ring                 layer_max_abs_diff=2.028e+00
+EvolveGCNH  K=1|ring_shifted         layer_max_abs_diff=2.474e+00
+EvolveGCNH  K=1|empty                layer_max_abs_diff=3.101e+00
+EvolveGCNH  K=1|star                 layer_max_abs_diff=3.400e+00
+full forecast head: {"GConvGRU|base_random": {"forecast_shape": [32, 3], "forecast_max_abs_diff_vs_base": 0.0}, "GConvGRU|ring": {"forecast_shape": [32, 3], "forecast_max_abs_diff_vs_base": 0.0}, "GConvGRU|ring_shifted": {"forecast_shape": [32, 3], "forecast_max_abs_diff_vs_base": 0.0}, "GConvGRU|empty": {"forecast_shape": [32, 3], "forecast_max_abs_diff_vs_base": 0.0}, "GConvGRU|star": {"forecast_shape": [32, 3], "forecast_max_abs_diff_vs_base": 0.0}, "GConvGRU|same_adjacency_repeat": {"forecast_max_abs_diff": 0.0}, "GConvLSTM|base_vs_ring_shifted": {"forecast_shape": [32, 3], "forecast_max_abs_diff": 0.0}, "EvolveGCNH|base_vs_ring_shifted": {"forecast_shape": [32, 3], "forecast_max_abs_diff": 0.6957911252975464}, "status": "ok"}

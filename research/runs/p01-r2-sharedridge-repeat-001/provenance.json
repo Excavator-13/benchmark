@@ -1,0 +1,271 @@
+{
+  "coverage": {
+    "coverage_fraction": 0.08394827870202602,
+    "covered_nodes": 10193,
+    "definition": "context-qualified non-self endpoint coverage: a node has a neighbour when it is an endpoint (row_id or col_id) of a graph row whose row_id != col_id within the same context; self-loop rows supply no neighbour",
+    "directed_source_rows": 321374,
+    "graph_columns": [
+      "r2_id",
+      "row_id",
+      "col_id"
+    ],
+    "key_columns": [
+      "r2_id",
+      "skill_id"
+    ],
+    "node_keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+    "nodes": 121420,
+    "non-self rows used": 321374,
+    "self_loop_rows": 0,
+    "source": "raw_graph_parquet",
+    "source_path": "/Users/watuji/da_chuang/repos/benchmark/dataset/graph/r2.parquet",
+    "source_sha256": "4cc1f399dd9061920179ade34d018fcbd58c3e00bb40f303b91e9aba99f9e12c",
+    "used_for_forecasting": false
+  },
+  "created": "2026-10-12T18:31:25+08:00",
+  "dataset": "r2",
+  "git": {
+    "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+    "dirty": true,
+    "errors": {},
+    "identity_available": true
+  },
+  "mode": "count",
+  "node_keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+  "nodes": 121420,
+  "protocol_version": "P1-count-L6-H3-v3",
+  "purpose": "formal",
+  "reference_evidence": null,
+  "run_id": "p01-r2-sharedridge-repeat-001",
+  "run_type": "run",
+  "scientific_acceptance": false,
+  "seed": 0,
+  "source_capture": {
+    "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+    "errors": {},
+    "files": {
+      "benchmark/nograph_baseline/__init__.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+          "path": "benchmark/nograph_baseline/__init__.py",
+          "sha256": "d9c569ef793ad4575f7fef38f798f059687e3fd118a471b4d091bfec74c17d78"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/__init__.py",
+        "sha256": "d9c569ef793ad4575f7fef38f798f059687e3fd118a471b4d091bfec74c17d78",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/__main__.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+          "path": "benchmark/nograph_baseline/__main__.py",
+          "sha256": "2ecea709492803226e52714799d7c861eb97af44100beeca58f3b7942fed2cfa"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/__main__.py",
+        "sha256": "2ecea709492803226e52714799d7c861eb97af44100beeca58f3b7942fed2cfa",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/_worker.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+          "path": "benchmark/nograph_baseline/_worker.py",
+          "sha256": "6b8add701f414edbf1931af2b29cab2231f8460043db7c88285ae5e400ca967b"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/_worker.py",
+        "sha256": "6b8add701f414edbf1931af2b29cab2231f8460043db7c88285ae5e400ca967b",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/artifacts.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+          "path": "benchmark/nograph_baseline/artifacts.py",
+          "sha256": "c116fb5b6ab019a0d5fc74f7528586ec599cb84f785983c4e7ba2173ad30c62d"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/artifacts.py",
+        "sha256": "c116fb5b6ab019a0d5fc74f7528586ec599cb84f785983c4e7ba2173ad30c62d",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/baselines.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+          "path": "benchmark/nograph_baseline/baselines.py",
+          "sha256": "a19d4e6465dd864f68e98dc61e803c342cb055955cc33583835142884ff98d2e"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/baselines.py",
+        "sha256": "a19d4e6465dd864f68e98dc61e803c342cb055955cc33583835142884ff98d2e",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/cli.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+          "path": "benchmark/nograph_baseline/cli.py",
+          "sha256": "47e8428e67f90f7f30e0285a97d2c376ce472899df6380119a124d15e9ba8049"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/cli.py",
+        "sha256": "47e8428e67f90f7f30e0285a97d2c376ce472899df6380119a124d15e9ba8049",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/coverage.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+          "path": "benchmark/nograph_baseline/coverage.py",
+          "sha256": "fad3fa9302e9da44a3cc348977c5f2beaae0951a188cb4cdb983ef0b53177b22"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/coverage.py",
+        "sha256": "fad3fa9302e9da44a3cc348977c5f2beaae0951a188cb4cdb983ef0b53177b22",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/data.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+          "path": "benchmark/nograph_baseline/data.py",
+          "sha256": "9f0409031b87620806f8b8a61e09d20c8d309d87327cedc15ae832aae0670214"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/data.py",
+        "sha256": "9f0409031b87620806f8b8a61e09d20c8d309d87327cedc15ae832aae0670214",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/metrics.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+          "path": "benchmark/nograph_baseline/metrics.py",
+          "sha256": "67af0a0cd0b26534d34dcbd66db9ef7c324a7d4f57abb3c91ed14d5faa3e8ab7"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/metrics.py",
+        "sha256": "67af0a0cd0b26534d34dcbd66db9ef7c324a7d4f57abb3c91ed14d5faa3e8ab7",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/protocol.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+          "path": "benchmark/nograph_baseline/protocol.py",
+          "sha256": "06e38d9d04d7209f6c6142d2f188d8201c81d3aa5544b718bfc99081336fca77"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/protocol.py",
+        "sha256": "06e38d9d04d7209f6c6142d2f188d8201c81d3aa5544b718bfc99081336fca77",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/ridge.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+          "path": "benchmark/nograph_baseline/ridge.py",
+          "sha256": "5fdfe38a4e79cef23ed7d50f206f7d5d074eba5f7ea17e6733ff260f284c09b2"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/ridge.py",
+        "sha256": "5fdfe38a4e79cef23ed7d50f206f7d5d074eba5f7ea17e6733ff260f284c09b2",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/runner.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+          "path": "benchmark/nograph_baseline/runner.py",
+          "sha256": "01ff3a1bd2c0036b7006f970a816be97bff236afb8195f9704489df515d166e9"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/runner.py",
+        "sha256": "01ff3a1bd2c0036b7006f970a816be97bff236afb8195f9704489df515d166e9",
+        "unavailable_reason": null
+      },
+      "research/phases/P01/protocol.md": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+          "path": "research/phases/P01/protocol.md",
+          "sha256": "b510beb0da9a482507072f78282d06bcf9dc93c3758dd7f16b1f8c326ba1d61a"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "research/phases/P01/protocol.md",
+        "sha256": "b510beb0da9a482507072f78282d06bcf9dc93c3758dd7f16b1f8c326ba1d61a",
+        "unavailable_reason": null
+      }
+    },
+    "generated": "2026-10-12T18:31:23+08:00",
+    "identity_available": true,
+    "patch_bytes": 0,
+    "patch_errors": {},
+    "patch_path": "git-diff.patch",
+    "patch_unusable_paths": [],
+    "policy": "P01-records-v2",
+    "protocol": {
+      "content_saved": null,
+      "git_reference": {
+        "commit": "1f3e5b14e3804ddb683978951bc49289ce6a8d72",
+        "path": "research/phases/P01/protocol.md",
+        "sha256": "b510beb0da9a482507072f78282d06bcf9dc93c3758dd7f16b1f8c326ba1d61a"
+      },
+      "git_status": "committed_clean",
+      "outside_repository": false,
+      "patch_path": null,
+      "path": "research/phases/P01/protocol.md",
+      "sha256": "b510beb0da9a482507072f78282d06bcf9dc93c3758dd7f16b1f8c326ba1d61a",
+      "unavailable_reason": null
+    },
+    "runtime_scope": [
+      "benchmark/nograph_baseline/__init__.py",
+      "benchmark/nograph_baseline/__main__.py",
+      "benchmark/nograph_baseline/_worker.py",
+      "benchmark/nograph_baseline/artifacts.py",
+      "benchmark/nograph_baseline/baselines.py",
+      "benchmark/nograph_baseline/cli.py",
+      "benchmark/nograph_baseline/coverage.py",
+      "benchmark/nograph_baseline/data.py",
+      "benchmark/nograph_baseline/metrics.py",
+      "benchmark/nograph_baseline/protocol.py",
+      "benchmark/nograph_baseline/ridge.py",
+      "benchmark/nograph_baseline/runner.py",
+      "research/phases/P01/protocol.md"
+    ],
+    "scoped_dirty": false,
+    "unrecoverable_paths": [],
+    "whole_repository_dirty": true
+  },
+  "source_sha256": "4ada154773b8678ae7d25b42e36a8309a51490bbe9fe059f015bb61724ed4c3c"
+}

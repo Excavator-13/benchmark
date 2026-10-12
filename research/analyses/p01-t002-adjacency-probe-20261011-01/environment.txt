@@ -1,0 +1,11 @@
+Python 3.11.17
+Name: torch
+Version: 2.14.1
+Name: torch-geometric
+Version: 2.8.0.post1
+Name: torch_sparse
+Version: 0.6.18
+Name: torch_scatter
+Version: 2.1.2
+Name: torch_geometric_temporal
+Version: 0.56.2
