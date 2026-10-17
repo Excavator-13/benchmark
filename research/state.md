@@ -2,13 +2,15 @@
 
 更新时间：2026-10-17。
 当前阶段：[P01](phases/P01/plan.md)，阶段状态与任务状态以该计划为准。
-当前工作：P01-T007 内部两折无图回测的实现已由 OpenSpec 归档 PASS，并按 [D020](decisions.md#d020-t007-内部两折回测实现研究侧验收) 接受为就绪证据；T007 改为 `in_progress`，正式 fold run（`r0`/`region`/`r2` × A/B、同 seed 重复）、产物保存与跨折收益判断仍待授权。T006 已按 [D018](decisions.md#d018-t006-r2count-研究侧验收) 接受；T005 因服务器暂时无法开机暂缓。
-当前执行者：本轮只读核对归档 PASS 与实现基准、复跑 287 项测试、更新记录并执行用户授权的 commit/push；没有启动正式 fold run，未连接服务器，远端 GPU、环境与进程状态未核验。
-本次授权范围：核对实现、更新记录、commit 与 push；不包含正式 fold run、封存或恢复核验。
-本轮 run：无。最近的 T006 正式 run 为 `p01-r2-sharedridge-001`、`p01-r2-sharedridge-repeat-001`（seed 0，`--purpose formal`），保存状态见[索引](archives/index.md)。
+当前工作：P01-T007 训练期内部两折无图回测已完成，并按 [D021](decisions.md#d021-t007-内部两折回测研究侧验收) 接受为 `done`。12 个正式 fold run（`r0`/`region`/`r2` × A/B 与同 seed 重复）均 `success`，检查与跨折对照完整；三组折间平均 MAE gain 均为负（-8.30% / -5.07% / -12.64%），未满足 §6.2 跨时间正收益条件，Ridge 在六组都不是评估 MAE 最小的规则。T006 已按 [D018](decisions.md#d018-t006-r2count-研究侧验收) 接受；T005 因服务器暂时无法开机暂缓；T008 仅剩 T005 依赖。
+当前执行者：本轮运行 12 个正式 fold run、19 份检查、跨折分析与记录更新，并按用户授权提交与推送；未连接服务器，远端 GPU、环境与进程状态未核验。
+本次授权范围：正式 fold run、检查、分析、记录更新与 commit/push；不包含封存或恢复核验。
+本轮 run：12 个 fold run（见[索引](archives/index.md#t007-内部两折回测运行与保存2026-10-17)）；结果见[两折报告](analyses/p01-t007-backtest-20261017-01/report.md)。可读入口与检查报告随本次记录入库；完整数组仅在本机。
 
 ## 恢复位置
 
+- 2026-10-17：T007 结果保存。12 个 run 的 `summary.md`/`provenance.json`/`command.json`、19 份检查报告与两折分析报告随本次记录提交并 push `origin/xzs`；完整数组与 run 目录其余内容已按新增 fold run 忽略规则仅留本机（约 217 MB）。未封存，备份与远端恢复未核验；`.gitignore` 只新增 fold run 规则，未改实现或科学协议。
+- 2026-10-17：T007 两折正式运行与验收（[D021](decisions.md#d021-t007-内部两折回测研究侧验收)）。12 个 run 均 success、commit `e919500`、三组数据身份一致；`eval` gain 相对当折 NaiveRef 为 `r0` -19.77% / +3.18%、`region` -11.85% / +1.70%、`r2` -30.41% / +5.12%（A/B），折间平均均负，未满足 §6.2 跨时间条件；Ridge 在六组都不是评估 MAE 最小方法。6 组同 seed 重复预测与指标差 0；12 份 recompute `source_data_read=false`、`model_refit=false`、差 0；fold `align-v2` 按预期拒绝。报告见[两折分析](analyses/p01-t007-backtest-20261017-01/report.md)，保存状态见[索引](archives/index.md#t007-内部两折回测运行与保存2026-10-17)。
 - 2026-10-17：T007 实现回收（[D020](decisions.md#d020-t007-内部两折回测实现研究侧验收)）。`openspec/changes/add-nograph-backtest-folds` 已归档为 `openspec/changes/archive/2026-10-17-add-nograph-backtest-folds/`，`verification.md` 为 PASS；把 5 个规划文件映射到归档路径后，报告 37 文件主清单 37/37 单文件 SHA256 一致，无缺失；本机按同款 formal-fold guard 复跑 287 项，285 通过、2 项 sklearn 跳过。确认 `protocol.md` 未改、主切分常量与默认路径保持、`research/runs/` 无正式 fold run、旧 run/封存包/归档未改。研究侧接受实现就绪，DELEGATION 关闭，T007 改为 `in_progress`：正式 fold run、产物与跨折收益仍需授权。保存状态见[索引](archives/index.md#t007-内部两折回测实现证据2026-10-17)。
 - 2026-10-13：按 [D019](decisions.md#d019-委派-t007-内部两折回测实现并登记范围)整理 T007：两折固定为 A 拟合 `2021-01..2022-06`（18 月）/验证 `2022-07..09`/开发评估 `2022-10..12`，B 拟合 `2021-01..2022-09`（21 月）/验证 `2022-10..12`/开发评估 `2023-01..03`；覆盖 `r0`/`region`/`r2`，折内活跃度分组用各折拟合观察期。指导见 [T007 执行指导](phases/P01/t007-backtest-guide.md)，实现登记为 `add-nograph-backtest-folds` 委托。本轮未运行 baseline、未改代码、未创建 OpenSpec 变更；T007 仍 `todo`。
 - 2026-10-13：完成 [T005 原服务器受控复跑指导](phases/P01/t005-evolvegcnh-guide.md)，集中整理环境/源码/数据核对、唯一输出目录、原 API seed 1 复跑、逐 epoch 选模记录、验证预测、成本、saved-only 重算/分组/重复性比较及取回交接。文档命令通过 Bash/Python 3.8 语法检查；数据核对与 saved-only 比较段用原始数据、归档预测及临时 fixture 检查通过，未拟合或推理模型，不构成新科研结果。用户初称原服务器仍保留，随后表示该服务器暂时无法开机，T005 暂缓；本轮未连接或核验它，GPU 训练段尚未实机核验，未启动实验、未修改运行实现或科学协议。T005 保持 `todo`；准备指导不等于开始实验。
@@ -28,15 +30,14 @@
 
 ## 下一可执行动作
 
-在途委托：无（[DELEGATION](../DELEGATION.md) 为 `closed`）。T002、T004、T006 已完成；T007 实现已接受、实验进行中；T005 暂缓，T008 未完成。P01 仍 active。
+在途委托：无（[DELEGATION](../DELEGATION.md) 为 `closed`）。T002、T004、T006、T007 已完成；T005 暂缓，T008 未完成。P01 仍 active。
 
-- 下一准备动作：用户授权后，按 [T007 执行指导](phases/P01/t007-backtest-guide.md) §7 运行 `r0`/`region`/`r2` × A/B 正式 run 与同 seed 重复 run；先做 `--purpose development` 冒烟确认产物，再写 `research/runs/`。未获授权前不启动。
-- 后续科学任务：按指导 §8 做 `recompute`/`compare`、`align-v2` 拒绝负例与跨折 gain 对照，按 §9 作 T007 实验验收；产物保存与成本记录随 run 记录。正式 run 与保存需用户单独授权。
-- 暂缓：P01-T005 等用户服务器恢复后再继续；[T005 指导](phases/P01/t005-evolvegcnh-guide.md)已备，不阻塞 T007。
+- 下一准备动作：T007 已完成，不再排 fold run。P01 剩余可推进的是 T008（阶段汇总、骨架与数据冻结）；计划仍列 T005 为 T008 依赖，T005 等服务器恢复，或在用户明确同意调整依赖后先做 T008 的其余部分。
+- 暂缓：P01-T005 等用户服务器恢复后再继续；[T005 指导](phases/P01/t005-evolvegcnh-guide.md)已备。
 - 规划后续：T008 冻结具体开发/最终比较数据与骨架，采用 D006/D007/D015；公平对照未执行，复杂模块未启动，严格时间主张所需的图来源仍未满足。
 - 保存事实：各批次产物的入库与备份状态见[索引](archives/index.md)；记录文件自身不声明提交状态，其提交身份从版本历史追溯。探针环境仍为本机 CPU conda 环境。
 
-T008 对 T002 的依赖已满足，其余依赖仍待 T005–T007。
+T008 对 T002、T004、T006、T007 的依赖已满足，仅 T005 因服务器暂缓。
 
 ## 待处理事项
 
@@ -48,7 +49,8 @@ T008 对 T002 的依赖已满足，其余依赖仍待 T005–T007。
 - [D016](decisions.md#d016-委派-t006-r2count-扩展给-openspec)：已按 [D017](decisions.md#d017-t006-r2count-实现研究侧验收与委托回收) 回收，委托 `closed`；实现 PASS 只证明软件就绪，不是 T006 实验验收。
 - [D018](decisions.md#d018-t006-r2count-研究侧验收)：T006 已接受并完成；r2 baseline、审计、重复性、重算与成本见决定正文与[索引](archives/index.md#t006-r2count-运行与保存2026-10-12)。
 - [D019](decisions.md#d019-委派-t007-内部两折回测实现并登记范围)：已按 [D020](decisions.md#d020-t007-内部两折回测实现研究侧验收) 回收，委托 `closed`；实现 PASS 只证明软件就绪，不是 T007 实验验收。
-- [D020](decisions.md#d020-t007-内部两折回测实现研究侧验收)：T007 实现已接受；正式 fold run、产物保存与跨折收益判断待授权。
-- T005、T007、T008 的科研工作见阶段计划；P01 尚未完成（T002、T004、T006 已完成；T007 进行中，T005 暂缓）。
+- [D020](decisions.md#d020-t007-内部两折回测实现研究侧验收)：T007 实现已接受；实验已按 [D021](decisions.md#d021-t007-内部两折回测研究侧验收) 完成。
+- [D021](decisions.md#d021-t007-内部两折回测研究侧验收)：T007 两折回测已完成并接受；三组折间平均 gain 均负，未满足跨时间条件，不宣称改善。
+- T005、T008 的科研工作见阶段计划；P01 尚未完成（T002、T004、T006、T007 已完成；T005 暂缓）。
 - T004 已封存、提交/push；远端恢复未核验，用户取消检查，不列为待补任务。
 - D009 的长期建议由 D010 接续，T010 已按 D011 接受并完成主体提交/push；第二轮清理已按 D012 完成，历史路径由迁移映射解释。远端恢复未核验，不安排默认检查；后续保存状态记录的提交身份从 Git 历史追溯。

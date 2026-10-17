@@ -35,6 +35,11 @@ __pycache__/
 # T006 r2/count formal runs are sealed in research/archives/<run-id>.tar.gz.
 /research/runs/p01-r2-sharedridge-00[1]/**
 /research/runs/p01-r2-sharedridge-repeat-00[1]/**
+# T007 internal two-fold runs keep expanded arrays local; only readable handoff
+# entries are tracked, matching the T004/T006 policy.
+/research/runs/p01-r0-backtest-*/**
+/research/runs/p01-region-backtest-*/**
+/research/runs/p01-r2-backtest-*/**
 !/research/runs/p01-*/summary.md
 !/research/runs/p01-*/provenance.json
 !/research/runs/p01-*/command.json

@@ -424,7 +424,7 @@ python -m benchmark.nograph_baseline recompute \
 
 `P01_RESTORE_DIR` 的按需展开方法见[索引](../../archives/index.md#内容身份与恢复限制)。仅有可读入口的原目录不含数组，不能直接重算；报告保留输入执行身份、来源、命令、容差和结果/失败信息，不改输入、不重训。三个检查同样支持保存的 `r2` 结果并保留 `r2_id` 身份；`align-v2` 的参考必须含被检查数据的记录：历史封存 v2 日志只有 `r0`/`region`，不新增 `r2` 记录也不改写，因此 r2 对齐使用独立的、含 r2 记录的 v2-format 参考；缺 r2 记录的参考显式失败，缺来源身份保持 `limited`。
 
-无图入口现支持 `r2/count` 的同一流程；其实现与对齐证据来自临时 fixture/development，不是正式 r2 run 或科研验收。正式 `r2/count` 运行与保存需用户单独授权，独立验证与研究侧验收由相应流程另行完成（研究侧实现验收见 [D017](../../decisions.md#d017-t006-r2count-实现研究侧验收与委托回收)）。科研接续再做训练期内部回测；操作、折定义与产物契约见独立的 [T007 指导](t007-backtest-guide.md)；fold 实现已由归档 PASS 按 [D020](../../decisions.md#d020-t007-内部两折回测实现研究侧验收) 接受，正式 fold run 与保存需另行授权。不把多个重叠窗口当作独立实验。旧图 CLI 不支持 `--model_name Ridge` 或 `--learning_rate ...`。
+无图入口现支持 `r2/count` 的同一流程；其实现与对齐证据来自临时 fixture/development，不是正式 r2 run 或科研验收。正式 `r2/count` 运行与保存需用户单独授权，独立验证与研究侧验收由相应流程另行完成（研究侧实现验收见 [D017](../../decisions.md#d017-t006-r2count-实现研究侧验收与委托回收)）。科研接续再做训练期内部回测；操作、折定义与产物契约见独立的 [T007 指导](t007-backtest-guide.md)；fold 实现已由归档 PASS 按 [D020](../../decisions.md#d020-t007-内部两折回测实现研究侧验收) 接受，两折正式 run 已完成并按 [D021](../../decisions.md#d021-t007-内部两折回测研究侧验收) 接受，结果见[分析报告](../../analyses/p01-t007-backtest-20261017-01/report.md)；后续复现需新 run ID 与授权。不把多个重叠窗口当作独立实验。旧图 CLI 不支持 `--model_name Ridge` 或 `--learning_rate ...`。
 
 ## 8. 什么时候恢复 GPU 实验
 

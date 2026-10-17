@@ -159,6 +159,23 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 
 保存状态：实现、测试、文档、主规格与归档变更目录随本次记录提交入库并 push `origin/xzs`；该提交同时包含本索引条目，提交身份从 Git 历史追溯。**未封存，备份与远端恢复未核验**。没有新增 run、封存包或备份核验；既有 T004/T006 包、旧 run、旧 OpenSpec 归档与科学协议未改。
 
+## T007 内部两折回测运行与保存（2026-10-17）
+
+所属任务 P01-T007；研究侧验收见 [D021](../decisions.md#d021-t007-内部两折回测研究侧验收)，分析见[两折报告](../analyses/p01-t007-backtest-20261017-01/report.md)。12 个正式 run 均 seed 0、`--purpose formal`、运行代码 commit `e9195006dc402d2ce6fb5afb3a164dfef699200c`、`success`；同 seed 主/重复各一组。
+
+| 数据 | A 折 | A 折重复 | B 折 | B 折重复 | 每组大小 |
+| --- | --- | --- | --- | --- | --- |
+| `r0` | `p01-r0-backtest-a-001` | `p01-r0-backtest-a-repeat-001` | `p01-r0-backtest-b-001` | `p01-r0-backtest-b-repeat-001` | 约 1.5 MB |
+| `region` | `p01-region-backtest-a-001` | `p01-region-backtest-a-repeat-001` | `p01-region-backtest-b-001` | `p01-region-backtest-b-repeat-001` | 约 7.9 MB |
+| `r2` | `p01-r2-backtest-a-001` | `p01-r2-backtest-a-repeat-001` | `p01-r2-backtest-b-001` | `p01-r2-backtest-b-repeat-001` | 约 45 MB |
+
+- 结果摘要：`eval` gain 相对当折 NaiveRef 为 `r0` -19.77% / +3.18%、`region` -11.85% / +1.70%、`r2` -30.41% / +5.12%（A/B）；折间平均均负，未满足协议 §6.2 的跨时间正收益条件。Ridge 在六组都不是评估 MAE 最小方法；主评测三组仍显著为负。完整表与限制见分析报告。
+- 检查：6 组同 seed `compare` 均 `ok`，预测与指标差 0；12 份 `recompute` 均 `ok`，`source_data_read=false`、`model_refit=false`、最大差 0；fold `align-v2` 按预期失败并留下报告。19 份检查报告位于 `research/reports/nograph-baseline/`（12 recompute、6 repeat-check、1 align-v2 拒绝）。
+- 保存状态：12 个 run 的 `summary.md`、`provenance.json`、`command.json`，19 份检查报告与两折分析报告随本次记录提交并 push `origin/xzs`；提交身份从 Git 历史追溯。完整预测、标签、模型、掩码、节点误差与 run 目录其余文件仍**仅在本机**（约 217 MB），已加入 `.gitignore` 的 fold run 规则，不上传；**未封存，未做异地备份或恢复核验**。后续需要完整数组或封存时另行处理。
+- 身份：运行代码 commit `e9195006dc402d2ce6fb5afb3a164dfef699200c`；三组 demand 与节点键 SHA256 见分析报告 §2，12 个 run 一致。
+
+没有新增封存包；既有 T004/T006 包、旧 run、旧 OpenSpec 归档与科学协议未改。
+
 ## my-change PR 合入（2026-10-11 接手记录）
 
 用户告知此前已向 `my-change` 发起 PR。本轮只读本地 Git：合并提交 `7cbfe561285b1118c09e3e2510e1e2d711fe7432` 记录 PR #9（`Excavator-13/xzs`），提交时间为 2026-10-08，父提交为 `341e7f8` 与 `98e9fbe`。本地 `xzs`、`my-change` 和缓存的 `origin/my-change` 均指向该合并提交；缓存的 `origin/xzs` 为 `98e9fbe`。合并提交与 `98e9fbe` 的文件树差异为空，后者含此前维护、T010/T011 及保存状态记录。

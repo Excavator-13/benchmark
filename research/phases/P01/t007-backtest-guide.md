@@ -101,6 +101,7 @@
 - 用户侧按 OpenSpec e13 流程执行 propose → apply → verify-change → archive-change。
 - 研究侧之后只读核对：活跃变更目录已不存在，归档 `verification.md` 为 `Verdict: PASS` 且 Verification Basis 与当前实现一致。
 - 满足后按归档报告作实现就绪判断、更新记录并关闭指针。PASS 只是实现证据，不是 T007 实验验收；若正式 fold run 尚未获授权，T007 仍为 `todo`。
+- 2026-10-17：实现已归档 PASS 并按 [D020](../../decisions.md#d020-t007-内部两折回测实现研究侧验收) 回收；两折正式 run（12 个）已完成并按 [D021](../../decisions.md#d021-t007-内部两折回测研究侧验收) 接受，结果见[两折分析报告](../../analyses/p01-t007-backtest-20261017-01/report.md)。本页命令保留为复现清单。
 
 ## 6. 正式运行前准备
 
