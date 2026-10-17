@@ -1,6 +1,6 @@
 # 实验与归档索引
 
-更新日期：2026-10-12。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
+更新日期：2026-10-17。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
 
 ## 已有运行
 
@@ -148,6 +148,16 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 - 可读入口 `summary.md`、`provenance.json`、`command.json` 随 run 目录入库；`predictions/`、`gold/`、`node-errors.parquet`、`masks.npz`、`nodes.parquet`、`models/` 等展开数组**仅保留在本机**并被 `.gitignore` 忽略，需要时按上面的包在独立目录展开。
 - 关联 saved-only 检查报告（入 Git）：`research/reports/nograph-baseline/p01-r2-recompute-primary-001.json`、`p01-r2-recompute-repeat-001.json`、`p01-r2-repeat-check-001.json`。
 - 备份状态：包与可读入口随 2026-10-12 的 push 到 `origin/xzs`；**未做独立远端取回或恢复核验**。原始 run 源码身份见各 run 的 `provenance.json`（固定 commit 加相关差异）。
+
+## T007 内部两折回测实现证据（2026-10-17）
+
+所属任务 P01-T007。OpenSpec 变更 `add-nograph-backtest-folds` 已归档，独立报告为 [`Verdict: PASS`](../../openspec/changes/archive/2026-10-17-add-nograph-backtest-folds/verification.md)；研究侧按 [D020](../decisions.md#d020-t007-内部两折回测实现研究侧验收) 接受其实现就绪证据，并关闭 [DELEGATION](../../DELEGATION.md) 指针。
+
+回收时只读核对：活跃变更目录已不存在；按报告 37 文件主清单重算 SHA256（5 个规划文件映射到归档路径）后 37/37 一致，无缺失；报告聚合指纹仅因路径映射不同。另核对 `research/phases/P01/protocol.md` 未改、主切分常量与默认路径保持、`research/runs/` 无正式 fold run、旧 run/封存包/`experiments_archive/`/既有 OpenSpec 归档未改；本机按报告同款 formal-fold guard 复跑 287 项测试，285 通过、2 项 sklearn 跳过。回收核对后执行指导 §7 只做过一次记录性入口文字更新。
+
+证据性质与限制：折入口、产物、`recompute`/`compare` 与 `align-v2` 拒绝来自临时 fixture 与 `--purpose development` 运行（报告 E1/E2），**不是真实数据的折实验结果、收益或成本结论**；可选 sklearn 后端动态未执行；继承的 r2-scale 成本记录是旧测量。正式 fold run 与保存尚未获授权。
+
+保存状态：实现、测试、文档、主规格与归档变更目录随本次记录提交入库并 push `origin/xzs`；该提交同时包含本索引条目，提交身份从 Git 历史追溯。**未封存，备份与远端恢复未核验**。没有新增 run、封存包或备份核验；既有 T004/T006 包、旧 run、旧 OpenSpec 归档与科学协议未改。
 
 ## my-change PR 合入（2026-10-11 接手记录）
 

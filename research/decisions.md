@@ -1,6 +1,6 @@
 # 建议与决定
 
-更新日期：2026-10-11。状态为 `proposed / accepted / rejected / superseded`。接受决定不表示关联实验已经执行。
+更新日期：2026-10-17。状态为 `proposed / accepted / rejected / superseded`。接受决定不表示关联实验已经执行。
 
 ## D001: 建立归档索引和进展记录
 
@@ -275,3 +275,34 @@ T006 任务状态改为 `in_progress`（实现部分完成）。剩余研究项�
 限制：未运行 `align-v2`（既有 v2 诊断参考不含 r2 记录，伪造参考属于新范围）；测试窗口已被查看，分组指标仅作描述性诊断；`SharedRidge` 劣于 `LastValue` 不构成图收益证据；图构建时间来源仍未决（D015），固定评测期结果不升级为历史或跨时间主张；成本只代表本机 CPU 条件。
 
 影响：按已接受顺序推进 T007 训练期内部两折无图回测；P01 仍 active（T005、T007、T008 未完成），科学协议与主张范围不变。
+
+## D019: 委派 T007 内部两折回测实现并登记范围
+
+提出及接受日期：2026-10-13。状态：`accepted`。
+来源：用户 2026-10-13 表示原服务器暂时无法开机，T005 暂缓，改做 T007；确认 T007 覆盖 `r0`/`region`/`r2` 三组 count、每折活跃度分组用该折拟合观察期、写执行指导并把实现登记为 OpenSpec 委托。
+
+决定：
+- T007 按协议 §8 的两折执行：A 拟合 `2021-01..2022-06`（18 月），验证 `2022-07..09`，开发评估 `2022-10..12`；B 拟合 `2021-01..2022-09`（21 月），验证 `2022-10..12`，开发评估 `2023-01..03`。窗口起点、边界省略与目标隔离见[执行指导](phases/P01/t007-backtest-guide.md#2-两折的固定定义)。
+- 覆盖三组 count（`r0`、`region`、`r2`）；每折重新构造窗口、标准化与 `TrainMean<fit>`，`NaiveRef`/`NaiveRef6` 与 `lambda` 只在折内验证上选。
+- 折内活跃度分组使用各折拟合观察期（A `fit18`、B `fit21`），不使用主协议 27 月掩码；主协议掩码如后续需要，只作单独标记的描述性对照。
+- 实现先经 OpenSpec 变更 `add-nograph-backtest-folds`（拟用名），登记为 [DELEGATION](../DELEGATION.md) 在途委托；研究侧只读核对结束判据，不代跑 propose/apply/verify/archive。
+- 正式 fold run 与保存需用户另行授权；T007 在实现 PASS 与正式 run 完成前保持 `todo`。本轮只写指导与登记，不启动 run、不改代码、不封存、不 commit/push。
+
+影响：DELEGATION 由 `closed` 改为 `open`；T005 保持 `todo` 并暂缓，等服务器可用；科学协议、主切分、主评测与收益门槛不变；T008 依赖不变。
+
+## D020: T007 内部两折回测实现研究侧验收
+
+提出及接受日期：2026-10-17。状态：`accepted`。
+来源：用户 2026-10-17 告知 OpenSpec 侧完成；依据归档独立报告 [`Verdict: PASS`](../openspec/changes/archive/2026-10-17-add-nograph-backtest-folds/verification.md) 与回收时的只读核对。
+
+结果：
+- 归档报告：37 文件主清单；完整 CPU discovery 287 项，285 通过、2 项可选 sklearn 跳过；E1/E2 覆盖六组 A/B × `r0`/`region`/`r2` 的 development 重复、saved-only `recompute`/`compare`、基本数值与分组/收益断言；E3 主切分预变更契约 0 difference。细节与限制见报告。
+- 回收核对：活跃变更目录已不存在；把 5 个规划文件映射到归档路径后，37/37 单文件 SHA256 与报告主清单一致，无缺失；报告聚合指纹只因路径映射不同，不重算为另一份依据。`research/phases/P01/protocol.md` 未改；`SPLITS`、`TRAIN_OBSERVATION_MONTH_COUNT` 等主切分常量与默认路径保持；`research/runs/` 无正式 fold run；旧 run、封存包、`experiments_archive/` 与既有 OpenSpec 归档未改。
+- 实现内容：`--fold A|B` 与不可变折定义、折内标准化、`TrainMean18`/`TrainMean21`、`fit18`/`fit21` 活跃度分组、`validation`/`eval` 输出、折产物与掩码、`recompute`/`compare` 支持、`align-v2` 明确拒绝、README §4.5 与执行指导 §7 入口、新增 `test_folds.py` 等测试。
+- 测试：本机 `job-sdf-baseline` 按报告同款 formal-fold guard 复跑 287 项，285 通过、2 项 sklearn 跳过，0 失败/错误。
+
+决定：接受该实现为 P01-T007 就绪证据；T007 改为 `in_progress`。正式折运行（`r0`/`region`/`r2` × A/B，主 run 与同 seed 重复）、产物保存与跨折收益判断仍需用户另行授权；实现 PASS 不是 T007 实验验收。
+
+限制：实现证据来自临时 fixture 与 `--purpose development` 运行，不是真实数据折结果、收益或成本结论；可选 sklearn 后端动态测试未执行；继承的 r2-scale 成本记录是旧测量，不冒充当前新测量。回收核对后，执行指导 §7 为记录入口说明做过一次文字更新，不属于实现变更；报告主清单的 5 个规划文件已随归档移动。
+
+影响：T007 进入正式折运行准备；T005 仍因服务器暂缓，T008 依赖未满足；科学协议、主切分、主评测与收益门槛不变；[DELEGATION](../DELEGATION.md) 关闭。

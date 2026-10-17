@@ -1,6 +1,6 @@
 # P01：建立可信研究底座
 
-更新时间：2026-10-11。
+更新时间：2026-10-17。
 阶段状态：`active`。
 目标：在明确的数据、时间和图语义下建立可复查、可恢复的 baseline，决定第二阶段使用什么骨架验证图收益。
 协议：[protocol.md](protocol.md)，科学版本 `P1-count-L6-H3-v3`；记录与保存政策 `P01-records-v2`。v2/v3 已运行结果的科学口径不变。
@@ -15,9 +15,9 @@
 | P01-T002 / P1-B | 数据与图语义审计 | done | T001 | [首轮诊断](../../runs/phase1-20261006-v2-01/summary.md)完成身份、网格、覆盖及重复次数；T004 的 `audit.json`/`metrics.json`/`node-errors.parquet` 补每月非零率、常数节点、活跃度分组与逐节点误差。按 [D013](../../decisions.md#d013-优先收尾-t002-的候选范围) 收尾并由 [D014](../../decisions.md#d014-t002-数据与图语义审计研究侧验收) 接受：[图结构审计](../../analyses/p01-t002-graph-semantics-20261011-01/report.md)、[图时间来源](../../analyses/p01-t002-graph-time-source-20261011-01/report.md)、[大需求交叉](../../analyses/p01-t002-big-demand-cross-20261011-01/report.md)、[邻接探针](../../analyses/p01-t002-adjacency-probe-20261011-01/report.md) |
 | P01-T003 / P1-C 诊断部分 | 五项朴素基线、活跃度分层与旧结果对齐 | done | T001 | [基线日志](../../runs/phase1-20261006-v2-01/naive-baselines.log)与[旧结果核对](../../runs/phase1-20261006-v2-01/archive-comparison.log)通过；正式入口及完整保存另由 T004 验收 |
 | P01-T004 / P1-D 与 P1-C 正式入口 | 实现、验证并运行无图 baseline 与共享 Ridge | done | T003；T002 核心身份审计已通过 | `r0/count`、`region/count` 的 NumPy 独立入口、训练期标准化、验证选 lambda、完整产物、分组、重算、同 seed 重复及成本均满足验收；[独立 PASS](../../../openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/verification.md)、[研究侧验收 D008](../../decisions.md#d008-t004-baseline-研究侧验收)、[运行与保存索引](../../archives/index.md#t004-baseline-运行2026-10-07)。以四个 `-002` 模型 run 及八个关联检查为依据；Ridge 总体测试不优于 LastValue。完整产物已封存核验，提交与备份事实以索引为准 |
-| P01-T005 / P1-E | EvolveGCN-H 受控复跑与诊断 | todo | T004 | 同 seed 复跑；或明确旧条件无法恢复并记录新条件重复性。尺度、优化、状态改动分别命名；[协议诊断规则](protocol.md#7-诊断已归档的-evolvegcn-h) |
+| P01-T005 / P1-E | EvolveGCN-H 受控复跑与诊断 | todo | T004 | 同 seed 复跑；或明确旧条件无法恢复并记录新条件重复性。尺度、优化、状态改动分别命名；[协议诊断规则](protocol.md#7-诊断已归档的-evolvegcn-h)、[原服务器完整执行指导](t005-evolvegcnh-guide.md)。2026-10-13 用户初称原云服务器仍保留，随后表示该服务器暂时无法开机，T005 暂缓；指导已备，远端条件未核验、实验未启动 |
 | P01-T006 / 粒度扩展 | 将 `r2/count` 加入同一流程 | done | T004 | 实现经 OpenSpec `add-r2-count-baseline` 归档独立 PASS 并由 [D017](../../decisions.md#d017-t006-r2count-实现研究侧验收与委托回收) 接受；真实运行与审计见 [D018](../../decisions.md#d018-t006-r2count-研究侧验收) 与 [r2 审计报告](../../analyses/p01-t006-r2-audit-20261012-01/report.md)：121,420 节点、52 上下文、网格完整、训练全零 44.64%、覆盖 8.39%、图完全对称；两个正式 run 同 seed 预测最大绝对差 0，重算不需要源数据或重训；`NaiveRef=LastValue`，SharedRidge 总体差于 LastValue；成本与封存见[索引](../../archives/index.md#t006-r2count-运行与保存2026-10-12) |
-| P01-T007 / 开发回测 | 训练期内部两折无图回测 | todo | T004；按指导在 T006 后接续 | 每折重新构造窗口和预处理，检查收益跨起点；[回测定义](protocol.md#8-少量时间数据下的验证策略)。按 [D015](../../decisions.md#d015-发布图使用范围与重建时机) 保持无图范围，不将时间来源未知的发布图用于严格历史回测主张 |
+| P01-T007 / 开发回测 | 训练期内部两折无图回测 | in_progress | T004；按指导在 T006 后接续 | 每折重新构造窗口和预处理，检查收益跨起点；[回测定义](protocol.md#8-少量时间数据下的验证策略)、[执行指导](t007-backtest-guide.md)。按 [D015](../../decisions.md#d015-发布图使用范围与重建时机) 保持无图范围，不将时间来源未知的发布图用于严格历史回测主张。2026-10-13 按 [D019](../../decisions.md#d019-委派-t007-内部两折回测实现并登记范围) 固定覆盖 `r0`/`region`/`r2`、折内拟合观察期分组并登记 fold 实现委托；2026-10-17 按 [D020](../../decisions.md#d020-t007-内部两折回测实现研究侧验收) 接受归档 PASS 的实现就绪证据，正式 fold run、产物保存与跨折收益判断待授权 |
 | P01-T008 / P1-F | 阶段汇总、选择第二阶段骨架与范围 | todo | T002、T004、T005、T006、T007 | 下表验收满足或明确调整决定；按 [D006](../../decisions.md#d006-明确主要改善目标) 采用完整任务主要评价并冻结开发/最终比较数据与配置，按 [D007](../../decisions.md#d007-检验低活跃节点与邻居信息的假设) 选择简单骨架先作自身/真实图/打乱图对照，达到既有图收益门槛后再进入复杂模块；按 D015 明确发布图时间限制。不让 EvolveGCN-H 波动无期限阻塞图收益验证 |
 | P01-T009 / 组织维护 | 按 skill 规范化记录，提交与推送 | done | D004 | 标准结构、迁移映射及核验完成，`b094cf1` 已 push，独立核对远端引用并取回入口；[迁移记录](../../archives/migrations/20261006-standardize-research.md) |
 | P01-T010 / 记录减负 | 落实保存政策、baseline 记录减负与第一轮净化 | done | D010；T004 | 政策与第一轮整理见 [D010](../../decisions.md#d010-采用实验记录与保存减负政策)；[OpenSpec 归档 PASS](../../../openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/verification.md) 与当前实现基准一致，按 [D011](../../decisions.md#d011-t010-记录减负研究侧验收)接受并回收委托。正式结果可重算、重复身份保留、开发隔离、检查单报告、相关脏源码可恢复、候选保存减量及 Git 包身份/排除声明均满足验收，旧包和可读入口保持原样。没有启动新科研实验；第二轮历史整理另属 T011 |
@@ -58,4 +58,6 @@
 - 2026-10-11 / [D016](../../decisions.md#d016-委派-t006-r2count-扩展给-openspec)：登记在途委托 `add-r2-count-baseline`（P01-T006），由用户在 OpenSpec 侧执行 propose → apply → verify-change → archive-change；研究侧只读核对结束判据、不代跑。T006 状态保持 `todo`；正式 `r2/count` run 与保存需另行授权。
 - 2026-10-11 / [D017](../../decisions.md#d017-t006-r2count-实现研究侧验收与委托回收)：核对归档 PASS 与 40 文件基准后接受 T006 的实现就绪证据并关闭委托；`r2/count` 入口、检查与 development 成本路径可用，`r0`/`region` 历史结果不变。T006 改为 `in_progress`，真实 r2 审计、正式 run/产物与实测成本仍需另行授权；实现 PASS 不等于实验验收。
 - 2026-10-12 / [D018](../../decisions.md#d018-t006-r2count-研究侧验收)：用户授权继续完成 T006 后，完成真实 r2 审计、两个正式 run、重算/同 seed 检查与成本记录并接受，T006 标为 done。`NaiveRef=LastValue`，SharedRidge 总体差于 LastValue；同 seed 预测差 0。P01 顺序推进到 T007，T005 与 T008 保留。
+- 2026-10-13 / [D019](../../decisions.md#d019-委派-t007-内部两折回测实现并登记范围)：用户因原服务器暂时无法开机暂缓 T005，改做 T007；固定 T007 覆盖三组 count、每折活跃度分组用该折拟合观察期，写好执行指导并把实现登记为 `add-nograph-backtest-folds` 在途委托。实现 PASS 与正式 fold run 授权前 T007 保持 `todo`；T005 保留。
+- 2026-10-17 / [D020](../../decisions.md#d020-t007-内部两折回测实现研究侧验收)：核对归档 PASS 的实现基准、287 项测试与主切分回归后接受 T007 实现就绪，T007 改为 `in_progress`，关闭委托。正式 fold run（`r0`/`region`/`r2` × A/B）、产物保存与跨折收益判断仍需另行授权；实现 PASS 不是实验验收。T005 仍暂缓。
 - 原科学顺序保留：`r0/count`、`region/count` 底座 -> `r2/count` -> 内部回测；EvolveGCN-H 的受控诊断在底座确认后进行。新模型与门控的实现未在本次组织工作中启动。

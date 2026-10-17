@@ -5,6 +5,8 @@
 - [总计划与研究假设](research/roadmap.md)
 - [第一阶段任务与验收](research/phases/P01/plan.md)
 - [实验协议](research/phases/P01/protocol.md)
+- [T005 原服务器受控复跑指导](research/phases/P01/t005-evolvegcnh-guide.md)
+- [T007 训练期内部两折无图回测指导](research/phases/P01/t007-backtest-guide.md)
 - [建议与决定](research/decisions.md)
 - [实验与归档索引](research/archives/index.md)
 - [首次记录标准化](research/archives/migrations/20261006-standardize-research.md)

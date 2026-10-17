@@ -19,7 +19,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 import numpy as np
 
 from . import artifacts, metrics, protocol
-from .data import sha256_file
+from .data import activity_group_masks, sha256_file
 
 #: Normalized tolerances used by saved-run checks.
 CPU_RELATIVE_TOLERANCE = 1e-6
@@ -660,6 +660,694 @@ def validate_report_semantics(payload: Any, *, label: str = "report") -> List[Di
 
 
 # ---------------------------------------------------------------------------
+# saved split identity (main, fold A or fold B)
+# ---------------------------------------------------------------------------
+_FOLD_BLOCK_FIELDS = (
+    "fold",
+    "fitting_observation_months",
+    "fitting_month_count",
+    "train_starts",
+    "validation_starts",
+    "eval_starts",
+    "omitted_starts",
+    "omitted_reasons",
+    "outside_fold_starts",
+    "eval_target_months",
+    "train_mean_method",
+    "evaluation_splits",
+    "evidence_role",
+)
+
+
+def _normalize_fold(value: Any, label: str) -> Optional[str]:
+    """Return a valid explicit fold label, ``None`` when unset, or fail."""
+    if value is None:
+        return None
+    if not isinstance(value, str) or value not in protocol.FOLD_NAMES:
+        raise CheckError(
+            f"{label} declares unknown fold {value!r}; expected "
+            f"{list(protocol.FOLD_NAMES)} (main runs have no fold field)"
+        )
+    return value
+
+
+def _fold_block(document: Any, label: str) -> Optional[Dict[str, Any]]:
+    """Return a document's ``fold`` object, ``None`` when absent, or fail."""
+    if not isinstance(document, Mapping) or "fold" not in document:
+        return None
+    block = document["fold"]
+    if not isinstance(block, Mapping):
+        raise CheckError(f"{label} fold metadata must be a JSON object")
+    return dict(block)
+
+
+def _expected_mask_keys(definition: protocol.SplitDefinition) -> set:
+    return {
+        definition.constant_mask_key,
+        definition.nonzero_activity_key,
+        "has_nonself_neighbor",
+        *definition.activity_mask_keys,
+    }
+
+
+def _mean_artifact(
+    definition: protocol.SplitDefinition,
+) -> Tuple[str, str, str]:
+    """Return ``(relative path, NPZ key, node-errors column)`` for the mean."""
+    if definition.is_main:
+        return "models/TrainMean27.npz", "train_mean27", "train_mean27"
+    return (
+        f"models/{definition.train_mean_method}.npz",
+        f"train_mean{definition.fitting_month_count}",
+        definition.train_mean_column,
+    )
+
+
+def _block_consistency(
+    block: Mapping[str, Any],
+    source: str,
+    expected: Mapping[str, Any],
+) -> None:
+    """Require a fold block to carry exactly the fixed definition payload."""
+    missing = [field for field in _FOLD_BLOCK_FIELDS if field not in block]
+    if missing:
+        raise CheckError(f"{source} fold metadata is missing field(s) {missing}")
+    for field in _FOLD_BLOCK_FIELDS:
+        actual = block.get(field)
+        wanted = expected[field]
+        if field in ("omitted_reasons",):
+            if not isinstance(actual, Mapping):
+                raise CheckError(f"{source} omitted_reasons must be an object")
+            actual = {str(key): value for key, value in actual.items()}
+            wanted = {str(key): value for key, value in wanted.items()}
+        if actual != wanted:
+            raise CheckError(
+                f"{source} fold field {field!r} is {actual!r}, expected {wanted!r}"
+            )
+
+
+def _validate_fold_windows(
+    windows: Mapping[str, Any], definition: protocol.SplitDefinition
+) -> None:
+    """Cross-check all 28 saved window roles and months for a fold."""
+    expected = definition.to_payload()
+    for field in (
+        "fold",
+        "fitting_observation_months",
+        "fitting_month_count",
+        "omitted_starts",
+        "outside_fold_starts",
+        "eval_target_months",
+    ):
+        if windows.get(field) != expected[field]:
+            raise CheckError(
+                f"windows.json {field!r} is {windows.get(field)!r}, expected "
+                f"{expected[field]!r}"
+            )
+    reasons = windows.get("omitted_reasons")
+    if not isinstance(reasons, Mapping) or {
+        str(key): value for key, value in reasons.items()
+    } != {str(key): value for key, value in expected["omitted_reasons"].items()}:
+        raise CheckError("windows.json omitted_reasons disagree with the fixed fold")
+    splits = windows.get("splits")
+    if not isinstance(splits, Mapping):
+        raise CheckError("windows.json is missing its splits object")
+    from_splits = {
+        "train": expected["train_starts"],
+        "validation": expected["validation_starts"],
+        definition.evaluation_split: expected["eval_starts"],
+    }
+    if set(splits) != set(from_splits):
+        raise CheckError(
+            f"windows.json split names {sorted(splits)} do not match "
+            f"{sorted(from_splits)}"
+        )
+    for name, starts in from_splits.items():
+        if list(splits.get(name, [])) != list(starts):
+            raise CheckError(
+                f"windows.json {name} starts {splits.get(name)!r} differ from "
+                f"{starts!r}"
+            )
+    entries = windows.get("windows")
+    if not isinstance(entries, list) or len(entries) != protocol.N_WINDOWS:
+        raise CheckError(
+            f"windows.json must list all {protocol.N_WINDOWS} windows with roles"
+        )
+    seen: set = set()
+    for entry in entries:
+        if not isinstance(entry, Mapping):
+            raise CheckError("windows.json window entries must be objects")
+        start = entry.get("start")
+        if not isinstance(start, int) or not 0 <= start < protocol.N_WINDOWS:
+            raise CheckError(f"windows.json has an invalid window start {start!r}")
+        if start in seen:
+            raise CheckError(f"windows.json repeats window start {start}")
+        seen.add(start)
+        role = definition.role_for_start(start)
+        if entry.get("role") != role:
+            raise CheckError(
+                f"window {start} role is {entry.get('role')!r}, expected {role!r}"
+            )
+        reason = definition.reason_for_start(start)
+        if entry.get("reason") != reason:
+            raise CheckError(
+                f"window {start} reason is {entry.get('reason')!r}, expected {reason!r}"
+            )
+        if list(entry.get("input_months", [])) != list(
+            protocol.window_input_months(start)
+        ):
+            raise CheckError(f"window {start} input months are inconsistent")
+        if list(entry.get("target_months", [])) != list(
+            protocol.window_target_months(start)
+        ):
+            raise CheckError(f"window {start} target months are inconsistent")
+        if entry.get("forecast_origin") != protocol.window_forecast_origin(start):
+            raise CheckError(f"window {start} forecast origin is inconsistent")
+    if seen != set(protocol.ALL_STARTS):
+        raise CheckError("windows.json does not cover every window start")
+
+
+def _validate_main_windows(windows: Mapping[str, Any]) -> None:
+    """Accept only the historical, consistent main-split window record."""
+    splits = windows.get("splits")
+    if not isinstance(splits, Mapping):
+        raise CheckError("windows.json is missing its splits object")
+    if set(splits) != set(protocol.SPLITS):
+        raise CheckError(
+            f"main run windows.json split names {sorted(splits)} do not match "
+            f"{sorted(protocol.SPLITS)}; a fold/eval record without fold "
+            "metadata is rejected instead of falling back to main"
+        )
+    for name, starts in protocol.SPLITS.items():
+        if list(splits.get(name, [])) != list(starts):
+            raise CheckError(
+                f"main run {name} starts {splits.get(name)!r} differ from "
+                f"{list(starts)!r}"
+            )
+    if list(windows.get("omitted_starts", [])) != list(protocol.OMITTED_STARTS):
+        raise CheckError("main run omitted starts differ from the fixed split")
+    entries = windows.get("windows")
+    if not isinstance(entries, list) or len(entries) != protocol.N_WINDOWS:
+        raise CheckError(
+            f"windows.json must list all {protocol.N_WINDOWS} windows"
+        )
+    role_by_start = {
+        start: name for name, starts in protocol.SPLITS.items() for start in starts
+    }
+    for entry in entries:
+        start = entry.get("start") if isinstance(entry, Mapping) else None
+        if not isinstance(start, int):
+            raise CheckError("windows.json has an invalid window start")
+        expected_split = role_by_start.get(start)
+        if entry.get("split") != expected_split:
+            raise CheckError(
+                f"main window {start} split is {entry.get('split')!r}, expected "
+                f"{expected_split!r}"
+            )
+
+
+def _validate_saved_methods(
+    run_dir: Path, identity: Dict[str, Any]
+) -> None:
+    """Check saved method names, split files and forbidden fold/main mixing."""
+    definition = identity["definition"]
+    predictions_root = run_dir / "predictions"
+    if not predictions_root.is_dir():
+        raise CheckError(f"required predictions directory is missing: {predictions_root}")
+    methods = sorted(
+        path.name for path in predictions_root.iterdir() if path.is_dir()
+    )
+    required = list(definition.naive_methods) + [protocol.MODEL_NAME]
+    optional = {protocol.CLIPPED_MODEL_NAME}
+    missing = [name for name in required if name not in methods]
+    if missing:
+        raise CheckError(f"predictions are missing required method(s) {missing}")
+    unknown = [name for name in methods if name not in required and name not in optional]
+    if unknown:
+        raise CheckError(f"predictions contain unknown method(s) {unknown}")
+    if definition.is_main:
+        if (run_dir / "gold" / "eval.npy").exists():
+            raise CheckError("main run contains an eval gold file")
+        for method in methods:
+            if (predictions_root / method / "eval.npy").exists():
+                raise CheckError(
+                    f"main run prediction {method}/eval.npy must not exist"
+                )
+        if (run_dir / "models" / "TrainMean27.npz").exists() is False:
+            raise CheckError("main run is missing models/TrainMean27.npz")
+    else:
+        if "TrainMean27" in methods:
+            raise CheckError("fold run must not reuse the TrainMean27 method name")
+        if (run_dir / "gold" / "test.npy").exists():
+            raise CheckError("fold run must not write gold/test.npy")
+        if (run_dir / "models" / "TrainMean27.npz").exists():
+            raise CheckError("fold run must not reuse models/TrainMean27.npz")
+        for method in methods:
+            if (predictions_root / method / "test.npy").exists():
+                raise CheckError(
+                    f"fold run prediction {method}/test.npy must not exist"
+                )
+    for split in definition.evaluation_splits:
+        gold_path = run_dir / "gold" / f"{split}.npy"
+        if not gold_path.is_file():
+            raise CheckError(f"required gold file is missing: {gold_path}")
+        for method in methods:
+            if not (predictions_root / method / f"{split}.npy").is_file():
+                raise CheckError(
+                    f"prediction is missing: {predictions_root / method / f'{split}.npy'}"
+                )
+    if not definition.is_main:
+        # Fold evidence must be internally complete before recomputation; a
+        # historical main report keeps its existing mismatch semantics for a
+        # deleted method record, so its comparison is left to recompute.
+        stored_methods = identity["metrics"].get("methods")
+        if not isinstance(stored_methods, Mapping) or set(stored_methods) != set(
+            definition.evaluation_splits
+        ):
+            raise CheckError(
+                "fold metrics.json method splits do not match the resolved split: "
+                f"{sorted(stored_methods) if isinstance(stored_methods, Mapping) else stored_methods!r}"
+            )
+        for split in definition.evaluation_splits:
+            if set(stored_methods.get(split, {})) != set(methods):
+                raise CheckError(
+                    f"fold metrics.json {split} methods "
+                    f"{sorted(stored_methods.get(split, {}))} differ from saved "
+                    f"predictions {methods}"
+                )
+    identity["methods"] = methods
+
+
+def _validate_saved_mean(
+    run_dir: Path, identity: Dict[str, Any]
+) -> None:
+    """Check the fitting-scope frozen mean artifact and its identity key."""
+    definition = identity["definition"]
+    relative, key, column = _mean_artifact(definition)
+    path = run_dir / relative
+    if not path.is_file():
+        raise CheckError(f"required fitting mean artifact is missing: {path}")
+    with np.load(path, allow_pickle=False) as handle:
+        if key not in handle:
+            raise CheckError(
+                f"{relative} is missing its fitting-mean key {key!r}; "
+                f"present keys: {sorted(handle.files)}"
+            )
+        if "train_observation_month_count" in handle:
+            count = int(np.asarray(handle["train_observation_month_count"]).reshape(-1)[0])
+            if count != definition.fitting_month_count:
+                raise CheckError(
+                    f"{relative} records {count} fitting months, expected "
+                    f"{definition.fitting_month_count}"
+                )
+    identity["mean_relative_path"] = relative
+    identity["mean_key"] = key
+    identity["mean_column"] = column
+
+
+def _validate_fold_mask_semantics(identity: Dict[str, Any]) -> None:
+    """Reject saved fold masks that contradict their own activity fractions.
+
+    ``nonzero_activity_fit18/21`` is a continuous fraction of the unique fold
+    fitting observations; the four boolean activity masks must be exactly the
+    protocol groups derived from those fractions (0, (0,1/3], (1/3,2/3],
+    (2/3,1]).  The constant mask must be a boolean node mask of the same shape.
+    These are fixed protocol semantics, so a saved contradiction is invalid
+    evidence even when recomputation reproduces the same wrong numbers.
+    """
+    definition = identity["definition"]
+    masks = identity["masks"]
+    activity = np.asarray(masks[definition.nonzero_activity_key])
+    if activity.ndim != 1:
+        raise CheckError(
+            f"{definition.nonzero_activity_key} must be a one-dimensional node mask"
+        )
+    if not np.issubdtype(activity.dtype, np.floating):
+        raise CheckError(
+            f"{definition.nonzero_activity_key} must store floating-point "
+            f"fractions, got {activity.dtype}"
+        )
+    if not np.isfinite(activity).all():
+        raise CheckError(
+            f"{definition.nonzero_activity_key} contains non-finite values"
+        )
+    if (activity < 0.0).any() or (activity > 1.0).any():
+        raise CheckError(
+            f"{definition.nonzero_activity_key} values must lie within [0, 1]"
+        )
+    count = definition.fitting_month_count
+    steps = activity * float(count)
+    if not np.allclose(steps, np.round(steps), rtol=0.0, atol=1e-9):
+        raise CheckError(
+            f"{definition.nonzero_activity_key} values are not integer multiples "
+            f"of 1/{count} (the unique fitting month count)"
+        )
+    group_arrays = []
+    for name in definition.activity_group_names:
+        mask = np.asarray(masks[f"activity_{name}"])
+        if mask.dtype != np.bool_:
+            raise CheckError(f"activity mask {name} must be boolean, got {mask.dtype}")
+        if mask.shape != activity.shape:
+            raise CheckError(
+                f"activity mask {name} shape {mask.shape} != activity shape "
+                f"{activity.shape}"
+            )
+        group_arrays.append(mask)
+    partition = np.stack(group_arrays).sum(axis=0)
+    if not np.array_equal(partition, np.ones(activity.shape[0], dtype=partition.dtype)):
+        raise CheckError(
+            "fold activity masks must partition every node exactly once; observed "
+            f"multiplicities {sorted(set(int(value) for value in partition))}"
+        )
+    constant = np.asarray(masks[definition.constant_mask_key])
+    if constant.dtype != np.bool_:
+        raise CheckError(
+            f"{definition.constant_mask_key} must be boolean, got {constant.dtype}"
+        )
+    if constant.shape != activity.shape:
+        raise CheckError(
+            f"{definition.constant_mask_key} shape {constant.shape} != activity shape "
+            f"{activity.shape}"
+        )
+    derived = activity_group_masks(activity)
+    for raw_name, group_name in zip(
+        protocol.ACTIVITY_GROUP_NAMES, definition.activity_group_names
+    ):
+        saved = np.asarray(masks[f"activity_{group_name}"], dtype=bool)
+        expected = np.asarray(derived[raw_name], dtype=bool)
+        if not np.array_equal(saved, expected):
+            mismatch = int((saved != expected).sum())
+            raise CheckError(
+                f"activity mask {group_name} disagrees with "
+                f"{definition.nonzero_activity_key} at the fixed group boundaries "
+                f"for {mismatch} node(s)"
+            )
+
+
+def _validate_saved_masks(run_dir: Path, identity: Dict[str, Any]) -> None:
+    """Check every mask key and load the masks for later use."""
+    masks = _load_npz(run_dir / "masks.npz")
+    expected = _expected_mask_keys(identity["definition"])
+    if set(masks) != expected:
+        raise CheckError(
+            f"masks.npz keys {sorted(masks)} do not match the resolved split "
+            f"contract {sorted(expected)}"
+        )
+    identity["masks"] = masks
+    if not identity["definition"].is_main:
+        _validate_fold_mask_semantics(identity)
+
+
+def _validate_fold_selection(identity: Dict[str, Any]) -> None:
+    """Cross-check the saved selection record against the fold definition."""
+    selection = identity.get("selection")
+    if not isinstance(selection, Mapping):
+        raise CheckError("fold run is missing selection.json")
+    definition = identity["definition"]
+    normalization = selection.get("normalization")
+    if not isinstance(normalization, Mapping):
+        raise CheckError("selection.json is missing its normalization record")
+    if list(normalization.get("train_observation_months", [])) != list(
+        definition.fitting_observation_months
+    ):
+        raise CheckError(
+            "selection.json normalization months disagree with the fold fitting "
+            "period"
+        )
+    if normalization.get("fitting_month_count") != definition.fitting_month_count:
+        raise CheckError(
+            "selection.json fitting_month_count disagrees with the fold definition"
+        )
+    if normalization.get("train_mean_method") != definition.train_mean_method:
+        raise CheckError(
+            "selection.json TrainMean method disagrees with the fold definition"
+        )
+    if normalization.get("ddof") != 0:
+        raise CheckError(
+            "selection.json normalization.ddof must be 0 for the fixed fold "
+            f"statistics, got {normalization.get('ddof')!r}"
+        )
+    if normalization.get("constant_node_std") != 1.0:
+        raise CheckError(
+            "selection.json normalization.constant_node_std must be 1.0, got "
+            f"{normalization.get('constant_node_std')!r}"
+        )
+    if normalization.get("applied_to_inputs_and_targets") is not True:
+        raise CheckError(
+            "selection.json must record normalization applied to inputs and targets"
+        )
+    if normalization.get("activity_scope") != definition.scope_label:
+        raise CheckError(
+            "selection.json activity_scope disagrees with the fold fitting scope"
+        )
+    references = selection.get("naive_references")
+    if not isinstance(references, Mapping):
+        raise CheckError("selection.json is missing naive_references")
+    if list(references.get("table_order", [])) != list(definition.naive_methods):
+        raise CheckError(
+            "selection.json naive method order disagrees with the fold definition"
+        )
+    scores = selection.get("naive_validation_scores")
+    if not isinstance(scores, Mapping) or set(scores) != set(definition.naive_methods):
+        raise CheckError(
+            "selection.json naive validation scores do not cover the five fold methods"
+        )
+    if references.get("NaiveRef") not in definition.naive_methods:
+        raise CheckError("selection.json NaiveRef is not a fold candidate")
+    if references.get("NaiveRef6") not in definition.naive_ref6_methods:
+        raise CheckError("selection.json NaiveRef6 is not a fold candidate")
+    shared = selection.get("shared_ridge")
+    if not isinstance(shared, Mapping):
+        raise CheckError("selection.json is missing shared_ridge")
+    table = shared.get("candidate_table")
+    if not isinstance(table, list) or len(table) != len(protocol.LAMBDA_CANDIDATES):
+        raise CheckError(
+            "selection.json must retain every Ridge candidate score row"
+        )
+    lambdas = sorted(float(row.get("lambda")) for row in table)
+    if lambdas != sorted(float(value) for value in protocol.LAMBDA_CANDIDATES):
+        raise CheckError(
+            f"selection.json candidate lambdas {lambdas} differ from the fixed "
+            f"candidates {list(protocol.LAMBDA_CANDIDATES)}"
+        )
+    if selection.get("test_labels_used_for_selection") is not False:
+        raise CheckError(
+            "selection.json must explicitly record "
+            "test_labels_used_for_selection=false"
+        )
+
+
+def resolve_saved_split(
+    run_dir: Path,
+    *,
+    metrics: Any = None,
+    windows: Any = None,
+    config: Any = None,
+    provenance: Any = None,
+    selection: Any = None,
+) -> Dict[str, Any]:
+    """Resolve and cross-validate the saved split identity of a run.
+
+    A historical main run (no fold/eval field anywhere) resolves to the main
+    split only when its window record is the consistent main format.  Any
+    explicit fold label, fold block or eval artifact requires complete fold
+    metadata from every writer; unknown, missing or contradictory evidence
+    fails rather than falling back to main.
+    """
+    run_dir = Path(run_dir)
+    if metrics is None:
+        metrics = _read_json(run_dir / "metrics.json")
+    if windows is None:
+        windows = _read_json(run_dir / "windows.json")
+    if config is None:
+        config = _read_optional_json(run_dir / "config.json")
+    if provenance is None:
+        provenance = _read_optional_json(run_dir / "provenance.json")
+    if selection is None:
+        selection = _read_optional_json(run_dir / "selection.json")
+    if not isinstance(metrics, Mapping):
+        raise CheckError("metrics.json must be a JSON object")
+    if not isinstance(windows, Mapping):
+        raise CheckError("windows.json must be a JSON object")
+
+    spec_fold = None
+    if isinstance(config, Mapping) and isinstance(config.get("spec"), Mapping):
+        spec_fold = _normalize_fold(
+            config["spec"].get("fold"), "config.json spec.fold"
+        )
+    blocks = {
+        "config.json": _fold_block(config, "config.json"),
+        "provenance.json": _fold_block(provenance, "provenance.json"),
+        "metrics.json": _fold_block(metrics, "metrics.json"),
+        "selection.json": _fold_block(selection, "selection.json"),
+    }
+    block_folds = {
+        source: _normalize_fold(block.get("fold"), f"{source} fold")
+        for source, block in blocks.items()
+        if block is not None
+    }
+    windows_fold = None
+    if "fold" in windows:
+        windows_fold = _normalize_fold(windows.get("fold"), "windows.json fold")
+    clues = {
+        "config.json spec.fold": spec_fold,
+        **block_folds,
+        "windows.json fold": windows_fold,
+    }
+    present = {source: value for source, value in clues.items() if value is not None}
+
+    if present:
+        labels = sorted(set(present.values()))
+        if len(labels) > 1:
+            raise CheckError(
+                f"saved fold labels contradict each other: {present}"
+            )
+        fold = labels[0]
+        missing = [
+            source
+            for source in (
+                "config.json spec.fold",
+                "config.json",
+                "provenance.json",
+                "metrics.json",
+                "selection.json",
+                "windows.json fold",
+            )
+            if source not in present
+        ]
+        if missing:
+            raise CheckError(
+                f"fold {fold} evidence is incomplete; missing fold metadata in "
+                f"{missing}"
+            )
+        block_incomplete = [
+            source
+            for source, block in blocks.items()
+            if block is not None and block.get("fold") is None
+        ]
+        if block_incomplete:
+            raise CheckError(
+                f"fold {fold} evidence is incomplete; fold label missing in "
+                f"{block_incomplete}"
+            )
+        definition = protocol.resolve_split(fold)
+        definition.validate()
+        expected = definition.to_payload()
+        for source, block in blocks.items():
+            if block is not None:
+                _block_consistency(block, source, expected)
+        _validate_fold_windows(windows, definition)
+        if isinstance(config, Mapping) and isinstance(config.get("spec"), Mapping):
+            if config["spec"].get("fold") != fold:
+                raise CheckError("config.json spec.fold disagrees with the run fold")
+        identity = {
+            "fold": fold,
+            "is_fold": True,
+            "definition": definition,
+            "eval_split": definition.evaluation_split,
+            "evaluation_splits": list(definition.evaluation_splits),
+            "metrics": metrics,
+            "windows": windows,
+            "config": config,
+            "provenance": provenance,
+            "selection": selection,
+            "evidence_role": expected.get("evidence_role"),
+        }
+        _validate_fold_selection(identity)
+        _validate_saved_methods(run_dir, identity)
+        _validate_saved_mean(run_dir, identity)
+        _validate_saved_masks(run_dir, identity)
+        return identity
+
+    present_blocks = [source for source, block in blocks.items() if block is not None]
+    if present_blocks:
+        raise CheckError(
+            "saved fold metadata is present without a usable fold label in "
+            f"{present_blocks}"
+        )
+    # No fold metadata: reject an eval trace instead of silently using main.
+    stored_methods = metrics.get("methods")
+    eval_traces: List[str] = []
+    if isinstance(stored_methods, Mapping) and "eval" in stored_methods:
+        eval_traces.append("metrics.json methods.eval")
+    if "eval" in (windows.get("splits") or {}):
+        eval_traces.append("windows.json splits.eval")
+    if (run_dir / "gold" / "eval.npy").exists():
+        eval_traces.append("gold/eval.npy")
+    predictions_root = run_dir / "predictions"
+    if predictions_root.is_dir():
+        for method_dir in predictions_root.iterdir():
+            if method_dir.is_dir() and (method_dir / "eval.npy").exists():
+                eval_traces.append(f"predictions/{method_dir.name}/eval.npy")
+    if eval_traces:
+        raise CheckError(
+            "eval evidence exists without fold metadata; refusing to fall back "
+            f"to main: {eval_traces}"
+        )
+    _validate_main_windows(windows)
+    identity = {
+        "fold": None,
+        "is_fold": False,
+        "definition": protocol.MAIN_SPLIT,
+        "eval_split": "test",
+        "evaluation_splits": ["validation", "test"],
+        "metrics": metrics,
+        "windows": windows,
+        "config": config,
+        "provenance": provenance,
+        "selection": selection,
+        "evidence_role": None,
+    }
+    _validate_saved_methods(run_dir, identity)
+    _validate_saved_mean(run_dir, identity)
+    _validate_saved_masks(run_dir, identity)
+    return identity
+
+
+def _validate_split_against_nodes(
+    identity: Dict[str, Any], node_count: int
+) -> None:
+    """Cross-check node-count-dependent saved identities after loading nodes."""
+    definition = identity["definition"]
+    expected_m = protocol.expected_train_sample_count(node_count, definition)
+    selection = identity.get("selection")
+    if isinstance(selection, Mapping) and "training_samples_M" in selection:
+        if int(selection.get("training_samples_M")) != expected_m:
+            raise CheckError(
+                f"selection.json training_samples_M is {selection.get('training_samples_M')}, "
+                f"expected {expected_m} for {definition.name}"
+            )
+        if int(selection.get("expected_training_samples_M", expected_m)) != expected_m:
+            raise CheckError(
+                "selection.json expected_training_samples_M disagrees with the "
+                "resolved split"
+            )
+        table = selection.get("shared_ridge", {}).get("candidate_table", [])
+        for row in table:
+            if int(row.get("M")) != expected_m:
+                raise CheckError(
+                    f"selection.json candidate M {row.get('M')} != {expected_m}"
+                )
+    masks = identity.get("masks") or {}
+    for name, mask in masks.items():
+        array = np.asarray(mask)
+        if array.shape != (int(node_count),):
+            raise CheckError(
+                f"mask {name} shape {array.shape} != ({int(node_count)},)"
+            )
+    mean_path = identity.get("mean_relative_path")
+    if mean_path:
+        with np.load(
+            Path(identity["run_dir"]) / mean_path, allow_pickle=False
+        ) as handle:
+            mean = np.asarray(handle[identity["mean_key"]]).reshape(-1)
+        if mean.shape != (int(node_count),):
+            raise CheckError(
+                f"{mean_path} mean shape {mean.shape} != ({int(node_count)},)"
+            )
+
+
+# ---------------------------------------------------------------------------
 # recompute
 # ---------------------------------------------------------------------------
 RECOMPUTE_CONSUMED_INPUTS = (
@@ -680,6 +1368,26 @@ RECOMPUTE_TOLERANCES = {
 }
 
 
+def _recompute_consumed_inputs(identity: Mapping[str, Any]) -> Tuple[str, ...]:
+    """Return exactly the saved artifacts one recomputation reads."""
+    definition = identity["definition"]
+    mean_relative, _, _ = _mean_artifact(definition)
+    return (
+        "config.json",
+        "provenance.json",
+        "selection.json",
+        "status.json",
+        "metrics.json",
+        "windows.json",
+        "nodes.parquet",
+        "masks.npz",
+        "gold/validation.npy",
+        f"gold/{definition.evaluation_split}.npy",
+        "node-errors.parquet",
+        mean_relative,
+    )
+
+
 def command_recompute(
     *,
     run_dir: Path,
@@ -693,6 +1401,8 @@ def command_recompute(
 
     The explicit ``report_path`` and the legacy ``run_id``/``runs_root`` alias
     are mutually exclusive and one is required; both produce one JSON report.
+    Main and fold A/B evidence are dispatched by the validated saved identity;
+    source demand, graph data and model fitting are never read or invoked.
     """
     run_dir = Path(run_dir)
     destination = resolve_report_path(
@@ -703,33 +1413,42 @@ def command_recompute(
     try:
         if not run_dir.exists():
             raise CheckError(f"input run directory does not exist: {run_dir}")
-        # Consumed-input identity and status parsing belong to the failure-report
-        # contract: an unreadable or malformed saved input still yields one
-        # informative report at a safe destination.
-        inputs["consumed_sha256"] = _hash_tree(run_dir, RECOMPUTE_CONSUMED_INPUTS)
         status = _read_json(run_dir / "status.json")
         if not isinstance(status, Mapping):
             raise CheckError(
                 f"required artifact is not a status object: {run_dir / 'status.json'}"
             )
+        metrics_document = _read_json(run_dir / "metrics.json")
+        windows_meta = _read_json(run_dir / "windows.json")
+        identity = resolve_saved_split(
+            run_dir,
+            metrics=metrics_document,
+            windows=windows_meta,
+            config=_read_optional_json(run_dir / "config.json"),
+            provenance=_read_optional_json(run_dir / "provenance.json"),
+            selection=_read_optional_json(run_dir / "selection.json"),
+        )
+        identity["run_dir"] = str(run_dir)
+        definition = identity["definition"]
         inputs["input_run_id"] = status.get("run_id")
         inputs["input_status"] = status.get("state")
-        metrics_document = _read_json(run_dir / "metrics.json")
+        inputs["fold"] = identity["fold"]
+        inputs["evaluation_splits"] = list(identity["evaluation_splits"])
+        inputs["consumed_sha256"] = _hash_tree(
+            run_dir, _recompute_consumed_inputs(identity)
+        )
         nodes = _read_nodes(run_dir / "nodes.parquet")
         key_columns = [column for column in nodes.columns if column != "node_index"]
-        masks = _load_npz(run_dir / "masks.npz")
-        windows_meta = _read_json(run_dir / "windows.json")
-        splits = windows_meta["splits"]
-
+        node_count = len(nodes)
+        _validate_split_against_nodes(identity, node_count)
+        masks = identity["masks"]
         activity_masks = {
-            name: masks[f"activity_{name}"]
-            for name in protocol.ACTIVITY_GROUP_NAMES
-            if f"activity_{name}" in masks
+            group_name: masks[f"activity_{group_name}"]
+            for group_name in definition.activity_group_names
         }
-        constant_masks = {
-            "constant_train27": masks["constant_train27"],
-            "nonconstant_train27": ~masks["constant_train27"],
-        }
+        constant_masks = metrics.constant_group_masks(
+            masks[definition.constant_mask_key], scope=definition.scope_label
+        )
         neighbor_masks = {
             "has_nonself_neighbor": masks["has_nonself_neighbor"],
             "no_nonself_neighbor": ~masks["has_nonself_neighbor"],
@@ -737,20 +1456,23 @@ def command_recompute(
         context_values = nodes[key_columns[0]].to_numpy()
         context_masks_map = metrics.context_masks(context_values)
 
-        recomputed: Dict[str, Dict[str, Any]] = {"validation": {}, "test": {}}
-        for split in ("validation", "test"):
+        recomputed: Dict[str, Dict[str, Any]] = {
+            split: {} for split in definition.evaluation_splits
+        }
+        for split in definition.evaluation_splits:
             gold = _load_npy(run_dir / "gold" / f"{split}.npy")
-            starts = splits[split]
-            for method_dir in sorted((run_dir / "predictions").iterdir()):
-                if not method_dir.is_dir():
-                    continue
-                method = method_dir.name
-                pred = _load_npy(method_dir / f"{split}.npy")
+            starts = definition.starts_for(split)
+            for method in identity["methods"]:
+                pred = _load_npy(run_dir / "predictions" / method / f"{split}.npy")
                 if pred.shape != gold.shape:
                     raise CheckError(
                         f"{method}/{split}: prediction shape {pred.shape} != gold {gold.shape}"
                     )
-                report = metrics.split_report(
+                if pred.ndim != 3 or pred.shape[1] != node_count:
+                    raise CheckError(
+                        f"{method}/{split}: node axis {pred.shape} != {node_count} nodes"
+                    )
+                recomputed[split][method] = metrics.split_report(
                     pred,
                     gold,
                     starts=starts,
@@ -758,14 +1480,15 @@ def command_recompute(
                     constant_masks=constant_masks,
                     context_masks_map=context_masks_map,
                     neighbor_masks=neighbor_masks,
+                    group_names=definition.activity_group_names,
+                    inactive_group_name=definition.activity_group_names[0],
                 )
-                recomputed[split][method] = report
         inputs["consumed_prediction_sha256"] = {
             f"predictions/{method}/{split}.npy": sha256_file(
                 run_dir / "predictions" / method / f"{split}.npy"
             )
-            for split in ("validation", "test")
-            for method in sorted(recomputed[split])
+            for split in definition.evaluation_splits
+            for method in identity["methods"]
         }
         stored = metrics_document.get("methods")
         missing_report_fields: List[str] = [
@@ -778,7 +1501,7 @@ def command_recompute(
                 f"{run_dir}/metrics.json does not contain a 'methods' object"
             )
         comparisons = {}
-        for split in ("validation", "test"):
+        for split in definition.evaluation_splits:
             comparisons[split] = compare_report_schema(
                 recomputed[split],
                 stored.get(split, {}),
@@ -807,8 +1530,8 @@ def command_recompute(
         ):
             model_names = [
                 method
-                for method in sorted(recomputed["test"])
-                if method not in protocol.NAIVE_METHODS
+                for method in identity["methods"]
+                if method not in definition.naive_methods
             ]
             reference_names = [
                 name
@@ -818,9 +1541,10 @@ def command_recompute(
                 )
                 if name is not None
             ]
-            for split in ("validation", "test"):
+            for split in definition.evaluation_splits:
                 recomputed_gains[split] = metrics.baseline_relative_comparison(
                     recomputed[split],
+                    activity_groups=definition.activity_group_names,
                     context_names=list(context_masks_map),
                     neighbor_names=list(neighbor_masks),
                     model_names=model_names,
@@ -850,12 +1574,14 @@ def command_recompute(
         )
 
         # Per-node diagnostic tables are also reported evidence; verify their
-        # error sums against freshly reduced saved predictions.
-        node_error_comparison = _compare_node_error_tables(run_dir, key_columns)
+        # error sums and fitting-scope columns against saved predictions.
+        node_error_comparison = _compare_node_error_tables(
+            run_dir, key_columns, identity
+        )
 
         failed = [
-            name
-            for name, comparison in comparisons.items()
+            split
+            for split, comparison in comparisons.items()
             if comparison["status"] != "ok"
         ]
         if gains_comparison["status"] != "ok":
@@ -875,7 +1601,18 @@ def command_recompute(
         result = {
             "check": "recompute",
             "input_run_dir": str(run_dir),
-            "methods": sorted(method for method in recomputed["test"].keys()),
+            "fold": identity["fold"],
+            "evaluation_splits": list(definition.evaluation_splits),
+            "methods": list(identity["methods"]),
+            "saved_split": {
+                "fold": identity["fold"],
+                "fitting_month_count": definition.fitting_month_count,
+                "train_mean_method": definition.train_mean_method,
+                "mean_artifact": identity["mean_relative_path"],
+                "activity_group_names": list(definition.activity_group_names),
+                "constant_group_names": list(definition.constant_group_names),
+                "consumed_mask_keys": sorted(identity["masks"]),
+            },
             "comparisons": comparisons,
             "relative_gains_comparison": gains_comparison,
             "node_error_comparison": node_error_comparison,
@@ -926,10 +1663,24 @@ def _read_nodes(path: Path) -> "Any":
 def _compare_node_error_tables(
     run_dir: Path,
     key_columns: Sequence[str],
+    identity: Optional[Mapping[str, Any]] = None,
 ) -> Dict[str, Any]:
-    """Verify the saved per-node diagnostic table against saved arrays."""
+    """Verify the saved per-node diagnostic table against saved arrays.
+
+    Main runs keep the historical ``train_mean27`` columns.  Fold runs require
+    the fitting-scope mean, activity, activity-group and constant columns and
+    compare them to the same saved masks used by the metric reports.
+    """
     import pandas as pd
 
+    definition = (
+        identity["definition"] if identity is not None else protocol.MAIN_SPLIT
+    )
+    mean_relative, mean_key, mean_column = _mean_artifact(definition)
+    is_fold = not definition.is_main
+    activity_column = f"activity_{definition.scope_label}"
+    group_column = f"activity_group_{definition.scope_label}"
+    constant_column = f"constant_{definition.scope_label}"
     stored_path = run_dir / "node-errors.parquet"
     if not stored_path.exists():
         return {
@@ -937,31 +1688,51 @@ def _compare_node_error_tables(
             "reason": "node-errors.parquet is missing",
             "compared_rows": 0,
         }
-    statistics_path = run_dir / "models" / "TrainMean27.npz"
+    statistics_path = run_dir / mean_relative
     if not statistics_path.exists():
         return {
             "status": "mismatch",
-            "reason": "models/TrainMean27.npz is missing",
+            "reason": f"{mean_relative} is missing",
             "compared_rows": 0,
         }
     with np.load(statistics_path, allow_pickle=False) as handle:
-        if "train_mean27" not in handle:
+        if mean_key not in handle:
             return {
                 "status": "mismatch",
-                "reason": "TrainMean27 statistics are missing",
+                "reason": f"{mean_relative} is missing its {mean_key} statistics",
                 "compared_rows": 0,
             }
-        train_mean = np.asarray(handle["train_mean27"], dtype=np.float64).reshape(-1)
+        train_mean = np.asarray(handle[mean_key], dtype=np.float64).reshape(-1)
     nodes = _read_nodes(run_dir / "nodes.parquet")
     keys = nodes[list(key_columns)].to_numpy()
     context_values = nodes[list(key_columns)[0]].to_numpy()
+    masks = (
+        identity.get("masks")
+        if identity is not None
+        else _load_npz(run_dir / "masks.npz")
+    )
+    activity_values = None
+    group_values = None
+    constant_values = None
+    if is_fold:
+        activity_values = np.asarray(
+            masks[definition.nonzero_activity_key], dtype=np.float64
+        )
+        constant_values = np.asarray(
+            masks[definition.constant_mask_key], dtype=bool
+        )
+        group_values = np.full(len(nodes), "", dtype=object)
+        for group_name in definition.activity_group_names:
+            group_values[
+                np.asarray(masks[f"activity_{group_name}"], dtype=bool)
+            ] = group_name
     frames = []
-    for split in ("validation", "test"):
+    for split in definition.evaluation_splits:
         gold = _load_npy(run_dir / "gold" / f"{split}.npy")
-        for method_dir in sorted((run_dir / "predictions").iterdir()):
-            if not method_dir.is_dir():
-                continue
-            method = method_dir.name
+        for method in sorted(
+            path.name for path in (run_dir / "predictions").iterdir() if path.is_dir()
+        ):
+            method_dir = run_dir / "predictions" / method
             pred = _load_npy(method_dir / f"{split}.npy")
             if pred.shape != gold.shape:
                 return {
@@ -979,6 +1750,13 @@ def _compare_node_error_tables(
                     key_columns=list(key_columns),
                     train_mean27_values=train_mean,
                     context_values=context_values,
+                    train_mean_column=mean_column,
+                    activity_values=activity_values,
+                    activity_column=activity_column if is_fold else None,
+                    activity_group_values=group_values if is_fold else None,
+                    activity_group_column=group_column if is_fold else None,
+                    constant_values=constant_values if is_fold else None,
+                    constant_column=constant_column if is_fold else None,
                 )
             )
     recomputed_frame = pd.concat(frames, ignore_index=True)
@@ -991,8 +1769,13 @@ def _compare_node_error_tables(
         "elements",
         "MAE",
         "MSE",
+        mean_column,
         *key_columns,
     ]
+    if is_fold:
+        required_columns.extend(
+            [activity_column, group_column, constant_column]
+        )
     missing_columns = [column for column in required_columns if column not in stored.columns]
     if missing_columns:
         return {
@@ -1012,15 +1795,18 @@ def _compare_node_error_tables(
     both = merged[merged["_merge"] == "both"]
     # Reject non-finite per-node values before tolerance comparison: NaN never
     # exceeds a tolerance, so an unchecked NaN would look like agreement.
-    nonfinite_fields: List[str] = []
-    for column in (
+    numeric_columns = [
         "absolute_error_sum",
         "squared_error_sum",
         "elements",
         "MAE",
         "MSE",
-        "train_mean27",
-    ):
+        mean_column,
+    ]
+    if is_fold:
+        numeric_columns.append(activity_column)
+    nonfinite_fields: List[str] = []
+    for column in numeric_columns:
         for side in ("stored", "recomputed"):
             name = f"{column}_{side}"
             if name not in both.columns:
@@ -1031,13 +1817,7 @@ def _compare_node_error_tables(
     worst = 0.0
     worst_column = None
     failed_fields = 0
-    for column in (
-        "absolute_error_sum",
-        "squared_error_sum",
-        "elements",
-        "MAE",
-        "MSE",
-    ):
+    for column in numeric_columns:
         stored_values = both[f"{column}_stored"].to_numpy(dtype=np.float64)
         recomputed_values = both[f"{column}_recomputed"].to_numpy(dtype=np.float64)
         differences = np.abs(stored_values - recomputed_values) / np.maximum(
@@ -1052,9 +1832,20 @@ def _compare_node_error_tables(
             worst = maximum
             worst_column = column
         failed_fields += int((differences > DIAGNOSTIC_RELATIVE_TOLERANCE).sum())
+    categorical_mismatches = 0
+    if is_fold:
+        stored_constant = both[f"{constant_column}_stored"].to_numpy()
+        recomputed_constant = both[f"{constant_column}_recomputed"].to_numpy()
+        categorical_mismatches += int(
+            (stored_constant.astype(bool) != recomputed_constant.astype(bool)).sum()
+        )
+        stored_groups = both[f"{group_column}_stored"].astype(str).to_numpy()
+        recomputed_groups = both[f"{group_column}_recomputed"].astype(str).to_numpy()
+        categorical_mismatches += int((stored_groups != recomputed_groups).sum())
     status = (
         "ok"
         if failed_fields == 0
+        and categorical_mismatches == 0
         and unmatched == 0
         and not nonfinite_fields
         and len(both) == len(stored) == len(recomputed_frame)
@@ -1067,9 +1858,14 @@ def _compare_node_error_tables(
         "recomputed_rows": int(len(recomputed_frame)),
         "unmatched_rows": unmatched,
         "failed_fields": failed_fields,
+        "categorical_mismatches": categorical_mismatches,
         "nonfinite_fields": nonfinite_fields,
         "max_normalized_difference": worst,
         "max_difference_column": worst_column,
+        "mean_column": mean_column,
+        "activity_column": activity_column if is_fold else None,
+        "activity_group_column": group_column if is_fold else None,
+        "constant_column": constant_column if is_fold else None,
         "tolerance": DIAGNOSTIC_RELATIVE_TOLERANCE,
     }
 
@@ -1077,15 +1873,26 @@ def _compare_node_error_tables(
 # ---------------------------------------------------------------------------
 # compare
 # ---------------------------------------------------------------------------
-COMPARE_CONSUMED_INPUTS = (
-    "metrics.json",
-    "selection.json",
-    "source-sha256.json",
-    "config.json",
-    "environment.json",
-    "masks.npz",
-    "status.json",
-)
+def _compare_consumed_inputs(identity: Mapping[str, Any]) -> Tuple[str, ...]:
+    """Return the saved artifacts the resolved comparison actually reads.
+
+    The fold-specific frozen mean and the window/provenance metadata that decide
+    the split identity are part of the consumed evidence, not just the generic
+    config/environment/mask files.
+    """
+    mean_relative, _, _ = _mean_artifact(identity["definition"])
+    return (
+        "metrics.json",
+        "selection.json",
+        "source-sha256.json",
+        "config.json",
+        "environment.json",
+        "masks.npz",
+        "status.json",
+        "windows.json",
+        "provenance.json",
+        mean_relative,
+    )
 
 COMPARE_TOLERANCES = {
     "cpu_relative": CPU_RELATIVE_TOLERANCE,
@@ -1120,8 +1927,6 @@ def command_compare(
         for label, run_dir in (("a", run_a), ("b", run_b)):
             if not run_dir.exists():
                 raise CheckError(f"run {label} does not exist: {run_dir}")
-        inputs["run_a_consumed_sha256"] = _hash_tree(run_a, COMPARE_CONSUMED_INPUTS)
-        inputs["run_b_consumed_sha256"] = _hash_tree(run_b, COMPARE_CONSUMED_INPUTS)
         status_a = _read_json(run_a / "status.json")
         status_b = _read_json(run_b / "status.json")
         # Link the declared execution identities, not only the current input
@@ -1143,6 +1948,32 @@ def command_compare(
         source_b = _read_optional_json(run_b / "source-sha256.json")
         environment_a = _read_optional_json(run_a / "environment.json")
         environment_b = _read_optional_json(run_b / "environment.json")
+        windows_a = _read_json(run_a / "windows.json")
+        windows_b = _read_json(run_b / "windows.json")
+        identity_a = resolve_saved_split(
+            run_a,
+            metrics=metrics_a,
+            windows=windows_a,
+            config=config_a,
+            provenance=_read_optional_json(run_a / "provenance.json"),
+            selection=selection_a,
+        )
+        identity_b = resolve_saved_split(
+            run_b,
+            metrics=metrics_b,
+            windows=windows_b,
+            config=config_b,
+            provenance=_read_optional_json(run_b / "provenance.json"),
+            selection=selection_b,
+        )
+        inputs["run_a_fold"] = identity_a["fold"]
+        inputs["run_b_fold"] = identity_b["fold"]
+        inputs["run_a_consumed_sha256"] = _hash_tree(
+            run_a, _compare_consumed_inputs(identity_a)
+        )
+        inputs["run_b_consumed_sha256"] = _hash_tree(
+            run_b, _compare_consumed_inputs(identity_b)
+        )
 
         spec_a = config_a.get("spec", {}) if isinstance(config_a, Mapping) else {}
         spec_b = config_b.get("spec", {}) if isinstance(config_b, Mapping) else {}
@@ -1173,6 +2004,13 @@ def command_compare(
         identity_checks = {
             "dataset": bool(
                 _equal_present(spec_a.get("data_name"), spec_b.get("data_name"))
+                and _equal_present(
+                    metrics_a.get("dataset"), metrics_b.get("dataset")
+                )
+            ),
+            "fold": bool(identity_a["fold"] == identity_b["fold"]),
+            "evaluation_splits": bool(
+                identity_a["evaluation_splits"] == identity_b["evaluation_splits"]
             ),
             "mode": bool(_equal_present(spec_a.get("mode"), spec_b.get("mode"))),
             "seed": bool(_equal_present(spec_a.get("seed"), spec_b.get("seed"))),
@@ -1265,10 +2103,16 @@ def command_compare(
             ),
             "identity_evidence_complete": not missing_evidence,
         }
-        methods = sorted(
-            set(metrics_a.get("methods", {}).get("test", {}))
-            & set(metrics_b.get("methods", {}).get("test", {}))
-        )
+        split_a = identity_a["eval_split"]
+        split_b = identity_b["eval_split"]
+        methods_a_set = set(metrics_a.get("methods", {}).get(split_a, {}))
+        methods_b_set = set(metrics_b.get("methods", {}).get(split_b, {}))
+        methods_equal = methods_a_set == methods_b_set
+        methods = sorted(methods_a_set | methods_b_set)
+        missing_methods = {
+            "run_a": sorted(methods_b_set - methods_a_set),
+            "run_b": sorted(methods_a_set - methods_b_set),
+        }
         prediction_comparisons: Dict[str, Any] = {}
         masks_equal = True
         masks_a = _load_npz(run_a / "masks.npz")
@@ -1280,10 +2124,17 @@ def command_compare(
             if not np.array_equal(masks_a[name], masks_b[name]):
                 masks_equal = False
                 break
-        for split in ("validation", "test"):
+        for split in identity_a["evaluation_splits"]:
             for method in methods:
                 path_a = run_a / "predictions" / method / f"{split}.npy"
                 path_b = run_b / "predictions" / method / f"{split}.npy"
+                if not path_a.is_file() or not path_b.is_file():
+                    prediction_comparisons[f"{split}/{method}"] = {
+                        "status": "missing_method",
+                        "run_a_file": path_a.is_file(),
+                        "run_b_file": path_b.is_file(),
+                    }
+                    continue
                 pred_a = _load_npy(path_a)
                 pred_b = _load_npy(path_b)
                 if pred_a.shape != pred_b.shape:
@@ -1313,14 +2164,17 @@ def command_compare(
                     or float(normalized.max()) <= CPU_RELATIVE_TOLERANCE
                     else "mismatch",
                 }
-        inputs["consumed_prediction_sha256"] = {
-            f"run_{label}:predictions/{method}/{split}.npy": sha256_file(
-                run_dir / "predictions" / method / f"{split}.npy"
-            )
-            for label, run_dir in (("a", run_a), ("b", run_b))
-            for split in ("validation", "test")
-            for method in methods
-        }
+        inputs["consumed_prediction_sha256"] = {}
+        for label, run_dir in (("a", run_a), ("b", run_b)):
+            for split in identity_a["evaluation_splits"]:
+                for method in methods:
+                    relative = (
+                        Path("predictions") / method / f"{split}.npy"
+                    )
+                    if (run_dir / relative).is_file():
+                        inputs["consumed_prediction_sha256"][
+                            f"run_{label}:{relative.as_posix()}"
+                        ] = sha256_file(run_dir / relative)
         metric_comparison = compare_number_sets(
             flatten_numbers(metrics_a.get("methods", {})),
             flatten_numbers(metrics_b.get("methods", {})),
@@ -1329,10 +2183,10 @@ def command_compare(
         )
         mae_relative_differences: Dict[str, Any] = {}
         mae_ok = True
-        for split in ("validation", "test"):
+        for split in identity_a["evaluation_splits"]:
             for method in methods:
-                report_a = metrics_a["methods"][split].get(method, {})
-                report_b = metrics_b["methods"][split].get(method, {})
+                report_a = metrics_a.get("methods", {}).get(split, {}).get(method, {})
+                report_b = metrics_b.get("methods", {}).get(split, {}).get(method, {})
                 mae_a = report_a.get("MAE")
                 mae_b = report_b.get("MAE")
                 if mae_a is None or mae_b is None:
@@ -1353,6 +2207,7 @@ def command_compare(
         )
         overall_ok = (
             identity_ok
+            and methods_equal
             and predictions_ok
             and metric_comparison["status"] == "ok"
             and mae_ok
@@ -1364,7 +2219,13 @@ def command_compare(
             "run_b": str(run_b),
             "status_a": status_a.get("state"),
             "status_b": status_b.get("state"),
+            "fold_a": identity_a["fold"],
+            "fold_b": identity_b["fold"],
+            "evaluation_splits_a": list(identity_a["evaluation_splits"]),
+            "evaluation_splits_b": list(identity_b["evaluation_splits"]),
             "identity_checks": identity_checks,
+            "methods_equal": methods_equal,
+            "missing_methods": missing_methods,
             "identity_evidence_complete": not missing_evidence,
             "missing_evidence": missing_evidence,
             "identity_evidence": {
@@ -1482,17 +2343,35 @@ def command_align_v2(
     try:
         if not run_dir.exists():
             raise CheckError(f"input run directory does not exist: {run_dir}")
+        # Resolve the run's own identity before touching the reference.  A fold
+        # is rejected from saved run evidence alone, so a missing, unreadable or
+        # fabricated reference can never mask the fold-specific reason.
+        metrics_document = _read_json(run_dir / "metrics.json")
+        # Link the declared execution identity in addition to the input location.
+        inputs["input_run_id"] = metrics_document.get("run_id")
+        windows_meta = _read_json(run_dir / "windows.json")
+        identity = resolve_saved_split(
+            run_dir,
+            metrics=metrics_document,
+            windows=windows_meta,
+            config=_read_optional_json(run_dir / "config.json"),
+            provenance=_read_optional_json(run_dir / "provenance.json"),
+            selection=_read_optional_json(run_dir / "selection.json"),
+        )
+        inputs["input_fold"] = identity["fold"]
+        if identity["is_fold"]:
+            raise CheckError(
+                f"align-v2 rejects fold run {identity['fold']}: the immutable v2 "
+                "reference has no fold records, so no eval-to-test mapping is "
+                "constructed and a fabricated fold reference is not accepted"
+            )
         if not reference.exists():
             raise CheckError(f"v2 reference log does not exist: {reference}")
         inputs["input_consumed_sha256"] = _hash_tree(run_dir, ALIGN_CONSUMED_INPUTS)
         reference_sha256 = sha256_file(reference)
         inputs["reference_sha256"] = reference_sha256
         parsed = parse_v2_reference(reference)
-        metrics_document = _read_json(run_dir / "metrics.json")
-        # Link the declared execution identity in addition to the input location.
-        inputs["input_run_id"] = metrics_document.get("run_id")
         audit = _read_json(run_dir / "audit.json")
-        windows_meta = _read_json(run_dir / "windows.json")
         dataset = metrics_document["dataset"]
         bucket = parsed["by_dataset"].get(dataset)
         if bucket is None:
