@@ -18,29 +18,18 @@ __pycache__/
 # Disposable fixtures and development probes; curated experiments use research/runs.
 /scratch/
 
-# Complete T004 evidence is sealed in research/archives/<run-id>.tar.gz.
-# Keep readable handoff records; restore expanded artifacts separately when needed.
-/research/runs/p01-r0-sharedridge-00[12]/**
-/research/runs/p01-r0-sharedridge-repeat-00[12]/**
-/research/runs/p01-r0-recompute-primary-00[12]/**
-/research/runs/p01-r0-recompute-repeat-00[12]/**
-/research/runs/p01-r0-repeat-check-00[12]/**
-/research/runs/p01-r0-alignment-00[12]/**
-/research/runs/p01-region-sharedridge-00[12]/**
-/research/runs/p01-region-sharedridge-repeat-00[12]/**
-/research/runs/p01-region-recompute-primary-00[12]/**
-/research/runs/p01-region-recompute-repeat-00[12]/**
-/research/runs/p01-region-repeat-check-00[12]/**
-/research/runs/p01-region-alignment-00[12]/**
-# T006 r2/count formal runs are sealed in research/archives/<run-id>.tar.gz.
-/research/runs/p01-r2-sharedridge-00[1]/**
-/research/runs/p01-r2-sharedridge-repeat-00[1]/**
-# T007 internal two-fold runs keep expanded arrays local; only readable handoff
-# entries are tracked, matching the T004/T006 policy.
-/research/runs/p01-r0-backtest-*/**
-/research/runs/p01-region-backtest-*/**
-/research/runs/p01-r2-backtest-*/**
-!/research/runs/p01-*/summary.md
-!/research/runs/p01-*/provenance.json
-!/research/runs/p01-*/command.json
-!/research/runs/p01-*/report.json
+# Research runs: readable records are versioned; expanded artifacts stay local
+# and are restored from the sealed package or external storage when needed.
+# One rule covers every run, so adding a run never needs an ignore exception.
+/research/runs/*/**
+!/research/runs/*/summary.md
+!/research/runs/*/provenance.json
+!/research/runs/*/command.json
+!/research/runs/*/report.json
+
+# One-time exceptions, not a per-run pattern:
+# - the legacy phase-1 run keeps its readable logs and protocol as a unit;
+# - the T005 controlled rerun keeps its 4.3 MB directory as reproducibility
+#   evidence (D022).
+!/research/runs/phase1-*/**
+!/research/runs/p01-region-evolvegcnh-seed1-repeat-20261018T004254Z/**

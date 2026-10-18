@@ -33,7 +33,7 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 - 本文件是指针，不是进度表：不要把 `tasks.md` 的勾选状态镜像到这里、`research/state.md` 或阶段计划。
   研究任务状态以阶段计划为准，变更级进度以变更目录为准；OpenSpec 的 PASS 是研究验收的**证据**，不是验收本身。
 - 研究侧收尾属于常规记录维护；若收尾包含需要新授权的动作（正式运行实验、封存、commit、push），只报告并等待授权。
-- 本文件不改变任何 skill；`.agents/skills/` 下的 skill 保持未修改，并对各自的流程保持权威。
+- 本文件不改变任何 skill 的行为；`.agents/skills/` 下的 skill 通过各自的更新流程维护，并对各自的流程保持权威。
 
 ## 当前委托
 
