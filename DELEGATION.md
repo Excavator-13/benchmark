@@ -39,12 +39,12 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 
 | 字段 | 值 |
 | --- | --- |
-| Status | `closed` |
-| 变更名 | `add-nograph-backtest-folds` |
-| 研究任务 | P01-T007 |
-| 登记时间 | 2026-10-13 |
-| 委派给 | OpenSpec e13 流程（propose → apply → verify-change → archive-change），由用户在其会话中执行；研究侧不代跑 |
-| 结束判据 | 活跃变更目录已不存在；`openspec/changes/archive/*-add-nograph-backtest-folds/verification.md` 为 `Verdict: PASS`，Verification Basis 与当前实现一致。覆盖 T007 的实现验收：按 [T007 指导](research/phases/P01/t007-backtest-guide.md) §2–§5 在 `benchmark.nograph_baseline` 增加折 A/B 调度，每折重建窗口、折内标准化与 `TrainMean<fit>`、折内活跃度分组，验证与开发评估分别命名 `validation`/`eval`，产物记录折与角色，`recompute`/`compare` 支持 fold run，`align-v2` 明确拒绝 fold run；主切分与 `r0`/`region`/`r2` 既有行为回归不变；不改变科学协议、主切分、主评测、选模/分组/收益门槛，不改旧 run、封存包或归档 |
-| 研究侧收尾 | 依据归档独立报告作 P01-T007 实现就绪判断，更新阶段计划、state、索引与执行指导入口说明。若正式 fold run 尚未获用户授权，只把 PASS 作为实现证据，不把它当实验验收；不代跑工作流、不改代码、不封存、不 commit/push、不做恢复核验；关闭本指针 |
-| 上次核对 | 2026-10-17（回收）：活跃变更目录已不存在；归档 `2026-10-17-add-nograph-backtest-folds/verification.md` 为 `Verdict: PASS`。按报告 37 文件主清单重算单文件 SHA256（5 个规划文件映射到归档路径），37/37 一致，无缺失；报告聚合指纹仅因路径映射不同。确认 `research/phases/P01/protocol.md` 未改、主切分常量与默认路径保持、`research/runs/` 无正式 fold run、旧 run/封存包/`experiments_archive/`/既有 OpenSpec 归档未改；本机按报告同款 formal-fold guard 复跑 287 项，285 通过、2 项 sklearn 跳过，0 失败/错误。回收后按收尾在 execution-guide §7 做过一次记录性入口文字更新 |
-| 回收记录 | 2026-10-17：按 [D020](research/decisions.md#d020-t007-内部两折回测实现研究侧验收) 接受 T007 实现就绪证据，T007 改为 `in_progress`，更新阶段计划、state、索引与执行指导入口说明，关闭本指针。正式 fold run（`r0`/`region`/`r2` × A/B）、产物保存与跨折收益判断仍待用户另行授权；实现 PASS 不是实验验收。没有代跑工作流、改实现、封存或做恢复核验；本轮 commit/push 由用户明确授权，提交身份从 Git 历史追溯，不在本指针声明提交状态 |
+| Status | `none` |
+| 变更名 | —（P02-T001 预登记为 `add-graph-value-skeleton`，尚未启动） |
+| 研究任务 | P02-T001（未启动） |
+| 登记时间 | — |
+| 委派给 | —（启动时填写） |
+| 结束判据 | —（启动时按 P02 计划 §3 与 D023 的骨架口径填写） |
+| 研究侧收尾 | —（启动时填写） |
+| 上次核对 | 2026-10-18：T008 完成时曾预登记为 `open`，同日按用户要求收回为 `none`；P02 未启动，未调用任何 OpenSpec 流程 |
+| 回收记录 | — |

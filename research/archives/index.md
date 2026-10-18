@@ -197,6 +197,14 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 - 首个尝试 `p01-region-evolvegcnh-seed1-repeat-20261018T003044Z` 在 §6 成本测量行失败（`torch.cuda.reset_peak_memory_stats` 未初始化 CUDA），`status.json=failed`、无训练产物；保留在服务器 `~/t005-runs/`，未取回本机。指导 §6 已按 2026-10-18 实机诊断补 `torch.cuda.init()`，该改动只影响成本统计起点。
 - 限制：单 seed 的一次同条件重复，不是初始化方差或稳定平均性能的估计；模型仍差于 `NaiveRef=LastValue`（测试 MAE 96.18 vs 35.31）；发布图构建时间未知；显存上报差异未解释。以上限制不因逐张量一致而消失。
 
+## T008 阶段汇总（2026-10-18）
+
+所属任务 P01-T008；研究侧验收见 [D023](../decisions.md#d023-t008-阶段验收与-p02-骨架范围)。[P01 阶段汇总](../analyses/p01-t008-stage-summary-20261018-01/report.md) 综合 T001–T007 的已接受结果与限制，不新增预测或指标计算；[P02 计划](../phases/P02/plan.md) 记录冻结配置与骨架，但 P02 未启动。
+
+- 保存状态：随本次记录提交入库并 push `origin/xzs`，提交身份从 Git 历史追溯。**未封存，备份与远端恢复未核验**。这不是实验 run，无包、无新增预测，因此没有独立的内容身份或包外校验。
+- 内容：逐任务证据表、七项阶段完成条件判定、进入第二阶段的四个条件（"自身时序学习基线"为有条件满足）、P01 未证明事项清单。
+- 边界：P02 的实现变更名 `add-graph-value-skeleton` 只是预登记，未调用任何 OpenSpec 流程、未改代码、未运行新实验。
+
 ## my-change PR 合入（2026-10-11 接手记录）
 
 用户告知此前已向 `my-change` 发起 PR。本轮只读本地 Git：合并提交 `7cbfe561285b1118c09e3e2510e1e2d711fe7432` 记录 PR #9（`Excavator-13/xzs`），提交时间为 2026-10-08，父提交为 `341e7f8` 与 `98e9fbe`。本地 `xzs`、`my-change` 和缓存的 `origin/my-change` 均指向该合并提交；缓存的 `origin/xzs` 为 `98e9fbe`。合并提交与 `98e9fbe` 的文件树差异为空，后者含此前维护、T010/T011 及保存状态记录。
