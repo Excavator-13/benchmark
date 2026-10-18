@@ -1,0 +1,11 @@
+{
+  "criterion": "validation MSE",
+  "tie_rule": "first minimum",
+  "selected_epoch": 461,
+  "best_validation_MSE": 70053.0625,
+  "reloaded_validation_MSE": 70053.0625,
+  "reloaded_validation_metrics": {
+    "RMSE": 264.6754055678389,
+    "MAE": 55.239013671875
+  }
+}

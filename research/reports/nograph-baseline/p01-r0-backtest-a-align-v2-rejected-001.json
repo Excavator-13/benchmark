@@ -1,0 +1,74 @@
+{
+  "checker": {
+    "protocol_version": "P1-count-L6-H3-v3",
+    "source": {
+      "commit": "e9195006dc402d2ce6fb5afb3a164dfef699200c",
+      "errors": {},
+      "files": {
+        "benchmark/nograph_baseline/__init__.py": "d9c569ef793ad4575f7fef38f798f059687e3fd118a471b4d091bfec74c17d78",
+        "benchmark/nograph_baseline/__main__.py": "2ecea709492803226e52714799d7c861eb97af44100beeca58f3b7942fed2cfa",
+        "benchmark/nograph_baseline/_worker.py": "6b8add701f414edbf1931af2b29cab2231f8460043db7c88285ae5e400ca967b",
+        "benchmark/nograph_baseline/artifacts.py": "c116fb5b6ab019a0d5fc74f7528586ec599cb84f785983c4e7ba2173ad30c62d",
+        "benchmark/nograph_baseline/checks.py": "2e3107dbd39a5a3973fecb95c76e3190a72adc72ba94046e536af2c6d6320af3",
+        "benchmark/nograph_baseline/cli.py": "ba127970287be4a170eeb576af658cca4e8fee53a4bcc2d75e02d3d1868daf76",
+        "benchmark/nograph_baseline/data.py": "790dd78339e6b7f5476a34a9d272e4fbef1be21075a5b57691e7dff22871cc63",
+        "benchmark/nograph_baseline/metrics.py": "476040954e611cafeb05eea71731cd43209ef7601455999f6772c0e21ebf127c",
+        "benchmark/nograph_baseline/protocol.py": "7b941e0f097ccd3b3f1a02337fab497dbbdadae3d478cce74011ea5f8591d73b"
+      },
+      "identity_available": true,
+      "patch_bytes": 0,
+      "patch_eligible_files": [],
+      "patch_included": false,
+      "patch_omitted_reason": null,
+      "policy": "P01-records-v2",
+      "scoped_dirty": false,
+      "scoped_files": [],
+      "scoped_state_available": true,
+      "source_patch": null,
+      "untracked_files": [],
+      "whole_repository_dirty": true
+    }
+  },
+  "command": {
+    "argv": [
+      "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python",
+      "-m",
+      "benchmark.nograph_baseline",
+      "align-v2",
+      "--run-dir",
+      "research/runs/p01-r0-backtest-a-001",
+      "--reference",
+      "research/runs/phase1-20261006-v2-01/naive-baselines.log",
+      "--report",
+      "research/reports/nograph-baseline/p01-r0-backtest-a-align-v2-rejected-001.json"
+    ],
+    "cwd": "/Users/watuji/da_chuang/repos/benchmark"
+  },
+  "created": "2026-10-17T15:55:37+08:00",
+  "errors": [
+    {
+      "message": "align-v2 rejects fold run A: the immutable v2 reference has no fold records, so no eval-to-test mapping is constructed and a fabricated fold reference is not accepted",
+      "type": "CheckError"
+    }
+  ],
+  "inputs": {
+    "input_fold": "A",
+    "input_run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r0-backtest-a-001",
+    "input_run_id": "p01-r0-backtest-a-001",
+    "reference_path": "/Users/watuji/da_chuang/repos/benchmark/research/runs/phase1-20261006-v2-01/naive-baselines.log"
+  },
+  "kind": "align-v2",
+  "result": {
+    "error": {
+      "message": "align-v2 rejects fold run A: the immutable v2 reference has no fold records, so no eval-to-test mapping is constructed and a fabricated fold reference is not accepted",
+      "type": "CheckError"
+    },
+    "status": "failed"
+  },
+  "status": "failed",
+  "tolerances": {
+    "definition": "abs(a-b) / max(1, abs(a), abs(b))",
+    "diagnostic_relative": 1e-12
+  },
+  "version": 1
+}

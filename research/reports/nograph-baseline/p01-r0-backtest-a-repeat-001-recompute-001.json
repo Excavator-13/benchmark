@@ -1,0 +1,2865 @@
+{
+  "checker": {
+    "protocol_version": "P1-count-L6-H3-v3",
+    "source": {
+      "commit": "e9195006dc402d2ce6fb5afb3a164dfef699200c",
+      "errors": {},
+      "files": {
+        "benchmark/nograph_baseline/__init__.py": "d9c569ef793ad4575f7fef38f798f059687e3fd118a471b4d091bfec74c17d78",
+        "benchmark/nograph_baseline/__main__.py": "2ecea709492803226e52714799d7c861eb97af44100beeca58f3b7942fed2cfa",
+        "benchmark/nograph_baseline/_worker.py": "6b8add701f414edbf1931af2b29cab2231f8460043db7c88285ae5e400ca967b",
+        "benchmark/nograph_baseline/artifacts.py": "c116fb5b6ab019a0d5fc74f7528586ec599cb84f785983c4e7ba2173ad30c62d",
+        "benchmark/nograph_baseline/checks.py": "2e3107dbd39a5a3973fecb95c76e3190a72adc72ba94046e536af2c6d6320af3",
+        "benchmark/nograph_baseline/cli.py": "ba127970287be4a170eeb576af658cca4e8fee53a4bcc2d75e02d3d1868daf76",
+        "benchmark/nograph_baseline/data.py": "790dd78339e6b7f5476a34a9d272e4fbef1be21075a5b57691e7dff22871cc63",
+        "benchmark/nograph_baseline/metrics.py": "476040954e611cafeb05eea71731cd43209ef7601455999f6772c0e21ebf127c",
+        "benchmark/nograph_baseline/protocol.py": "7b941e0f097ccd3b3f1a02337fab497dbbdadae3d478cce74011ea5f8591d73b"
+      },
+      "identity_available": true,
+      "patch_bytes": 0,
+      "patch_eligible_files": [],
+      "patch_included": false,
+      "patch_omitted_reason": null,
+      "policy": "P01-records-v2",
+      "scoped_dirty": false,
+      "scoped_files": [],
+      "scoped_state_available": true,
+      "source_patch": null,
+      "untracked_files": [],
+      "whole_repository_dirty": true
+    }
+  },
+  "command": {
+    "argv": [
+      "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python",
+      "-m",
+      "benchmark.nograph_baseline",
+      "recompute",
+      "--run-dir",
+      "research/runs/p01-r0-backtest-a-repeat-001",
+      "--report",
+      "research/reports/nograph-baseline/p01-r0-backtest-a-repeat-001-recompute-001.json"
+    ],
+    "cwd": "/Users/watuji/da_chuang/repos/benchmark"
+  },
+  "created": "2026-10-17T15:55:25+08:00",
+  "errors": [],
+  "inputs": {
+    "consumed_prediction_sha256": {
+      "predictions/LastValue/eval.npy": "08e2a83ee95e69aa56e77ce2a39f4837689822cfc6c9440db6f07c08610e5355",
+      "predictions/LastValue/validation.npy": "63f5ce7fb401215dc3ab0e77c94990df78a2fb9df4c813709f27617bb4bacaa9",
+      "predictions/SeasonalNaive12/eval.npy": "30a600d4b6ee335cc00a25bb1a2814647c24db1608ca0bc62f34b9d75c20624e",
+      "predictions/SeasonalNaive12/validation.npy": "9f11cb230fc7283fb9336f47803da4459b83d323695fc0fa8f3737e139d410b0",
+      "predictions/SharedRidge/eval.npy": "0e34ad279f56f422bd40f847df8c1b248bed0d1156c3d03f7672dc21cec2c36e",
+      "predictions/SharedRidge/validation.npy": "5b848e75352d06c90377741a13b8456a027a3027de13532e27afc37ebc902cad",
+      "predictions/TrainMean18/eval.npy": "e013058a6f3049fc088f77b1c44fe40984d4ba146b70d69816c43db9f32f221a",
+      "predictions/TrainMean18/validation.npy": "e013058a6f3049fc088f77b1c44fe40984d4ba146b70d69816c43db9f32f221a",
+      "predictions/WindowMean6/eval.npy": "ceaa341af814df068daab778885e296e396235be2ff98697f37476af900c9fb0",
+      "predictions/WindowMean6/validation.npy": "a746ac49a6376f6561ad56b931aac5bf8269f9312db76a685b89e268ab6c051a",
+      "predictions/Zero/eval.npy": "730759be40a1f2f5f4b24d45a2b17e4e8af145f694e47c4f35bcecfb1dee3797",
+      "predictions/Zero/validation.npy": "730759be40a1f2f5f4b24d45a2b17e4e8af145f694e47c4f35bcecfb1dee3797"
+    },
+    "consumed_sha256": {
+      "config.json": "9d456a8779f101a8783f74ef5e10e3aafeb1e6fc3afced0ff6925ffb66867a6c",
+      "gold/eval.npy": "9746782755a53a2d9bca817fc010526798817b65f8ee121b518de948a99a9997",
+      "gold/validation.npy": "d152f369b75c5aece08e4777da97ff7ed579facb4acf0307d7483e9936d4a830",
+      "masks.npz": "0e44d14fff5d0964f9daa3e4a055bd2d3a533374e25686d07e78ebe2884d46d8",
+      "metrics.json": "d898d6a1dbff15a1ff63487ffd08688b96c21ed87a2bd23f4c3ee4ee2d198710",
+      "models/TrainMean18.npz": "c158e135f4c0e5dae100e0d7bef0d912f5863646d2608e3d006a6b2bb8972893",
+      "node-errors.parquet": "5a6daef46c1c12f814939d59198b531b01c994bb011e696fac77435c0c53bffa",
+      "nodes.parquet": "c64a58acdf8102ebb838a7e23c57c51282fedcb049f3bf94ff49ba3522866e09",
+      "provenance.json": "13fd6598d0cfbc25e065dbbe2ff5647688c2472a56c511a1c32ee7a65a13800a",
+      "selection.json": "0669da263d0ed6d4f3e1d90696bbb5547fe24cd0f73e798b329163820719e604",
+      "status.json": "98799f4ace1ec681049417f735954df7bf28a35f5319fcf22b8d54bf44015a25",
+      "windows.json": "bb959b4a4786727e19906b27e49d568b1b97b51c2014fd306411b02f156a5753"
+    },
+    "evaluation_splits": [
+      "validation",
+      "eval"
+    ],
+    "fold": "A",
+    "input_run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r0-backtest-a-repeat-001",
+    "input_run_id": "p01-r0-backtest-a-repeat-001",
+    "input_status": "success"
+  },
+  "kind": "recompute",
+  "result": {
+    "check": "recompute",
+    "comparisons": {
+      "eval": {
+        "compared_fields": 954,
+        "extra_fields": [],
+        "failed_fields": [],
+        "label": "recompute:eval",
+        "max_difference_path": null,
+        "max_normalized_difference": 0.0,
+        "missing_fields": [],
+        "null_field_paths": [],
+        "null_fields": 0,
+        "status": "ok",
+        "tolerance": 1e-12
+      },
+      "validation": {
+        "compared_fields": 954,
+        "extra_fields": [],
+        "failed_fields": [],
+        "label": "recompute:validation",
+        "max_difference_path": null,
+        "max_normalized_difference": 0.0,
+        "missing_fields": [],
+        "null_field_paths": [],
+        "null_fields": 0,
+        "status": "ok",
+        "tolerance": 1e-12
+      }
+    },
+    "evaluation_splits": [
+      "validation",
+      "eval"
+    ],
+    "fold": "A",
+    "gain_semantic_problems": [],
+    "input_run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r0-backtest-a-repeat-001",
+    "methods": [
+      "LastValue",
+      "SeasonalNaive12",
+      "SharedRidge",
+      "TrainMean18",
+      "WindowMean6",
+      "Zero"
+    ],
+    "missing_report_fields": [],
+    "model_refit": false,
+    "node_error_comparison": {
+      "activity_column": "activity_fit18",
+      "activity_group_column": "activity_group_fit18",
+      "categorical_mismatches": 0,
+      "compared_rows": 28020,
+      "constant_column": "constant_fit18",
+      "failed_fields": 0,
+      "max_difference_column": null,
+      "max_normalized_difference": 0.0,
+      "mean_column": "train_mean18",
+      "nonfinite_fields": [],
+      "recomputed_rows": 28020,
+      "status": "ok",
+      "stored_rows": 28020,
+      "tolerance": 1e-12,
+      "unmatched_rows": 0
+    },
+    "nonfinite_gain_fields": [],
+    "nonfinite_recomputed_fields": [],
+    "nonfinite_stored_fields": [],
+    "recomputed_metrics": {
+      "eval": {
+        "LastValue": {
+          "MAE": 161.20256959314776,
+          "MSE": 455417.54746609565,
+          "RMSE": 674.8463139605162,
+          "absolute_error_sum": 1129224.0,
+          "activity_groups": {
+            "fit18_high": {
+              "MAE": 183.10737491877842,
+              "MSE": 518200.4156920078,
+              "RMSE": 719.8613864432567,
+              "absolute_error_contribution_fraction": 0.9982155887582977,
+              "absolute_error_sum": 1127209.0,
+              "elements": 6156,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2052,
+              "squared_error_contribution_fraction": 0.9999504228562579,
+              "squared_error_sum": 3190041759.0,
+              "status": "ok"
+            },
+            "fit18_inactive": {
+              "MAE": 0.12745098039215685,
+              "MSE": 0.3431372549019608,
+              "RMSE": 0.5857791861290061,
+              "absolute_error_contribution_fraction": 1.1512330591627525e-05,
+              "absolute_error_sum": 13.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.0971099265778929e-08,
+              "squared_error_sum": 35.0,
+              "status": "ok"
+            },
+            "fit18_low": {
+              "MAE": 0.8928571428571429,
+              "MSE": 4.255952380952381,
+              "RMSE": 2.0629959721124957,
+              "absolute_error_contribution_fraction": 0.00026566916749909674,
+              "absolute_error_sum": 300.0,
+              "elements": 336,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 112,
+              "squared_error_contribution_fraction": 4.4824777000182484e-07,
+              "squared_error_sum": 1430.0,
+              "status": "ok"
+            },
+            "fit18_medium": {
+              "MAE": 4.141119221411192,
+              "MSE": 381.2554744525547,
+              "RMSE": 19.525764375628288,
+              "absolute_error_contribution_fraction": 0.001507229743611542,
+              "absolute_error_sum": 1702.0,
+              "elements": 411,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 137,
+              "squared_error_contribution_fraction": 4.911792487287129e-05,
+              "squared_error_sum": 156696.0,
+              "status": "ok"
+            }
+          },
+          "aggregation_note": "overall RMSE is sqrt(MSE over all window-node-horizon elements), not the mean of window RMSE values",
+          "balanced_activity_group_MAE": 47.06720056585973,
+          "constant_groups": {
+            "constant_fit18": {
+              "MAE": 0.12745098039215685,
+              "MSE": 0.3431372549019608,
+              "RMSE": 0.5857791861290061,
+              "absolute_error_contribution_fraction": 1.1512330591627525e-05,
+              "absolute_error_sum": 13.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.0971099265778929e-08,
+              "squared_error_sum": 35.0,
+              "status": "ok"
+            },
+            "nonconstant_fit18": {
+              "MAE": 163.58264522671303,
+              "MSE": 462146.8759959438,
+              "RMSE": 679.8138539305769,
+              "absolute_error_contribution_fraction": 0.9999884876694084,
+              "absolute_error_sum": 1129211.0,
+              "elements": 6903,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2301,
+              "squared_error_contribution_fraction": 0.9999999890289007,
+              "squared_error_sum": 3190199885.0,
+              "status": "ok"
+            }
+          },
+          "contexts": {
+            "0": {
+              "MAE": 161.20256959314776,
+              "MSE": 455417.54746609565,
+              "RMSE": 674.8463139605162,
+              "absolute_error_contribution_fraction": 1.0,
+              "absolute_error_sum": 1129224.0,
+              "elements": 7005,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2335,
+              "squared_error_contribution_fraction": 1.0,
+              "squared_error_sum": 3190199920.0,
+              "status": "ok"
+            }
+          },
+          "elements": 7005,
+          "excluded_empty_groups": [],
+          "horizons": {
+            "h1": {
+              "MAE": 113.89122055674518,
+              "MSE": 152479.46723768738,
+              "RMSE": 390.4861934021322,
+              "absolute_error_sum": 265936.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 356039556.0,
+              "status": "ok"
+            },
+            "h2": {
+              "MAE": 85.87880085653104,
+              "MSE": 69048.8817987152,
+              "RMSE": 262.7715391717969,
+              "absolute_error_sum": 200527.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 161229139.0,
+              "status": "ok"
+            },
+            "h3": {
+              "MAE": 283.837687366167,
+              "MSE": 1144724.2933618843,
+              "RMSE": 1069.9178909439192,
+              "absolute_error_sum": 662761.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 2672931225.0,
+              "status": "ok"
+            }
+          },
+          "negative_prediction_ratio": 0.0,
+          "neighbor_groups": {
+            "has_nonself_neighbor": {
+              "MAE": 80.80254777070064,
+              "MSE": 43842.825902335455,
+              "RMSE": 209.3867854052291,
+              "absolute_error_contribution_fraction": 0.06740558117787082,
+              "absolute_error_sum": 76116.0,
+              "elements": 942,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 314,
+              "squared_error_contribution_fraction": 0.012945878952940354,
+              "squared_error_sum": 41299942.0,
+              "status": "ok"
+            },
+            "no_nonself_neighbor": {
+              "MAE": 173.69421078673923,
+              "MSE": 519363.3478476002,
+              "RMSE": 720.6686810508697,
+              "absolute_error_contribution_fraction": 0.9325944188221292,
+              "absolute_error_sum": 1053108.0,
+              "elements": 6063,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2021,
+              "squared_error_contribution_fraction": 0.9870541210470597,
+              "squared_error_sum": 3148899978.0,
+              "status": "ok"
+            }
+          },
+          "nonempty_groups": [
+            "fit18_inactive",
+            "fit18_low",
+            "fit18_medium",
+            "fit18_high"
+          ],
+          "squared_error_sum": 3190199920.0,
+          "status": "ok",
+          "target_month_multiplicities": {
+            "2022-10": 1,
+            "2022-11": 1,
+            "2022-12": 1
+          },
+          "training_all_zero_group": {
+            "MAE": 0.12745098039215685,
+            "MSE": 0.3431372549019608,
+            "RMSE": 0.5857791861290061,
+            "group": "fit18_inactive",
+            "nodes": 34,
+            "status": "ok"
+          },
+          "windows": [
+            {
+              "MAE": 161.20256959314776,
+              "MSE": 455417.54746609565,
+              "RMSE": 674.8463139605162,
+              "absolute_error_sum": 1129224.0,
+              "elements": 7005,
+              "forecast_origin": "2022-09",
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 3190199920.0,
+              "start": 15,
+              "status": "ok",
+              "target_months": [
+                "2022-10",
+                "2022-11",
+                "2022-12"
+              ]
+            }
+          ]
+        },
+        "SeasonalNaive12": {
+          "MAE": 211.84453961456103,
+          "MSE": 676609.3097787295,
+          "RMSE": 822.5626479355415,
+          "absolute_error_sum": 1483971.0,
+          "activity_groups": {
+            "fit18_high": {
+              "MAE": 240.69168291098114,
+              "MSE": 769881.0666016894,
+              "RMSE": 877.4286675289846,
+              "absolute_error_contribution_fraction": 0.9984682989088062,
+              "absolute_error_sum": 1481698.0,
+              "elements": 6156,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2052,
+              "squared_error_contribution_fraction": 0.9999450657542102,
+              "squared_error_sum": 4739387846.0,
+              "status": "ok"
+            },
+            "fit18_inactive": {
+              "MAE": 0.06862745098039216,
+              "MSE": 0.28431372549019607,
+              "RMSE": 0.5332107702308685,
+              "absolute_error_contribution_fraction": 4.717073312079549e-06,
+              "absolute_error_sum": 7.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 6.1185975592494476e-09,
+              "squared_error_sum": 29.0,
+              "status": "ok"
+            },
+            "fit18_low": {
+              "MAE": 0.7410714285714286,
+              "MSE": 2.7767857142857144,
+              "RMSE": 1.6663690210411721,
+              "absolute_error_contribution_fraction": 0.00016779303638682965,
+              "absolute_error_sum": 249.0,
+              "elements": 336,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 112,
+              "squared_error_contribution_fraction": 1.96850052509646e-07,
+              "squared_error_sum": 933.0,
+              "status": "ok"
+            },
+            "fit18_medium": {
+              "MAE": 4.907542579075426,
+              "MSE": 631.1605839416059,
+              "RMSE": 25.1229095437134,
+              "absolute_error_contribution_fraction": 0.0013591909814949215,
+              "absolute_error_sum": 2017.0,
+              "elements": 411,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 137,
+              "squared_error_contribution_fraction": 5.473127713973177e-05,
+              "squared_error_sum": 259407.0,
+              "status": "ok"
+            }
+          },
+          "aggregation_note": "overall RMSE is sqrt(MSE over all window-node-horizon elements), not the mean of window RMSE values",
+          "balanced_activity_group_MAE": 61.6022310924021,
+          "constant_groups": {
+            "constant_fit18": {
+              "MAE": 0.06862745098039216,
+              "MSE": 0.28431372549019607,
+              "RMSE": 0.5332107702308685,
+              "absolute_error_contribution_fraction": 4.717073312079549e-06,
+              "absolute_error_sum": 7.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 6.1185975592494476e-09,
+              "squared_error_sum": 29.0,
+              "status": "ok"
+            },
+            "nonconstant_fit18": {
+              "MAE": 214.9737795161524,
+              "MSE": 686607.0094161959,
+              "RMSE": 828.6175290302492,
+              "absolute_error_contribution_fraction": 0.9999952829266879,
+              "absolute_error_sum": 1483964.0,
+              "elements": 6903,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2301,
+              "squared_error_contribution_fraction": 0.9999999938814025,
+              "squared_error_sum": 4739648186.0,
+              "status": "ok"
+            }
+          },
+          "contexts": {
+            "0": {
+              "MAE": 211.84453961456103,
+              "MSE": 676609.3097787295,
+              "RMSE": 822.5626479355415,
+              "absolute_error_contribution_fraction": 1.0,
+              "absolute_error_sum": 1483971.0,
+              "elements": 7005,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2335,
+              "squared_error_contribution_fraction": 1.0,
+              "squared_error_sum": 4739648215.0,
+              "status": "ok"
+            }
+          },
+          "elements": 7005,
+          "excluded_empty_groups": [],
+          "horizons": {
+            "h1": {
+              "MAE": 135.26124197002142,
+              "MSE": 157909.8419700214,
+              "RMSE": 397.3787135341064,
+              "absolute_error_sum": 315835.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 368719481.0,
+              "status": "ok"
+            },
+            "h2": {
+              "MAE": 165.97687366167023,
+              "MSE": 231188.27237687368,
+              "RMSE": 480.8204159318463,
+              "absolute_error_sum": 387556.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 539824616.0,
+              "status": "ok"
+            },
+            "h3": {
+              "MAE": 334.29550321199144,
+              "MSE": 1640729.8149892935,
+              "RMSE": 1280.909760673754,
+              "absolute_error_sum": 780580.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 3831104118.0,
+              "status": "ok"
+            }
+          },
+          "negative_prediction_ratio": 0.0,
+          "neighbor_groups": {
+            "has_nonself_neighbor": {
+              "MAE": 120.51273885350318,
+              "MSE": 97851.02653927813,
+              "RMSE": 312.8114872239799,
+              "absolute_error_contribution_fraction": 0.07649947337245809,
+              "absolute_error_sum": 113523.0,
+              "elements": 942,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 314,
+              "squared_error_contribution_fraction": 0.019447786590634134,
+              "squared_error_sum": 92175667.0,
+              "status": "ok"
+            },
+            "no_nonself_neighbor": {
+              "MAE": 226.03463631865412,
+              "MSE": 766530.1909945571,
+              "RMSE": 875.5170992016987,
+              "absolute_error_contribution_fraction": 0.9235005266275419,
+              "absolute_error_sum": 1370448.0,
+              "elements": 6063,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2021,
+              "squared_error_contribution_fraction": 0.9805522134093658,
+              "squared_error_sum": 4647472548.0,
+              "status": "ok"
+            }
+          },
+          "nonempty_groups": [
+            "fit18_inactive",
+            "fit18_low",
+            "fit18_medium",
+            "fit18_high"
+          ],
+          "squared_error_sum": 4739648215.0,
+          "status": "ok",
+          "target_month_multiplicities": {
+            "2022-10": 1,
+            "2022-11": 1,
+            "2022-12": 1
+          },
+          "training_all_zero_group": {
+            "MAE": 0.06862745098039216,
+            "MSE": 0.28431372549019607,
+            "RMSE": 0.5332107702308685,
+            "group": "fit18_inactive",
+            "nodes": 34,
+            "status": "ok"
+          },
+          "windows": [
+            {
+              "MAE": 211.84453961456103,
+              "MSE": 676609.3097787295,
+              "RMSE": 822.5626479355415,
+              "absolute_error_sum": 1483971.0,
+              "elements": 7005,
+              "forecast_origin": "2022-09",
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 4739648215.0,
+              "start": 15,
+              "status": "ok",
+              "target_months": [
+                "2022-10",
+                "2022-11",
+                "2022-12"
+              ]
+            }
+          ]
+        },
+        "SharedRidge": {
+          "MAE": 193.0796272688921,
+          "MSE": 454562.92375394754,
+          "RMSE": 674.2128178505268,
+          "absolute_error_sum": 1352522.789018589,
+          "activity_groups": {
+            "fit18_high": {
+              "MAE": 219.36551111246845,
+              "MSE": 517218.51693762816,
+              "RMSE": 719.179057632818,
+              "absolute_error_contribution_fraction": 0.9984409115858496,
+              "absolute_error_sum": 1350414.0864083557,
+              "elements": 6156,
+              "negative_prediction_ratio": 0.0017868745938921377,
+              "nodes": 2052,
+              "squared_error_contribution_fraction": 0.9999321368861628,
+              "squared_error_sum": 3183997190.2680387,
+              "status": "ok"
+            },
+            "fit18_inactive": {
+              "MAE": 0.20350590783560285,
+              "MSE": 0.283487466914816,
+              "RMSE": 0.5324354110263667,
+              "absolute_error_contribution_fraction": 1.5347321884530698e-05,
+              "absolute_error_sum": 20.75760259923149,
+              "elements": 102,
+              "negative_prediction_ratio": 0.00980392156862745,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 9.080962572070874e-09,
+              "squared_error_sum": 28.91572162531123,
+              "status": "ok"
+            },
+            "fit18_low": {
+              "MAE": 0.7567138425927069,
+              "MSE": 1.7961659280071003,
+              "RMSE": 1.3402111505308036,
+              "absolute_error_contribution_fraction": 0.0001879863712282744,
+              "absolute_error_sum": 254.25585111114952,
+              "elements": 336,
+              "negative_prediction_ratio": 0.10714285714285714,
+              "nodes": 112,
+              "squared_error_contribution_fraction": 1.8953245231126238e-07,
+              "squared_error_sum": 603.5117518103857,
+              "status": "ok"
+            },
+            "fit18_medium": {
+              "MAE": 4.461530794459578,
+              "MSE": 524.2291992455938,
+              "RMSE": 22.896052044961678,
+              "absolute_error_contribution_fraction": 0.0013557547210375947,
+              "absolute_error_sum": 1833.6891565228866,
+              "elements": 411,
+              "negative_prediction_ratio": 0.021897810218978103,
+              "nodes": 137,
+              "squared_error_contribution_fraction": 6.766450042230979e-05,
+              "squared_error_sum": 215458.20088993906,
+              "status": "ok"
+            }
+          },
+          "aggregation_note": "overall RMSE is sqrt(MSE over all window-node-horizon elements), not the mean of window RMSE values",
+          "balanced_activity_group_MAE": 56.196815414339085,
+          "constant_groups": {
+            "constant_fit18": {
+              "MAE": 0.20350590783560285,
+              "MSE": 0.283487466914816,
+              "RMSE": 0.5324354110263667,
+              "absolute_error_contribution_fraction": 1.5347321884530698e-05,
+              "absolute_error_sum": 20.75760259923149,
+              "elements": 102,
+              "negative_prediction_ratio": 0.00980392156862745,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 9.080962572070874e-09,
+              "squared_error_sum": 28.91572162531123,
+              "status": "ok"
+            },
+            "nonconstant_fit18": {
+              "MAE": 195.92960037896415,
+              "MSE": 461279.62508774165,
+              "RMSE": 679.1756953011067,
+              "absolute_error_contribution_fraction": 0.9999846526781153,
+              "absolute_error_sum": 1352502.0314159896,
+              "elements": 6903,
+              "negative_prediction_ratio": 0.00811241489207591,
+              "nodes": 2301,
+              "squared_error_contribution_fraction": 0.9999999909190374,
+              "squared_error_sum": 3184213251.9806805,
+              "status": "ok"
+            }
+          },
+          "contexts": {
+            "0": {
+              "MAE": 193.0796272688921,
+              "MSE": 454562.92375394754,
+              "RMSE": 674.2128178505268,
+              "absolute_error_contribution_fraction": 1.0,
+              "absolute_error_sum": 1352522.789018589,
+              "elements": 7005,
+              "negative_prediction_ratio": 0.008137044967880086,
+              "nodes": 2335,
+              "squared_error_contribution_fraction": 1.0,
+              "squared_error_sum": 3184213280.8964024,
+              "status": "ok"
+            }
+          },
+          "elements": 7005,
+          "excluded_empty_groups": [],
+          "horizons": {
+            "h1": {
+              "MAE": 130.6466942948162,
+              "MSE": 131386.7202914706,
+              "RMSE": 362.47306147004997,
+              "absolute_error_sum": 305060.03117839585,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.009850107066381156,
+              "squared_error_sum": 306787991.8805839,
+              "status": "ok"
+            },
+            "h2": {
+              "MAE": 172.1308572545797,
+              "MSE": 277591.9108907172,
+              "RMSE": 526.8699183771239,
+              "absolute_error_sum": 401925.5516894436,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.007280513918629551,
+              "squared_error_sum": 648177111.9298246,
+              "status": "ok"
+            },
+            "h3": {
+              "MAE": 276.46133025728034,
+              "MSE": 954710.1400796548,
+              "RMSE": 977.0926977926172,
+              "absolute_error_sum": 645537.2061507496,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.007280513918629551,
+              "squared_error_sum": 2229248177.085994,
+              "status": "ok"
+            }
+          },
+          "negative_prediction_ratio": 0.008137044967880086,
+          "neighbor_groups": {
+            "has_nonself_neighbor": {
+              "MAE": 110.67198012446806,
+              "MSE": 67033.41674378618,
+              "RMSE": 258.9081241363163,
+              "absolute_error_contribution_fraction": 0.07708040568610047,
+              "absolute_error_sum": 104253.00527724891,
+              "elements": 942,
+              "negative_prediction_ratio": 0.0074309978768577496,
+              "nodes": 314,
+              "squared_error_contribution_fraction": 0.019830794297444235,
+              "squared_error_sum": 63145478.57264657,
+              "status": "ok"
+            },
+            "no_nonself_neighbor": {
+              "MAE": 205.88319045709056,
+              "MSE": 514772.8521068375,
+              "RMSE": 717.4767258293732,
+              "absolute_error_contribution_fraction": 0.9229195943138995,
+              "absolute_error_sum": 1248269.78374134,
+              "elements": 6063,
+              "negative_prediction_ratio": 0.008246742536698005,
+              "nodes": 2021,
+              "squared_error_contribution_fraction": 0.9801692057025557,
+              "squared_error_sum": 3121067802.3237557,
+              "status": "ok"
+            }
+          },
+          "nonempty_groups": [
+            "fit18_inactive",
+            "fit18_low",
+            "fit18_medium",
+            "fit18_high"
+          ],
+          "squared_error_sum": 3184213280.8964024,
+          "status": "ok",
+          "target_month_multiplicities": {
+            "2022-10": 1,
+            "2022-11": 1,
+            "2022-12": 1
+          },
+          "training_all_zero_group": {
+            "MAE": 0.20350590783560285,
+            "MSE": 0.283487466914816,
+            "RMSE": 0.5324354110263667,
+            "group": "fit18_inactive",
+            "nodes": 34,
+            "status": "ok"
+          },
+          "windows": [
+            {
+              "MAE": 193.0796272688921,
+              "MSE": 454562.92375394754,
+              "RMSE": 674.2128178505268,
+              "absolute_error_sum": 1352522.789018589,
+              "elements": 7005,
+              "forecast_origin": "2022-09",
+              "negative_prediction_ratio": 0.008137044967880086,
+              "squared_error_sum": 3184213280.8964024,
+              "start": 15,
+              "status": "ok",
+              "target_months": [
+                "2022-10",
+                "2022-11",
+                "2022-12"
+              ]
+            }
+          ]
+        },
+        "TrainMean18": {
+          "MAE": 175.52716460679733,
+          "MSE": 378044.33963682427,
+          "RMSE": 614.8531041125386,
+          "absolute_error_sum": 1229567.7880706154,
+          "activity_groups": {
+            "fit18_high": {
+              "MAE": 199.4097464555188,
+              "MSE": 430141.0246219454,
+              "RMSE": 655.8513738812669,
+              "absolute_error_contribution_fraction": 0.9983722825940471,
+              "absolute_error_sum": 1227566.3991801739,
+              "elements": 6156,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2052,
+              "squared_error_contribution_fraction": 0.9999046705210555,
+              "squared_error_sum": 2647948147.5726957,
+              "status": "ok"
+            },
+            "fit18_inactive": {
+              "MAE": 0.06862745098039216,
+              "MSE": 0.28431372549019607,
+              "RMSE": 0.5332107702308685,
+              "absolute_error_contribution_fraction": 5.693057404329124e-06,
+              "absolute_error_sum": 7.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.0950832051485453e-08,
+              "squared_error_sum": 29.0,
+              "status": "ok"
+            },
+            "fit18_low": {
+              "MAE": 0.6732804242942837,
+              "MSE": 1.6269290078446974,
+              "RMSE": 1.2755112731154896,
+              "absolute_error_contribution_fraction": 0.00018398515702648446,
+              "absolute_error_sum": 226.22222256287932,
+              "elements": 336,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 112,
+              "squared_error_contribution_fraction": 2.0642248431257374e-07,
+              "squared_error_sum": 546.6481466358183,
+              "status": "ok"
+            },
+            "fit18_medium": {
+              "MAE": 4.302108680969897,
+              "MSE": 612.8368250889328,
+              "RMSE": 24.755541300665044,
+              "absolute_error_contribution_fraction": 0.0014380391915220538,
+              "absolute_error_sum": 1768.1666678786278,
+              "elements": 411,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 137,
+              "squared_error_contribution_fraction": 9.511210562818782e-05,
+              "squared_error_sum": 251875.93511155134,
+              "status": "ok"
+            }
+          },
+          "aggregation_note": "overall RMSE is sqrt(MSE over all window-node-horizon elements), not the mean of window RMSE values",
+          "balanced_activity_group_MAE": 51.113440752940846,
+          "constant_groups": {
+            "constant_fit18": {
+              "MAE": 0.06862745098039216,
+              "MSE": 0.28431372549019607,
+              "RMSE": 0.5332107702308685,
+              "absolute_error_contribution_fraction": 5.693057404329124e-06,
+              "absolute_error_sum": 7.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.0950832051485453e-08,
+              "squared_error_sum": 29.0,
+              "status": "ok"
+            },
+            "nonconstant_fit18": {
+              "MAE": 178.11977228315448,
+              "MSE": 383630.3882595906,
+              "RMSE": 619.37903440429,
+              "absolute_error_contribution_fraction": 0.9999943069425957,
+              "absolute_error_sum": 1229560.7880706154,
+              "elements": 6903,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2301,
+              "squared_error_contribution_fraction": 0.999999989049168,
+              "squared_error_sum": 2648200570.155954,
+              "status": "ok"
+            }
+          },
+          "contexts": {
+            "0": {
+              "MAE": 175.52716460679733,
+              "MSE": 378044.33963682427,
+              "RMSE": 614.8531041125386,
+              "absolute_error_contribution_fraction": 1.0,
+              "absolute_error_sum": 1229567.7880706154,
+              "elements": 7005,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2335,
+              "squared_error_contribution_fraction": 1.0,
+              "squared_error_sum": 2648200599.155954,
+              "status": "ok"
+            }
+          },
+          "elements": 7005,
+          "excluded_empty_groups": [],
+          "horizons": {
+            "h1": {
+              "MAE": 129.87680456364723,
+              "MSE": 136523.8584797829,
+              "RMSE": 369.4913510216212,
+              "absolute_error_sum": 303262.3386561163,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 318783209.5502931,
+              "status": "ok"
+            },
+            "h2": {
+              "MAE": 150.8905083909902,
+              "MSE": 232225.2686012361,
+              "RMSE": 481.897570652972,
+              "absolute_error_sum": 352329.3370929621,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 542246002.1838863,
+              "status": "ok"
+            },
+            "h3": {
+              "MAE": 245.8141808657546,
+              "MSE": 765383.8918294539,
+              "RMSE": 874.862213053835,
+              "absolute_error_sum": 573976.112321537,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 1787171387.4217749,
+              "status": "ok"
+            }
+          },
+          "negative_prediction_ratio": 0.0,
+          "neighbor_groups": {
+            "has_nonself_neighbor": {
+              "MAE": 99.18789815921693,
+              "MSE": 52970.87729546728,
+              "RMSE": 230.15402950082643,
+              "absolute_error_contribution_fraction": 0.07599011699273328,
+              "absolute_error_sum": 93435.00006598234,
+              "elements": 942,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 314,
+              "squared_error_contribution_fraction": 0.01884244208245934,
+              "squared_error_sum": 49898566.41233018,
+              "status": "ok"
+            },
+            "no_nonself_neighbor": {
+              "MAE": 187.38789180350207,
+              "MSE": 428550.55793231464,
+              "RMSE": 654.637730299984,
+              "absolute_error_contribution_fraction": 0.9240098830072667,
+              "absolute_error_sum": 1136132.788004633,
+              "elements": 6063,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2021,
+              "squared_error_contribution_fraction": 0.9811575579175407,
+              "squared_error_sum": 2598302032.7436237,
+              "status": "ok"
+            }
+          },
+          "nonempty_groups": [
+            "fit18_inactive",
+            "fit18_low",
+            "fit18_medium",
+            "fit18_high"
+          ],
+          "squared_error_sum": 2648200599.155954,
+          "status": "ok",
+          "target_month_multiplicities": {
+            "2022-10": 1,
+            "2022-11": 1,
+            "2022-12": 1
+          },
+          "training_all_zero_group": {
+            "MAE": 0.06862745098039216,
+            "MSE": 0.28431372549019607,
+            "RMSE": 0.5332107702308685,
+            "group": "fit18_inactive",
+            "nodes": 34,
+            "status": "ok"
+          },
+          "windows": [
+            {
+              "MAE": 175.52716460679733,
+              "MSE": 378044.33963682427,
+              "RMSE": 614.8531041125386,
+              "absolute_error_sum": 1229567.7880706154,
+              "elements": 7005,
+              "forecast_origin": "2022-09",
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 2648200599.155954,
+              "start": 15,
+              "status": "ok",
+              "target_months": [
+                "2022-10",
+                "2022-11",
+                "2022-12"
+              ]
+            }
+          ]
+        },
+        "WindowMean6": {
+          "MAE": 201.258885876761,
+          "MSE": 700659.7068497912,
+          "RMSE": 837.0541839390036,
+          "absolute_error_sum": 1409818.4955667108,
+          "activity_groups": {
+            "fit18_high": {
+              "MAE": 228.73337593104853,
+              "MSE": 797269.5393761233,
+              "RMSE": 892.8995124738972,
+              "absolute_error_contribution_fraction": 0.9987687540342004,
+              "absolute_error_sum": 1408082.6622315347,
+              "elements": 6156,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2052,
+              "squared_error_contribution_fraction": 0.9999735210120441,
+              "squared_error_sum": 4907991284.399415,
+              "status": "ok"
+            },
+            "fit18_inactive": {
+              "MAE": 0.08496732074840396,
+              "MSE": 0.28104575163398693,
+              "RMSE": 0.5301374837096382,
+              "absolute_error_contribution_fraction": 6.147363468127453e-06,
+              "absolute_error_sum": 8.666666716337204,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 5.840659842543522e-09,
+              "squared_error_sum": 28.666666666666668,
+              "status": "ok"
+            },
+            "fit18_low": {
+              "MAE": 0.7574404796496743,
+              "MSE": 2.030505964680324,
+              "RMSE": 1.4249582326090557,
+              "absolute_error_contribution_fraction": 0.0001805196924019557,
+              "absolute_error_sum": 254.50000116229057,
+              "elements": 336,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 112,
+              "squared_error_contribution_fraction": 1.3900430936205918e-07,
+              "squared_error_sum": 682.2500041325889,
+              "status": "ok"
+            },
+            "fit18_medium": {
+              "MAE": 3.5831305773661373,
+              "MSE": 314.47972433517987,
+              "RMSE": 17.733576185732527,
+              "absolute_error_contribution_fraction": 0.0010445789099294716,
+              "absolute_error_sum": 1472.6666672974825,
+              "elements": 411,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 137,
+              "squared_error_contribution_fraction": 2.633414298686727e-05,
+              "squared_error_sum": 129251.16670175892,
+              "status": "ok"
+            }
+          },
+          "aggregation_note": "overall RMSE is sqrt(MSE over all window-node-horizon elements), not the mean of window RMSE values",
+          "balanced_activity_group_MAE": 58.289728577203185,
+          "constant_groups": {
+            "constant_fit18": {
+              "MAE": 0.08496732074840396,
+              "MSE": 0.28104575163398693,
+              "RMSE": 0.5301374837096382,
+              "absolute_error_contribution_fraction": 6.147363468127453e-06,
+              "absolute_error_sum": 8.666666716337204,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 5.840659842543522e-09,
+              "squared_error_sum": 28.666666666666668,
+              "status": "ok"
+            },
+            "nonconstant_fit18": {
+              "MAE": 204.23146876720187,
+              "MSE": 711012.7796343794,
+              "RMSE": 843.21573730237,
+              "absolute_error_contribution_fraction": 0.9999938526365318,
+              "absolute_error_sum": 1409809.8288999945,
+              "elements": 6903,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2301,
+              "squared_error_contribution_fraction": 0.9999999941593403,
+              "squared_error_sum": 4908121217.816121,
+              "status": "ok"
+            }
+          },
+          "contexts": {
+            "0": {
+              "MAE": 201.258885876761,
+              "MSE": 700659.7068497912,
+              "RMSE": 837.0541839390036,
+              "absolute_error_contribution_fraction": 1.0,
+              "absolute_error_sum": 1409818.4955667108,
+              "elements": 7005,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2335,
+              "squared_error_contribution_fraction": 1.0,
+              "squared_error_sum": 4908121246.482787,
+              "status": "ok"
+            }
+          },
+          "elements": 7005,
+          "excluded_empty_groups": [],
+          "horizons": {
+            "h1": {
+              "MAE": 172.25203374790814,
+              "MSE": 400737.7214986632,
+              "RMSE": 633.0384834262946,
+              "absolute_error_sum": 402208.4988013655,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 935722579.6993785,
+              "status": "ok"
+            },
+            "h2": {
+              "MAE": 100.38864876568573,
+              "MSE": 96445.4696228453,
+              "RMSE": 310.55670918987613,
+              "absolute_error_sum": 234407.49486787617,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 225200171.56934378,
+              "status": "ok"
+            },
+            "h3": {
+              "MAE": 331.13597511668917,
+              "MSE": 1604795.9294278652,
+              "RMSE": 1266.80540314125,
+              "absolute_error_sum": 773202.5018974692,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 3747198495.214065,
+              "status": "ok"
+            }
+          },
+          "negative_prediction_ratio": 0.0,
+          "neighbor_groups": {
+            "has_nonself_neighbor": {
+              "MAE": 96.35368083977396,
+              "MSE": 50209.285049618404,
+              "RMSE": 224.07428466831797,
+              "absolute_error_contribution_fraction": 0.06438074662553055,
+              "absolute_error_sum": 90765.16735106707,
+              "elements": 942,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 314,
+              "squared_error_contribution_fraction": 0.009636507360251987,
+              "squared_error_sum": 47297146.51674054,
+              "status": "ok"
+            },
+            "no_nonself_neighbor": {
+              "MAE": 217.55786379938047,
+              "MSE": 801719.2973719357,
+              "RMSE": 895.3877916143015,
+              "absolute_error_contribution_fraction": 0.9356192533744695,
+              "absolute_error_sum": 1319053.3282156438,
+              "elements": 6063,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2021,
+              "squared_error_contribution_fraction": 0.990363492639748,
+              "squared_error_sum": 4860824099.966046,
+              "status": "ok"
+            }
+          },
+          "nonempty_groups": [
+            "fit18_inactive",
+            "fit18_low",
+            "fit18_medium",
+            "fit18_high"
+          ],
+          "squared_error_sum": 4908121246.482787,
+          "status": "ok",
+          "target_month_multiplicities": {
+            "2022-10": 1,
+            "2022-11": 1,
+            "2022-12": 1
+          },
+          "training_all_zero_group": {
+            "MAE": 0.08496732074840396,
+            "MSE": 0.28104575163398693,
+            "RMSE": 0.5301374837096382,
+            "group": "fit18_inactive",
+            "nodes": 34,
+            "status": "ok"
+          },
+          "windows": [
+            {
+              "MAE": 201.258885876761,
+              "MSE": 700659.7068497912,
+              "RMSE": 837.0541839390036,
+              "absolute_error_sum": 1409818.4955667108,
+              "elements": 7005,
+              "forecast_origin": "2022-09",
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 4908121246.482787,
+              "start": 15,
+              "status": "ok",
+              "target_months": [
+                "2022-10",
+                "2022-11",
+                "2022-12"
+              ]
+            }
+          ]
+        },
+        "Zero": {
+          "MAE": 842.2012847965739,
+          "MSE": 10109835.123768738,
+          "RMSE": 3179.5966919986467,
+          "absolute_error_sum": 5899620.0,
+          "activity_groups": {
+            "fit18_high": {
+              "MAE": 958.0466211825861,
+              "MSE": 11504083.663905133,
+              "RMSE": 3391.7670415146636,
+              "absolute_error_contribution_fraction": 0.9996804878958305,
+              "absolute_error_sum": 5897735.0,
+              "elements": 6156,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2052,
+              "squared_error_contribution_fraction": 0.9999963850721988,
+              "squared_error_sum": 70819139035.0,
+              "status": "ok"
+            },
+            "fit18_inactive": {
+              "MAE": 0.06862745098039216,
+              "MSE": 0.28431372549019607,
+              "RMSE": 0.5332107702308685,
+              "absolute_error_contribution_fraction": 1.186517097711378e-06,
+              "absolute_error_sum": 7.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 4.094923429210504e-10,
+              "squared_error_sum": 29.0,
+              "status": "ok"
+            },
+            "fit18_low": {
+              "MAE": 0.4880952380952381,
+              "MSE": 1.7321428571428572,
+              "RMSE": 1.3161089837634485,
+              "absolute_error_contribution_fraction": 2.7798400574952285e-05,
+              "absolute_error_sum": 164.0,
+              "elements": 336,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 112,
+              "squared_error_contribution_fraction": 8.218087709656943e-09,
+              "squared_error_sum": 582.0,
+              "status": "ok"
+            },
+            "fit18_medium": {
+              "MAE": 4.170316301703163,
+              "MSE": 621.4014598540145,
+              "RMSE": 24.927925301837988,
+              "absolute_error_contribution_fraction": 0.00029052718649675744,
+              "absolute_error_sum": 1714.0,
+              "elements": 411,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 137,
+              "squared_error_contribution_fraction": 3.606300221126365e-06,
+              "squared_error_sum": 255396.0,
+              "status": "ok"
+            }
+          },
+          "aggregation_note": "overall RMSE is sqrt(MSE over all window-node-horizon elements), not the mean of window RMSE values",
+          "balanced_activity_group_MAE": 240.69341504334122,
+          "constant_groups": {
+            "constant_fit18": {
+              "MAE": 0.06862745098039216,
+              "MSE": 0.28431372549019607,
+              "RMSE": 0.5332107702308685,
+              "absolute_error_contribution_fraction": 1.186517097711378e-06,
+              "absolute_error_sum": 7.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 4.094923429210504e-10,
+              "squared_error_sum": 29.0,
+              "status": "ok"
+            },
+            "nonconstant_fit18": {
+              "MAE": 854.6447921193684,
+              "MSE": 10259219.906272635,
+              "RMSE": 3203.0017025085444,
+              "absolute_error_contribution_fraction": 0.9999988134829023,
+              "absolute_error_sum": 5899613.0,
+              "elements": 6903,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2301,
+              "squared_error_contribution_fraction": 0.9999999995905077,
+              "squared_error_sum": 70819395013.0,
+              "status": "ok"
+            }
+          },
+          "contexts": {
+            "0": {
+              "MAE": 842.2012847965739,
+              "MSE": 10109835.123768738,
+              "RMSE": 3179.5966919986467,
+              "absolute_error_contribution_fraction": 1.0,
+              "absolute_error_sum": 5899620.0,
+              "elements": 7005,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2335,
+              "squared_error_contribution_fraction": 1.0,
+              "squared_error_sum": 70819395042.0,
+              "status": "ok"
+            }
+          },
+          "elements": 7005,
+          "excluded_empty_groups": [],
+          "horizons": {
+            "h1": {
+              "MAE": 862.7957173447537,
+              "MSE": 10392191.06124197,
+              "RMSE": 3223.6921474052033,
+              "absolute_error_sum": 2014628.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 24265766128.0,
+              "status": "ok"
+            },
+            "h2": {
+              "MAE": 980.2325481798715,
+              "MSE": 13473077.75974304,
+              "RMSE": 3670.569132946966,
+              "absolute_error_sum": 2288843.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 31459636569.0,
+              "status": "ok"
+            },
+            "h3": {
+              "MAE": 683.5755888650964,
+              "MSE": 6464236.550321199,
+              "RMSE": 2542.4862930449003,
+              "absolute_error_sum": 1596149.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 15093992345.0,
+              "status": "ok"
+            }
+          },
+          "negative_prediction_ratio": 0.0,
+          "neighbor_groups": {
+            "has_nonself_neighbor": {
+              "MAE": 337.40021231422503,
+              "MSE": 592059.5403397027,
+              "RMSE": 769.4540534298995,
+              "absolute_error_contribution_fraction": 0.053873130811814995,
+              "absolute_error_sum": 317831.0,
+              "elements": 942,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 314,
+              "squared_error_contribution_fraction": 0.007875245004129726,
+              "squared_error_sum": 557720087.0,
+              "status": "ok"
+            },
+            "no_nonself_neighbor": {
+              "MAE": 920.6315355434604,
+              "MSE": 11588598.871020947,
+              "RMSE": 3404.203118355447,
+              "absolute_error_contribution_fraction": 0.946126869188185,
+              "absolute_error_sum": 5581789.0,
+              "elements": 6063,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2021,
+              "squared_error_contribution_fraction": 0.9921247549958703,
+              "squared_error_sum": 70261674955.0,
+              "status": "ok"
+            }
+          },
+          "nonempty_groups": [
+            "fit18_inactive",
+            "fit18_low",
+            "fit18_medium",
+            "fit18_high"
+          ],
+          "squared_error_sum": 70819395042.0,
+          "status": "ok",
+          "target_month_multiplicities": {
+            "2022-10": 1,
+            "2022-11": 1,
+            "2022-12": 1
+          },
+          "training_all_zero_group": {
+            "MAE": 0.06862745098039216,
+            "MSE": 0.28431372549019607,
+            "RMSE": 0.5332107702308685,
+            "group": "fit18_inactive",
+            "nodes": 34,
+            "status": "ok"
+          },
+          "windows": [
+            {
+              "MAE": 842.2012847965739,
+              "MSE": 10109835.123768738,
+              "RMSE": 3179.5966919986467,
+              "absolute_error_sum": 5899620.0,
+              "elements": 7005,
+              "forecast_origin": "2022-09",
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 70819395042.0,
+              "start": 15,
+              "status": "ok",
+              "target_months": [
+                "2022-10",
+                "2022-11",
+                "2022-12"
+              ]
+            }
+          ]
+        }
+      },
+      "validation": {
+        "LastValue": {
+          "MAE": 138.95274803711635,
+          "MSE": 334910.2295503212,
+          "RMSE": 578.7142900864995,
+          "absolute_error_sum": 973364.0,
+          "activity_groups": {
+            "fit18_high": {
+              "MAE": 157.77858999350227,
+              "MSE": 381065.7808641975,
+              "RMSE": 617.3052574409176,
+              "absolute_error_contribution_fraction": 0.9978641083911055,
+              "absolute_error_sum": 971285.0,
+              "elements": 6156,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2052,
+              "squared_error_contribution_fraction": 0.9999125290014861,
+              "squared_error_sum": 2345840947.0,
+              "status": "ok"
+            },
+            "fit18_inactive": {
+              "MAE": 0.0392156862745098,
+              "MSE": 0.0392156862745098,
+              "RMSE": 0.19802950859533486,
+              "absolute_error_contribution_fraction": 4.10945956497261e-06,
+              "absolute_error_sum": 4.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.704996291893077e-09,
+              "squared_error_sum": 4.0,
+              "status": "ok"
+            },
+            "fit18_low": {
+              "MAE": 1.0833333333333333,
+              "MSE": 9.214285714285714,
+              "RMSE": 3.035504194410825,
+              "absolute_error_contribution_fraction": 0.0003739608204125076,
+              "absolute_error_sum": 364.0,
+              "elements": 336,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 112,
+              "squared_error_contribution_fraction": 1.3196671299252417e-06,
+              "squared_error_sum": 3096.0,
+              "status": "ok"
+            },
+            "fit18_medium": {
+              "MAE": 4.1630170316301705,
+              "MSE": 491.7542579075426,
+              "RMSE": 22.17553286637195,
+              "absolute_error_contribution_fraction": 0.0017578213289170341,
+              "absolute_error_sum": 1711.0,
+              "elements": 411,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 137,
+              "squared_error_contribution_fraction": 8.614962638770042e-05,
+              "squared_error_sum": 202111.0,
+              "status": "ok"
+            }
+          },
+          "aggregation_note": "overall RMSE is sqrt(MSE over all window-node-horizon elements), not the mean of window RMSE values",
+          "balanced_activity_group_MAE": 40.76603901118507,
+          "constant_groups": {
+            "constant_fit18": {
+              "MAE": 0.0392156862745098,
+              "MSE": 0.0392156862745098,
+              "RMSE": 0.19802950859533486,
+              "absolute_error_contribution_fraction": 4.10945956497261e-06,
+              "absolute_error_sum": 4.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.704996291893077e-09,
+              "squared_error_sum": 4.0,
+              "status": "ok"
+            },
+            "nonconstant_fit18": {
+              "MAE": 141.00535998841085,
+              "MSE": 339858.9242358395,
+              "RMSE": 582.9742054635346,
+              "absolute_error_contribution_fraction": 0.999995890540435,
+              "absolute_error_sum": 973360.0,
+              "elements": 6903,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2301,
+              "squared_error_contribution_fraction": 0.9999999982950037,
+              "squared_error_sum": 2346046154.0,
+              "status": "ok"
+            }
+          },
+          "contexts": {
+            "0": {
+              "MAE": 138.95274803711635,
+              "MSE": 334910.2295503212,
+              "RMSE": 578.7142900864995,
+              "absolute_error_contribution_fraction": 1.0,
+              "absolute_error_sum": 973364.0,
+              "elements": 7005,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2335,
+              "squared_error_contribution_fraction": 1.0,
+              "squared_error_sum": 2346046158.0,
+              "status": "ok"
+            }
+          },
+          "elements": 7005,
+          "excluded_empty_groups": [],
+          "horizons": {
+            "h1": {
+              "MAE": 98.46809421841542,
+              "MSE": 180915.26209850106,
+              "RMSE": 425.34134774143587,
+              "absolute_error_sum": 229923.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 422437137.0,
+              "status": "ok"
+            },
+            "h2": {
+              "MAE": 193.02740899357602,
+              "MSE": 656598.8586723768,
+              "RMSE": 810.3078789400834,
+              "absolute_error_sum": 450719.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 1533158335.0,
+              "status": "ok"
+            },
+            "h3": {
+              "MAE": 125.3627408993576,
+              "MSE": 167216.56788008564,
+              "RMSE": 408.9212245409691,
+              "absolute_error_sum": 292722.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 390450686.0,
+              "status": "ok"
+            }
+          },
+          "negative_prediction_ratio": 0.0,
+          "neighbor_groups": {
+            "has_nonself_neighbor": {
+              "MAE": 72.60615711252655,
+              "MSE": 38031.674097664545,
+              "RMSE": 195.01711232008472,
+              "absolute_error_contribution_fraction": 0.07026662173657543,
+              "absolute_error_sum": 68395.0,
+              "elements": 942,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 314,
+              "squared_error_contribution_fraction": 0.01527072980974145,
+              "squared_error_sum": 35825837.0,
+              "status": "ok"
+            },
+            "no_nonself_neighbor": {
+              "MAE": 149.26092693386113,
+              "MSE": 381035.84380669636,
+              "RMSE": 617.281008785056,
+              "absolute_error_contribution_fraction": 0.9297333782634246,
+              "absolute_error_sum": 904969.0,
+              "elements": 6063,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2021,
+              "squared_error_contribution_fraction": 0.9847292701902586,
+              "squared_error_sum": 2310220321.0,
+              "status": "ok"
+            }
+          },
+          "nonempty_groups": [
+            "fit18_inactive",
+            "fit18_low",
+            "fit18_medium",
+            "fit18_high"
+          ],
+          "squared_error_sum": 2346046158.0,
+          "status": "ok",
+          "target_month_multiplicities": {
+            "2022-07": 1,
+            "2022-08": 1,
+            "2022-09": 1
+          },
+          "training_all_zero_group": {
+            "MAE": 0.0392156862745098,
+            "MSE": 0.0392156862745098,
+            "RMSE": 0.19802950859533486,
+            "group": "fit18_inactive",
+            "nodes": 34,
+            "status": "ok"
+          },
+          "windows": [
+            {
+              "MAE": 138.95274803711635,
+              "MSE": 334910.2295503212,
+              "RMSE": 578.7142900864995,
+              "absolute_error_sum": 973364.0,
+              "elements": 7005,
+              "forecast_origin": "2022-06",
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 2346046158.0,
+              "start": 12,
+              "status": "ok",
+              "target_months": [
+                "2022-07",
+                "2022-08",
+                "2022-09"
+              ]
+            }
+          ]
+        },
+        "SeasonalNaive12": {
+          "MAE": 199.5140613847252,
+          "MSE": 501155.54689507495,
+          "RMSE": 707.9234046809548,
+          "absolute_error_sum": 1397596.0,
+          "activity_groups": {
+            "fit18_high": {
+              "MAE": 226.6804743339831,
+              "MSE": 570237.6460363873,
+              "RMSE": 755.140812058511,
+              "absolute_error_contribution_fraction": 0.9984609286231501,
+              "absolute_error_sum": 1395445.0,
+              "elements": 6156,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2052,
+              "squared_error_contribution_fraction": 0.9999397090738879,
+              "squared_error_sum": 3510382949.0,
+              "status": "ok"
+            },
+            "fit18_inactive": {
+              "MAE": 0.0392156862745098,
+              "MSE": 0.0392156862745098,
+              "RMSE": 0.19802950859533486,
+              "absolute_error_contribution_fraction": 2.8620574185959317e-06,
+              "absolute_error_sum": 4.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.1394081199702043e-09,
+              "squared_error_sum": 4.0,
+              "status": "ok"
+            },
+            "fit18_low": {
+              "MAE": 0.9047619047619048,
+              "MSE": 3.9642857142857144,
+              "RMSE": 1.9910514092523364,
+              "absolute_error_contribution_fraction": 0.0002175163638132908,
+              "absolute_error_sum": 304.0,
+              "elements": 336,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 112,
+              "squared_error_contribution_fraction": 3.7942290395007804e-07,
+              "squared_error_sum": 1332.0,
+              "status": "ok"
+            },
+            "fit18_medium": {
+              "MAE": 4.484184914841849,
+              "MSE": 511.7299270072993,
+              "RMSE": 22.62144838438289,
+              "absolute_error_contribution_fraction": 0.0013186929556180756,
+              "absolute_error_sum": 1843.0,
+              "elements": 411,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 137,
+              "squared_error_contribution_fraction": 5.991036380006333e-05,
+              "squared_error_sum": 210321.0,
+              "status": "ok"
+            }
+          },
+          "aggregation_note": "overall RMSE is sqrt(MSE over all window-node-horizon elements), not the mean of window RMSE values",
+          "balanced_activity_group_MAE": 58.02715920996535,
+          "constant_groups": {
+            "constant_fit18": {
+              "MAE": 0.0392156862745098,
+              "MSE": 0.0392156862745098,
+              "RMSE": 0.19802950859533486,
+              "absolute_error_contribution_fraction": 2.8620574185959317e-06,
+              "absolute_error_sum": 4.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.1394081199702043e-09,
+              "squared_error_sum": 4.0,
+              "status": "ok"
+            },
+            "nonconstant_fit18": {
+              "MAE": 202.46153846153845,
+              "MSE": 508560.7130233232,
+              "RMSE": 713.1344284378109,
+              "absolute_error_contribution_fraction": 0.9999971379425814,
+              "absolute_error_sum": 1397592.0,
+              "elements": 6903,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2301,
+              "squared_error_contribution_fraction": 0.9999999988605919,
+              "squared_error_sum": 3510594602.0,
+              "status": "ok"
+            }
+          },
+          "contexts": {
+            "0": {
+              "MAE": 199.5140613847252,
+              "MSE": 501155.54689507495,
+              "RMSE": 707.9234046809548,
+              "absolute_error_contribution_fraction": 1.0,
+              "absolute_error_sum": 1397596.0,
+              "elements": 7005,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2335,
+              "squared_error_contribution_fraction": 1.0,
+              "squared_error_sum": 3510594606.0,
+              "status": "ok"
+            }
+          },
+          "elements": 7005,
+          "excluded_empty_groups": [],
+          "horizons": {
+            "h1": {
+              "MAE": 238.37344753747323,
+              "MSE": 790130.6912205567,
+              "RMSE": 888.8929582466928,
+              "absolute_error_sum": 556602.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 1844955164.0,
+              "status": "ok"
+            },
+            "h2": {
+              "MAE": 192.82355460385438,
+              "MSE": 466175.5310492505,
+              "RMSE": 682.7704819697835,
+              "absolute_error_sum": 450243.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 1088519865.0,
+              "status": "ok"
+            },
+            "h3": {
+              "MAE": 167.34518201284797,
+              "MSE": 247160.41841541755,
+              "RMSE": 497.15230907179495,
+              "absolute_error_sum": 390751.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 577119577.0,
+              "status": "ok"
+            }
+          },
+          "negative_prediction_ratio": 0.0,
+          "neighbor_groups": {
+            "has_nonself_neighbor": {
+              "MAE": 114.3036093418259,
+              "MSE": 99014.11464968153,
+              "RMSE": 314.6650833023606,
+              "absolute_error_contribution_fraction": 0.0770422926224746,
+              "absolute_error_sum": 107674.0,
+              "elements": 942,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 314,
+              "squared_error_contribution_fraction": 0.02656851800563611,
+              "squared_error_sum": 93271296.0,
+              "status": "ok"
+            },
+            "no_nonself_neighbor": {
+              "MAE": 212.75309252845125,
+              "MSE": 563635.7100445324,
+              "RMSE": 750.7567582409981,
+              "absolute_error_contribution_fraction": 0.9229577073775254,
+              "absolute_error_sum": 1289922.0,
+              "elements": 6063,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2021,
+              "squared_error_contribution_fraction": 0.9734314819943639,
+              "squared_error_sum": 3417323310.0,
+              "status": "ok"
+            }
+          },
+          "nonempty_groups": [
+            "fit18_inactive",
+            "fit18_low",
+            "fit18_medium",
+            "fit18_high"
+          ],
+          "squared_error_sum": 3510594606.0,
+          "status": "ok",
+          "target_month_multiplicities": {
+            "2022-07": 1,
+            "2022-08": 1,
+            "2022-09": 1
+          },
+          "training_all_zero_group": {
+            "MAE": 0.0392156862745098,
+            "MSE": 0.0392156862745098,
+            "RMSE": 0.19802950859533486,
+            "group": "fit18_inactive",
+            "nodes": 34,
+            "status": "ok"
+          },
+          "windows": [
+            {
+              "MAE": 199.5140613847252,
+              "MSE": 501155.54689507495,
+              "RMSE": 707.9234046809548,
+              "absolute_error_sum": 1397596.0,
+              "elements": 7005,
+              "forecast_origin": "2022-06",
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 3510594606.0,
+              "start": 12,
+              "status": "ok",
+              "target_months": [
+                "2022-07",
+                "2022-08",
+                "2022-09"
+              ]
+            }
+          ]
+        },
+        "SharedRidge": {
+          "MAE": 164.65959640399132,
+          "MSE": 414543.2799265018,
+          "RMSE": 643.8503552274409,
+          "absolute_error_sum": 1153440.4728099592,
+          "activity_groups": {
+            "fit18_high": {
+              "MAE": 187.0377180265298,
+              "MSE": 471680.7948625538,
+              "RMSE": 686.7902116822529,
+              "absolute_error_contribution_fraction": 0.998234602750083,
+              "absolute_error_sum": 1151404.1921713175,
+              "elements": 6156,
+              "negative_prediction_ratio": 0.0003248862897985705,
+              "nodes": 2052,
+              "squared_error_contribution_fraction": 0.9999281295983169,
+              "squared_error_sum": 2903666973.1738815,
+              "status": "ok"
+            },
+            "fit18_inactive": {
+              "MAE": 0.16677423076769135,
+              "MSE": 0.0476991246262725,
+              "RMSE": 0.2184012926387399,
+              "absolute_error_contribution_fraction": 1.4748027262181257e-05,
+              "absolute_error_sum": 17.010971538304517,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.67545420497273e-09,
+              "squared_error_sum": 4.865310711879795,
+              "status": "ok"
+            },
+            "fit18_low": {
+              "MAE": 0.8837292467644564,
+              "MSE": 2.942283111263314,
+              "RMSE": 1.715308459509051,
+              "absolute_error_contribution_fraction": 0.00025743246739858423,
+              "absolute_error_sum": 296.9330269128574,
+              "elements": 336,
+              "negative_prediction_ratio": 0.05952380952380952,
+              "nodes": 112,
+              "squared_error_contribution_fraction": 3.4044402575297273e-07,
+              "squared_error_sum": 988.6071253844734,
+              "status": "ok"
+            },
+            "fit18_medium": {
+              "MAE": 4.190600097786731,
+              "MSE": 505.37527695148844,
+              "RMSE": 22.48055330616861,
+              "absolute_error_contribution_fraction": 0.0014932167552560976,
+              "absolute_error_sum": 1722.3366401903463,
+              "elements": 411,
+              "negative_prediction_ratio": 0.004866180048661801,
+              "nodes": 137,
+              "squared_error_contribution_fraction": 7.152828220297305e-05,
+              "squared_error_sum": 207709.23882706175,
+              "status": "ok"
+            }
+          },
+          "aggregation_note": "overall RMSE is sqrt(MSE over all window-node-horizon elements), not the mean of window RMSE values",
+          "balanced_activity_group_MAE": 48.06970540046217,
+          "constant_groups": {
+            "constant_fit18": {
+              "MAE": 0.16677423076769135,
+              "MSE": 0.0476991246262725,
+              "RMSE": 0.2184012926387399,
+              "absolute_error_contribution_fraction": 1.4748027262181257e-05,
+              "absolute_error_sum": 17.010971538304517,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.67545420497273e-09,
+              "squared_error_sum": 4.865310711879795,
+              "status": "ok"
+            },
+            "nonconstant_fit18": {
+              "MAE": 167.09017265513845,
+              "MSE": 420668.6471128254,
+              "RMSE": 648.5897371318987,
+              "absolute_error_contribution_fraction": 0.9999852519727377,
+              "absolute_error_sum": 1153423.4618384207,
+              "elements": 6903,
+              "negative_prediction_ratio": 0.003476749239461104,
+              "nodes": 2301,
+              "squared_error_contribution_fraction": 0.9999999983245457,
+              "squared_error_sum": 2903875671.019834,
+              "status": "ok"
+            }
+          },
+          "contexts": {
+            "0": {
+              "MAE": 164.65959640399132,
+              "MSE": 414543.2799265018,
+              "RMSE": 643.8503552274409,
+              "absolute_error_contribution_fraction": 1.0,
+              "absolute_error_sum": 1153440.4728099592,
+              "elements": 7005,
+              "negative_prediction_ratio": 0.003426124197002141,
+              "nodes": 2335,
+              "squared_error_contribution_fraction": 1.0,
+              "squared_error_sum": 2903875675.885145,
+              "status": "ok"
+            }
+          },
+          "elements": 7005,
+          "excluded_empty_groups": [],
+          "horizons": {
+            "h1": {
+              "MAE": 135.20241247763377,
+              "MSE": 248622.97918630444,
+              "RMSE": 498.6210777597598,
+              "absolute_error_sum": 315697.63313527487,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.005139186295503212,
+              "squared_error_sum": 580534656.4000208,
+              "status": "ok"
+            },
+            "h2": {
+              "MAE": 215.77364046153468,
+              "MSE": 778927.1121396555,
+              "RMSE": 882.5684744764314,
+              "absolute_error_sum": 503831.4504776835,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0029978586723768737,
+              "squared_error_sum": 1818794806.8460956,
+              "status": "ok"
+            },
+            "h3": {
+              "MAE": 143.00273627280546,
+              "MSE": 216079.7484535455,
+              "RMSE": 464.84378930297163,
+              "absolute_error_sum": 333911.38919700077,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0021413276231263384,
+              "squared_error_sum": 504546212.6390287,
+              "status": "ok"
+            }
+          },
+          "negative_prediction_ratio": 0.003426124197002141,
+          "neighbor_groups": {
+            "has_nonself_neighbor": {
+              "MAE": 85.71452572753984,
+              "MSE": 43539.85082047896,
+              "RMSE": 208.6620493057589,
+              "absolute_error_contribution_fraction": 0.07000195080604367,
+              "absolute_error_sum": 80743.08323534252,
+              "elements": 942,
+              "negative_prediction_ratio": 0.0031847133757961785,
+              "nodes": 314,
+              "squared_error_contribution_fraction": 0.01412406867604252,
+              "squared_error_sum": 41014539.47289118,
+              "status": "ok"
+            },
+            "no_nonself_neighbor": {
+              "MAE": 176.92518383219803,
+              "MSE": 472185.5742062105,
+              "RMSE": 687.1576050704892,
+              "absolute_error_contribution_fraction": 0.9299980491939563,
+              "absolute_error_sum": 1072697.3895746167,
+              "elements": 6063,
+              "negative_prediction_ratio": 0.0034636318654131617,
+              "nodes": 2021,
+              "squared_error_contribution_fraction": 0.9858759313239576,
+              "squared_error_sum": 2862861136.4122543,
+              "status": "ok"
+            }
+          },
+          "nonempty_groups": [
+            "fit18_inactive",
+            "fit18_low",
+            "fit18_medium",
+            "fit18_high"
+          ],
+          "squared_error_sum": 2903875675.885145,
+          "status": "ok",
+          "target_month_multiplicities": {
+            "2022-07": 1,
+            "2022-08": 1,
+            "2022-09": 1
+          },
+          "training_all_zero_group": {
+            "MAE": 0.16677423076769135,
+            "MSE": 0.0476991246262725,
+            "RMSE": 0.2184012926387399,
+            "group": "fit18_inactive",
+            "nodes": 34,
+            "status": "ok"
+          },
+          "windows": [
+            {
+              "MAE": 164.65959640399132,
+              "MSE": 414543.2799265018,
+              "RMSE": 643.8503552274409,
+              "absolute_error_sum": 1153440.4728099592,
+              "elements": 7005,
+              "forecast_origin": "2022-06",
+              "negative_prediction_ratio": 0.003426124197002141,
+              "squared_error_sum": 2903875675.885145,
+              "start": 12,
+              "status": "ok",
+              "target_months": [
+                "2022-07",
+                "2022-08",
+                "2022-09"
+              ]
+            }
+          ]
+        },
+        "TrainMean18": {
+          "MAE": 183.64120799619639,
+          "MSE": 569948.3322381969,
+          "RMSE": 754.949224940457,
+          "absolute_error_sum": 1286406.6620133556,
+          "activity_groups": {
+            "fit18_high": {
+              "MAE": 208.66167529629297,
+              "MSE": 648518.7056297002,
+              "RMSE": 805.3065910755358,
+              "absolute_error_contribution_fraction": 0.9985343756799073,
+              "absolute_error_sum": 1284521.2731239796,
+              "elements": 6156,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2052,
+              "squared_error_contribution_fraction": 0.9999481738032412,
+              "squared_error_sum": 3992281151.856435,
+              "status": "ok"
+            },
+            "fit18_inactive": {
+              "MAE": 0.0392156862745098,
+              "MSE": 0.0392156862745098,
+              "RMSE": 0.19802950859533486,
+              "absolute_error_contribution_fraction": 3.1094366331558003e-06,
+              "absolute_error_sum": 4.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.0018815166244083e-09,
+              "squared_error_sum": 4.0,
+              "status": "ok"
+            },
+            "fit18_low": {
+              "MAE": 0.8164682544523939,
+              "MSE": 2.720182974952991,
+              "RMSE": 1.6492977217449223,
+              "absolute_error_contribution_fraction": 0.00021325552921705576,
+              "absolute_error_sum": 274.33333349600434,
+              "elements": 336,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 112,
+              "squared_error_contribution_fraction": 2.28925287733111e-07,
+              "squared_error_sum": 913.981479584205,
+              "status": "ok"
+            },
+            "fit18_medium": {
+              "MAE": 3.9101108415573473,
+              "MSE": 501.2104395495251,
+              "RMSE": 22.38772966491969,
+              "absolute_error_contribution_fraction": 0.0012492593542425118,
+              "absolute_error_sum": 1607.0555558800697,
+              "elements": 411,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 137,
+              "squared_error_contribution_fraction": 5.1596269589527086e-05,
+              "squared_error_sum": 205997.49065485483,
+              "status": "ok"
+            }
+          },
+          "aggregation_note": "overall RMSE is sqrt(MSE over all window-node-horizon elements), not the mean of window RMSE values",
+          "balanced_activity_group_MAE": 53.356867519644304,
+          "constant_groups": {
+            "constant_fit18": {
+              "MAE": 0.0392156862745098,
+              "MSE": 0.0392156862745098,
+              "RMSE": 0.19802950859533486,
+              "absolute_error_contribution_fraction": 3.1094366331558003e-06,
+              "absolute_error_sum": 4.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.0018815166244083e-09,
+              "squared_error_sum": 4.0,
+              "status": "ok"
+            },
+            "nonconstant_fit18": {
+              "MAE": 186.3541448664864,
+              "MSE": 578369.993238964,
+              "RMSE": 760.5064057843064,
+              "absolute_error_contribution_fraction": 0.9999968905633668,
+              "absolute_error_sum": 1286402.6620133556,
+              "elements": 6903,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2301,
+              "squared_error_contribution_fraction": 0.9999999989981182,
+              "squared_error_sum": 3992488063.3285685,
+              "status": "ok"
+            }
+          },
+          "contexts": {
+            "0": {
+              "MAE": 183.64120799619639,
+              "MSE": 569948.3322381969,
+              "RMSE": 754.949224940457,
+              "absolute_error_contribution_fraction": 1.0,
+              "absolute_error_sum": 1286406.6620133556,
+              "elements": 7005,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2335,
+              "squared_error_contribution_fraction": 1.0,
+              "squared_error_sum": 3992488067.3285694,
+              "status": "ok"
+            }
+          },
+          "elements": 7005,
+          "excluded_empty_groups": [],
+          "horizons": {
+            "h1": {
+              "MAE": 171.9820601477565,
+              "MSE": 512749.2968207455,
+              "RMSE": 716.0651484472244,
+              "absolute_error_sum": 401578.1104450114,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 1197269608.0764408,
+              "status": "ok"
+            },
+            "h2": {
+              "MAE": 250.17192350663166,
+              "MSE": 1027914.2487040383,
+              "RMSE": 1013.8610598617734,
+              "absolute_error_sum": 584151.4413879849,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 2400179770.7239294,
+              "status": "ok"
+            },
+            "h3": {
+              "MAE": 128.769640334201,
+              "MSE": 169181.45118980666,
+              "RMSE": 411.3167285557526,
+              "absolute_error_sum": 300677.11018035933,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 395038688.52819854,
+              "status": "ok"
+            }
+          },
+          "negative_prediction_ratio": 0.0,
+          "neighbor_groups": {
+            "has_nonself_neighbor": {
+              "MAE": 91.05885849326786,
+              "MSE": 55950.25427545879,
+              "RMSE": 236.5380609446581,
+              "absolute_error_contribution_fraction": 0.06667988221268072,
+              "absolute_error_sum": 85777.44470065832,
+              "elements": 942,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 314,
+              "squared_error_contribution_fraction": 0.013201076280923724,
+              "squared_error_sum": 52705139.52748218,
+              "status": "ok"
+            },
+            "no_nonself_neighbor": {
+              "MAE": 198.02560074430107,
+              "MSE": 649807.5091210764,
+              "RMSE": 806.1063882150274,
+              "absolute_error_contribution_fraction": 0.9333201177873193,
+              "absolute_error_sum": 1200629.2173126973,
+              "elements": 6063,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2021,
+              "squared_error_contribution_fraction": 0.9867989237190761,
+              "squared_error_sum": 3939782927.8010864,
+              "status": "ok"
+            }
+          },
+          "nonempty_groups": [
+            "fit18_inactive",
+            "fit18_low",
+            "fit18_medium",
+            "fit18_high"
+          ],
+          "squared_error_sum": 3992488067.3285694,
+          "status": "ok",
+          "target_month_multiplicities": {
+            "2022-07": 1,
+            "2022-08": 1,
+            "2022-09": 1
+          },
+          "training_all_zero_group": {
+            "MAE": 0.0392156862745098,
+            "MSE": 0.0392156862745098,
+            "RMSE": 0.19802950859533486,
+            "group": "fit18_inactive",
+            "nodes": 34,
+            "status": "ok"
+          },
+          "windows": [
+            {
+              "MAE": 183.64120799619639,
+              "MSE": 569948.3322381969,
+              "RMSE": 754.949224940457,
+              "absolute_error_sum": 1286406.6620133556,
+              "elements": 7005,
+              "forecast_origin": "2022-06",
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 3992488067.3285694,
+              "start": 12,
+              "status": "ok",
+              "target_months": [
+                "2022-07",
+                "2022-08",
+                "2022-09"
+              ]
+            }
+          ]
+        },
+        "WindowMean6": {
+          "MAE": 152.01648681400548,
+          "MSE": 427664.36105903785,
+          "RMSE": 653.9605194956633,
+          "absolute_error_sum": 1064875.4901321083,
+          "activity_groups": {
+            "fit18_high": {
+              "MAE": 172.68762022885238,
+              "MSE": 486612.39892817615,
+              "RMSE": 697.5760882715061,
+              "absolute_error_contribution_fraction": 0.9982998012255231,
+              "absolute_error_sum": 1063064.9901288152,
+              "elements": 6156,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2052,
+              "squared_error_contribution_fraction": 0.9999322644462206,
+              "squared_error_sum": 2995585927.801852,
+              "status": "ok"
+            },
+            "fit18_inactive": {
+              "MAE": 0.0392156862745098,
+              "MSE": 0.0392156862745098,
+              "RMSE": 0.19802950859533486,
+              "absolute_error_contribution_fraction": 3.756307697065842e-06,
+              "absolute_error_sum": 4.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.3352075868242131e-09,
+              "squared_error_sum": 4.0,
+              "status": "ok"
+            },
+            "fit18_low": {
+              "MAE": 0.923611114599875,
+              "MSE": 3.3298611341724325,
+              "RMSE": 1.8247907096904106,
+              "absolute_error_contribution_fraction": 0.0002914268732648341,
+              "absolute_error_sum": 310.333334505558,
+              "elements": 336,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 112,
+              "squared_error_contribution_fraction": 3.734686913511213e-07,
+              "squared_error_sum": 1118.8333410819373,
+              "status": "ok"
+            },
+            "fit18_medium": {
+              "MAE": 3.6403081965635002,
+              "MSE": 490.9941201139564,
+              "RMSE": 22.158387127991883,
+              "absolute_error_contribution_fraction": 0.0014050155935150543,
+              "absolute_error_sum": 1496.1666687875986,
+              "elements": 411,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 137,
+              "squared_error_contribution_fraction": 6.736074988044449e-05,
+              "squared_error_sum": 201798.58336683607,
+              "status": "ok"
+            }
+          },
+          "aggregation_note": "overall RMSE is sqrt(MSE over all window-node-horizon elements), not the mean of window RMSE values",
+          "balanced_activity_group_MAE": 44.322688806572565,
+          "constant_groups": {
+            "constant_fit18": {
+              "MAE": 0.0392156862745098,
+              "MSE": 0.0392156862745098,
+              "RMSE": 0.19802950859533486,
+              "absolute_error_contribution_fraction": 3.756307697065842e-06,
+              "absolute_error_sum": 4.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 1.3352075868242131e-09,
+              "squared_error_sum": 4.0,
+              "status": "ok"
+            },
+            "nonconstant_fit18": {
+              "MAE": 154.2621309766925,
+              "MSE": 433983.6078833203,
+              "RMSE": 658.774322422573,
+              "absolute_error_contribution_fraction": 0.9999962436923029,
+              "absolute_error_sum": 1064871.4901321083,
+              "elements": 6903,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2301,
+              "squared_error_contribution_fraction": 0.9999999986647924,
+              "squared_error_sum": 2995788845.21856,
+              "status": "ok"
+            }
+          },
+          "contexts": {
+            "0": {
+              "MAE": 152.01648681400548,
+              "MSE": 427664.36105903785,
+              "RMSE": 653.9605194956633,
+              "absolute_error_contribution_fraction": 1.0,
+              "absolute_error_sum": 1064875.4901321083,
+              "elements": 7005,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2335,
+              "squared_error_contribution_fraction": 1.0,
+              "squared_error_sum": 2995788849.21856,
+              "status": "ok"
+            }
+          },
+          "elements": 7005,
+          "excluded_empty_groups": [],
+          "horizons": {
+            "h1": {
+              "MAE": 124.87158878063364,
+              "MSE": 295636.8782560581,
+              "RMSE": 543.725002419475,
+              "absolute_error_sum": 291575.15980277956,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 690312110.7278956,
+              "status": "ok"
+            },
+            "h2": {
+              "MAE": 219.6296198820468,
+              "MSE": 853951.4075018209,
+              "RMSE": 924.0949126046636,
+              "absolute_error_sum": 512835.16242457926,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 1993976536.5167518,
+              "status": "ok"
+            },
+            "h3": {
+              "MAE": 111.54825177933598,
+              "MSE": 133404.79741923456,
+              "RMSE": 365.24621479111124,
+              "absolute_error_sum": 260465.1679047495,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 311500201.9739127,
+              "status": "ok"
+            }
+          },
+          "negative_prediction_ratio": 0.0,
+          "neighbor_groups": {
+            "has_nonself_neighbor": {
+              "MAE": 76.28803874954043,
+              "MSE": 68984.05790572717,
+              "RMSE": 262.64816372045544,
+              "absolute_error_contribution_fraction": 0.06748519725357913,
+              "absolute_error_sum": 71863.33250206709,
+              "elements": 942,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 314,
+              "squared_error_contribution_fraction": 0.02169144282787004,
+              "squared_error_sum": 64982982.54719499,
+              "status": "ok"
+            },
+            "no_nonself_neighbor": {
+              "MAE": 163.7823119957185,
+              "MSE": 483392.02814965625,
+              "RMSE": 695.2639988879449,
+              "absolute_error_contribution_fraction": 0.9325148027464208,
+              "absolute_error_sum": 993012.1576300412,
+              "elements": 6063,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2021,
+              "squared_error_contribution_fraction": 0.9783085571721302,
+              "squared_error_sum": 2930805866.6713657,
+              "status": "ok"
+            }
+          },
+          "nonempty_groups": [
+            "fit18_inactive",
+            "fit18_low",
+            "fit18_medium",
+            "fit18_high"
+          ],
+          "squared_error_sum": 2995788849.21856,
+          "status": "ok",
+          "target_month_multiplicities": {
+            "2022-07": 1,
+            "2022-08": 1,
+            "2022-09": 1
+          },
+          "training_all_zero_group": {
+            "MAE": 0.0392156862745098,
+            "MSE": 0.0392156862745098,
+            "RMSE": 0.19802950859533486,
+            "group": "fit18_inactive",
+            "nodes": 34,
+            "status": "ok"
+          },
+          "windows": [
+            {
+              "MAE": 152.01648681400548,
+              "MSE": 427664.36105903785,
+              "RMSE": 653.9605194956633,
+              "absolute_error_sum": 1064875.4901321083,
+              "elements": 7005,
+              "forecast_origin": "2022-06",
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 2995788849.21856,
+              "start": 12,
+              "status": "ok",
+              "target_months": [
+                "2022-07",
+                "2022-08",
+                "2022-09"
+              ]
+            }
+          ]
+        },
+        "Zero": {
+          "MAE": 1037.8269807280515,
+          "MSE": 15423423.054675233,
+          "RMSE": 3927.2666136481275,
+          "absolute_error_sum": 7269978.0,
+          "activity_groups": {
+            "fit18_high": {
+              "MAE": 1180.651559454191,
+              "MSE": 17550498.463125408,
+              "RMSE": 4189.331505517964,
+              "absolute_error_contribution_fraction": 0.9997404393795964,
+              "absolute_error_sum": 7268091.0,
+              "elements": 6156,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2052,
+              "squared_error_contribution_fraction": 0.9999980566743416,
+              "squared_error_sum": 108040868539.0,
+              "status": "ok"
+            },
+            "fit18_inactive": {
+              "MAE": 0.0392156862745098,
+              "MSE": 0.0392156862745098,
+              "RMSE": 0.19802950859533486,
+              "absolute_error_contribution_fraction": 5.50207992376318e-07,
+              "absolute_error_sum": 4.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 3.702295511678038e-11,
+              "squared_error_sum": 4.0,
+              "status": "ok"
+            },
+            "fit18_low": {
+              "MAE": 0.6636904761904762,
+              "MSE": 3.0208333333333335,
+              "RMSE": 1.7380544678845176,
+              "absolute_error_contribution_fraction": 3.067409557497973e-05,
+              "absolute_error_sum": 223.0,
+              "elements": 336,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 112,
+              "squared_error_contribution_fraction": 9.394574860883022e-09,
+              "squared_error_sum": 1015.0,
+              "status": "ok"
+            },
+            "fit18_medium": {
+              "MAE": 4.038929440389294,
+              "MSE": 508.3698296836983,
+              "RMSE": 22.547058115942715,
+              "absolute_error_contribution_fraction": 0.00022833631683617198,
+              "absolute_error_sum": 1660.0,
+              "elements": 411,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 137,
+              "squared_error_contribution_fraction": 1.933894060525023e-06,
+              "squared_error_sum": 208940.0,
+              "status": "ok"
+            }
+          },
+          "aggregation_note": "overall RMSE is sqrt(MSE over all window-node-horizon elements), not the mean of window RMSE values",
+          "balanced_activity_group_MAE": 296.34834876426135,
+          "constant_groups": {
+            "constant_fit18": {
+              "MAE": 0.0392156862745098,
+              "MSE": 0.0392156862745098,
+              "RMSE": 0.19802950859533486,
+              "absolute_error_contribution_fraction": 5.50207992376318e-07,
+              "absolute_error_sum": 4.0,
+              "elements": 102,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 34,
+              "squared_error_contribution_fraction": 3.702295511678038e-11,
+              "squared_error_sum": 4.0,
+              "status": "ok"
+            },
+            "nonconstant_fit18": {
+              "MAE": 1053.1615239750834,
+              "MSE": 15651322.395190496,
+              "RMSE": 3956.1752230140787,
+              "absolute_error_contribution_fraction": 0.9999994497920076,
+              "absolute_error_sum": 7269974.0,
+              "elements": 6903,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2301,
+              "squared_error_contribution_fraction": 0.9999999999629771,
+              "squared_error_sum": 108041078494.0,
+              "status": "ok"
+            }
+          },
+          "contexts": {
+            "0": {
+              "MAE": 1037.8269807280515,
+              "MSE": 15423423.054675233,
+              "RMSE": 3927.2666136481275,
+              "absolute_error_contribution_fraction": 1.0,
+              "absolute_error_sum": 7269978.0,
+              "elements": 7005,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2335,
+              "squared_error_contribution_fraction": 1.0,
+              "squared_error_sum": 108041078498.0,
+              "status": "ok"
+            }
+          },
+          "elements": 7005,
+          "excluded_empty_groups": [],
+          "horizons": {
+            "h1": {
+              "MAE": 1024.8441113490364,
+              "MSE": 15234926.33104925,
+              "RMSE": 3903.194375258456,
+              "absolute_error_sum": 2393011.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 35573552983.0,
+              "status": "ok"
+            },
+            "h2": {
+              "MAE": 1129.4059957173447,
+              "MSE": 18174472.5366167,
+              "RMSE": 4263.152886845216,
+              "absolute_error_sum": 2637163.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 42437393373.0,
+              "status": "ok"
+            },
+            "h3": {
+              "MAE": 959.230835117773,
+              "MSE": 12860870.296359744,
+              "RMSE": 3586.2055569026916,
+              "absolute_error_sum": 2239804.0,
+              "elements": 2335,
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 30030132142.0,
+              "status": "ok"
+            }
+          },
+          "negative_prediction_ratio": 0.0,
+          "neighbor_groups": {
+            "has_nonself_neighbor": {
+              "MAE": 412.5828025477707,
+              "MSE": 887654.9607218683,
+              "RMSE": 942.1544250927595,
+              "absolute_error_contribution_fraction": 0.053459996715258286,
+              "absolute_error_sum": 388653.0,
+              "elements": 942,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 314,
+              "squared_error_contribution_fraction": 0.007739380100833395,
+              "squared_error_sum": 836170973.0,
+              "status": "ok"
+            },
+            "no_nonself_neighbor": {
+              "MAE": 1134.970311726868,
+              "MSE": 17681825.42058387,
+              "RMSE": 4204.976268730166,
+              "absolute_error_contribution_fraction": 0.9465400032847417,
+              "absolute_error_sum": 6881325.0,
+              "elements": 6063,
+              "negative_prediction_ratio": 0.0,
+              "nodes": 2021,
+              "squared_error_contribution_fraction": 0.9922606198991666,
+              "squared_error_sum": 107204907525.0,
+              "status": "ok"
+            }
+          },
+          "nonempty_groups": [
+            "fit18_inactive",
+            "fit18_low",
+            "fit18_medium",
+            "fit18_high"
+          ],
+          "squared_error_sum": 108041078498.0,
+          "status": "ok",
+          "target_month_multiplicities": {
+            "2022-07": 1,
+            "2022-08": 1,
+            "2022-09": 1
+          },
+          "training_all_zero_group": {
+            "MAE": 0.0392156862745098,
+            "MSE": 0.0392156862745098,
+            "RMSE": 0.19802950859533486,
+            "group": "fit18_inactive",
+            "nodes": 34,
+            "status": "ok"
+          },
+          "windows": [
+            {
+              "MAE": 1037.8269807280515,
+              "MSE": 15423423.054675233,
+              "RMSE": 3927.2666136481275,
+              "absolute_error_sum": 7269978.0,
+              "elements": 7005,
+              "forecast_origin": "2022-06",
+              "negative_prediction_ratio": 0.0,
+              "squared_error_sum": 108041078498.0,
+              "start": 12,
+              "status": "ok",
+              "target_months": [
+                "2022-07",
+                "2022-08",
+                "2022-09"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "recomputed_relative_gains": {
+      "eval": {
+        "SharedRidge": {
+          "LastValue": {
+            "activity_groups": {
+              "fit18_high": {
+                "MAE": 219.36551111246845,
+                "absolute_MAE_difference": -36.258136193690035,
+                "reference_MAE": 183.10737491877842,
+                "relative_MAE_gain": -0.1980157064114604,
+                "status": "ok"
+              },
+              "fit18_inactive": {
+                "MAE": 0.20350590783560285,
+                "absolute_MAE_difference": -0.076054927443446,
+                "reference_MAE": 0.12745098039215685,
+                "relative_MAE_gain": -0.5967386614793455,
+                "status": "ok"
+              },
+              "fit18_low": {
+                "MAE": 0.7567138425927069,
+                "absolute_MAE_difference": 0.136143300264436,
+                "reference_MAE": 0.8928571428571429,
+                "relative_MAE_gain": 0.1524804962961683,
+                "status": "ok"
+              },
+              "fit18_medium": {
+                "MAE": 4.461530794459578,
+                "absolute_MAE_difference": -0.32041157304838563,
+                "reference_MAE": 4.141119221411192,
+                "relative_MAE_gain": -0.07737318244587926,
+                "status": "ok"
+              }
+            },
+            "contexts": {
+              "0": {
+                "MAE": 193.0796272688921,
+                "absolute_MAE_difference": -31.87705767574434,
+                "reference_MAE": 161.20256959314776,
+                "relative_MAE_gain": -0.19774534460708335,
+                "status": "ok"
+              }
+            },
+            "neighbor_groups": {
+              "has_nonself_neighbor": {
+                "MAE": 110.67198012446806,
+                "absolute_MAE_difference": -29.869432353767422,
+                "reference_MAE": 80.80254777070064,
+                "relative_MAE_gain": -0.36965953646078237,
+                "status": "ok"
+              },
+              "no_nonself_neighbor": {
+                "MAE": 205.88319045709056,
+                "absolute_MAE_difference": -32.18897967035133,
+                "reference_MAE": 173.69421078673923,
+                "relative_MAE_gain": -0.1853198188042823,
+                "status": "ok"
+              }
+            },
+            "overall": {
+              "MAE": 193.0796272688921,
+              "absolute_MAE_difference": -31.87705767574434,
+              "reference_MAE": 161.20256959314776,
+              "relative_MAE_gain": -0.19774534460708335,
+              "status": "ok"
+            },
+            "windows": {
+              "15": {
+                "MAE": 193.0796272688921,
+                "absolute_MAE_difference": -31.87705767574434,
+                "reference_MAE": 161.20256959314776,
+                "relative_MAE_gain": -0.19774534460708335,
+                "status": "ok"
+              }
+            }
+          }
+        }
+      },
+      "validation": {
+        "SharedRidge": {
+          "LastValue": {
+            "activity_groups": {
+              "fit18_high": {
+                "MAE": 187.0377180265298,
+                "absolute_MAE_difference": -29.259128033027537,
+                "reference_MAE": 157.77858999350227,
+                "relative_MAE_gain": -0.18544422303579025,
+                "status": "ok"
+              },
+              "fit18_inactive": {
+                "MAE": 0.16677423076769135,
+                "absolute_MAE_difference": -0.12755854449318155,
+                "reference_MAE": 0.0392156862745098,
+                "relative_MAE_gain": -3.2527428845761297,
+                "status": "ok"
+              },
+              "fit18_low": {
+                "MAE": 0.8837292467644564,
+                "absolute_MAE_difference": 0.19960408656887685,
+                "reference_MAE": 1.0833333333333333,
+                "relative_MAE_gain": 0.18424992606357865,
+                "status": "ok"
+              },
+              "fit18_medium": {
+                "MAE": 4.190600097786731,
+                "absolute_MAE_difference": -0.027583066156560143,
+                "reference_MAE": 4.1630170316301705,
+                "relative_MAE_gain": -0.00662573944497149,
+                "status": "ok"
+              }
+            },
+            "contexts": {
+              "0": {
+                "MAE": 164.65959640399132,
+                "absolute_MAE_difference": -25.706848366874965,
+                "reference_MAE": 138.95274803711635,
+                "relative_MAE_gain": -0.18500424590385417,
+                "status": "ok"
+              }
+            },
+            "neighbor_groups": {
+              "has_nonself_neighbor": {
+                "MAE": 85.71452572753984,
+                "absolute_MAE_difference": -13.10836861501329,
+                "reference_MAE": 72.60615711252655,
+                "relative_MAE_gain": -0.18054073010223728,
+                "status": "ok"
+              },
+              "no_nonself_neighbor": {
+                "MAE": 176.92518383219803,
+                "absolute_MAE_difference": -27.6642568983369,
+                "reference_MAE": 149.26092693386113,
+                "relative_MAE_gain": -0.18534158581632812,
+                "status": "ok"
+              }
+            },
+            "overall": {
+              "MAE": 164.65959640399132,
+              "absolute_MAE_difference": -25.706848366874965,
+              "reference_MAE": 138.95274803711635,
+              "relative_MAE_gain": -0.18500424590385417,
+              "status": "ok"
+            },
+            "windows": {
+              "12": {
+                "MAE": 164.65959640399132,
+                "absolute_MAE_difference": -25.706848366874965,
+                "reference_MAE": 138.95274803711635,
+                "relative_MAE_gain": -0.18500424590385417,
+                "status": "ok"
+              }
+            }
+          }
+        }
+      }
+    },
+    "recomputed_semantic_problems": [],
+    "relative_gains_comparison": {
+      "compared_fields": 90,
+      "extra_fields": [],
+      "failed_fields": [],
+      "label": "recompute:relative_gains",
+      "max_difference_path": null,
+      "max_normalized_difference": 0.0,
+      "missing_fields": [],
+      "null_field_paths": [],
+      "null_fields": 0,
+      "status": "ok",
+      "tolerance": 1e-12
+    },
+    "required_report_fields": [
+      "methods",
+      "references",
+      "relative_gains"
+    ],
+    "saved_split": {
+      "activity_group_names": [
+        "fit18_inactive",
+        "fit18_low",
+        "fit18_medium",
+        "fit18_high"
+      ],
+      "constant_group_names": [
+        "constant_fit18",
+        "nonconstant_fit18"
+      ],
+      "consumed_mask_keys": [
+        "activity_fit18_high",
+        "activity_fit18_inactive",
+        "activity_fit18_low",
+        "activity_fit18_medium",
+        "constant_fit18",
+        "has_nonself_neighbor",
+        "nonzero_activity_fit18"
+      ],
+      "fitting_month_count": 18,
+      "fold": "A",
+      "mean_artifact": "models/TrainMean18.npz",
+      "train_mean_method": "TrainMean18"
+    },
+    "source_data_read": false,
+    "status": "ok",
+    "stored_semantic_problems": []
+  },
+  "status": "ok",
+  "tolerances": {
+    "definition": "abs(a-b) / max(1, abs(a), abs(b))",
+    "metric_relative": 1e-12
+  },
+  "version": 1
+}

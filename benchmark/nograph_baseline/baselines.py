@@ -15,18 +15,32 @@ import numpy as np
 from . import protocol
 
 
-def train_mean27(signal: np.ndarray) -> np.ndarray:
-    """Return the frozen per-node mean over the 27 training observations.
+def train_mean(
+    signal: np.ndarray,
+    month_count: int = protocol.TRAIN_OBSERVATION_MONTH_COUNT,
+) -> np.ndarray:
+    """Return the frozen per-node mean over the first ``month_count`` months.
 
-    Computed with ``float32`` accumulation, exactly as in the v2 diagnostic, so
-    ``TrainMean27`` predictions reproduce the sealed log.
+    The default 27-month call keeps the ``float32`` accumulation of the v2
+    diagnostic so ``TrainMean27`` predictions reproduce the sealed log.  Fold
+    calls pass 18 or 21 and name the method ``TrainMean18``/``TrainMean21``.
     """
     values = np.asarray(signal)
     if values.ndim != 2 or values.shape[1] != protocol.N_MONTHS:
         raise ValueError(
             f"signal must have shape [N, {protocol.N_MONTHS}], got {values.shape}"
         )
-    return values[:, :protocol.TRAIN_OBSERVATION_MONTH_COUNT].mean(axis=1, keepdims=True)
+    count = int(month_count)
+    if not 1 <= count <= protocol.N_MONTHS:
+        raise ValueError(
+            f"month_count must be within 1..{protocol.N_MONTHS}, got {month_count}"
+        )
+    return values[:, :count].mean(axis=1, keepdims=True)
+
+
+def train_mean27(signal: np.ndarray) -> np.ndarray:
+    """Backward-compatible default: the frozen 27-month training mean."""
+    return train_mean(signal, protocol.TRAIN_OBSERVATION_MONTH_COUNT)
 
 
 def naive_predictions(
@@ -34,8 +48,14 @@ def naive_predictions(
     starts: Sequence[int],
     *,
     frozen_train_mean: np.ndarray | None = None,
+    train_mean_method: str = "TrainMean27",
 ) -> Dict[str, np.ndarray]:
-    """Return all five na\"ive predictions as ``[windows, nodes, H]`` arrays."""
+    """Return all five na\"ive predictions as ``[windows, nodes, H]`` arrays.
+
+    ``train_mean_method`` names the frozen-mean method for the selected fitting
+    scope (``TrainMean18``/``TrainMean21`` for folds) so no fold artifact uses
+    the main ``TrainMean27`` name.
+    """
     values = np.asarray(signal)
     offset = protocol.INPUT_LENGTH
     horizon = protocol.HORIZON
@@ -49,7 +69,7 @@ def naive_predictions(
         "Zero": np.zeros_like(gold),
         "LastValue": np.repeat(x[:, :, -1:], horizon, axis=2),
         "WindowMean6": np.repeat(x.mean(axis=2, keepdims=True), horizon, axis=2),
-        "TrainMean27": np.broadcast_to(
+        train_mean_method: np.broadcast_to(
             np.asarray(frozen_train_mean)[None, :, :], gold.shape
         ),
         "SeasonalNaive12": np.stack(

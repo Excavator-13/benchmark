@@ -88,6 +88,15 @@ def build_parser() -> argparse.ArgumentParser:
         choices=list(protocol.SUPPORTED_MODES),
         help="value mode (only count is supported by this protocol)",
     )
+    run.add_argument(
+        "--fold",
+        default=None,
+        choices=list(protocol.FOLD_NAMES),
+        help=(
+            "explicit development backtest fold A or B (T007 guide section 2); "
+            "omit for the unchanged default main split"
+        ),
+    )
     run.add_argument("--seed", type=int, default=0, help="deterministic seed")
     run.add_argument("--run-id", required=True, help="fresh run directory name")
     run.add_argument(
@@ -221,6 +230,7 @@ def _handle_run(args: argparse.Namespace) -> int:
         "data_name": args.data_name,
         "run_id": args.run_id,
         "mode": args.mode,
+        "fold": args.fold,
         "seed": int(args.seed),
         "purpose": args.purpose,
         "retain_candidates": bool(args.retain_candidates),

@@ -1,0 +1,469 @@
+{
+  "checker": {
+    "protocol_version": "P1-count-L6-H3-v3",
+    "source": {
+      "commit": "e9195006dc402d2ce6fb5afb3a164dfef699200c",
+      "errors": {},
+      "files": {
+        "benchmark/nograph_baseline/__init__.py": "d9c569ef793ad4575f7fef38f798f059687e3fd118a471b4d091bfec74c17d78",
+        "benchmark/nograph_baseline/__main__.py": "2ecea709492803226e52714799d7c861eb97af44100beeca58f3b7942fed2cfa",
+        "benchmark/nograph_baseline/_worker.py": "6b8add701f414edbf1931af2b29cab2231f8460043db7c88285ae5e400ca967b",
+        "benchmark/nograph_baseline/artifacts.py": "c116fb5b6ab019a0d5fc74f7528586ec599cb84f785983c4e7ba2173ad30c62d",
+        "benchmark/nograph_baseline/checks.py": "2e3107dbd39a5a3973fecb95c76e3190a72adc72ba94046e536af2c6d6320af3",
+        "benchmark/nograph_baseline/cli.py": "ba127970287be4a170eeb576af658cca4e8fee53a4bcc2d75e02d3d1868daf76",
+        "benchmark/nograph_baseline/data.py": "790dd78339e6b7f5476a34a9d272e4fbef1be21075a5b57691e7dff22871cc63",
+        "benchmark/nograph_baseline/metrics.py": "476040954e611cafeb05eea71731cd43209ef7601455999f6772c0e21ebf127c",
+        "benchmark/nograph_baseline/protocol.py": "7b941e0f097ccd3b3f1a02337fab497dbbdadae3d478cce74011ea5f8591d73b"
+      },
+      "identity_available": true,
+      "patch_bytes": 0,
+      "patch_eligible_files": [],
+      "patch_included": false,
+      "patch_omitted_reason": null,
+      "policy": "P01-records-v2",
+      "scoped_dirty": false,
+      "scoped_files": [],
+      "scoped_state_available": true,
+      "source_patch": null,
+      "untracked_files": [],
+      "whole_repository_dirty": true
+    }
+  },
+  "command": {
+    "argv": [
+      "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python",
+      "-m",
+      "benchmark.nograph_baseline",
+      "compare",
+      "--run-a",
+      "research/runs/p01-r2-backtest-b-001",
+      "--run-b",
+      "research/runs/p01-r2-backtest-b-repeat-001",
+      "--report",
+      "research/reports/nograph-baseline/p01-r2-backtest-b-repeat-check-001.json"
+    ],
+    "cwd": "/Users/watuji/da_chuang/repos/benchmark"
+  },
+  "created": "2026-10-17T15:55:37+08:00",
+  "errors": [],
+  "inputs": {
+    "consumed_prediction_sha256": {
+      "run_a:predictions/LastValue/eval.npy": "9d278c4449a985005277304a0be083e831f1926daf6b8d44fa90e5882cf81c90",
+      "run_a:predictions/LastValue/validation.npy": "6432f1f162c4d32409c8f261d7e9e427325a5221e777079f8bd9b8bb9baf6d44",
+      "run_a:predictions/SeasonalNaive12/eval.npy": "1c21d09f1f43a34b7c8561e58d89e28c8008c6c0803fdf73e7ffcf3d6d88d435",
+      "run_a:predictions/SeasonalNaive12/validation.npy": "062caa2afa62a19968faf13a4bdb9ceb90e2d0cb0d794c9d16b5bedc40ed45b9",
+      "run_a:predictions/SharedRidge/eval.npy": "162d68735d5305a3adb88bc0531f1a92d4ef740eff911e369a7b4baf38616064",
+      "run_a:predictions/SharedRidge/validation.npy": "755a1445f5b8352a5bad072f56e12afba44e1a1316ba554847b72049cb6e319e",
+      "run_a:predictions/TrainMean21/eval.npy": "87d0d5b26f938a431c8b573949e5fd10a9d1c997c86e1f5be1c8299ed6f77836",
+      "run_a:predictions/TrainMean21/validation.npy": "87d0d5b26f938a431c8b573949e5fd10a9d1c997c86e1f5be1c8299ed6f77836",
+      "run_a:predictions/WindowMean6/eval.npy": "e2801172db36ba1a546e0f2409872506da54a9977bb8e5ec800fae318150af3a",
+      "run_a:predictions/WindowMean6/validation.npy": "11a01e6ef6048a07335ad4499f61d250758b6c1e64a9c7cc64dbcbf76b5f3897",
+      "run_a:predictions/Zero/eval.npy": "5732a97a04b03e01ced0e8be4338ad95d31cb1a97f8d5c1346624a6a169f1cab",
+      "run_a:predictions/Zero/validation.npy": "5732a97a04b03e01ced0e8be4338ad95d31cb1a97f8d5c1346624a6a169f1cab",
+      "run_b:predictions/LastValue/eval.npy": "9d278c4449a985005277304a0be083e831f1926daf6b8d44fa90e5882cf81c90",
+      "run_b:predictions/LastValue/validation.npy": "6432f1f162c4d32409c8f261d7e9e427325a5221e777079f8bd9b8bb9baf6d44",
+      "run_b:predictions/SeasonalNaive12/eval.npy": "1c21d09f1f43a34b7c8561e58d89e28c8008c6c0803fdf73e7ffcf3d6d88d435",
+      "run_b:predictions/SeasonalNaive12/validation.npy": "062caa2afa62a19968faf13a4bdb9ceb90e2d0cb0d794c9d16b5bedc40ed45b9",
+      "run_b:predictions/SharedRidge/eval.npy": "162d68735d5305a3adb88bc0531f1a92d4ef740eff911e369a7b4baf38616064",
+      "run_b:predictions/SharedRidge/validation.npy": "755a1445f5b8352a5bad072f56e12afba44e1a1316ba554847b72049cb6e319e",
+      "run_b:predictions/TrainMean21/eval.npy": "87d0d5b26f938a431c8b573949e5fd10a9d1c997c86e1f5be1c8299ed6f77836",
+      "run_b:predictions/TrainMean21/validation.npy": "87d0d5b26f938a431c8b573949e5fd10a9d1c997c86e1f5be1c8299ed6f77836",
+      "run_b:predictions/WindowMean6/eval.npy": "e2801172db36ba1a546e0f2409872506da54a9977bb8e5ec800fae318150af3a",
+      "run_b:predictions/WindowMean6/validation.npy": "11a01e6ef6048a07335ad4499f61d250758b6c1e64a9c7cc64dbcbf76b5f3897",
+      "run_b:predictions/Zero/eval.npy": "5732a97a04b03e01ced0e8be4338ad95d31cb1a97f8d5c1346624a6a169f1cab",
+      "run_b:predictions/Zero/validation.npy": "5732a97a04b03e01ced0e8be4338ad95d31cb1a97f8d5c1346624a6a169f1cab"
+    },
+    "run_a": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r2-backtest-b-001",
+    "run_a_consumed_sha256": {
+      "config.json": "c880831513d10b517a9fcfd8df1457753f4ea4404f862497eff52c4a23607ac2",
+      "environment.json": "daf6ddab4e24ff18974073835f0e931069732ed1eed2bf8e2b97f7b3a77b56b0",
+      "masks.npz": "e8336317af44a187e9762eea87825f96fd5a0bef2555cd8454dad6e69d152d7c",
+      "metrics.json": "a4766a2a2ecd0ffdb7c57db312bbeb64f012b54c08d986a85ee64caa0aa42131",
+      "models/TrainMean21.npz": "52674d5e09fdfe2e1ea446a3c579801ba9b510cc78afd140685fdb48cb3678ed",
+      "provenance.json": "c6ffa777f91ba8bd9bc239de18758116d0d7e2a57fb8835dde626176f13fb930",
+      "selection.json": "92b37d863232f61b5b8d5f1d10e0d5689561158e431bfca997bdaa52be9210b7",
+      "source-sha256.json": "f037a0c19f1acff5340a25790adee902c5546ed08c0d3a248b09ec87e459e512",
+      "status.json": "d13568cee07892f9add4c2609af6b89c503766e8fbfb33db0141048207c72c77",
+      "windows.json": "0c624e800f181e08a42a90258ecbeabe6ea3c5607373694e237dac23b5dbdc4a"
+    },
+    "run_a_fold": "B",
+    "run_a_id": "p01-r2-backtest-b-001",
+    "run_a_status": "success",
+    "run_b": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r2-backtest-b-repeat-001",
+    "run_b_consumed_sha256": {
+      "config.json": "7dc3e8553f73d9eef6261f7af142ca3aa9d7c97a7fd05db437f6b5e13f1159ff",
+      "environment.json": "daf6ddab4e24ff18974073835f0e931069732ed1eed2bf8e2b97f7b3a77b56b0",
+      "masks.npz": "e8336317af44a187e9762eea87825f96fd5a0bef2555cd8454dad6e69d152d7c",
+      "metrics.json": "b9da4c3de33040c219e488ddaa0dd6bd57c176beca6ff8d044c182ed57b4862c",
+      "models/TrainMean21.npz": "52674d5e09fdfe2e1ea446a3c579801ba9b510cc78afd140685fdb48cb3678ed",
+      "provenance.json": "233fb8a9cb9c7136fc2f492145e579982e51993c772e6d1885c079a880589e50",
+      "selection.json": "92b37d863232f61b5b8d5f1d10e0d5689561158e431bfca997bdaa52be9210b7",
+      "source-sha256.json": "52bd00ac26971cf2971617eee9fe22529390aade9754cb2f76a9f937aeedb712",
+      "status.json": "347d6e795bedc0229ef08b4184b359e7d8571698130a5be8265b0dbf584d950e",
+      "windows.json": "0c624e800f181e08a42a90258ecbeabe6ea3c5607373694e237dac23b5dbdc4a"
+    },
+    "run_b_fold": "B",
+    "run_b_id": "p01-r2-backtest-b-repeat-001",
+    "run_b_status": "success"
+  },
+  "kind": "compare",
+  "result": {
+    "check": "compare",
+    "cpu_relative_tolerance": 1e-06,
+    "evaluation_splits_a": [
+      "validation",
+      "eval"
+    ],
+    "evaluation_splits_b": [
+      "validation",
+      "eval"
+    ],
+    "fold_a": "B",
+    "fold_b": "B",
+    "identity_checks": {
+      "clip_nonnegative": true,
+      "coverage_identity": true,
+      "dataset": true,
+      "demand_sha256": true,
+      "environment_condition_complete": true,
+      "environment_optional_packages": true,
+      "environment_packages": true,
+      "environment_semantic": true,
+      "evaluation_splits": true,
+      "fold": true,
+      "identity_evidence_complete": true,
+      "mode": true,
+      "naive_ref": true,
+      "naive_ref6": true,
+      "node_keys_sha256": true,
+      "protocol_sha256": true,
+      "protocol_version": true,
+      "ridge_backend": true,
+      "seed": true,
+      "selected_lambda": true,
+      "semantic_config": true
+    },
+    "identity_evidence": {
+      "config_identity_a": {
+        "clip_nonnegative": false,
+        "lambdas": [
+          0.0001,
+          0.001,
+          0.01,
+          0.1,
+          1.0
+        ],
+        "model_name": "SharedRidge",
+        "naive_methods": [
+          "Zero",
+          "LastValue",
+          "WindowMean6",
+          "TrainMean21",
+          "SeasonalNaive12"
+        ],
+        "protocol_version": "P1-count-L6-H3-v3",
+        "spec": {
+          "clip_nonnegative": false,
+          "data_name": "r2",
+          "fold": "B",
+          "mode": "count",
+          "ridge_backend": "numpy",
+          "seed": 0
+        }
+      },
+      "config_identity_b": {
+        "clip_nonnegative": false,
+        "lambdas": [
+          0.0001,
+          0.001,
+          0.01,
+          0.1,
+          1.0
+        ],
+        "model_name": "SharedRidge",
+        "naive_methods": [
+          "Zero",
+          "LastValue",
+          "WindowMean6",
+          "TrainMean21",
+          "SeasonalNaive12"
+        ],
+        "protocol_version": "P1-count-L6-H3-v3",
+        "spec": {
+          "clip_nonnegative": false,
+          "data_name": "r2",
+          "fold": "B",
+          "mode": "count",
+          "ridge_backend": "numpy",
+          "seed": 0
+        }
+      },
+      "environment_identity_a": {
+        "cpu_count": 10,
+        "machine": "arm64",
+        "numpy_blas_config": "{\n  \"Compilers\": {\n    \"c\": {\n      \"name\": \"clang\",\n      \"linker\": \"ld64\",\n      \"version\": \"14.0.0\",\n      \"commands\": \"cc\",\n      \"args\": \"-fno-strict-aliasing, -DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\",\n      \"linker args\": \"-fno-strict-aliasing, -DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\"\n    },\n    \"cython\": {\n      \"name\": \"cython\",\n      \"linker\": \"cython\",\n      \"version\": \"3.0.8\",\n      \"commands\": \"cython\"\n    },\n    \"c++\": {\n      \"name\": \"clang\",\n      \"linker\": \"ld64\",\n      \"version\": \"14.0.0\",\n      \"commands\": \"c++\",\n      \"args\": \"-DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\",\n      \"linker args\": \"-DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\"\n    }\n  },\n  \"Machine Information\": {\n    \"host\": {\n      \"cpu\": \"aarch64\",\n      \"family\": \"aarch64\",\n      \"endian\": \"little\",\n      \"system\": \"darwin\"\n    },\n    \"build\": {\n      \"cpu\": \"aarch64\",\n      \"family\": \"aarch64\",\n      \"endian\": \"little\",\n      \"system\": \"darwin\"\n    }\n  },\n  \"Build Dependencies\": {\n    \"blas\": {\n      \"name\": \"openblas64\",\n      \"found\": true,\n      \"version\": \"0.3.23.dev\",\n      \"detection method\": \"pkgconfig\",\n      \"include directory\": \"/opt/arm64-builds/include\",\n      \"lib directory\": \"/opt/arm64-builds/lib\",\n      \"openblas configuration\": \"USE_64BITINT=1 DYNAMIC_ARCH=1 DYNAMIC_OLDER= NO_CBLAS= NO_LAPACK= NO_LAPACKE= NO_AFFINITY=1 USE_OPENMP= SANDYBRIDGE MAX_THREADS=3\",\n      \"pc file directory\": \"/usr/local/lib/pkgconfig\"\n    },\n    \"lapack\": {\n      \"name\": \"dep4350285776\",\n      \"found\": true,\n      \"version\": \"1.26.4\",\n      \"detection method\": \"internal\",\n      \"include directory\": \"unknown\",\n      \"lib directory\": \"unknown\",\n      \"openblas configuration\": \"unknown\",\n      \"pc file directory\": \"unknown\"\n    }\n  },\n  \"Python Information\": {\n    \"path\": \"/private/var/folders/76/zy5ktkns50v6gt5g8r0sf6sc0000gn/T/cibw-run-iyy0yn4s/cp311-macosx_arm64/build/venv/bin/python\",\n    \"version\": \"3.11\"\n  },\n  \"SIMD Extensions\": {\n    \"baseline\": [\n      \"NEON\",\n      \"NEON_FP16\",\n      \"NEON_VFPV4\",\n      \"ASIMD\"\n    ],\n    \"found\": [\n      \"ASIMDHP\"\n    ],\n    \"not found\": [\n      \"ASIMDFHM\"\n    ]\n  }\n}\n",
+        "optional_packages": {
+          "sklearn": null
+        },
+        "packages": {
+          "numpy": "1.26.4",
+          "pandas": "2.2.3",
+          "pyarrow": "17.0.0"
+        },
+        "pip_freeze": "aiohappyeyeballs==2.7.1\naiohttp==3.14.5\naiosignal==1.4.0\nattrs==26.1.0\ncertifi==2026.7.22\ncharset-normalizer==3.5.2\ndecorator==4.4.2\nfilelock==4.1.0\nfrozenlist==1.8.0\nfsspec==2026.9.0\nidna==3.20\nJinja2==3.1.6\nMarkupSafe==3.0.4\nmpmath==1.3.0\nmultidict==7.1.0\nnetworkx==3.6.1\nnumpy==1.26.4\npackaging==26.3\npandas==2.2.3\npropcache==0.5.4\npsutil==7.2.2\npyarrow==17.0.0\npyparsing==3.3.3\npython-dateutil==2.9.0.post0\npytz==2026.5\nrequests==2.34.2\nscipy==1.17.1\nsix==1.17.0\nsympy==1.14.0\ntorch==2.14.1\ntorch-geometric==2.8.0.post1\ntorch_geometric_temporal==0.56.2\ntorch_scatter==2.1.2\ntorch_sparse==0.6.18\ntqdm==4.70.1\ntyping_extensions==4.16.0\ntzdata==2026.5\nurllib3==2.8.0\nxxhash==4.0.1\nyarl==1.25.1\n",
+        "platform": "macOS-27.0.1-arm64-arm-64bit",
+        "processor": "arm",
+        "python_version": "3.11.17 (main, Oct  1 2026, 20:09:52) [Clang 20.1.8 ]",
+        "python_version_info": [
+          3,
+          11,
+          17
+        ],
+        "system": "Darwin",
+        "thread_environment": {
+          "MKL_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        }
+      },
+      "environment_identity_b": {
+        "cpu_count": 10,
+        "machine": "arm64",
+        "numpy_blas_config": "{\n  \"Compilers\": {\n    \"c\": {\n      \"name\": \"clang\",\n      \"linker\": \"ld64\",\n      \"version\": \"14.0.0\",\n      \"commands\": \"cc\",\n      \"args\": \"-fno-strict-aliasing, -DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\",\n      \"linker args\": \"-fno-strict-aliasing, -DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\"\n    },\n    \"cython\": {\n      \"name\": \"cython\",\n      \"linker\": \"cython\",\n      \"version\": \"3.0.8\",\n      \"commands\": \"cython\"\n    },\n    \"c++\": {\n      \"name\": \"clang\",\n      \"linker\": \"ld64\",\n      \"version\": \"14.0.0\",\n      \"commands\": \"c++\",\n      \"args\": \"-DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\",\n      \"linker args\": \"-DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\"\n    }\n  },\n  \"Machine Information\": {\n    \"host\": {\n      \"cpu\": \"aarch64\",\n      \"family\": \"aarch64\",\n      \"endian\": \"little\",\n      \"system\": \"darwin\"\n    },\n    \"build\": {\n      \"cpu\": \"aarch64\",\n      \"family\": \"aarch64\",\n      \"endian\": \"little\",\n      \"system\": \"darwin\"\n    }\n  },\n  \"Build Dependencies\": {\n    \"blas\": {\n      \"name\": \"openblas64\",\n      \"found\": true,\n      \"version\": \"0.3.23.dev\",\n      \"detection method\": \"pkgconfig\",\n      \"include directory\": \"/opt/arm64-builds/include\",\n      \"lib directory\": \"/opt/arm64-builds/lib\",\n      \"openblas configuration\": \"USE_64BITINT=1 DYNAMIC_ARCH=1 DYNAMIC_OLDER= NO_CBLAS= NO_LAPACK= NO_LAPACKE= NO_AFFINITY=1 USE_OPENMP= SANDYBRIDGE MAX_THREADS=3\",\n      \"pc file directory\": \"/usr/local/lib/pkgconfig\"\n    },\n    \"lapack\": {\n      \"name\": \"dep4350285776\",\n      \"found\": true,\n      \"version\": \"1.26.4\",\n      \"detection method\": \"internal\",\n      \"include directory\": \"unknown\",\n      \"lib directory\": \"unknown\",\n      \"openblas configuration\": \"unknown\",\n      \"pc file directory\": \"unknown\"\n    }\n  },\n  \"Python Information\": {\n    \"path\": \"/private/var/folders/76/zy5ktkns50v6gt5g8r0sf6sc0000gn/T/cibw-run-iyy0yn4s/cp311-macosx_arm64/build/venv/bin/python\",\n    \"version\": \"3.11\"\n  },\n  \"SIMD Extensions\": {\n    \"baseline\": [\n      \"NEON\",\n      \"NEON_FP16\",\n      \"NEON_VFPV4\",\n      \"ASIMD\"\n    ],\n    \"found\": [\n      \"ASIMDHP\"\n    ],\n    \"not found\": [\n      \"ASIMDFHM\"\n    ]\n  }\n}\n",
+        "optional_packages": {
+          "sklearn": null
+        },
+        "packages": {
+          "numpy": "1.26.4",
+          "pandas": "2.2.3",
+          "pyarrow": "17.0.0"
+        },
+        "pip_freeze": "aiohappyeyeballs==2.7.1\naiohttp==3.14.5\naiosignal==1.4.0\nattrs==26.1.0\ncertifi==2026.7.22\ncharset-normalizer==3.5.2\ndecorator==4.4.2\nfilelock==4.1.0\nfrozenlist==1.8.0\nfsspec==2026.9.0\nidna==3.20\nJinja2==3.1.6\nMarkupSafe==3.0.4\nmpmath==1.3.0\nmultidict==7.1.0\nnetworkx==3.6.1\nnumpy==1.26.4\npackaging==26.3\npandas==2.2.3\npropcache==0.5.4\npsutil==7.2.2\npyarrow==17.0.0\npyparsing==3.3.3\npython-dateutil==2.9.0.post0\npytz==2026.5\nrequests==2.34.2\nscipy==1.17.1\nsix==1.17.0\nsympy==1.14.0\ntorch==2.14.1\ntorch-geometric==2.8.0.post1\ntorch_geometric_temporal==0.56.2\ntorch_scatter==2.1.2\ntorch_sparse==0.6.18\ntqdm==4.70.1\ntyping_extensions==4.16.0\ntzdata==2026.5\nurllib3==2.8.0\nxxhash==4.0.1\nyarl==1.25.1\n",
+        "platform": "macOS-27.0.1-arm64-arm-64bit",
+        "processor": "arm",
+        "python_version": "3.11.17 (main, Oct  1 2026, 20:09:52) [Clang 20.1.8 ]",
+        "python_version_info": [
+          3,
+          11,
+          17
+        ],
+        "system": "Darwin",
+        "thread_environment": {
+          "MKL_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        }
+      },
+      "source_identity_a": {
+        "coverage": "4cc1f399dd9061920179ade34d018fcbd58c3e00bb40f303b91e9aba99f9e12c",
+        "demand": "4ada154773b8678ae7d25b42e36a8309a51490bbe9fe059f015bb61724ed4c3c",
+        "node_keys": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+        "protocol": "b510beb0da9a482507072f78282d06bcf9dc93c3758dd7f16b1f8c326ba1d61a"
+      },
+      "source_identity_b": {
+        "coverage": "4cc1f399dd9061920179ade34d018fcbd58c3e00bb40f303b91e9aba99f9e12c",
+        "demand": "4ada154773b8678ae7d25b42e36a8309a51490bbe9fe059f015bb61724ed4c3c",
+        "node_keys": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+        "protocol": "b510beb0da9a482507072f78282d06bcf9dc93c3758dd7f16b1f8c326ba1d61a"
+      }
+    },
+    "identity_evidence_complete": true,
+    "mae_relative_differences": {
+      "eval/LastValue": {
+        "MAE_a": 8.009386152748037,
+        "MAE_b": 8.009386152748037,
+        "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+        "relative_difference": 0.0,
+        "status": "ok"
+      },
+      "eval/SeasonalNaive12": {
+        "MAE_a": 6.72847965738758,
+        "MAE_b": 6.72847965738758,
+        "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+        "relative_difference": 0.0,
+        "status": "ok"
+      },
+      "eval/SharedRidge": {
+        "MAE_a": 7.599239201442888,
+        "MAE_b": 7.599239201442888,
+        "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+        "relative_difference": 0.0,
+        "status": "ok"
+      },
+      "eval/TrainMean21": {
+        "MAE_a": 7.498657679830841,
+        "MAE_b": 7.498657679830841,
+        "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+        "relative_difference": 0.0,
+        "status": "ok"
+      },
+      "eval/WindowMean6": {
+        "MAE_a": 6.863643192925524,
+        "MAE_b": 6.863643192925524,
+        "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+        "relative_difference": 0.0,
+        "status": "ok"
+      },
+      "eval/Zero": {
+        "MAE_a": 17.50131224949212,
+        "MAE_b": 17.50131224949212,
+        "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+        "relative_difference": 0.0,
+        "status": "ok"
+      },
+      "validation/LastValue": {
+        "MAE_a": 5.089035304452863,
+        "MAE_b": 5.089035304452863,
+        "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+        "relative_difference": 0.0,
+        "status": "ok"
+      },
+      "validation/SeasonalNaive12": {
+        "MAE_a": 7.494709822654148,
+        "MAE_b": 7.494709822654148,
+        "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+        "relative_difference": 0.0,
+        "status": "ok"
+      },
+      "validation/SharedRidge": {
+        "MAE_a": 6.079121153990656,
+        "MAE_b": 6.079121153990656,
+        "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+        "relative_difference": 0.0,
+        "status": "ok"
+      },
+      "validation/TrainMean21": {
+        "MAE_a": 5.938438532492541,
+        "MAE_b": 5.938438532492541,
+        "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+        "relative_difference": 0.0,
+        "status": "ok"
+      },
+      "validation/WindowMean6": {
+        "MAE_a": 5.775939787238958,
+        "MAE_b": 5.775939787238958,
+        "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+        "relative_difference": 0.0,
+        "status": "ok"
+      },
+      "validation/Zero": {
+        "MAE_a": 16.196178553780268,
+        "MAE_b": 16.196178553780268,
+        "criterion": "abs(MAE_a-MAE_b)/max(1,MAE_a,MAE_b) <= 1e-6",
+        "relative_difference": 0.0,
+        "status": "ok"
+      }
+    },
+    "masks_equal": true,
+    "methods_equal": true,
+    "metric_comparison": {
+      "compared_fields": 7728,
+      "extra_fields": [],
+      "failed_fields": [],
+      "label": "metrics",
+      "max_difference_path": null,
+      "max_normalized_difference": 0.0,
+      "missing_fields": [],
+      "require_complete": true,
+      "status": "ok",
+      "tolerance": 1e-06
+    },
+    "missing_evidence": [],
+    "missing_methods": {
+      "run_a": [],
+      "run_b": []
+    },
+    "prediction_comparisons": {
+      "eval/LastValue": {
+        "elementwise_violations": 0,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      },
+      "eval/SeasonalNaive12": {
+        "elementwise_violations": 0,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      },
+      "eval/SharedRidge": {
+        "elementwise_violations": 0,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      },
+      "eval/TrainMean21": {
+        "elementwise_violations": 0,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      },
+      "eval/WindowMean6": {
+        "elementwise_violations": 0,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      },
+      "eval/Zero": {
+        "elementwise_violations": 0,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      },
+      "validation/LastValue": {
+        "elementwise_violations": 0,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      },
+      "validation/SeasonalNaive12": {
+        "elementwise_violations": 0,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      },
+      "validation/SharedRidge": {
+        "elementwise_violations": 0,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      },
+      "validation/TrainMean21": {
+        "elementwise_violations": 0,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      },
+      "validation/WindowMean6": {
+        "elementwise_violations": 0,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      },
+      "validation/Zero": {
+        "elementwise_violations": 0,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      }
+    },
+    "run_a": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r2-backtest-b-001",
+    "run_b": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p01-r2-backtest-b-repeat-001",
+    "seed_variance_reported": false,
+    "selection_a": 1.0,
+    "selection_b": 1.0,
+    "status": "ok",
+    "status_a": "success",
+    "status_b": "success"
+  },
+  "status": "ok",
+  "tolerances": {
+    "cpu_relative": 1e-06,
+    "definition": "abs(a-b) / max(1, abs(a), abs(b))"
+  },
+  "version": 1
+}

@@ -245,6 +245,63 @@ persists every losing Ridge candidate's parameters and validation predictions;
 by default only the selected model is persisted and `selection.json` still keeps
 the complete scalar candidate score table).
 
+**Development backtest folds.** `--fold {A,B}` selects one of the two fixed
+development backtest folds of `research/phases/P01/t007-backtest-guide.md`
+section 2; omitting it keeps the unchanged main split and every existing main
+artifact. A fold refits the normalization, frozen mean and activity grouping on
+its own fitting observations and reports `validation` plus `eval` (never
+`test`); 2023-07..12 is not computed. Fold A fits 2021-01..2022-06 (18 months,
+`TrainMean18`, `fit18` groups), uses training starts 0..9, validation start 12
+targeting 2022-07..09 and eval start 15 targeting 2022-10..12, omits starts 10,
+11, 13, 14, 16, 17 and marks 18..27 as outside the fold. Fold B fits
+2021-01..2022-09 (21 months, `TrainMean21`, `fit21` groups), uses training
+starts 0..12, validation start 15 targeting 2022-10..12 and eval start 18
+targeting 2023-01..03, omits starts 13, 14, 16, 17, 19, 20 and marks 21..27 as
+outside the fold. Each fold is development evidence about a different forecast
+origin, not an additional blind test and not a replacement for the main
+2023-07..12 evaluation.
+
+```bash
+# one A/B development smoke per dataset (ignored scratch output; no formal run)
+python -m benchmark.nograph_baseline run --data-name r0 --mode count --seed 0 \
+    --fold A --run-id probe-r0-backtest-a --purpose development
+python -m benchmark.nograph_baseline run --data-name r0 --mode count --seed 0 \
+    --fold A --run-id probe-r0-backtest-a-repeat --purpose development
+python -m benchmark.nograph_baseline run --data-name region --mode count --seed 0 \
+    --fold B --run-id probe-region-backtest-b --purpose development
+
+# saved-only fold checks: validation/eval metrics, gains and node errors
+python -m benchmark.nograph_baseline recompute \
+    --run-dir scratch/nograph-baseline/probe-r0-backtest-a \
+    --report scratch/nograph-baseline/reports/probe-r0-backtest-a-recompute.json
+python -m benchmark.nograph_baseline compare \
+    --run-a scratch/nograph-baseline/probe-r0-backtest-a \
+    --run-b scratch/nograph-baseline/probe-r0-backtest-a-repeat \
+    --report scratch/nograph-baseline/reports/probe-r0-backtest-a-compare.json
+# align-v2 rejects a fold run: the immutable v2 reference has no fold records
+python -m benchmark.nograph_baseline align-v2 \
+    --run-dir scratch/nograph-baseline/probe-r0-backtest-a \
+    --reference research/runs/phase1-20261006-v2-01/naive-baselines.log \
+    --report scratch/nograph-baseline/reports/probe-r0-backtest-a-align.json
+```
+
+Fold metadata is written consistently to `config.json`, `provenance.json`,
+`windows.json` (all 28 roles: train, validation, eval, omitted with reason, or
+outside_fold), `selection.json`, `metrics.json` and `audit.json`
+(`fit18`/`fit21` statistics; retained 27-month values stay under
+`main_protocol_diagnostics` and never feed fold fitting, grouping or
+selection). Fold runs save `models/TrainMean18.npz`/`TrainMean21.npz`,
+`activity_fit18_*`/`activity_fit21_*` masks, `predictions/<method>/validation.npy`
+and `eval.npy`, and `gold/validation.npy`/`gold/eval.npy`; no `test` split is
+computed. `recompute` reproduces every fold metric, gain and node-error column
+from saved evidence; `compare` additionally requires the same explicit fold,
+dataset, demand content identity and seed, so A-versus-B, main-versus-fold,
+different data/content or different seed fail even when predictions coincide.
+A formal fold run (`--purpose formal`) writes `research/runs/` and records
+`evidence_role=development_backtest`, but formal-fold execution/saving and
+research acceptance require separate authorization; implementation and
+verification use development fixtures only.
+
 **Formal vs development.** `--purpose formal` (the default) writes
 `research/runs/<run_id>/`; `--purpose development` writes the ignored
 `scratch/nograph-baseline/<run_id>/` and labels the run as development rather
@@ -273,6 +330,9 @@ and input run directories are left byte-for-byte unchanged. A missing or
 invalid saved input still produces a failure report and a nonzero exit; an
 invalid output destination produces no output. All three checks accept saved
 `r2` results under the same report contract and preserve `r2_id` identities.
+`recompute` and `compare` also accept saved fold A/B results (validation plus
+eval); `compare` requires the same fold and `align-v2` rejects fold runs
+explicitly because the v2 reference has no fold records.
 `align-v2` requires the supplied immutable reference to contain records for the
 run's dataset: the historical sealed v2 log holds `r0`/`region` records only and
 is never rewritten, so `r2` alignment uses a separate v2-format reference that

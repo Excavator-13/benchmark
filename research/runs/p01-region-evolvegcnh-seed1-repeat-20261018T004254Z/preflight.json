@@ -1,0 +1,46 @@
+{
+  "status": "passed",
+  "source_commit": "950a1d8febbf992b8bda061d35f03107d0b18478",
+  "nodes": 16345,
+  "splits": {
+    "train": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "validation": [
+      21
+    ],
+    "test": [
+      24,
+      25,
+      26,
+      27
+    ]
+  },
+  "activity_counts": {
+    "inactive": 1349,
+    "low": 2885,
+    "medium": 1817,
+    "high": 10294,
+    "has_neighbor": 2185,
+    "isolated": 14160
+  },
+  "environment_review_required": true
+}

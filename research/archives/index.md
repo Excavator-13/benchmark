@@ -1,6 +1,6 @@
 # 实验与归档索引
 
-更新日期：2026-10-12。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
+更新日期：2026-10-18。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
 
 ## 已有运行
 
@@ -148,6 +148,62 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 - 可读入口 `summary.md`、`provenance.json`、`command.json` 随 run 目录入库；`predictions/`、`gold/`、`node-errors.parquet`、`masks.npz`、`nodes.parquet`、`models/` 等展开数组**仅保留在本机**并被 `.gitignore` 忽略，需要时按上面的包在独立目录展开。
 - 关联 saved-only 检查报告（入 Git）：`research/reports/nograph-baseline/p01-r2-recompute-primary-001.json`、`p01-r2-recompute-repeat-001.json`、`p01-r2-repeat-check-001.json`。
 - 备份状态：包与可读入口随 2026-10-12 的 push 到 `origin/xzs`；**未做独立远端取回或恢复核验**。原始 run 源码身份见各 run 的 `provenance.json`（固定 commit 加相关差异）。
+
+## T007 内部两折回测实现证据（2026-10-17）
+
+所属任务 P01-T007。OpenSpec 变更 `add-nograph-backtest-folds` 已归档，独立报告为 [`Verdict: PASS`](../../openspec/changes/archive/2026-10-17-add-nograph-backtest-folds/verification.md)；研究侧按 [D020](../decisions.md#d020-t007-内部两折回测实现研究侧验收) 接受其实现就绪证据，并关闭 [DELEGATION](../../DELEGATION.md) 指针。
+
+回收时只读核对：活跃变更目录已不存在；按报告 37 文件主清单重算 SHA256（5 个规划文件映射到归档路径）后 37/37 一致，无缺失；报告聚合指纹仅因路径映射不同。另核对 `research/phases/P01/protocol.md` 未改、主切分常量与默认路径保持、`research/runs/` 无正式 fold run、旧 run/封存包/`experiments_archive/`/既有 OpenSpec 归档未改；本机按报告同款 formal-fold guard 复跑 287 项测试，285 通过、2 项 sklearn 跳过。回收核对后执行指导 §7 只做过一次记录性入口文字更新。
+
+证据性质与限制：折入口、产物、`recompute`/`compare` 与 `align-v2` 拒绝来自临时 fixture 与 `--purpose development` 运行（报告 E1/E2），**不是真实数据的折实验结果、收益或成本结论**；可选 sklearn 后端动态未执行；继承的 r2-scale 成本记录是旧测量。正式 fold run 与保存尚未获授权。
+
+保存状态：实现、测试、文档、主规格与归档变更目录随本次记录提交入库并 push `origin/xzs`；该提交同时包含本索引条目，提交身份从 Git 历史追溯。**未封存，备份与远端恢复未核验**。没有新增 run、封存包或备份核验；既有 T004/T006 包、旧 run、旧 OpenSpec 归档与科学协议未改。
+
+## T007 内部两折回测运行与保存（2026-10-17）
+
+所属任务 P01-T007；研究侧验收见 [D021](../decisions.md#d021-t007-内部两折回测研究侧验收)，分析见[两折报告](../analyses/p01-t007-backtest-20261017-01/report.md)。12 个正式 run 均 seed 0、`--purpose formal`、运行代码 commit `e9195006dc402d2ce6fb5afb3a164dfef699200c`、`success`；同 seed 主/重复各一组。
+
+| 数据 | A 折 | A 折重复 | B 折 | B 折重复 | 每组大小 |
+| --- | --- | --- | --- | --- | --- |
+| `r0` | `p01-r0-backtest-a-001` | `p01-r0-backtest-a-repeat-001` | `p01-r0-backtest-b-001` | `p01-r0-backtest-b-repeat-001` | 约 1.5 MB |
+| `region` | `p01-region-backtest-a-001` | `p01-region-backtest-a-repeat-001` | `p01-region-backtest-b-001` | `p01-region-backtest-b-repeat-001` | 约 7.9 MB |
+| `r2` | `p01-r2-backtest-a-001` | `p01-r2-backtest-a-repeat-001` | `p01-r2-backtest-b-001` | `p01-r2-backtest-b-repeat-001` | 约 45 MB |
+
+- 结果摘要：`eval` gain 相对当折 NaiveRef 为 `r0` -19.77% / +3.18%、`region` -11.85% / +1.70%、`r2` -30.41% / +5.12%（A/B）；折间平均均负，未满足协议 §6.2 的跨时间正收益条件。Ridge 在六组都不是评估 MAE 最小方法；主评测三组仍显著为负。完整表与限制见分析报告。
+- 检查：6 组同 seed `compare` 均 `ok`，预测与指标差 0；12 份 `recompute` 均 `ok`，`source_data_read=false`、`model_refit=false`、最大差 0；fold `align-v2` 按预期失败并留下报告。19 份检查报告位于 `research/reports/nograph-baseline/`（12 recompute、6 repeat-check、1 align-v2 拒绝）。
+- 保存状态：12 个 run 的 `summary.md`、`provenance.json`、`command.json`，19 份检查报告与两折分析报告随本次记录提交并 push `origin/xzs`；提交身份从 Git 历史追溯。完整预测、标签、模型、掩码、节点误差与 run 目录其余文件仍**仅在本机**（约 217 MB），已加入 `.gitignore` 的 fold run 规则，不上传；**未封存，未做异地备份或恢复核验**。后续需要完整数组或封存时另行处理。
+- 身份：运行代码 commit `e9195006dc402d2ce6fb5afb3a164dfef699200c`；三组 demand 与节点键 SHA256 见分析报告 §2，12 个 run 一致。
+
+没有新增封存包；既有 T004/T006 包、旧 run、旧 OpenSpec 归档与科学协议未改。
+
+## T005 原服务器受控复跑（2026-10-18）
+
+所属任务 P01-T005；[执行指导](../phases/P01/t005-evolvegcnh-guide.md)；研究侧验收见 [D022](../decisions.md#d022-t005-受控复跑研究侧验收)。
+
+| 项目 | 值 |
+| --- | --- |
+| run ID | `p01-region-evolvegcnh-seed1-repeat-20261018T004254Z` |
+| 状态 / 退出码 | `succeeded` / `exit 0` |
+| 条件 | 源码基准 `950a1d8febbf992b8bda061d35f03107d0b18478`；`region/count`、`EvolveGCNH`、seed 1、500 epoch、L6/H3、原始 count |
+| 设备与环境 | Tesla T4 / 驱动 `535.216.01` / CUDA 12.2 / torch `2.3.0+cu121` / Python 3.8.20；`pip freeze` 与归档旧清单逐字节一致；显存上报 `16384 MiB`（旧记录 `15360 MiB`），无法确认同一物理 GPU |
+| 选模 | 验证 MSE，选中 epoch `461`，`best_validation_MSE = 70053.0625`；重载验证 MSE 相同（MAE 55.239 / RMSE 264.675） |
+| 测试指标 | MAE `96.18077182769775` / RMSE `579.5045937857179`；float64 重算 MAE `96.18076957532733` |
+| 与旧 seed 1 比较 | `exact_prediction_match=true`、最大绝对预测差 `0.0`、归一化 MAE 差 `0.0`、`labels_identical=true`；负预测比例两侧同为 `0.16100234526358723` |
+| 成本 | 加载 1.33 s；训练+测试 80.34 s；峰值 RSS 1,197,146,112 bytes；峰值 CUDA allocated 298,932,224 / reserved 329,252,864 bytes |
+| 证据 | `condition-review.md`、`comparison.json`、`selection.json`、`cost.json`、`status.json`、`environment.json`、`inputs.json`、`pip-freeze.txt`、`nvidia-smi.txt`、`training-trace.jsonl`（1,000 条）、`outputs/count/region/EvolveGCNH/1/` |
+
+- 保存状态：整目录已取回本机 `research/runs/p01-region-evolvegcnh-seed1-repeat-20261018T004254Z/`（4.3 MB），含 checkpoint、测试/验证预测与标签。随本次记录提交入库并 push `origin/xzs`，提交身份从 Git 历史追溯（同一提交包含本条目）。**未封存，备份与远端恢复未核验**。
+- 入库范围：与本项目批量 run 的"可读入口入库、数组留本机"不同，本 run 体积小且预测/checkpoint 就是复现证据，故整目录入库、不新增忽略规则；与 T004/T006/T007 的减量政策不冲突（那些对象是数十至数百 MB 的批量产物）。
+- 首个尝试 `p01-region-evolvegcnh-seed1-repeat-20261018T003044Z` 在 §6 成本测量行失败（`torch.cuda.reset_peak_memory_stats` 未初始化 CUDA），`status.json=failed`、无训练产物；保留在服务器 `~/t005-runs/`，未取回本机。指导 §6 已按 2026-10-18 实机诊断补 `torch.cuda.init()`，该改动只影响成本统计起点。
+- 限制：单 seed 的一次同条件重复，不是初始化方差或稳定平均性能的估计；模型仍差于 `NaiveRef=LastValue`（测试 MAE 96.18 vs 35.31）；发布图构建时间未知；显存上报差异未解释。以上限制不因逐张量一致而消失。
+
+## T008 阶段汇总（2026-10-18）
+
+所属任务 P01-T008；研究侧验收见 [D023](../decisions.md#d023-t008-阶段验收与-p02-骨架范围)。[P01 阶段汇总](../analyses/p01-t008-stage-summary-20261018-01/report.md) 综合 T001–T007 的已接受结果与限制，不新增预测或指标计算；[P02 计划](../phases/P02/plan.md) 记录冻结配置与骨架，但 P02 未启动。
+
+- 保存状态：随本次记录提交入库并 push `origin/xzs`，提交身份从 Git 历史追溯。**未封存，备份与远端恢复未核验**。这不是实验 run，无包、无新增预测，因此没有独立的内容身份或包外校验。
+- 内容：逐任务证据表、七项阶段完成条件判定、进入第二阶段的四个条件（"自身时序学习基线"为有条件满足）、P01 未证明事项清单。
+- 边界：P02 的实现变更名 `add-graph-value-skeleton` 只是预登记，未调用任何 OpenSpec 流程、未改代码、未运行新实验。
 
 ## my-change PR 合入（2026-10-11 接手记录）
 

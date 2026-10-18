@@ -5,8 +5,10 @@ biases, fit on standardized training windows with the objective
 
 ``(1/M) * sum_m ||x_m W + b - y_m||_2^2 + lambda * ||W||_F^2``
 
-where ``M = 19 * N``.  Lambda is chosen exclusively by validation original-unit
-MSE; test labels never reach fitting or selection.
+where ``M`` equals the selected definition's training-window count times the
+node count (``19 * N`` for the main split, ``10 * N`` for fold A and ``13 * N``
+for fold B).  Lambda is chosen exclusively by validation original-unit MSE; test
+or fold-eval labels never reach fitting or selection.
 """
 
 from __future__ import annotations
@@ -66,7 +68,7 @@ def validate_model_payload(
 
 @dataclass
 class TrainingStats:
-    """Frozen per-node statistics over the unique 27 training observations."""
+    """Frozen per-node statistics over the unique fitting observations."""
 
     mean: np.ndarray  # float64 [N]
     std: np.ndarray  # float64 [N]
@@ -74,13 +76,20 @@ class TrainingStats:
     constant_mask: np.ndarray  # bool [N]
     activity: np.ndarray  # float64 [N]
     activity_groups: Dict[str, np.ndarray]
-    train_mean27_float32: np.ndarray  # float32 [N, 1]
+    train_mean_float32: np.ndarray  # float32 [N, 1]
     train_observation_months: Tuple[str, ...] = protocol.TRAIN_OBSERVATION_MONTHS
+    fitting_month_count: int = protocol.TRAIN_OBSERVATION_MONTH_COUNT
+    train_mean_method: str = "TrainMean27"
     ddof: int = 0
 
     @property
     def node_count(self) -> int:
         return int(self.mean.shape[0])
+
+    @property
+    def train_mean27_float32(self) -> np.ndarray:
+        """Backward-compatible alias of :attr:`train_mean_float32`."""
+        return self.train_mean_float32
 
     def standardize(self, values: np.ndarray) -> np.ndarray:
         """Standardize raw values whose first axis is the node index."""
@@ -106,6 +115,8 @@ class TrainingStats:
         return {
             "node_count": self.node_count,
             "train_observation_months": list(self.train_observation_months),
+            "fitting_month_count": self.fitting_month_count,
+            "train_mean_method": self.train_mean_method,
             "ddof": self.ddof,
             "mean": self.mean,
             "std": self.std,
@@ -115,25 +126,31 @@ class TrainingStats:
         }
 
 
-def compute_training_stats(signal: np.ndarray) -> TrainingStats:
+def compute_training_stats(
+    signal: np.ndarray,
+    *,
+    definition: Optional[protocol.SplitDefinition] = None,
+) -> TrainingStats:
     """Compute the frozen normalization and activity/constant masks.
 
-    Statistics use exactly the 27 unique observations ``2021-01..2023-03``
-    (each month counted once), never flattened overlapping windows.
+    Statistics use exactly the unique fitting observations of the selected
+    definition (``2021-01..2023-03`` for main, the first 18/21 months for A/B),
+    each month counted once, never flattened overlapping windows.
     """
+    definition = protocol.MAIN_SPLIT if definition is None else definition
     values = np.asarray(signal)
     if values.ndim != 2 or values.shape[1] != protocol.N_MONTHS:
         raise RidgeError(
             f"signal must have shape [N, {protocol.N_MONTHS}], got {values.shape}"
         )
-    train_count = protocol.TRAIN_OBSERVATION_MONTH_COUNT
+    train_count = definition.fitting_month_count
     train = values[:, :train_count].astype(np.float64)
     mean = train.mean(axis=1)
     std = train.std(axis=1, ddof=0)
     constant_mask = std == 0
     effective_std = np.where(constant_mask, 1.0, std)
-    # Activity is defined by the same unique training range; the boolean-mean
-    # formula matches the v2 diagnostic exactly (all boundaries are k/27).
+    # Activity is defined by the same unique fitting range; the boolean-mean
+    # formula matches the v2 diagnostic exactly for the main split.
     activity = (values[:, :train_count] > 0).mean(axis=1).astype(np.float64)
     groups = activity_group_masks(activity)
     return TrainingStats(
@@ -143,7 +160,10 @@ def compute_training_stats(signal: np.ndarray) -> TrainingStats:
         constant_mask=constant_mask,
         activity=activity,
         activity_groups=groups,
-        train_mean27_float32=values[:, :train_count].mean(axis=1, keepdims=True),
+        train_mean_float32=values[:, :train_count].mean(axis=1, keepdims=True),
+        train_observation_months=definition.fitting_observation_months,
+        fitting_month_count=train_count,
+        train_mean_method=definition.train_mean_method,
     )
 
 
@@ -340,7 +360,8 @@ def fit_candidates(
 
     ``y_validation`` arrives standardized with the frozen node statistics, so
     it is inverse-transformed first: selection must compare original-unit
-    predictions with original-unit labels.
+    predictions with original-unit labels.  Fold eval labels are never passed
+    here; the caller builds and evaluates them only after selection is frozen.
     """
     if backend not in ("numpy", "sklearn"):
         raise RidgeError(f"unknown ridge backend {backend!r}")

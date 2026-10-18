@@ -1,0 +1,17 @@
+{
+  "task_id": "P01-T005",
+  "run_id": "p01-region-evolvegcnh-seed1-repeat-20261018T004254Z",
+  "source_commit": "950a1d8febbf992b8bda061d35f03107d0b18478",
+  "scientific_protocol": "P1-count-L6-H3-v3",
+  "records_policy": "P01-records-v2",
+  "protocol_snapshot": "protocol.md",
+  "executed_commands": "guide.md sections 5-7",
+  "inputs": "inputs.json",
+  "environment": "environment.json",
+  "condition_review": "condition-review.md",
+  "config": "config.json",
+  "training_trace": "training-trace.jsonl",
+  "limitations": [
+    "Published graph construction cutoff unknown; fixed-period evidence only"
+  ]
+}

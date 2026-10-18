@@ -1,0 +1,42 @@
+{
+  "benchmark/graph_method/main.py": {
+    "sha256": "c63dfc355afec0afd01adca34a42ccdf5a13b5a5d5b3dd20df9706d531db1b09",
+    "bytes": 34835
+  },
+  "benchmark/graph_method/dataset.py": {
+    "sha256": "d201185f31c881a0f539cb24eed68eee704d20f5790dbfd382c4d4cc4a882096",
+    "bytes": 12884
+  },
+  "benchmark/graph_method/prepare_graph_data.py": {
+    "sha256": "bf347e7ccaa2e694ad051cf8eb107be8c6dad048f219197d22752a7fe8888bd6",
+    "bytes": 14596
+  },
+  "benchmark/graph_method/models/__init__.py": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "benchmark/graph_method/models/evolvegcnh.py": {
+    "sha256": "08fba1c5096ac6d74132b6856b838f1b8a964197264eed761b941d3b0764d92c",
+    "bytes": 5720
+  },
+  "dataset/demand/region.parquet": {
+    "sha256": "27a946c787efcd5f1d2b25ca35bebd1392320d9b10920e771405a664db5e4a3f",
+    "bytes": 912025
+  },
+  "dataset/graph/region.parquet": {
+    "sha256": "c0bed3290be3691fbb07c4834c96e8d567e1f54cdfb2120d8a0846a86b64d87c",
+    "bytes": 1394831
+  },
+  "/home/ubuntu/benchmark/benchmark/graph_method/data/count/region.json": {
+    "sha256": "d0c476e055429f57370a811a947c69dd3f1ebec6d10a67ba8930fa048462b356",
+    "bytes": 7787048
+  },
+  "/home/ubuntu/t005-runs/p01-region-evolvegcnh-seed1-repeat-20261018T004254Z/guide.md": {
+    "sha256": "ffe0754318249280ceeaa9dc04d726de7810f0b29efba8d3ae995d506c941304",
+    "bytes": 37599
+  },
+  "/home/ubuntu/t005-runs/p01-region-evolvegcnh-seed1-repeat-20261018T004254Z/protocol.md": {
+    "sha256": "b510beb0da9a482507072f78282d06bcf9dc93c3758dd7f16b1f8c326ba1d61a",
+    "bytes": 28232
+  }
+}

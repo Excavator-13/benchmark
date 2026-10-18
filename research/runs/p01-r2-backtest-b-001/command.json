@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python",
+    "-m",
+    "benchmark.nograph_baseline",
+    "run",
+    "--data-name",
+    "r2",
+    "--mode",
+    "count",
+    "--seed",
+    "0",
+    "--fold",
+    "B",
+    "--run-id",
+    "p01-r2-backtest-b-001",
+    "--purpose",
+    "formal"
+  ],
+  "cwd": "/Users/watuji/da_chuang/repos/benchmark",
+  "cwd_differs_from_launcher": false,
+  "launcher_cwd": "/Users/watuji/da_chuang/repos/benchmark",
+  "python": "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python"
+}

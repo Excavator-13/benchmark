@@ -420,6 +420,69 @@ def build_audit(
     return audit
 
 
+def build_fold_audit(
+    base_audit: Dict[str, Any],
+    signal: np.ndarray,
+    definition: "protocol.SplitDefinition",
+) -> Dict[str, Any]:
+    """Scope descriptive audits for an explicit A/B fold run.
+
+    The fold-fitting statistics live in a distinct ``fit18``/``fit21``
+    namespace.  Every retained 27-month value (including nested per-context
+    values) is moved under ``main_protocol_diagnostics`` with an explicit
+    ``2021-01..2023-03`` scope and a descriptive-only marker, so neither the
+    main-protocol nor the full-36-month diagnostics can be mistaken for fold
+    fitting, grouping or selection inputs.
+    """
+    values = np.asarray(signal)
+    count = definition.fitting_month_count
+    fit = values[:, :count].astype(np.float64)
+    activity = (values[:, :count] > 0).mean(axis=1).astype(np.float64)
+    std = fit.std(axis=1, ddof=0)
+    constant = std == 0
+    groups = activity_group_masks(activity)
+    label = definition.scope_label
+    return {
+        "dataset": base_audit.get("dataset"),
+        "mode": base_audit.get("mode"),
+        "key_columns": base_audit.get("key_columns"),
+        "nodes": base_audit.get("nodes"),
+        "fold": definition.fold,
+        "evidence_role": "development_backtest",
+        label: {
+            "fitting_observation_months": list(
+                definition.fitting_observation_months
+            ),
+            "fitting_month_count": count,
+            "train_all_zero_fraction": float((activity == 0).mean()),
+            "constant_node_count": int(constant.sum()),
+            "constant_node_fraction": float(constant.mean()),
+            "activity_group_counts": {
+                f"{label}_{name}": int(mask.sum())
+                for name, mask in groups.items()
+            },
+            "value_range": {
+                "min": float(fit.min()),
+                "max": float(fit.max()),
+                "mean": float(fit.mean()),
+            },
+        },
+        "main_protocol_diagnostics": {
+            **base_audit,
+            "scope": (
+                "main-protocol descriptive diagnostics over 2021-01..2023-03 "
+                "(27 months)"
+            ),
+            "descriptive_only": True,
+            "excluded_from_fold_fitting_grouping_selection": True,
+        },
+        "full_36_month_diagnostics_scope": (
+            "2021-01..2023-12 descriptive only; never used for fold fitting, "
+            "grouping or selection"
+        ),
+    }
+
+
 def activity_group_masks(activity: np.ndarray) -> Dict[str, np.ndarray]:
     """Return the four fixed training-activity masks in protocol order."""
     activity = np.asarray(activity, dtype=np.float64)

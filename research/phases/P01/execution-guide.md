@@ -394,6 +394,24 @@ python -m benchmark.nograph_baseline run --data-name r2 --mode count --seed 0 --
 
 模型调用必须使用新的 run ID。此命令会执行模型，仅在相应实验已授权时运行。两组现有正式结果见[索引](../../archives/index.md#t004-baseline-运行2026-10-07)；数组已清理时，在独立空目录从包展开，不能对仅有可读入口的 run 目录直接重算。`r2/count` 的正式 run 与保存同样需用户单独授权；上面的 `--purpose development` 只写忽略的 `scratch/nograph-baseline/`，属于实现/开发证据，不是正式 r2 实验或科研验收，也不改变已接受的 `r0`/`region` 证据。
 
+**开发回测折入口（T007）。** 入口支持 `--fold A|B`，省略时仍是原主切分，旧主入口、产物与旧 run 不变。A 折用拟合观察期 `2021-01..2022-06`（18 月，`TrainMean18`/`fit18`），训练起点 `0..9`、验证起点 `12`（目标 `2022-07..09`）、eval 起点 `15`（目标 `2022-10..12`）；B 折用 `2021-01..2022-09`（21 月，`TrainMean21`/`fit21`），训练 `0..12`、验证 `15`（目标 `2022-10..12`）、eval `18`（目标 `2023-01..03`）。折内验证与开发评估分别命名 `validation` 与 `eval`，不计算 `2023-07..12`；两折是不同起点的开发证据，不是额外盲测，也不替代主评测。实现期只用 development 冒烟：
+
+```bash
+python -m benchmark.nograph_baseline run --data-name r0 --mode count --seed 0 \
+    --fold A --run-id probe-r0-backtest-a --purpose development
+python -m benchmark.nograph_baseline run --data-name r0 --mode count --seed 0 \
+    --fold A --run-id probe-r0-backtest-a-repeat --purpose development
+python -m benchmark.nograph_baseline recompute \
+    --run-dir scratch/nograph-baseline/probe-r0-backtest-a \
+    --report scratch/nograph-baseline/reports/probe-r0-backtest-a-recompute.json
+python -m benchmark.nograph_baseline compare \
+    --run-a scratch/nograph-baseline/probe-r0-backtest-a \
+    --run-b scratch/nograph-baseline/probe-r0-backtest-a-repeat \
+    --report scratch/nograph-baseline/reports/probe-r0-backtest-a-compare.json
+```
+
+`recompute` 从保存产物重算 fold 的 validation/eval 指标、收益与节点表，不读源数据、不重训；`compare` 额外要求同数据集、同需求内容身份、同折、同 seed，折或数据不一致即失败；`align-v2` 明确拒绝 fold run，因为既有 v2 参考没有折记录。`--purpose formal` 的折 run 写入 `research/runs/` 并标记 `evidence_role=development_backtest`，但正式 fold 运行、保存与 T007 实验验收都需用户另行授权；实现与独立验证只用临时 fixture/development 输出。操作与产物契约见 [T007 指导](t007-backtest-guide.md)，准确命令以 [README §4.5](../../../README.md#45-graph-free-cpu-baseline-benchmarknograph_baseline) 与 CLI help 为准。
+
 记录减负已由 [T010 独立 PASS](../../../openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/verification.md)及 [D011 研究侧验收](../../decisions.md#d011-t010-记录减负研究侧验收)完成。模型默认 `--purpose formal`，临时开发显式使用 `--purpose development`（输出在忽略的 `scratch/nograph-baseline/`）；默认只保存被选模型与完整候选验证分数，研究需要完整候选数组时使用 `--retain-candidates`。已提交源码/协议用固定 commit 与路径定位，相关脏内容保存可恢复材料。
 
 `recompute`、`compare`、`align-v2` 使用 `--report PATH` 生成一份不覆盖已有文件的 JSON 报告，返回 `report_path`；模型仍返回 `run_dir`。旧检查 `--run-id ID`/`--runs-root ROOT` 是单份 `<ROOT>/<ID>.json` 报告的兼容别名，默认报告根为 `research/reports/nograph-baseline/`，不再产生完整 check run。不能同时给 `--report` 和旧 run ID，报告路径不能在输入 run 内。以按需展开的旧包为输入也支持：
@@ -406,9 +424,11 @@ python -m benchmark.nograph_baseline recompute \
 
 `P01_RESTORE_DIR` 的按需展开方法见[索引](../../archives/index.md#内容身份与恢复限制)。仅有可读入口的原目录不含数组，不能直接重算；报告保留输入执行身份、来源、命令、容差和结果/失败信息，不改输入、不重训。三个检查同样支持保存的 `r2` 结果并保留 `r2_id` 身份；`align-v2` 的参考必须含被检查数据的记录：历史封存 v2 日志只有 `r0`/`region`，不新增 `r2` 记录也不改写，因此 r2 对齐使用独立的、含 r2 记录的 v2-format 参考；缺 r2 记录的参考显式失败，缺来源身份保持 `limited`。
 
-无图入口现支持 `r2/count` 的同一流程；其实现与对齐证据来自临时 fixture/development，不是正式 r2 run 或科研验收。正式 `r2/count` 运行与保存需用户单独授权，独立验证与研究侧验收由相应流程另行完成（研究侧实现验收见 [D017](../../decisions.md#d017-t006-r2count-实现研究侧验收与委托回收)）。科研接续再做训练期内部回测；不把多个重叠窗口当作独立实验。旧图 CLI 不支持 `--model_name Ridge` 或 `--learning_rate ...`。
+无图入口现支持 `r2/count` 的同一流程；其实现与对齐证据来自临时 fixture/development，不是正式 r2 run 或科研验收。正式 `r2/count` 运行与保存需用户单独授权，独立验证与研究侧验收由相应流程另行完成（研究侧实现验收见 [D017](../../decisions.md#d017-t006-r2count-实现研究侧验收与委托回收)）。科研接续再做训练期内部回测；操作、折定义与产物契约见独立的 [T007 指导](t007-backtest-guide.md)；fold 实现已由归档 PASS 按 [D020](../../decisions.md#d020-t007-内部两折回测实现研究侧验收) 接受，两折正式 run 已完成并按 [D021](../../decisions.md#d021-t007-内部两折回测研究侧验收) 接受，结果见[分析报告](../../analyses/p01-t007-backtest-20261017-01/report.md)；后续复现需新 run ID 与授权。不把多个重叠窗口当作独立实验。旧图 CLI 不支持 `--model_name Ridge` 或 `--learning_rate ...`。
 
 ## 8. 什么时候恢复 GPU 实验
+
+T005 的完整操作请使用独立的 [原服务器受控复跑指导](t005-evolvegcnh-guide.md)：本机传材料 → 原服务器条件核对 → 独立输出复跑 → 保存预测重算/分组/同 seed 比较 → 取回与交接。本节保留入口背景，历史指南不再作为本轮的完整操作入口。
 
 当归档比较已对齐，且决定需要回答 EvolveGCN-H 的重复性问题时，准备 T005 的受控复跑。原结果提交为 `950a1d8febbf992b8bda061d35f03107d0b18478`，GPU 为 Tesla T4，环境名为 `job-sdf`。优先保留原机器/环境；新机器需从历史日志核对依赖和设备，不能仅凭环境名认定条件相同。旧指南的前篇环境安装文档未入库，不能依赖其中缺失链接重建环境。
 

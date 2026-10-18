@@ -1,6 +1,6 @@
 # 建议与决定
 
-更新日期：2026-10-11。状态为 `proposed / accepted / rejected / superseded`。接受决定不表示关联实验已经执行。
+更新日期：2026-10-17。状态为 `proposed / accepted / rejected / superseded`。接受决定不表示关联实验已经执行。
 
 ## D001: 建立归档索引和进展记录
 
@@ -275,3 +275,105 @@ T006 任务状态改为 `in_progress`（实现部分完成）。剩余研究项�
 限制：未运行 `align-v2`（既有 v2 诊断参考不含 r2 记录，伪造参考属于新范围）；测试窗口已被查看，分组指标仅作描述性诊断；`SharedRidge` 劣于 `LastValue` 不构成图收益证据；图构建时间来源仍未决（D015），固定评测期结果不升级为历史或跨时间主张；成本只代表本机 CPU 条件。
 
 影响：按已接受顺序推进 T007 训练期内部两折无图回测；P01 仍 active（T005、T007、T008 未完成），科学协议与主张范围不变。
+
+## D019: 委派 T007 内部两折回测实现并登记范围
+
+提出及接受日期：2026-10-13。状态：`accepted`。
+来源：用户 2026-10-13 表示原服务器暂时无法开机，T005 暂缓，改做 T007；确认 T007 覆盖 `r0`/`region`/`r2` 三组 count、每折活跃度分组用该折拟合观察期、写执行指导并把实现登记为 OpenSpec 委托。
+
+决定：
+- T007 按协议 §8 的两折执行：A 拟合 `2021-01..2022-06`（18 月），验证 `2022-07..09`，开发评估 `2022-10..12`；B 拟合 `2021-01..2022-09`（21 月），验证 `2022-10..12`，开发评估 `2023-01..03`。窗口起点、边界省略与目标隔离见[执行指导](phases/P01/t007-backtest-guide.md#2-两折的固定定义)。
+- 覆盖三组 count（`r0`、`region`、`r2`）；每折重新构造窗口、标准化与 `TrainMean<fit>`，`NaiveRef`/`NaiveRef6` 与 `lambda` 只在折内验证上选。
+- 折内活跃度分组使用各折拟合观察期（A `fit18`、B `fit21`），不使用主协议 27 月掩码；主协议掩码如后续需要，只作单独标记的描述性对照。
+- 实现先经 OpenSpec 变更 `add-nograph-backtest-folds`（拟用名），登记为 [DELEGATION](../DELEGATION.md) 在途委托；研究侧只读核对结束判据，不代跑 propose/apply/verify/archive。
+- 正式 fold run 与保存需用户另行授权；T007 在实现 PASS 与正式 run 完成前保持 `todo`。本轮只写指导与登记，不启动 run、不改代码、不封存、不 commit/push。
+
+影响：DELEGATION 由 `closed` 改为 `open`；T005 保持 `todo` 并暂缓，等服务器可用；科学协议、主切分、主评测与收益门槛不变；T008 依赖不变。
+
+## D020: T007 内部两折回测实现研究侧验收
+
+提出及接受日期：2026-10-17。状态：`accepted`。
+来源：用户 2026-10-17 告知 OpenSpec 侧完成；依据归档独立报告 [`Verdict: PASS`](../openspec/changes/archive/2026-10-17-add-nograph-backtest-folds/verification.md) 与回收时的只读核对。
+
+结果：
+- 归档报告：37 文件主清单；完整 CPU discovery 287 项，285 通过、2 项可选 sklearn 跳过；E1/E2 覆盖六组 A/B × `r0`/`region`/`r2` 的 development 重复、saved-only `recompute`/`compare`、基本数值与分组/收益断言；E3 主切分预变更契约 0 difference。细节与限制见报告。
+- 回收核对：活跃变更目录已不存在；把 5 个规划文件映射到归档路径后，37/37 单文件 SHA256 与报告主清单一致，无缺失；报告聚合指纹只因路径映射不同，不重算为另一份依据。`research/phases/P01/protocol.md` 未改；`SPLITS`、`TRAIN_OBSERVATION_MONTH_COUNT` 等主切分常量与默认路径保持；`research/runs/` 无正式 fold run；旧 run、封存包、`experiments_archive/` 与既有 OpenSpec 归档未改。
+- 实现内容：`--fold A|B` 与不可变折定义、折内标准化、`TrainMean18`/`TrainMean21`、`fit18`/`fit21` 活跃度分组、`validation`/`eval` 输出、折产物与掩码、`recompute`/`compare` 支持、`align-v2` 明确拒绝、README §4.5 与执行指导 §7 入口、新增 `test_folds.py` 等测试。
+- 测试：本机 `job-sdf-baseline` 按报告同款 formal-fold guard 复跑 287 项，285 通过、2 项 sklearn 跳过，0 失败/错误。
+
+决定：接受该实现为 P01-T007 就绪证据；T007 改为 `in_progress`。正式折运行（`r0`/`region`/`r2` × A/B，主 run 与同 seed 重复）、产物保存与跨折收益判断仍需用户另行授权；实现 PASS 不是 T007 实验验收。
+
+限制：实现证据来自临时 fixture 与 `--purpose development` 运行，不是真实数据折结果、收益或成本结论；可选 sklearn 后端动态测试未执行；继承的 r2-scale 成本记录是旧测量，不冒充当前新测量。回收核对后，执行指导 §7 为记录入口说明做过一次文字更新，不属于实现变更；报告主清单的 5 个规划文件已随归档移动。
+
+影响：T007 进入正式折运行准备；T005 仍因服务器暂缓，T008 依赖未满足；科学协议、主切分、主评测与收益门槛不变；[DELEGATION](../DELEGATION.md) 关闭。
+
+## D021: T007 内部两折回测研究侧验收
+
+提出及接受日期：2026-10-17。状态：`accepted`。
+来源：本轮 12 个正式 fold run、19 份检查报告与[两折分析报告](analyses/p01-t007-backtest-20261017-01/report.md)；实现就绪依据见 [D020](decisions.md#d020-t007-内部两折回测实现研究侧验收)。
+
+结果：
+- 身份：12 个 run 均 seed 0、`--purpose formal`、commit `e9195006dc402d2ce6fb5afb3a164dfef699200c`、`success`；三组数据的 demand 与节点键身份在 12 个 run 中一致。
+- 选模：只按折内验证 MSE；A 折 `NaiveRef` 三组均为 LastValue，B 折 `r0`/`region` 为 TrainMean21、`r2` 为 LastValue；Ridge 的验证 MSE 六组均高于当折参照。
+- 收益（`eval` 相对 `NaiveRef`）：`r0` -19.77% / +3.18%，`region` -11.85% / +1.70%，`r2` -30.41% / +5.12%（A/B）；折间平均 -8.30% / -5.07% / -12.64%，三组都未满足 §6.2 的跨时间正收益条件。
+- 描述性：Ridge 在六组 `eval` 中都不是 MAE 最小的方法（A 折 LastValue，B 折 SeasonalNaive12）；B 折正收益由 high 组驱动，inactive 组大幅变差；主评测三组 gain 为 -44.71% / -34.80% / -41.19%（T004/T006 已保存，未重跑）。
+- 检查：6 组同 seed 重复的预测最大绝对差 0、指标归一化差 0；12 份 `recompute` 均 `source_data_read=false`、`model_refit=false`、最大差 0；fold `align-v2` 按预期拒绝。
+- 成本：本机 CPU，`r0` 0.49–0.52 s / 141–144 MB，`region` 0.72–0.73 s / 269–281 MB，`r2` 1.90–2.02 s / 994–1,164 MB。
+
+决定：按阶段计划与指导 §9 的完成条件，将 P01-T007 标为 `done`。接受的是“两折按协议执行并检查了收益跨起点”的证据，不是正收益结论：三组均未满足跨时间稳健性条件，Ridge 也没有在任何一折成为评估 MAE 最小的规则。
+
+限制：两折是开发证据，不是盲测或独立重复；每折评估只有一个 3 个月窗口；折间 `NaiveRef` 可不同（B 折 `r0`/`region` 为 TrainMean21）；B 折评估目标落在主协议训练标签内；无图、无显著性主张；可选 sklearn 未执行；成本只代表本机 CPU。收益按协议原定义计算，不据结果改折、换参照或重定义门槛。
+
+影响：T007 完成；T008 的其余依赖只剩 T005（仍因服务器暂缓），若用户决定调整依赖需另行记录。T008 应把共享 Ridge 视为可重复但总体不占优的参照，不得当作已证明有收益的骨架；科学协议、主切分、主评测与门槛不变。
+
+## D022: T005 受控复跑研究侧验收
+
+提出及接受日期：2026-10-18。状态：`accepted`。
+来源：用户在保留的原 GPU 服务器上按 [T005 指导](phases/P01/t005-evolvegcnh-guide.md) 执行 §3–§9；run `p01-region-evolvegcnh-seed1-repeat-20261018T004254Z` 的条件核对、预检、训练与 saved-only 比较产物；保存状态见[索引](archives/index.md#t005-原服务器受控复跑2026-10-18)。
+
+结果：
+- 环境：`~/benchmark` 的 HEAD 为 `950a1d8febbf992b8bda061d35f03107d0b18478`，与指导基准一致；`pip freeze` 与归档旧清单逐字节一致；8 项核心包断言通过；T4、驱动 `535.216.01`、CUDA 12.2。显存上报由 `15360 MiB` 变为 `16384 MiB`、ECC 显示列不同，无法确认同一物理 GPU；归档 freeze/nvidia-smi 本身是 2026-10-02 采集的快照。
+- 预检：`preflight.json=passed`；源码与两个 parquet 逐文件 `hash-object` 比对、生成 JSON 可由源数据重建、16,345 节点 × 36 月、窗口 `[19,1,4]`、逐窗口输入/标签逐元素相等、邻居覆盖 2,185、`NaiveRef=LastValue`、旧 seed 0/1 重算与记录一致。
+- 训练：`exit 0`、500 epoch；选中 epoch `461`（验证 MSE `70053.0625`，验证 MAE 55.239 / RMSE 264.675）；训练+测试 80.34 s，加载 1.33 s；峰值 RSS 1,197,146,112 bytes，峰值 CUDA allocated 298,932,224 / reserved 329,252,864 bytes。
+- 比较：测试 MAE `96.18077182769775` / RMSE `579.5045937857179`，与归档旧 seed 1 的 `metrics.json` 逐位一致；float64 重算两侧同为 `96.18076957532733`；归一化 MAE 差 `0.0`、最大绝对预测差 `0.0`、`exact_prediction_match=true`、`labels_identical=true`、负预测比例两侧同为 `0.16100234526358723`。
+- 执行缺陷：首个尝试 `p01-region-evolvegcnh-seed1-repeat-20261018T003044Z` 在 §6 成本测量行失败（`reset_peak_memory_stats` 未初始化 CUDA，torch 2.3 的该函数无 `is_initialized()` 保护）；指导 §6 已补 `torch.cuda.init()` 并留 2026-10-18 注。该行只影响成本统计起点，未改损失、优化器、状态传递、选模或数据。
+
+决定：按阶段计划与指导 §8–§9 的完成条件，将 P01-T005 标为 `done`。接受的是"同条件同 seed 受控复跑与条件清楚"的证据，且本次以逐张量一致这一最强形式满足 §7 的 CUDA 同 seed 比较要求（`0 ≤ 1e-4`），不是改善结论。
+
+限制：这是单个 seed 的一次重复，不能估计初始化方差或稳定平均性能，也不能替代 seed 0/1 差异分析；模型仍差于 `NaiveRef=LastValue`（测试 MAE 96.18 vs 35.31）；发布图构建时间未知，结果只解释为带此限制的固定评测；无法确认同一物理 GPU，显存上报差异未解释；成本只代表本次机器条件；测试期只有 4 个重叠窗口。不据本次结果启动 seed 2/3/4、归一化、学习率或状态预热干预。
+
+影响：P01-T005 完成，阶段完成条件中的 EvolveGCN 状态项满足；T008 的依赖（T002/T004/T005/T006/T007）全部满足，可以开始。科学协议、主切分、主评测、选模与收益门槛不变；旧归档、封存包与运行来源身份不变。
+
+## D023: T008 阶段验收与 P02 骨架范围
+
+提出及接受日期：2026-10-18。状态：`accepted`。
+来源：用户 2026-10-18 选择 P02 骨架（新写小型 GRU 编码器）与开发数据（`r0`/`region`/`r2`）；[P01 阶段汇总](analyses/p01-t008-stage-summary-20261018-01/report.md)；[P02 计划](phases/P02/plan.md)。
+
+结果：
+- 阶段汇总：P01 七项完成条件全部满足（汇总 §5）；底座可重复、旧运行可复现、`NaiveRef` 三组均为 `LastValue`、Ridge 从未在评估 MAE 上占优、两折收益折间平均为负、图收益未证明。
+- 进入 P02 的条件：指标可重算、同条件复跑差异可解释、图语义限制已披露，均成立；"稳定的自身时序学习基线"由 T004 的窗口特征 Ridge 有条件满足，P02 自身分支将作为递推对照（汇总 §4）。
+- 冻结：数据 `r0`/`region`/`r2`（count）；主切分 L6/H3；开发 seeds `0,1,2`、最终 `0..4`；主指标 MAE，RMSE 恶化 ≤1%；`NaiveRef=LastValue`；分组掩码沿用 P01；每模型固定 200 epoch、hidden 32、Adam；同 seed 至少两次重复。明细见 P02 计划 §4。
+- 骨架：同一每节点 GRU（hidden 32）+ 共享输出头；自身分支 `ŷ=Wh+b`；图分支 `h'=h+mean_{N_in(v)} h_u`，孤立节点消息 0，**无额外可学习参数**；打乱图为场景内保持入/出度序列的双边交换，3 个 seed，按模型 seed 三图平均（§6.2 #4）。
+- 委托：本次未启动实现。P02-T001 的变更名 `add-graph-value-skeleton` 与范围记入 P02 计划；启动前按 AGENTS.md 先登记委托（当前指针为 `none`）。
+
+决定：接受 T008 完成（汇总、冻结与骨架选择即其验收内容）；P01 阶段完成条件全部满足，P01 标为 `done`；P02 进入实现准备。
+
+限制：P01 未证明图收益、跨时间稳健性、初始化方差或统计显著性；发布图构建时间未知，P02 结论同样只作固定评测期证据；`r2` 覆盖 8.39%，若收益只出现在覆盖节点，只能限定主张。冻结配置在 P02 正式比较开始前不得按中间结果修改；必须修改时先记录再运行。
+
+影响：T008 `done`，P01 结束；`DELEGATION` 保持 `none`（未启动实现）；P02 计划生效但未开始执行。科学协议、主切分、主评测、选模与 §6.2 门槛不变。
+
+## D024: 跟进 research-maintainer 上游版本
+
+提出及接受日期：2026-10-18。状态：`accepted`。
+来源：用户 2026-10-18 要求跟进上游 skill；仓库内副本由上游 `3809e17` 更新到 `370b942`（skill 提交见 Git 历史），差异为新增 `references/external-work.md` 与 SKILL/records/transitions 的约束补充。
+
+结果：
+- 外部与人工执行：指导需含停止边界、冻结条件、可判定预检和结构化回传；复跑或对齐另一 run 要给出 `可比 / 有条件可比 / 不可比` 判定；交给其他流程时只登记一条由研究侧维护的指针，工作真正启动后才登记，对方 PASS 只是证据。项目现有的 T005 指导、预检、condition-review 与 [DELEGATION](../DELEGATION.md) 指针已是同一做法。
+- 记录边界：state 改为替换型；同一事件只在一处叙述；分析报告放在 `analyses/<analysis-id>/`；可读记录与大型产物按布局分开，忽略规则不随 run 增加；记录/保存政策版本与科学协议版本分开。
+- 项目侧只对齐冲突：`AGENTS.md` 的指针读取方与 skill 表述、`DELEGATION.md` 的 skill 表述、`state.md` 的累积历史、`.gitignore` 的逐 run 例外。
+
+决定：接受更新。记录政策沿用 `P01-records-v2`，科学协议 `P1-count-L6-H3-v3` 不变；不重跑历史运行，不重写已完成 run 与 P01 计划任务行的历史叙述。
+
+限制：只更新仓库内副本；不迁移已有 run，不改变封存包与历史产物；本机全局 skill 是否同名不在本次核对范围。
+
+影响：无新实验、无封存、无备份核验；P02 范围与冻结项不变。

@@ -264,10 +264,19 @@ def baseline_relative_comparison(
     return comparison
 
 
-def constant_group_masks(constant_mask: np.ndarray) -> Dict[str, np.ndarray]:
-    """Return the constant / nonconstant diagnostic masks."""
+def constant_group_masks(
+    constant_mask: np.ndarray, *, scope: str = "train27"
+) -> Dict[str, np.ndarray]:
+    """Return the constant / nonconstant diagnostic masks for a fitting scope.
+
+    ``scope`` defaults to the historical main ``train27`` names and becomes
+    ``fit18``/``fit21`` for the development folds.
+    """
     constant = np.asarray(constant_mask, dtype=bool)
-    return {"constant_train27": constant, "nonconstant_train27": ~constant}
+    return {
+        f"constant_{scope}": constant,
+        f"nonconstant_{scope}": ~constant,
+    }
 
 
 def neighbor_group_masks(neighbor_mask: np.ndarray) -> Dict[str, np.ndarray]:
@@ -298,12 +307,20 @@ def node_error_table(
     key_columns: Sequence[str],
     train_mean27_values: np.ndarray,
     context_values: np.ndarray,
+    train_mean_column: str = "train_mean27",
+    activity_values: Optional[np.ndarray] = None,
+    activity_column: Optional[str] = None,
+    activity_group_values: Optional[np.ndarray] = None,
+    activity_group_column: Optional[str] = None,
+    constant_values: Optional[np.ndarray] = None,
+    constant_column: Optional[str] = None,
 ) -> "Any":
     """Build the complete per-node error contribution table.
 
-    Rows are ordered by descending training mean with ties broken by the
+    Rows are ordered by descending fitting mean with ties broken by the
     canonical ascending node key, so a large-demand audit needs no invented
-    threshold.
+    threshold.  The main split keeps its historical columns; fold calls pass
+    the fitting-scope mean column name and the activity/group/constant columns.
     """
     import pandas as pd
 
@@ -317,14 +334,29 @@ def node_error_table(
     frame["method"] = method
     frame["split"] = split
     frame["context"] = np.asarray(context_values, dtype=np.int64)
-    frame["train_mean27"] = np.asarray(train_mean27_values, dtype=np.float64)
+    frame[train_mean_column] = np.asarray(
+        train_mean27_values, dtype=np.float64
+    )
+    for values, column in (
+        (activity_values, activity_column),
+        (activity_group_values, activity_group_column),
+        (constant_values, constant_column),
+    ):
+        if values is None and column is None:
+            continue
+        if values is None or column is None:
+            raise ValueError(
+                "activity/group/constant node-error columns require both values "
+                "and a column name"
+            )
+        frame[column] = np.asarray(values)
     frame["absolute_error_sum"] = absolute
     frame["squared_error_sum"] = squared
     frame["elements"] = int(elements)
     frame["MAE"] = absolute / elements
     frame["MSE"] = squared / elements
     frame = frame.sort_values(
-        ["method", "split", "train_mean27", *key_columns],
+        ["method", "split", train_mean_column, *key_columns],
         ascending=[True, True, False] + [True] * len(key_columns),
         kind="stable",
     ).reset_index(drop=True)
@@ -350,6 +382,8 @@ def split_report(
     context_masks_map: Mapping[str, np.ndarray],
     neighbor_masks: Mapping[str, np.ndarray],
     group_names: Sequence[str] = protocol.ACTIVITY_GROUP_NAMES,
+    inactive_group_name: str = "inactive",
+    aggregation_note: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Compute every required report level for one method and split."""
     overall = error_metrics(pred, gold)
@@ -389,10 +423,10 @@ def split_report(
     report["contexts"] = contexts
     report["neighbor_groups"] = neighbors
     report["training_all_zero_group"] = {
-        "group": "inactive",
-        "nodes": activity.get("inactive", {}).get("nodes", 0),
+        "group": inactive_group_name,
+        "nodes": activity.get(inactive_group_name, {}).get("nodes", 0),
         **{
-            key: activity.get("inactive", {}).get(key)
+            key: activity.get(inactive_group_name, {}).get(key)
             for key in ("MAE", "MSE", "RMSE", "status")
         },
     }
@@ -400,7 +434,7 @@ def split_report(
     report["windows"] = window_metrics(pred, gold, starts)
     report["horizons"] = horizon_metrics(pred, gold)
     report["target_month_multiplicities"] = target_month_multiplicities(starts)
-    report["aggregation_note"] = (
+    report["aggregation_note"] = aggregation_note or (
         "overall RMSE is sqrt(MSE over all window-node-horizon elements), "
         "not the mean of window RMSE values"
     )
