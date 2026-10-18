@@ -1,14 +1,20 @@
 # 当前状态
 
-更新时间：2026-10-17。
+更新时间：2026-10-18。
 当前阶段：[P01](phases/P01/plan.md)，阶段状态与任务状态以该计划为准。
-当前工作：P01-T007 训练期内部两折无图回测已完成，并按 [D021](decisions.md#d021-t007-内部两折回测研究侧验收) 接受为 `done`。12 个正式 fold run（`r0`/`region`/`r2` × A/B 与同 seed 重复）均 `success`，检查与跨折对照完整；三组折间平均 MAE gain 均为负（-8.30% / -5.07% / -12.64%），未满足 §6.2 跨时间正收益条件，Ridge 在六组都不是评估 MAE 最小的规则。T006 已按 [D018](decisions.md#d018-t006-r2count-研究侧验收) 接受；T005 因服务器暂时无法开机暂缓；T008 仅剩 T005 依赖。
-当前执行者：本轮运行 12 个正式 fold run、19 份检查、跨折分析与记录更新，并按用户授权提交与推送；未连接服务器，远端 GPU、环境与进程状态未核验。
-本次授权范围：正式 fold run、检查、分析、记录更新与 commit/push；不包含封存或恢复核验。
-本轮 run：12 个 fold run（见[索引](archives/index.md#t007-内部两折回测运行与保存2026-10-17)）；结果见[两折报告](analyses/p01-t007-backtest-20261017-01/report.md)。可读入口与检查报告随本次记录入库；完整数组仅在本机。
+当前工作：P01-T007 训练期内部两折无图回测已完成，并按 [D021](decisions.md#d021-t007-内部两折回测研究侧验收) 接受为 `done`。12 个正式 fold run（`r0`/`region`/`r2` × A/B 与同 seed 重复）均 `success`，检查与跨折对照完整；三组折间平均 MAE gain 均为负（-8.30% / -5.07% / -12.64%），未满足 §6.2 跨时间正收益条件，Ridge 在六组都不是评估 MAE 最小的规则。T006 已按 [D018](decisions.md#d018-t006-r2count-研究侧验收) 接受。T005 已完成并按 [D022](decisions.md#d022-t005-受控复跑研究侧验收) 接受为 `done`：同条件同 seed 受控复跑（run `p01-region-evolvegcnh-seed1-repeat-20261018T004254Z`，`exit 0`、500 epoch）与归档旧 seed 1 逐张量一致（预测最大绝对差 0、归一化 MAE 差 0、标签一致）；T008 的依赖全部满足，可以开始。
+当前执行者：用户在服务器 `~/benchmark` 按[指导](phases/P01/t005-evolvegcnh-guide.md) §3–§9 执行并回传产物；研究侧完成验收判断、索引与记录更新。研究侧未连接该机，远端事实以回传产物为据。
+本次授权范围：远端检查与训练由用户在其服务器执行；研究侧做验收与记录维护、取回产物并确定入库范围。不包含封存、commit、push 或恢复核验。
+本轮 run：T005 run `p01-region-evolvegcnh-seed1-repeat-20261018T004254Z`，已整目录取回本机 `research/runs/`（4.3 MB）；产物与保存状态见[索引](archives/index.md#t005-原服务器受控复跑2026-10-18)。
 
 ## 恢复位置
 
+- 2026-10-18（T005 完成与验收）：run `p01-region-evolvegcnh-seed1-repeat-20261018T004254Z` 取回本机（4.3 MB，整目录含 checkpoint、预测与标签）；§7 比较 `exact_prediction_match=true`、最大绝对预测差 0、归一化 MAE 差 0、`labels_identical=true`，测试 MAE `96.18077182769775` / RMSE `579.5045937857179` 与归档旧 seed 1 逐位一致；按 [D022](decisions.md#d022-t005-受控复跑研究侧验收) 接受 T005 为 `done`，阶段完成条件 EvolveGCN 项满足。保存状态见[索引](archives/index.md#t005-原服务器受控复跑2026-10-18)：已取回本机并随本次记录提交入库、push `origin/xzs`（提交身份从 Git 历史追溯）；未封存，备份与恢复未核验。
+- 2026-10-18（§6 成功，用户回传）：新 run `p01-region-evolvegcnh-seed1-repeat-20261018T004254Z` 训练 `exit 0`，500 epoch 用时约 80 s（6.23 it/s，末次 tqdm 显示 `best_val_loss=70053.0625`），测试 `RMSE 579.5045937857179 / MAE 96.18077182769775` 与归档旧 seed 1 的 `metrics.json` 逐位一致。§7 的 saved-only 张量级比较、`selection.json`/`cost.json` 细读与产物取回尚未做；train 产物仍在服务器。
+- 2026-10-18（§6 首次尝试失败，用户回传）：run `p01-region-evolvegcnh-seed1-repeat-20261018T003044Z` 在 `torch.cuda.reset_peak_memory_stats(device)`（指导 §6 脚本第 65 行，属成本测量，早于数据加载与建模）抛 `RuntimeError: Invalid device argument`，`status.json` 记为 failed，训练未开始、无 checkpoint/预测/轨迹；`condition-review.md` 已写、预检通过。该 run 按指导保留，不能复用。疑似原因：torch 2.3 的 `reset_peak_memory_stats` 没有 `is_initialized()` 保护（同版本 `memory_stats_as_nested_dict`、`empty_cache` 都有），调用时该设备缓存分配器尚未初始化。指导的 GPU 段本就未实机核验，这是首次实机暴露的执行脚本缺陷，不涉及模型、损失、优化、选模或数据。诊断确认：裸调用失败，先 `torch.cuda.init()` 或先分配后均成功。已在[指导](phases/P01/t005-evolvegcnh-guide.md) §6 重置前补 `torch.cuda.init()` 并加 2026-10-18 日期注；该行只影响成本统计起点。指导哈希已变，新 run 需重新传输 `guide.md` 后再提取脚本；训练尚未有一次成功运行。
+- 2026-10-18（远端 §5 预检，用户回传）：run `p01-region-evolvegcnh-seed1-repeat-20261018T003044Z` 预检 `exit 0`、`preflight.json=passed`：HEAD/源码/数据 `hash-object` 断言、生成 JSON 可重建、16,345 节点 × 36 月、窗口数 `[19,1,4]`、逐窗口输入与标签逐元素相等、邻居覆盖 2,185、`NaiveRef=LastValue`、旧 seed 0/1 重算与 `metrics.json` 一致，全部通过。`diff -u` 旧 freeze 与当前 `pip freeze` 无输出（依赖集逐字节一致），8 项核心包断言通过；两次 `nvidia-smi` 差异仅为采集时间、温度 37→36C、功耗 11→10W、ECC 显示 `0`→`Off`、显存上报 `15360`→`16384 MiB`，T4 与驱动 `535.216.01` 一致。条件判断为“可比旧条件（有条件）”：依赖与源码/数据一致，但无法确认同一物理 GPU，且归档 freeze 本身是 2026-10-02 采集的快照而非原运行时刻记录。`condition-review.md` 尚未写、§6 训练尚未启动。
+- 2026-10-18（远端 §3，用户回传）：`~/benchmark` 的 HEAD 为 `950a1d8febbf992b8bda061d35f03107d0b18478`，与指导基准一致，无需 worktree；`git status --short` 只有未跟踪的 `evolvegcn-region-count-results.tar.gz` 与 `logs/`，不触及 §5 用 `hash-object` 断言的源码/输入。`nvidia-smi` 为 Tesla T4、驱动 `535.216.01`、CUDA 12.2、无运行进程；但显存上报 `16384 MiB`，与旧记录 `15360 MiB` 差 1 GiB，ECC/MIG 显示行也与旧记录不同，不能据此确认同一物理 GPU。`python 3.8.20`、`pip 25.0.1`（`job-sdf`）；`pgrep` 只匹配到 tmux 会话自身，不能据此认为存在训练。尚未创建 run 目录、未跑 §5 预检、未写 `condition-review.md`、未启动训练；核心依赖是否与旧记录一致仍待 §5 断言与 `pip freeze` 差异。
+- 2026-10-18：T005 恢复条件出现（只读复核，未连接服务器）。用户报告原 GPU 服务器可重新启动；[T005 指导](phases/P01/t005-evolvegcnh-guide.md) 自 2026-10-13 编写后未改，其本机输入材料仍齐备且未变更：`research/phases/P01/protocol.md`、`experiments_archive/1st_try_in_phase_fix_origin/logs/pip-freeze.txt` 与 `nvidia-smi.txt`、旧结果 `.../results/count/region/EvolveGCNH/{0,1}`（seed 1 `metrics.json` 为 `MAE 96.180772 / RMSE 579.504594`，与指导正文一致，文件自 2026-10-13 无提交变更）。T007 全部改动限于 `benchmark.nograph_baseline`，不涉及指导所用的 `benchmark/graph_method` 与服务器侧源码基准 `950a1d8`，故不改变 §5 断言与 §7 比较口径。另按该提交复核了指导引用的接口假设：`ExperimentConfig`/`result_dir`/`run_split`（含 `optimizer_steps` 字段与 `collect_predictions`）/`regression_metrics`/`load_checkpoint`/`train_experiment` 签名均存在；`train_experiment` 以模块全局名调用 `run_split`，故 §6 的 monkeypatch 能记录 train/validation 两次调用；`prepare_graph_data.py --mode count --data_name region` 的输出路径为 `benchmark/graph_method/data/count/region.json`；`benchmark/graph_method` 与 `dataset` 在 `950a1d8` 与当前 HEAD 之间只差两个已删除的分析脚本，版本断言与归档 freeze、T4/15,360 MiB 记录一致。这些只证明指导与源码基准相符，不是远端条件核验。本轮未连接、未核验远端进程与 GPU，T005 仍 `todo`（准备指导不等于开始实验）；执行入口是指导 §2 的材料传输。记录文件本机已改，未 commit。
 - 2026-10-17：T007 结果保存。12 个 run 的 `summary.md`/`provenance.json`/`command.json`、19 份检查报告与两折分析报告随本次记录提交并 push `origin/xzs`；完整数组与 run 目录其余内容已按新增 fold run 忽略规则仅留本机（约 217 MB）。未封存，备份与远端恢复未核验；`.gitignore` 只新增 fold run 规则，未改实现或科学协议。
 - 2026-10-17：T007 两折正式运行与验收（[D021](decisions.md#d021-t007-内部两折回测研究侧验收)）。12 个 run 均 success、commit `e919500`、三组数据身份一致；`eval` gain 相对当折 NaiveRef 为 `r0` -19.77% / +3.18%、`region` -11.85% / +1.70%、`r2` -30.41% / +5.12%（A/B），折间平均均负，未满足 §6.2 跨时间条件；Ridge 在六组都不是评估 MAE 最小方法。6 组同 seed 重复预测与指标差 0；12 份 recompute `source_data_read=false`、`model_refit=false`、差 0；fold `align-v2` 按预期拒绝。报告见[两折分析](analyses/p01-t007-backtest-20261017-01/report.md)，保存状态见[索引](archives/index.md#t007-内部两折回测运行与保存2026-10-17)。
 - 2026-10-17：T007 实现回收（[D020](decisions.md#d020-t007-内部两折回测实现研究侧验收)）。`openspec/changes/add-nograph-backtest-folds` 已归档为 `openspec/changes/archive/2026-10-17-add-nograph-backtest-folds/`，`verification.md` 为 PASS；把 5 个规划文件映射到归档路径后，报告 37 文件主清单 37/37 单文件 SHA256 一致，无缺失；本机按同款 formal-fold guard 复跑 287 项，285 通过、2 项 sklearn 跳过。确认 `protocol.md` 未改、主切分常量与默认路径保持、`research/runs/` 无正式 fold run、旧 run/封存包/归档未改。研究侧接受实现就绪，DELEGATION 关闭，T007 改为 `in_progress`：正式 fold run、产物与跨折收益仍需授权。保存状态见[索引](archives/index.md#t007-内部两折回测实现证据2026-10-17)。
@@ -30,14 +36,14 @@
 
 ## 下一可执行动作
 
-在途委托：无（[DELEGATION](../DELEGATION.md) 为 `closed`）。T002、T004、T006、T007 已完成；T005 暂缓，T008 未完成。P01 仍 active。
+在途委托：无（[DELEGATION](../DELEGATION.md) 为 `closed`）。T002、T004、T005、T006、T007 已完成；P01 剩余 T008。P01 仍 active。
 
-- 下一准备动作：T007 已完成，不再排 fold run。P01 剩余可推进的是 T008（阶段汇总、骨架与数据冻结）；计划仍列 T005 为 T008 依赖，T005 等服务器恢复，或在用户明确同意调整依赖后先做 T008 的其余部分。
-- 暂缓：P01-T005 等用户服务器恢复后再继续；[T005 指导](phases/P01/t005-evolvegcnh-guide.md)已备。
+- 下一准备动作：开始 P01-T008（阶段汇总、选择第二阶段骨架与范围）。按 D006 冻结完整任务主要评价的开发/最终比较数据与配置，按 D007 先以简单骨架作自身/真实图/结构打乱图的公平对照，通过协议 §6.2 门槛后再考虑复杂模块；按 D015 披露发布图时间限制。T005 完成不自动等于 P01 阶段完成。
+- 恢复须知：T005 的验收依据是 2026-10-18 的 run 与 saved-only 比较；不要把“逐张量一致”扩展为改善结论或初始化方差估计。
 - 规划后续：T008 冻结具体开发/最终比较数据与骨架，采用 D006/D007/D015；公平对照未执行，复杂模块未启动，严格时间主张所需的图来源仍未满足。
 - 保存事实：各批次产物的入库与备份状态见[索引](archives/index.md)；记录文件自身不声明提交状态，其提交身份从版本历史追溯。探针环境仍为本机 CPU conda 环境。
 
-T008 对 T002、T004、T006、T007 的依赖已满足，仅 T005 因服务器暂缓。
+T008 对 T002、T004、T005、T006、T007 的依赖均已满足。
 
 ## 待处理事项
 
@@ -51,6 +57,8 @@ T008 对 T002、T004、T006、T007 的依赖已满足，仅 T005 因服务器暂
 - [D019](decisions.md#d019-委派-t007-内部两折回测实现并登记范围)：已按 [D020](decisions.md#d020-t007-内部两折回测实现研究侧验收) 回收，委托 `closed`；实现 PASS 只证明软件就绪，不是 T007 实验验收。
 - [D020](decisions.md#d020-t007-内部两折回测实现研究侧验收)：T007 实现已接受；实验已按 [D021](decisions.md#d021-t007-内部两折回测研究侧验收) 完成。
 - [D021](decisions.md#d021-t007-内部两折回测研究侧验收)：T007 两折回测已完成并接受；三组折间平均 gain 均负，未满足跨时间条件，不宣称改善。
-- T005、T008 的科研工作见阶段计划；P01 尚未完成（T002、T004、T006、T007 已完成；T005 暂缓）。
+- P01 尚未完成：T002、T004、T005、T006、T007 已完成；T008 待开始，阶段汇总与数据/配置冻结仍需执行。
+- T005 产物已取回本机并整目录入库（4.3 MB，预测/checkpoint 即复现证据），随本次记录 push `origin/xzs`（提交身份从 Git 历史追溯）；未封存，备份与恢复未核验。
+- 首个失败尝试 `p01-region-evolvegcnh-seed1-repeat-20261018T003044Z` 只留在服务器 `~/t005-runs/`，未取回；其证据作用（指导 §6 未实机验证）已由指导注与 [D022](decisions.md#d022-t005-受控复跑研究侧验收) 记录，不列为补做项。
 - T004 已封存、提交/push；远端恢复未核验，用户取消检查，不列为待补任务。
 - D009 的长期建议由 D010 接续，T010 已按 D011 接受并完成主体提交/push；第二轮清理已按 D012 完成，历史路径由迁移映射解释。远端恢复未核验，不安排默认检查；后续保存状态记录的提交身份从 Git 历史追溯。

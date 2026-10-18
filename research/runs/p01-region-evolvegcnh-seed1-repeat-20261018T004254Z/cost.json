@@ -1,0 +1,10 @@
+{
+  "load_seconds": 1.3253065079998123,
+  "training_and_test_seconds": 80.34456812100052,
+  "total_seconds_including_extra_validation": 81.99834387100054,
+  "peak_RSS_bytes": 1197146112,
+  "peak_cuda_allocated_bytes": 298932224,
+  "peak_cuda_reserved_bytes": 329252864,
+  "device": "Tesla T4",
+  "RSS_unit_basis": "Linux ru_maxrss in KiB"
+}

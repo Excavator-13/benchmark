@@ -1,6 +1,6 @@
 # 实验与归档索引
 
-更新日期：2026-10-17。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
+更新日期：2026-10-18。研究交接见[当前状态](../state.md)，任务验收见[阶段计划](../phases/P01/plan.md)。运行成功、已封存、已入库和已备份分别记录。
 
 ## 已有运行
 
@@ -175,6 +175,27 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 - 身份：运行代码 commit `e9195006dc402d2ce6fb5afb3a164dfef699200c`；三组 demand 与节点键 SHA256 见分析报告 §2，12 个 run 一致。
 
 没有新增封存包；既有 T004/T006 包、旧 run、旧 OpenSpec 归档与科学协议未改。
+
+## T005 原服务器受控复跑（2026-10-18）
+
+所属任务 P01-T005；[执行指导](../phases/P01/t005-evolvegcnh-guide.md)；研究侧验收见 [D022](../decisions.md#d022-t005-受控复跑研究侧验收)。
+
+| 项目 | 值 |
+| --- | --- |
+| run ID | `p01-region-evolvegcnh-seed1-repeat-20261018T004254Z` |
+| 状态 / 退出码 | `succeeded` / `exit 0` |
+| 条件 | 源码基准 `950a1d8febbf992b8bda061d35f03107d0b18478`；`region/count`、`EvolveGCNH`、seed 1、500 epoch、L6/H3、原始 count |
+| 设备与环境 | Tesla T4 / 驱动 `535.216.01` / CUDA 12.2 / torch `2.3.0+cu121` / Python 3.8.20；`pip freeze` 与归档旧清单逐字节一致；显存上报 `16384 MiB`（旧记录 `15360 MiB`），无法确认同一物理 GPU |
+| 选模 | 验证 MSE，选中 epoch `461`，`best_validation_MSE = 70053.0625`；重载验证 MSE 相同（MAE 55.239 / RMSE 264.675） |
+| 测试指标 | MAE `96.18077182769775` / RMSE `579.5045937857179`；float64 重算 MAE `96.18076957532733` |
+| 与旧 seed 1 比较 | `exact_prediction_match=true`、最大绝对预测差 `0.0`、归一化 MAE 差 `0.0`、`labels_identical=true`；负预测比例两侧同为 `0.16100234526358723` |
+| 成本 | 加载 1.33 s；训练+测试 80.34 s；峰值 RSS 1,197,146,112 bytes；峰值 CUDA allocated 298,932,224 / reserved 329,252,864 bytes |
+| 证据 | `condition-review.md`、`comparison.json`、`selection.json`、`cost.json`、`status.json`、`environment.json`、`inputs.json`、`pip-freeze.txt`、`nvidia-smi.txt`、`training-trace.jsonl`（1,000 条）、`outputs/count/region/EvolveGCNH/1/` |
+
+- 保存状态：整目录已取回本机 `research/runs/p01-region-evolvegcnh-seed1-repeat-20261018T004254Z/`（4.3 MB），含 checkpoint、测试/验证预测与标签。随本次记录提交入库并 push `origin/xzs`，提交身份从 Git 历史追溯（同一提交包含本条目）。**未封存，备份与远端恢复未核验**。
+- 入库范围：与本项目批量 run 的"可读入口入库、数组留本机"不同，本 run 体积小且预测/checkpoint 就是复现证据，故整目录入库、不新增忽略规则；与 T004/T006/T007 的减量政策不冲突（那些对象是数十至数百 MB 的批量产物）。
+- 首个尝试 `p01-region-evolvegcnh-seed1-repeat-20261018T003044Z` 在 §6 成本测量行失败（`torch.cuda.reset_peak_memory_stats` 未初始化 CUDA），`status.json=failed`、无训练产物；保留在服务器 `~/t005-runs/`，未取回本机。指导 §6 已按 2026-10-18 实机诊断补 `torch.cuda.init()`，该改动只影响成本统计起点。
+- 限制：单 seed 的一次同条件重复，不是初始化方差或稳定平均性能的估计；模型仍差于 `NaiveRef=LastValue`（测试 MAE 96.18 vs 35.31）；发布图构建时间未知；显存上报差异未解释。以上限制不因逐张量一致而消失。
 
 ## my-change PR 合入（2026-10-11 接手记录）
 

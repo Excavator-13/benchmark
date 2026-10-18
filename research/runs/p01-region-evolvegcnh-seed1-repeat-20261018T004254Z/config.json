@@ -1,0 +1,18 @@
+{
+  "data_name": "region",
+  "mode": "count",
+  "model_name": "EvolveGCNH",
+  "device": "cuda:0",
+  "seed": 1,
+  "window_size": 6,
+  "hidden_dim": 32,
+  "pred_length": 3,
+  "num_epochs": 500,
+  "train_ratio": 0.83,
+  "eval_ratio": 0.04,
+  "data_dir": null,
+  "results_dir": "/home/ubuntu/t005-runs/p01-region-evolvegcnh-seed1-repeat-20261018T004254Z/outputs",
+  "learning_rate": 0.01,
+  "optimizer": "Adam",
+  "input_scale": "raw count"
+}

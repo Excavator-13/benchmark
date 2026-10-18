@@ -1,0 +1,7 @@
+{
+  "relative_MAE_difference": 0.0,
+  "within_MAE_tolerance": true,
+  "max_absolute_prediction_difference": 0.0,
+  "exact_prediction_match": true,
+  "labels_identical": true
+}

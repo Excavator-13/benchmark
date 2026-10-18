@@ -1,0 +1,48 @@
+{
+  "0": {
+    "path": "/home/ubuntu/benchmark/benchmark/graph_method/results/count/region/EvolveGCNH/0",
+    "recorded_metrics": {
+      "RMSE": 238.95777526453287,
+      "MAE": 41.08068561553955
+    },
+    "recalculated": {
+      "RMSE": 238.95777526453287,
+      "MAE": 41.08068561553955
+    },
+    "files": {
+      "checkpoint.pt": "95dfae95330f7aceede9ac00d3dd4a4b3f57b281d37bbe40e3e595ef643d8fd0",
+      "gold_0.pt": "e1ad2ed34e6abce0ccc838884050e240d9949e0576b8e4c530268d12e4462bbf",
+      "gold_1.pt": "b586b4cc104237eec026ec32729b7f2a03c2b84acd402275b798ae7f99cc4750",
+      "gold_2.pt": "7e2a0a95d14480a51b40ebdda7f428e9a8e30ea348c9262ab9d6d867d3a96ec9",
+      "gold_3.pt": "297e5f758a9ea605e33d75e573f89eeecf39bf84a41829acef6ab7f69a3b0e43",
+      "metrics.json": "019d70b0e06cc0adfa74237a7376d110d24889d1785687309fcae232407320f7",
+      "pred_0.pt": "be800e83cc3913c99bb79b6af562a7de356df25cee5918a9f8f35aa659f9415f",
+      "pred_1.pt": "36cf5ede9a538777eb68c7c0dfa22369f855c18579116fb9b7783f5fa15d64d7",
+      "pred_2.pt": "5b83b28c154c160d8d835e6cdf488bf71b00afdcb987d7b5eca1f941002fa310",
+      "pred_3.pt": "adbe93daa920a8590f58dfe28b000574936ac45748ff4aa129fd0626c33e9b6b"
+    }
+  },
+  "1": {
+    "path": "/home/ubuntu/benchmark/benchmark/graph_method/results/count/region/EvolveGCNH/1",
+    "recorded_metrics": {
+      "RMSE": 579.5045937857179,
+      "MAE": 96.18077182769775
+    },
+    "recalculated": {
+      "RMSE": 579.5045937857179,
+      "MAE": 96.18077182769775
+    },
+    "files": {
+      "checkpoint.pt": "c3ae4ae3a6d7d54c7275ace4ded2fe2db50e33e1ab4d514a83d05ac4c7e04078",
+      "gold_0.pt": "e1ad2ed34e6abce0ccc838884050e240d9949e0576b8e4c530268d12e4462bbf",
+      "gold_1.pt": "b586b4cc104237eec026ec32729b7f2a03c2b84acd402275b798ae7f99cc4750",
+      "gold_2.pt": "7e2a0a95d14480a51b40ebdda7f428e9a8e30ea348c9262ab9d6d867d3a96ec9",
+      "gold_3.pt": "297e5f758a9ea605e33d75e573f89eeecf39bf84a41829acef6ab7f69a3b0e43",
+      "metrics.json": "c7ad8897e1cb5aa486272c2cb1f1aef1e6e71b816ceef77ffa143db107d539dc",
+      "pred_0.pt": "6e962a2c5b62edaa075329d132b3cc2f85b596a758ab02eba598eb506f63c137",
+      "pred_1.pt": "b92051994791cf16239872fd058a35cf454125fa4e36ee2cd466e92993e8df37",
+      "pred_2.pt": "8a4707a492ab7c678991244d625e6d11903cc9914b760c3de1af81dae6c3befc",
+      "pred_3.pt": "8fe6998628676deacbcc3afdaf82b6140318db878e2c86b9e95dc08c6650da45"
+    }
+  }
+}

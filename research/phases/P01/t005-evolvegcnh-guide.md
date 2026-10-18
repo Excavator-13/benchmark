@@ -7,6 +7,10 @@
 
 2026-10-13 后续：用户随后表示该服务器暂时无法开机，T005 暂缓，改做 [T007](t007-backtest-guide.md)；本页保留，等服务器恢复后按原步骤执行。
 
+2026-10-18 后续：用户报告服务器可重新启动，本页恢复正常作为执行入口；页面步骤与断言未改（其本机材料与旧结果自 2026-10-13 未变），仍未连接服务器、未启动实验。旧条件是否可比由 §5 预检与 §5 末尾的条件核对结论决定，不因“能启动”先验成立。
+
+2026-10-18 执行结果：已按本页在服务器上完成一次受控复跑（run `p01-region-evolvegcnh-seed1-repeat-20261018T004254Z`，`exit 0`、500 epoch 约 80 s）。测试 MAE/RMSE 与归档旧 seed 1 逐位一致，比较为 `exact_prediction_match=true`、最大绝对预测差 0、标签一致；研究侧按 [D022](../../decisions.md#d022-t005-受控复跑研究侧验收) 接受为完成。§6 首跑暴露的成本测量行缺陷见 §6 注，修复后该段通过。
+
 ## 1. 本轮回答什么，做到哪里停止
 
 问题：旧 `region/count` 的 seed 1 再执行一次，是否与旧运行近似一致？这一步先区分执行重复性与不同初始化的差异。
@@ -437,6 +441,7 @@ original_run_split = main.run_split
 
 try:
     device = main.resolve_device(config.device)
+    torch.cuda.init()
     torch.cuda.reset_peak_memory_stats(device)
     load_start = time.perf_counter()
     dataset = main.load_dataset(config)
@@ -498,6 +503,8 @@ T005_TRAIN_EXIT=${PIPESTATUS[0]}
 printf 'Training exit: %s\n' "$T005_TRAIN_EXIT" | tee "$T005_RUN/training-exit.txt"
 fi
 ```
+
+> 2026-10-18 实机修复：首次实机运行时 `torch.cuda.reset_peak_memory_stats(device)` 抛 `RuntimeError: Invalid device argument`。torch 2.3 的该函数没有 `is_initialized()` 保护，而调用点之前没有任何操作初始化该设备的缓存分配器。上面已在重置前补 `torch.cuda.init()`；最小诊断确认裸调用失败、`init()` 后与一次分配后均成功。该行只决定成本统计的起点，不改变损失、优化器、状态传递、选模或数据。首次失败 run `p01-region-evolvegcnh-seed1-repeat-20261018T003044Z` 保留（`status.json=failed`，无训练产物）。
 
 退出码非 0 时保留已形成的日志、状态和 checkpoint，不把失败写成完成。被系统直接杀掉可能来不及更新 `status.json`，此时 `running` 仅表示最后一次写入状态；根据进程、退出码和日志记录实际中断。当前脚本没有恢复优化器中途续训能力，重试用新 run，不能把仅加载最佳 checkpoint 当成继续原 500 epoch。
 
@@ -679,4 +686,4 @@ rsync -av -e "ssh -p $T005_PORT" "$T005_HOST:~/t005-runs/$T005_RUN_ID/" "$T005_L
 
 ## 编写时的检查范围
 
-本机已检查 Bash 命令语法及内嵌 Python 的 Python 3.8 语法兼容性。数据/分组/窗口核对和 saved-only 比较段已用当前原始数据、归档预测与临时目录检查，未拟合或推理模型。临时比较以旧预测副本作同值输入，确认预测差为 0，重算 seed 1 MAE 约 96.180772、LastValue MAE 约 35.309850；这验证的是指导脚本，不是新的同 seed 实验结论。GPU 训练段、SSH/传输与服务器完整条件尚未实机核验。
+本机已检查 Bash 命令语法及内嵌 Python 的 Python 3.8 语法兼容性。数据/分组/窗口核对和 saved-only 比较段已用当前原始数据、归档预测与临时目录检查，未拟合或推理模型。临时比较以旧预测副本作同值输入，确认预测差为 0，重算 seed 1 MAE 约 96.180772、LastValue MAE 约 35.309850；这验证的是指导脚本，不是新的同 seed 实验结论。GPU 训练段、SSH/传输与服务器完整条件尚未实机核验。2026-10-18 首次实机运行暴露并修复了 §6 成本测量行的 CUDA 初始化顺序问题（见 §6 注）；该修复尚无一次完整成功训练作为依据，仍以各 run 的实际日志为准。
