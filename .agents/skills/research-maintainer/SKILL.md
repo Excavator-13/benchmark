@@ -1,6 +1,6 @@
 ---
 name: research-maintainer
-description: "Maintain a research project's roadmap, phase plans, current work, decisions, and reproducible experiment provenance across agent sessions. Use to initialize or normalize research records, resume partial work, capture new findings, or prepare handoffs. Records known storage, commit, and backup state as facts; sealing, backup, and recovery procedures run only on explicit request. Does not authorize experiments, repository migration, commits, or pushes beyond the user's scope."
+description: "Maintain a research project's roadmap, phase plans, current work, decisions, and reproducible experiment provenance across agent sessions. Use to initialize or normalize research records, resume partial work, capture new findings, prepare handoffs, or record work executed by another machine, person, or workflow. Records known storage, commit, and backup state as facts; sealing, backup, and recovery procedures run only on explicit request. Does not authorize experiments, repository migration, commits, or pushes beyond the user's scope."
 ---
 
 # Research Maintainer
@@ -13,13 +13,14 @@ description: "Maintain a research project's roadmap, phase plans, current work, 
 
 - 初始化、规范化或新增记录：读 [records.md](references/records.md)，使用其目录、字段和模板。
 - 接手、部分完成、中断、新建议或阶段变更：读 [transitions.md](references/transitions.md)。
+- 工作由外部机器或人工执行，或要交给其他流程执行：读 [external-work.md](references/external-work.md)。
 - 用户明确要求封存、提交、推送或恢复核验时：读 [archive-and-git.md](references/archive-and-git.md)；未要求时不读、不执行。
 
 仅阅读当前动作需要的参考文件；不要每轮重建全部目录。
 
 ## 共同规则
 
-1. **明确权威来源。** 总目标在 roadmap；任务状态和阶段验收在 phase plan；state 记录当前工作位置和下一动作；建议与决定在 decisions；执行事实在 run；保存和备份状态在 archive index。其他文档通过 ID 和链接引用，避免维护相互竞争的进度表。
+1. **明确权威来源。** 总目标在 roadmap；任务状态和阶段验收在 phase plan；state 记录当前工作位置和下一动作；建议与决定在 decisions；执行事实在 run；保存和备份状态在 archive index。其他文档通过 ID 和链接引用，避免维护相互竞争的进度表。叙述同样只写一处：过程与结果在 run 或分析报告，决定在 decisions，保存事实在 archive index；其他记录引用而不复制数字。
 2. **恢复依据来自文件和证据。** 聊天内容可补充上下文，重要结果、决定和交接位置需落盘。摘要中的推断不得升级为已验证事实。
 3. **按子任务维护进度。** 一轮运行成功不等于任务完成，一个任务完成不等于阶段完成。依照各自验收条件分别判断。
 4. **新建议有状态。** 发现先登记证据和候选建议；接受后才更新受影响的计划。普通任务内的执行细节可按已有授权决定，不把每项建议都变成审批流程。
@@ -67,15 +68,17 @@ description: "Maintain a research project's roadmap, phase plans, current work, 
 
 更新 state 的范围、恢复位置、验收条件和下一动作。产生关键结果或改变计划时及时落盘，避免全部依赖最终聊天总结。执行过程使用用户指定的工具和项目开发流程；本 skill 不替代代码实现或独立验证流程。
 
+执行不在本会话完成时，按 `external-work.md` 写指导、预检和回传要求；复跑或对齐另一个 run 时记录条件可比性判定。把工作交给其他流程时，只在真正启动时登记一条由本侧维护的指针。
+
 ### 暂停、交接或收尾
 
-核对真实产物和进程后，更新任务状态、证据链接、未解决项、建议、精确恢复位置及下一动作。无法完成某项核验时记录原因，不补写为成功。
+核对真实产物和进程后，更新任务状态、证据链接、未解决项、建议、精确恢复位置及下一动作。无法完成某项核验时记录原因，不补写为成功。state 的更新是替换当前交接点，不是追加一条历史；需要长期保留的事实写进 run summary 或 decision。
 
 重要实验/分析保存过程与输出；封存和 Git 操作按授权及 `archive-and-git.md` 执行。目录已存在或文件未被忽略都不能证明已入库。到达“按请求停止”的完成点即结束本轮，不再追加检查。
 
 ## 结束时的简短报告
 
-向用户说明本次完成的具体子任务、证据位置、尚未完成的部分及下一动作。涉及产物时按已知事实报告封存/提交/备份状态，未核验的照实写“未核验”，不因此当场补做核验；新建议注明待讨论还是已接受。不要把维护记录描述为完成了实验或整个阶段。
+向用户说明本次完成的具体子任务、证据位置、尚未完成的部分及下一动作。涉及产物时按已知事实报告封存/提交/备份状态，未核验的照实写“未核验”，不因此当场补做核验；新建议注明待讨论还是已接受。涉及外部执行或复跑时，同时报告条件可比性结论。不要把维护记录描述为完成了实验或整个阶段。
 
 ## 核验第一版或后续修改
 
@@ -87,3 +90,8 @@ description: "Maintain a research project's roadmap, phase plans, current work, 
 - 封存后完成 push 时，备份状态在外部索引更新，封存摘要不被重写。
 - 运行中断时，记录最后成功位置和现存产物，恢复不会覆盖旧输出。
 - 用户要求结束工作时，本轮不新增检查项，未知的保持未知，且不把取消项写成待办。
+- 连续三次交接后，state 仍只描述当前交接点，没有累积成按时间排列的日志。
+- 计划冻结了某个对象名但工作尚未启动时，没有在途委托；对方完成后，研究侧只读核对即可收尾。
+- 外部机器或人工执行回传后，run 记录给出执行者、预检结果、可比性结论和未实机核验的范围。
+- 一次实验结束后，同一组指标只在一个文件里叙述，其他记录只链接它。
+- 连续新增多个 run 时，忽略规则不需要随 run 增加。
