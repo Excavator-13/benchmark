@@ -27,6 +27,7 @@ __all__ = [
     "resolve_output_root",
     "validate_run_destination",
     "development_roots",
+    "authoritative_scratch_root",
     "protected_project_roots",
     "validate_implementation_root",
     "computational_identity",
@@ -37,9 +38,21 @@ class ConfigError(ValueError):
     """Raised when axes, purpose or destination violate the frozen contract."""
 
 
+def authoritative_scratch_root() -> Path:
+    """Return the checked-out project's ignored development scratch tree."""
+    return protocol.REPO_ROOT / "scratch"
+
+
 def development_roots(repo_root: Path) -> Sequence[Path]:
-    """Return the allowed development parent roots (ignored scratch, temp)."""
-    return (Path(repo_root) / "scratch", Path(tempfile.gettempdir()))
+    """Return the allowed development parents of the checkout and the system temp.
+
+    The repository-root override deliberately does not contribute its own
+    ``scratch`` tree: only the authoritative checkout's ignored scratch and the
+    system temporary directory are allowed development parents.  ``repo_root``
+    is accepted for signature compatibility and validated separately.
+    """
+    del repo_root
+    return (authoritative_scratch_root(), Path(tempfile.gettempdir()))
 
 
 def protected_project_roots() -> Sequence[Path]:
@@ -61,7 +74,12 @@ def protected_project_roots() -> Sequence[Path]:
 
 
 def validate_implementation_root(repo_root: Path) -> Path:
-    """Reject an implementation-root override into a protected project tree."""
+    """Accept only the project checkout or a temporary implementation root.
+
+    A nested override (for example into OpenSpec planning or any other
+    unignored directory) is unsupported: it could otherwise rebase the
+    development whitelist onto an arbitrary source tree.
+    """
     resolved = Path(repo_root).expanduser().resolve()
     if not resolved.is_dir():
         raise ConfigError(f"implementation root is not an existing directory: {resolved}")
@@ -71,7 +89,14 @@ def validate_implementation_root(repo_root: Path) -> Path:
                 f"implementation root {resolved} resolves inside the protected "
                 f"location {Path(protected).resolve()}"
             )
-    return resolved
+    temporary = Path(tempfile.gettempdir()).expanduser().resolve()
+    authoritative = Path(protocol.REPO_ROOT).expanduser().resolve()
+    if resolved == authoritative or nb_artifacts.is_within(resolved, temporary):
+        return resolved
+    raise ConfigError(
+        "implementation root override must be the project checkout "
+        f"({authoritative}) or a temporary directory ({temporary}); got {resolved}"
+    )
 
 
 def resolve_output_root(
@@ -96,11 +121,12 @@ def resolve_output_root(
                 f"{(repo_root / 'research' / 'runs').as_posix()}"
             )
         return repo_root / "research" / "runs"
-    candidate = (
-        Path(output_root)
-        if output_root is not None
-        else repo_root / "scratch" / "graph-value-skeleton"
-    )
+    temporary = Path(tempfile.gettempdir()).expanduser().resolve()
+    if output_root is not None:
+        candidate = Path(output_root)
+    else:
+        base = repo_root if nb_artifacts.is_within(repo_root, temporary) else protocol.REPO_ROOT
+        candidate = base / "scratch" / "graph-value-skeleton"
     resolved = candidate.expanduser().resolve()
     allowed = [Path(root).expanduser().resolve() for root in development_roots(repo_root)]
     if not any(nb_artifacts.is_within(resolved, root) for root in allowed):

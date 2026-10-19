@@ -183,8 +183,45 @@ class AxisValidationTest(unittest.TestCase):
             gvs_checks.validate_report_destination(
                 link, link / "scratch" / "probe.json"
             )
-        # A legitimate temporary implementation root still works.
+        # Nested OpenSpec planning trees are unignored and unsupported overrides.
+        openspec_root = protocol.REPO_ROOT / "openspec"
+        nested_root = openspec_root / "changes" / "add-graph-value-skeleton"
+        for override in (openspec_root, nested_root):
+            with self.subTest(override=str(override)):
+                with self.assertRaises(gvs_config.ConfigError):
+                    gvs_config.resolve_config(
+                        data_name="r0",
+                        method="self",
+                        model_seed=0,
+                        shuffle_seed=None,
+                        run_id="rebased-openspec",
+                        purpose="development",
+                        repo_root=override,
+                    )
+                with self.assertRaises(gvs_checks.CheckError):
+                    gvs_checks.validate_report_destination(
+                        override, override / "scratch" / "probe.json"
+                    )
+        self.assertFalse((nested_root / "scratch").exists())
+        # The authoritative ignored scratch and a temporary destination remain
+        # valid resolution targets.
+        legal_report = protocol.REPO_ROOT / "scratch" / "gvs-resolution-only-report.json"
+        self.assertEqual(
+            gvs_checks.validate_report_destination(protocol.REPO_ROOT, legal_report),
+            legal_report,
+        )
+        temp_report = Path(tempfile.mkdtemp(prefix="gvs-report-temp-")) / "r.json"
+        self.assertEqual(
+            gvs_checks.validate_report_destination(protocol.REPO_ROOT, temp_report),
+            temp_report,
+        )
+        # A legitimate temporary implementation root still works, including the
+        # default scratch location derived inside that temporary root.
         temp_root = Path(tempfile.mkdtemp(prefix="gvs-legit-root-"))
+        self.assertEqual(
+            gvs_config.resolve_output_root(temp_root, "development"),
+            (temp_root / "scratch" / "graph-value-skeleton").resolve(),
+        )
         config = gvs_config.resolve_config(
             data_name="r0",
             method="self",

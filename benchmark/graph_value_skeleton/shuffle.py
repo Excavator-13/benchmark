@@ -33,6 +33,8 @@ __all__ = [
     "ShuffledGraph",
     "shuffle_graph",
     "swap_context_edges",
+    "context_seed_sequence",
+    "context_edge_sha256",
 ]
 
 
@@ -94,6 +96,30 @@ def _context_label(context: Optional[Sequence[int]]) -> str:
     return "context" if context is None else f"context {list(int(v) for v in context)}"
 
 
+def context_seed_sequence(
+    shuffle_seed: int, context: Sequence[int]
+) -> List[int]:
+    """Derive the designed ``SeedSequence([shuffle_seed, context_id...])``.
+
+    Design D6 specifies the context *ID* (not its ordinal position), so a
+    non-dense or non-consecutive context ID selects a different local stream
+    while contiguous published IDs 0..N-1 remain unchanged.
+    """
+    return [int(shuffle_seed), *(int(value) for value in context)]
+
+
+def context_edge_sha256(
+    context: Sequence[int], local_edges: np.ndarray
+) -> str:
+    """Hash a context's canonical local edge set (public for saved checks)."""
+    array = np.asarray(local_edges, dtype=np.int64)
+    if array.size == 0:
+        array = np.zeros((0, 2), dtype=np.int64)
+    else:
+        array = array.reshape(-1, 2)
+    return _context_edge_sha256(context, array)
+
+
 def _swap_edges(
     local_edges: List[Tuple[int, int]],
     *,
@@ -102,9 +128,17 @@ def _swap_edges(
     attempt_factor: int,
     context: Optional[Sequence[int]] = None,
 ) -> Dict[str, Any]:
-    """Run the deterministic double-edge swap budget for one context."""
+    """Run the deterministic double-edge swap budget for one context.
+
+    The local edge list is canonicalized (sorted by source then target) before
+    the first proposal, so the stream depends only on the context identity, the
+    shuffle seed and the source edge set -- never on the caller's row order.
+    """
     label = _context_label(context)
-    edge_count = len(local_edges)
+    edges: List[Tuple[int, int]] = sorted(
+        (int(source), int(target)) for source, target in local_edges
+    )
+    edge_count = len(edges)
     if edge_count == 0:
         return {
             "edge_count": 0,
@@ -122,8 +156,8 @@ def _swap_edges(
     rng = np.random.Generator(np.random.PCG64(np.random.SeedSequence(list(seed_sequence))))
     target_accepted = accept_factor * edge_count
     attempt_limit = attempt_factor * edge_count
-    edge_set = set(local_edges)
-    original = set(local_edges)
+    edge_set = set(edges)
+    original = set(edges)
     rejections: Counter = Counter()
     attempts = 0
     accepted = 0
@@ -134,8 +168,8 @@ def _swap_edges(
         if first_index == second_index:
             rejections["same_edge_index"] += 1
             continue
-        a, b = local_edges[first_index]
-        c, d = local_edges[second_index]
+        a, b = edges[first_index]
+        c, d = edges[second_index]
         if a == d or c == b:
             rejections["self_loop"] += 1
             continue
@@ -151,8 +185,8 @@ def _swap_edges(
         edge_set.discard((c, d))
         edge_set.add(first)
         edge_set.add(second)
-        local_edges[first_index] = first
-        local_edges[second_index] = second
+        edges[first_index] = first
+        edges[second_index] = second
         accepted += 1
     if accepted < target_accepted:
         raise ShuffleError(
@@ -232,9 +266,10 @@ def shuffle_graph(
                 for source_node, target_node in local.tolist()
             ]
         original_local = list(local_edges)
+        seed_sequence = context_seed_sequence(shuffle_seed, context)
         result = _swap_edges(
             local_edges,
-            seed_sequence=(int(shuffle_seed), int(ordinal)),
+            seed_sequence=seed_sequence,
             accept_factor=accept_factor,
             attempt_factor=attempt_factor,
             context=context,
@@ -244,6 +279,7 @@ def shuffle_graph(
                 {
                     "context": list(context),
                     "ordinal": ordinal,
+                    "seed_sequence": list(seed_sequence),
                     "nodes": int(node_indices.shape[0]),
                     "edge_count": 0,
                     "empty": True,
@@ -272,6 +308,7 @@ def shuffle_graph(
             {
                 "context": list(context),
                 "ordinal": ordinal,
+                "seed_sequence": list(seed_sequence),
                 "nodes": int(node_indices.shape[0]),
                 "edge_count": int(result["edge_count"]),
                 "empty": False,
@@ -323,7 +360,7 @@ def shuffle_graph(
         "algorithm": protocol.SHUFFLE_ALGORITHM,
         "algorithm_version": protocol.SHUFFLE_VERSION,
         "shuffle_seed": int(shuffle_seed),
-        "seed_derivation": "PCG64(SeedSequence([shuffle_seed, context_ordinal]))",
+        "seed_derivation": "PCG64(SeedSequence([shuffle_seed, context_id...]))",
         "accept_target_factor": int(accept_factor),
         "attempt_limit_factor": int(attempt_factor),
         "target_rule": "accept 10*E_ctx swaps, attempt at most 100*E_ctx",

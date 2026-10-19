@@ -15,6 +15,7 @@ from unittest import mock
 import numpy as np
 
 from benchmark.graph_value_skeleton import checks as gvs_checks
+from benchmark.graph_value_skeleton import cli as gvs_cli
 from benchmark.graph_value_skeleton import data as gvs_data
 from benchmark.graph_value_skeleton import graph as gvs_graph
 from benchmark.graph_value_skeleton import model as gvs_model
@@ -176,6 +177,42 @@ class ChecksTest(unittest.TestCase):
                     "validation_elements", 0
                 ),
             ),
+            "missing-audit": lambda directory: (directory / "audit.json").unlink(),
+            "missing-graph-audit": lambda directory: (
+                directory / "graph-audit.json"
+            ).unlink(),
+            "fractional-count": lambda directory: _edit_json(
+                directory / "training-history.json",
+                lambda payload: payload["rows"][0].__setitem__(
+                    "validation_elements",
+                    float(payload["rows"][0]["validation_elements"]) + 0.5,
+                ),
+            ),
+            "negative-history-score": lambda directory: _edit_json(
+                directory / "training-history.json",
+                lambda payload: payload["rows"][1].__setitem__(
+                    "validation_MAE_original_units_after_update", -5.0
+                ),
+            ),
+            "selected-score-contradiction": _contradict_selected_score,
+            "audit-identity-hash": lambda directory: _edit_json(
+                directory / "audit.json",
+                lambda payload: payload["identity"].__setitem__(
+                    "node_keys_sha256", "0" * 64
+                ),
+            ),
+            "graph-audit-message-hash": lambda directory: _edit_json(
+                directory / "graph-audit.json",
+                lambda payload: payload["message_edges"].__setitem__(
+                    "edges_sha256", "0" * 64
+                ),
+            ),
+            "unexpected-shuffle-audit": lambda directory: _edit_json(
+                directory / "graph-audit.json",
+                lambda payload: payload.__setitem__(
+                    "shuffle", {"algorithm": "unexpected"}
+                ),
+            ),
         }
         for label, tamper in cases.items():
             with self.subTest(case=label):
@@ -194,6 +231,74 @@ class ChecksTest(unittest.TestCase):
                 envelope = json.loads(report.read_text(encoding="utf-8"))
                 self.assertNotEqual(envelope["status"], "ok")
                 self.assertEqual(envelope["kind"], "recompute")
+
+    def test_recompute_detects_damaged_shuffle_audit(self) -> None:
+        for label, mutate in _shuffle_audit_mutations().items():
+            with self.subTest(case=label):
+                destination = copy_run(
+                    self.shuffled[0], self.root / "tampered" / f"shuffle-{label}"
+                )
+                _edit_json(destination / "graph-audit.json", mutate)
+                before = tree_hashes(destination)
+                report = self._report(f"recompute-shuffle-{label}")
+                result = gvs_checks.command_recompute(
+                    run_dir=destination,
+                    repo_root=protocol.REPO_ROOT,
+                    command=["test", "recompute"],
+                    report_path=report,
+                )
+                self.assertNotEqual(result["status"], "ok", label)
+                self.assertEqual(before, tree_hashes(destination), label)
+
+    def test_recompute_cli_exits_nonzero_for_damaged_shuffle_audit(self) -> None:
+        for label, mutate in _shuffle_audit_mutations().items():
+            with self.subTest(case=label):
+                destination = copy_run(
+                    self.shuffled[0], self.root / "tampered" / f"cli-{label}"
+                )
+                _edit_json(destination / "graph-audit.json", mutate)
+                report = self._report(f"cli-{label}")
+                code = gvs_cli.main(
+                    [
+                        "recompute",
+                        "--run-dir",
+                        str(destination),
+                        "--report",
+                        str(report),
+                    ]
+                )
+                self.assertNotEqual(code, 0, label)
+                envelope = json.loads(report.read_text(encoding="utf-8"))
+                self.assertNotEqual(envelope["status"], "ok", label)
+
+    def test_valid_shuffled_run_with_empty_context_recomputes(self) -> None:
+        root = Path(tempfile.mkdtemp(prefix="gvs-empty-context-"))
+        keys = [(0, skill) for skill in range(4)] + [(2, skill) for skill in range(4)]
+        signal = (
+            np.arange(len(keys) * 36, dtype=np.float32).reshape(len(keys), 36) + 1.0
+        )
+        rows = [
+            (0, source, target)
+            for source, target in fixtures.CONTEXT_EDGES["region"]
+        ]
+        fixture = fixtures.build_fixture(
+            root, "r2", keys=keys, signal=signal, graph_rows=rows
+        )
+        config = fixtures.make_config(
+            root, fixture, method="shuffled", shuffle_seed=1, run_id="empty-context"
+        )
+        run_dir = Path(runner.execute_run(config)["run_dir"])
+        audit = fixtures.read_json(run_dir / "graph-audit.json")
+        empty = [entry for entry in audit["shuffle"]["contexts"] if entry["empty"]]
+        self.assertEqual(len(empty), 1)
+        self.assertEqual(empty[0]["context"], [2])
+        result = gvs_checks.command_recompute(
+            run_dir=run_dir,
+            repo_root=protocol.REPO_ROOT,
+            command=["test", "recompute"],
+            report_path=root / "report.json",
+        )
+        self.assertEqual(result["status"], "ok", result["envelope"]["errors"])
 
     def test_recompute_reports_failure_for_missing_artifacts(self) -> None:
         destination = copy_run(self.run_a, self.root / "tampered" / "missing")
@@ -489,7 +594,9 @@ class ChecksTest(unittest.TestCase):
         destination = copy_run(members[1], self.root / "tampered" / "graph-identity")
         _edit_json(
             destination / "provenance.json",
-            lambda payload: payload["graph"].__setitem__("raw_rows", 999999),
+            lambda payload: payload["graph"].__setitem__(
+                "source_path", str(destination / "different-source.parquet")
+            ),
         )
         result = gvs_checks.command_summarize_shuffled(
             run_dirs=[members[0], destination, members[2]],
@@ -521,6 +628,121 @@ def _flip_mask(path: Path) -> None:
     mask[0] = ~mask[0]
     arrays["has_nonself_neighbor"] = mask
     np.savez(path, **arrays)
+
+
+def _coherent_false_overlap(payload: dict) -> None:
+    shuffle_audit = payload["shuffle"]
+    context = shuffle_audit["contexts"][0]
+    edge_count = context["edge_count"]
+    context.update(
+        changed_edges=1,
+        added_edges=1,
+        intersection_edges=edge_count - 1,
+        symmetric_difference_edges=2,
+        changed_fraction=1 / edge_count,
+        intersection_fraction=(edge_count - 1) / edge_count,
+        symmetric_difference_fraction=1 / edge_count,
+    )
+    shuffle_audit["changed_edges"] = sum(
+        entry["changed_edges"] for entry in shuffle_audit["contexts"]
+    )
+
+
+def _lower_work_budget(payload: dict) -> None:
+    shuffle_audit = payload["shuffle"]
+    shuffle_audit["accept_target_factor"] = 1
+    for context in shuffle_audit["contexts"]:
+        context["target_accepted"] = context["edge_count"]
+        context["accepted"] = context["edge_count"]
+    shuffle_audit["totals"]["accepted"] = sum(
+        context["accepted"] for context in shuffle_audit["contexts"]
+    )
+
+
+def _shuffle_audit_mutations():
+    return {
+        "missing-shuffle": lambda payload: payload.pop("shuffle"),
+        "result-hash": lambda payload: payload["shuffle"].__setitem__(
+            "result_edges_sha256", "0" * 64
+        ),
+        "seed": lambda payload: payload["shuffle"].__setitem__("shuffle_seed", 1),
+        "unchanged-context": lambda payload: payload["shuffle"]["contexts"][
+            0
+        ].__setitem__("changed_edges", 0),
+        "missing-totals": lambda payload: payload["shuffle"].pop("totals"),
+        "missing-context": lambda payload: payload["shuffle"]["contexts"].pop(),
+        "duplicate-context": lambda payload: payload["shuffle"]["contexts"].append(
+            dict(payload["shuffle"]["contexts"][0])
+        ),
+        "wrong-context": lambda payload: payload["shuffle"]["contexts"][
+            0
+        ].__setitem__("context", [999]),
+        "negative-swaps": lambda payload: payload["shuffle"]["contexts"][
+            0
+        ].__setitem__("accepted", -1),
+        "negative-attempts": lambda payload: payload["shuffle"]["contexts"][
+            0
+        ].__setitem__("attempts", -1),
+        "target-mismatch": lambda payload: payload["shuffle"]["contexts"][
+            0
+        ].__setitem__("target_accepted", 0),
+        "attempts-exceed": lambda payload: payload["shuffle"]["contexts"][
+            0
+        ].__setitem__("attempts", 0),
+        "missing-context-result-hash": lambda payload: payload["shuffle"][
+            "contexts"
+        ][0].pop("result_edges_sha256"),
+        "wrong-context-source-hash": lambda payload: payload["shuffle"]["contexts"][
+            0
+        ].__setitem__("source_edges_sha256", "0" * 64),
+        "missing-seed-sequence": lambda payload: payload["shuffle"]["contexts"][
+            0
+        ].pop("seed_sequence"),
+        "totals-mismatch": lambda payload: payload["shuffle"]["totals"].__setitem__(
+            "accepted", payload["shuffle"]["totals"]["accepted"] + 1
+        ),
+        "fractional-raw-count": lambda payload: payload.__setitem__(
+            "raw_rows", payload["raw_rows"] + 0.5
+        ),
+        "fractional-message-count": lambda payload: payload["message_edges"].__setitem__(
+            "edges", payload["message_edges"]["edges"] + 0.5
+        ),
+        "negative-changed-fraction": lambda payload: payload["shuffle"]["contexts"][
+            0
+        ].__setitem__("changed_fraction", -1.0),
+        "missing-changed-fraction": lambda payload: payload["shuffle"]["contexts"][
+            0
+        ].pop("changed_fraction"),
+        "coherent-false-overlap": _coherent_false_overlap,
+        "missing-rejections": lambda payload: payload["shuffle"]["contexts"][0].pop(
+            "rejections"
+        ),
+        "inconsistent-rejections": lambda payload: payload["shuffle"]["contexts"][
+            0
+        ].__setitem__(
+            "rejections",
+            {
+                "same_edge_index": payload["shuffle"]["contexts"][0]["attempts"] + 1
+            },
+        ),
+        "lower-work-budget": _lower_work_budget,
+        "missing-top-changed": lambda payload: payload["shuffle"].pop("changed_edges"),
+    }
+
+
+def _contradict_selected_score(directory: Path) -> None:
+    history_path = directory / "training-history.json"
+    history = json.loads(history_path.read_text(encoding="utf-8"))
+    epoch = int(history["selected_epoch"])
+    history["rows"][epoch - 1][
+        "validation_MSE_original_units_after_update"
+    ] = -1.0
+    history["selected_validation_MSE"] = -1.0
+    history_path.write_text(json.dumps(history), encoding="utf-8")
+    selection_path = directory / "selection.json"
+    selection = json.loads(selection_path.read_text(encoding="utf-8"))
+    selection["training"]["selected_validation_MSE"] = -1.0
+    selection_path.write_text(json.dumps(selection), encoding="utf-8")
 
 
 def _nan_parameter(path: Path) -> None:

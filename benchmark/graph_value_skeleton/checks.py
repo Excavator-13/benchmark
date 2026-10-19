@@ -27,6 +27,7 @@ from benchmark.nograph_baseline import protocol as p01
 from benchmark.nograph_baseline.data import sha256_file
 
 from . import artifacts, config as gvs_config, graph as gvs_graph, protocol
+from . import shuffle as gvs_shuffle
 
 __all__ = [
     "CheckError",
@@ -127,8 +128,11 @@ def validate_report_destination(
     except gvs_config.ConfigError as exc:
         raise CheckError(str(exc)) from exc
     resolved = destination.resolve()
+    # Eligibility is anchored to the authoritative ignored scratch tree and the
+    # system temporary directory, never to a scratch directory implied by an
+    # arbitrary repository-root override.
     allowed = [
-        (Path(repo_root) / "scratch").resolve(),
+        gvs_config.authoritative_scratch_root().resolve(),
         Path(tempfile.gettempdir()).resolve(),
     ]
     if not any(nb_artifacts.is_within(resolved, root) for root in allowed):
@@ -298,6 +302,8 @@ _CONSUMED_RELATIVE = (
     "windows.json",
     "nodes.parquet",
     "masks.npz",
+    "audit.json",
+    "graph-audit.json",
     "selection.json",
     "training-history.json",
     "models/selected.npz",
@@ -324,6 +330,8 @@ class LoadedRun:
     history: Mapping[str, Any]
     environment: Mapping[str, Any]
     source: Mapping[str, Any]
+    audit: Mapping[str, Any]
+    graph_audit: Mapping[str, Any]
     masks: Dict[str, np.ndarray]
     nodes: Any
     gold: Dict[str, np.ndarray]
@@ -377,6 +385,12 @@ def load_run(run_dir: Path) -> LoadedRun:
     history = _read_json(run_dir / "training-history.json")
     environment = _read_json(run_dir / "environment.json")
     source = _read_json(run_dir / "source.json")
+    audit_document = _read_json(run_dir / "audit.json")
+    graph_audit_document = _read_json(run_dir / "graph-audit.json")
+    if not isinstance(audit_document, Mapping):
+        raise CheckError(f"{run_dir}/audit.json is not a JSON object")
+    if not isinstance(graph_audit_document, Mapping):
+        raise CheckError(f"{run_dir}/graph-audit.json is not a JSON object")
     masks = _load_npz(run_dir / "masks.npz")
     import pandas as pd
 
@@ -407,6 +421,8 @@ def load_run(run_dir: Path) -> LoadedRun:
         history=history,
         environment=environment,
         source=source,
+        audit=audit_document,
+        graph_audit=graph_audit_document,
         masks=masks,
         nodes=nodes,
         gold=gold,
@@ -546,6 +562,7 @@ def _validate_loaded(loaded: LoadedRun) -> Dict[str, Any]:
     _validate_history(loaded, problems, node_count)
     _validate_parameters(loaded, problems)
     _validate_saved_graph_evidence(loaded, problems, node_count)
+    _validate_saved_audit_evidence(loaded, problems, node_count)
 
     # Naive reference identity: published runs must still be LastValue.
     references = loaded.metrics.get("references", {})
@@ -577,9 +594,23 @@ def _validate_loaded(loaded: LoadedRun) -> Dict[str, Any]:
     }
 
 
+def _exact_int(value: Any) -> bool:
+    """Return True only for a JSON integer (never a bool or a float)."""
+    return isinstance(value, int) and not isinstance(value, bool)
+
+
+_SCORE_FIELDS = (
+    "train_MSE_original_units_before_update",
+    "train_MAE_original_units_before_update",
+    "validation_MSE_original_units_after_update",
+    "validation_MAE_original_units_after_update",
+)
+
+
 def _validate_history(
     loaded: LoadedRun, problems: List[str], node_count: int
 ) -> None:
+    """Validate exact history counts, score domains and selection consistency."""
     history = loaded.history
     rows = history.get("rows")
     if not isinstance(rows, list) or len(rows) != protocol.EPOCHS:
@@ -588,44 +619,64 @@ def _validate_history(
             f"{len(rows) if isinstance(rows, list) else type(rows).__name__}"
         )
         return
-    epochs = [int(row.get("epoch", -1)) for row in rows]
-    if epochs != list(range(1, protocol.EPOCHS + 1)):
-        problems.append("training-history epochs are not exactly 1..200")
-    required = (
-        "train_elements",
-        "train_MSE_original_units_before_update",
-        "train_MAE_original_units_before_update",
-        "validation_elements",
-        "validation_MSE_original_units_after_update",
-        "validation_MAE_original_units_after_update",
+    expected_train_elements = (
+        len(protocol.TRAIN_STARTS) * int(node_count) * protocol.HORIZON
     )
-    expected_train_elements = len(protocol.TRAIN_STARTS) * int(node_count) * protocol.HORIZON
     expected_validation_elements = (
         len(protocol.VALIDATION_STARTS) * int(node_count) * protocol.HORIZON
     )
-    for row in rows:
-        missing = [field for field in required if field not in row]
+    history_valid = True
+    for index, row in enumerate(rows):
+        label = f"history row {index + 1}"
+        if not isinstance(row, Mapping):
+            problems.append(f"{label} is not an object")
+            history_valid = False
+            continue
+        epoch = row.get("epoch")
+        if not _exact_int(epoch) or int(epoch) != index + 1:
+            problems.append(
+                f"{label} epoch {epoch!r} is not the exact integer {index + 1}"
+            )
+            history_valid = False
+        missing = [
+            field
+            for field in ("train_elements", "validation_elements", *_SCORE_FIELDS)
+            if field not in row
+        ]
         if missing:
-            problems.append(f"history row {row.get('epoch')} is missing {missing}")
-            break
-        if not all(
-            math.isfinite(float(row[field]))
-            for field in required
+            problems.append(f"{label} is missing {missing}")
+            history_valid = False
+            continue
+        for field, expected in (
+            ("train_elements", expected_train_elements),
+            ("validation_elements", expected_validation_elements),
         ):
-            problems.append(f"history row {row.get('epoch')} has a non-finite score")
-            break
-        if int(row["train_elements"]) != expected_train_elements:
-            problems.append(
-                f"history row {row.get('epoch')} train elements "
-                f"{row['train_elements']} != {expected_train_elements}"
-            )
-            break
-        if int(row["validation_elements"]) != expected_validation_elements:
-            problems.append(
-                f"history row {row.get('epoch')} validation elements "
-                f"{row['validation_elements']} != {expected_validation_elements}"
-            )
-            break
+            value = row[field]
+            if not _exact_int(value):
+                problems.append(
+                    f"{label} {field} {value!r} is not an exact integer"
+                )
+                history_valid = False
+            elif int(value) != expected:
+                problems.append(
+                    f"{label} {field} {int(value)} != {expected}"
+                )
+                history_valid = False
+        for field in _SCORE_FIELDS:
+            value = row[field]
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                problems.append(f"{label} {field} {value!r} is not a number")
+                history_valid = False
+                continue
+            number = float(value)
+            if not math.isfinite(number):
+                problems.append(f"{label} {field} is non-finite")
+                history_valid = False
+            elif number < 0.0:
+                problems.append(f"{label} {field} {number} is negative")
+                history_valid = False
+    if not history_valid:
+        return
     best_epoch = 0
     best_value = float("inf")
     for row in rows:
@@ -633,26 +684,669 @@ def _validate_history(
         if value < best_value:
             best_value = value
             best_epoch = int(row["epoch"])
-    recorded_epoch = int(history.get("selected_epoch", -1))
-    if recorded_epoch != best_epoch:
+    recorded_epoch = history.get("selected_epoch")
+    if not _exact_int(recorded_epoch) or int(recorded_epoch) != best_epoch:
         problems.append(
-            f"selected epoch {recorded_epoch} != earliest validation-MSE minimum "
-            f"{best_epoch}"
+            f"selected epoch {recorded_epoch!r} is not the earliest "
+            f"validation-MSE minimum {best_epoch}"
         )
-    if int(loaded.selection.get("training", {}).get("selected_epoch", -1)) != best_epoch:
-        problems.append("selection.json selected epoch disagrees with the history")
-    recorded_value = float(history.get("selected_validation_MSE", "nan"))
-    if not math.isclose(
-        recorded_value,
-        float(rows[best_epoch - 1]["validation_MSE_original_units_after_update"]),
-        rel_tol=1e-12,
-        abs_tol=1e-12,
+    selection_training = loaded.selection.get("training")
+    if not isinstance(selection_training, Mapping):
+        problems.append("selection.json has no training selection record")
+        selection_training = {}
+    recorded_selection_epoch = selection_training.get("selected_epoch")
+    if not _exact_int(recorded_selection_epoch) or int(recorded_selection_epoch) != best_epoch:
+        problems.append(
+            "selection.json selected epoch "
+            f"{recorded_selection_epoch!r} is not the earliest validation-MSE "
+            f"minimum {best_epoch}"
+        )
+    selected_row = rows[best_epoch - 1]
+    recorded_value = history.get("selected_validation_MSE")
+    if isinstance(recorded_value, bool) or not isinstance(recorded_value, (int, float)):
+        problems.append(
+            f"recorded selected validation MSE {recorded_value!r} is not a number"
+        )
+    else:
+        number = float(recorded_value)
+        if not math.isfinite(number) or number < 0.0:
+            problems.append(
+                f"recorded selected validation MSE {number} is not a finite "
+                "nonnegative error score"
+            )
+        elif not math.isclose(
+            number,
+            float(selected_row["validation_MSE_original_units_after_update"]),
+            rel_tol=1e-12,
+            abs_tol=1e-12,
+        ):
+            problems.append(
+                "recorded selected validation MSE disagrees with the selected "
+                "history row"
+            )
+    selection_value = selection_training.get("selected_validation_MSE")
+    if isinstance(selection_value, bool) or not isinstance(selection_value, (int, float)):
+        problems.append(
+            f"selection.json selected validation MSE {selection_value!r} is not a number"
+        )
+    else:
+        number = float(selection_value)
+        if not math.isfinite(number) or number < 0.0:
+            problems.append(
+                f"selection.json selected validation MSE {number} is not a finite "
+                "nonnegative error score"
+            )
+        elif float(selected_row["validation_MSE_original_units_after_update"]) != number:
+            problems.append(
+                "selection.json selected validation MSE disagrees with the selected "
+                "history row"
+            )
+    # The selected history score must agree with the saved selected-prediction
+    # validation metrics; this is the consistency the negative-score probe broke.
+    methods = loaded.metrics.get("methods")
+    validation_report = (
+        methods.get("validation") if isinstance(methods, Mapping) else None
+    )
+    model_report = (
+        validation_report.get(loaded.method)
+        if isinstance(validation_report, Mapping)
+        else None
+    )
+    if not isinstance(model_report, Mapping):
+        problems.append(
+            "metrics.json has no validation report for the model method"
+        )
+        return
+    for field, metric in (
+        ("validation_MSE_original_units_after_update", "MSE"),
+        ("validation_MAE_original_units_after_update", "MAE"),
     ):
-        problems.append("recorded selected validation MSE disagrees with the history row")
-    if float(loaded.selection.get("training", {}).get("selected_validation_MSE", "nan")) != float(
-        rows[best_epoch - 1]["validation_MSE_original_units_after_update"]
+        reported = model_report.get(metric)
+        if isinstance(reported, bool) or not isinstance(reported, (int, float)):
+            problems.append(
+                f"metrics.json validation {metric} {reported!r} is not a number"
+            )
+            continue
+        reported_number = float(reported)
+        if not math.isfinite(reported_number) or reported_number < 0.0:
+            problems.append(
+                f"metrics.json validation {metric} {reported_number} is not a "
+                "finite nonnegative error score"
+            )
+            continue
+        row_number = float(selected_row[field])
+        difference = normalized_difference(row_number, reported_number)
+        if difference > DIAGNOSTIC_RELATIVE_TOLERANCE:
+            problems.append(
+                f"selected history {metric} {row_number} disagrees with the saved "
+                f"selected-prediction validation {metric} {reported_number} "
+                f"(normalized difference {difference:.3e})"
+            )
+
+
+def _exact_nonnegative_count(
+    value: Any, label: str, problems: List[str]
+) -> Optional[int]:
+    """Return an exact nonnegative JSON integer, or record why it is invalid."""
+    if not _exact_int(value):
+        problems.append(f"{label} {value!r} is not an exact integer")
+        return None
+    number = int(value)
+    if number < 0:
+        problems.append(f"{label} {number} is negative")
+        return None
+    return number
+
+
+def _validate_fraction(
+    value: Any, expected: Optional[float], label: str, problems: List[str]
+) -> None:
+    """Validate a saved audit fraction against saved-set arithmetic."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        problems.append(f"{label} {value!r} is not a number")
+        return
+    number = float(value)
+    if not math.isfinite(number) or number < 0.0 or number > 1.0:
+        problems.append(f"{label} {number} is outside [0,1]")
+        return
+    if expected is None:
+        problems.append(f"{label} has no saved-set arithmetic value")
+        return
+    difference = normalized_difference(number, expected)
+    if difference > DIAGNOSTIC_RELATIVE_TOLERANCE:
+        problems.append(
+            f"{label} {number} disagrees with saved-set arithmetic {expected} "
+            f"(normalized difference {difference:.3e})"
+        )
+
+
+def _validate_saved_audit_evidence(
+    loaded: LoadedRun, problems: List[str], node_count: int
+) -> None:
+    """Require complete, exact and mutually consistent graph/shuffle audits."""
+    audit_document = loaded.audit
+    graph_audit = loaded.graph_audit
+    demand_identity = loaded.provenance.get("demand", {})
+    graph_identity = loaded.provenance.get("graph", {})
+    graph_used = loaded.provenance.get("graph_used", {})
+    if not isinstance(graph_identity, Mapping):
+        graph_identity = {}
+    if not isinstance(graph_used, Mapping):
+        graph_used = {}
+    identity = audit_document.get("identity")
+    if not isinstance(identity, Mapping):
+        problems.append("audit.json has no identity record")
+    else:
+        if identity.get("node_keys_sha256") != demand_identity.get(
+            "node_keys_sha256"
+        ):
+            problems.append("audit.json node-key hash disagrees with provenance")
+        recorded_nodes = _exact_nonnegative_count(
+            identity.get("nodes"), "audit.json identity nodes", problems
+        )
+        if recorded_nodes is not None and recorded_nodes != node_count:
+            problems.append(
+                "audit.json node count is not the saved node count"
+            )
+    masks = audit_document.get("masks")
+    if not isinstance(masks, Mapping):
+        problems.append("audit.json has no mask record")
+    else:
+        recorded_hashes = loaded.provenance.get("masks", {}).get("array_sha256")
+        if masks.get("array_sha256") != recorded_hashes:
+            problems.append("audit.json mask hashes disagree with provenance")
+        if masks.get("recomputed_from_shuffled_adjacency") is not False:
+            problems.append(
+                "audit.json does not state that masks are independent of the "
+                "shuffled adjacency"
+            )
+        if masks.get("shared_by_methods") != list(protocol.METHODS):
+            problems.append(
+                "audit.json does not record the mask as shared by all methods"
+            )
+    if not isinstance(graph_audit, Mapping):
+        problems.append("graph-audit.json is not an object")
+        return
+    raw_rows = _exact_nonnegative_count(
+        graph_audit.get("raw_rows"), "graph-audit.json raw_rows", problems
+    )
+    unique_edges = _exact_nonnegative_count(
+        graph_audit.get("unique_edges"), "graph-audit.json unique_edges", problems
+    )
+    provenance_raw = _exact_nonnegative_count(
+        graph_identity.get("raw_rows"), "provenance graph raw_rows", problems
+    )
+    provenance_unique = _exact_nonnegative_count(
+        graph_identity.get("unique_edges"), "provenance graph unique_edges", problems
+    )
+    if (
+        raw_rows is not None
+        and provenance_raw is not None
+        and raw_rows != provenance_raw
     ):
-        problems.append("selection.json selected validation MSE disagrees with the history")
+        problems.append("graph-audit.json raw row count disagrees with provenance")
+    if (
+        unique_edges is not None
+        and provenance_unique is not None
+        and unique_edges != provenance_unique
+    ):
+        problems.append("graph-audit.json unique edge count disagrees with provenance")
+    if graph_audit.get("source_sha256") != graph_identity.get("source_sha256"):
+        problems.append("graph-audit.json source hash disagrees with provenance")
+    self_loops = _exact_nonnegative_count(
+        graph_audit.get("self_loop_rows"), "graph-audit.json self_loop_rows", problems
+    )
+    if self_loops is not None and self_loops != 0:
+        problems.append("graph-audit.json records accepted self-loop rows")
+    multiplicity = graph_audit.get("multiplicity")
+    if not isinstance(multiplicity, Mapping):
+        problems.append("graph-audit.json has no multiplicity audit")
+    else:
+        if multiplicity.get("weights_edges") is not False:
+            problems.append(
+                "graph-audit.json does not record a binary, unweighted multiplicity audit"
+            )
+        _exact_nonnegative_count(
+            multiplicity.get("duplicate_rows", 0),
+            "graph-audit.json multiplicity duplicate_rows",
+            problems,
+        )
+        maximum = _exact_nonnegative_count(
+            multiplicity.get("max_multiplicity", 0),
+            "graph-audit.json multiplicity max_multiplicity",
+            problems,
+        )
+        if maximum is not None and unique_edges and maximum < 1:
+            problems.append("graph-audit.json max multiplicity is below one")
+    message_record = graph_audit.get("message_edges")
+    if not isinstance(message_record, Mapping):
+        problems.append("graph-audit.json has no message-edge record")
+    else:
+        if message_record.get("edges_sha256") != graph_used.get(
+            "message_edges_sha256"
+        ):
+            problems.append(
+                "graph-audit.json message-edge hash disagrees with provenance"
+            )
+        message_count = _exact_nonnegative_count(
+            message_record.get("edges"),
+            "graph-audit.json message-edge edges",
+            problems,
+        )
+        provenance_message_count = _exact_nonnegative_count(
+            graph_used.get("message_edges"),
+            "provenance graph_used message_edges",
+            problems,
+        )
+        if (
+            message_count is not None
+            and provenance_message_count is not None
+            and message_count != provenance_message_count
+        ):
+            problems.append(
+                "graph-audit.json message-edge count disagrees with provenance"
+            )
+        if message_record.get("binary_unique_directed") is not True:
+            problems.append(
+                "graph-audit.json does not record binary unique directed edges"
+            )
+    # Saved canonical node/context inventory and edge arrays.
+    key_columns = [column for column in loaded.nodes.columns if column != "node_index"]
+    key_array = loaded.nodes[key_columns].to_numpy(dtype=np.int64)
+    context_of_node = [
+        tuple(int(value) for value in row[:-1]) for row in key_array.tolist()
+    ]
+    expected_contexts = sorted(set(context_of_node))
+    context_ordinal = {
+        context: index for index, context in enumerate(expected_contexts)
+    }
+    context_code = np.array(
+        [context_ordinal[context_of_node[node]] for node in range(node_count)],
+        dtype=np.int64,
+    )
+    context_nodes = {
+        context: np.flatnonzero(context_code == index)
+        for context, index in context_ordinal.items()
+    }
+    message_edges = _load_npy(loaded.run_dir / "graph/edges.npy")
+    source_edges = _load_npy(loaded.run_dir / "graph/source-edges.npy")
+    for label, edges in (
+        ("graph/edges.npy", message_edges),
+        ("graph/source-edges.npy", source_edges),
+    ):
+        if edges.size and not np.array_equal(
+            context_code[edges[:, 0]], context_code[edges[:, 1]]
+        ):
+            problems.append(f"{label} contains a cross-context edge")
+    if loaded.method != protocol.METHOD_SHUFFLED:
+        if "shuffle" in graph_audit:
+            problems.append("non-shuffled run carries a shuffle audit record")
+        return
+    shuffle_audit = graph_audit.get("shuffle")
+    if not isinstance(shuffle_audit, Mapping):
+        problems.append("graph-audit.json has no shuffle audit for a shuffled run")
+        return
+    if shuffle_audit.get("algorithm") != protocol.SHUFFLE_ALGORITHM:
+        problems.append("shuffle audit algorithm disagrees with the frozen algorithm")
+    if shuffle_audit.get("algorithm_version") != protocol.SHUFFLE_VERSION:
+        problems.append("shuffle audit version disagrees with the frozen version")
+    configured_seed = loaded.shuffle_seed
+    audit_seed = _exact_nonnegative_count(
+        shuffle_audit.get("shuffle_seed"), "shuffle audit shuffle_seed", problems
+    )
+    if audit_seed is None or configured_seed is None or audit_seed != int(
+        configured_seed
+    ):
+        problems.append("shuffle audit seed disagrees with the configured seed")
+    if shuffle_audit.get("source_edges_sha256") != graph_identity.get(
+        "edges_sha256"
+    ):
+        problems.append("shuffle audit source-edge hash disagrees with provenance")
+    shuffle_identity = graph_used.get("shuffle_identity")
+    if not isinstance(shuffle_identity, Mapping):
+        problems.append("provenance has no shuffled-graph identity for a shuffled run")
+        return
+    if shuffle_audit.get("result_edges_sha256") != shuffle_identity.get(
+        "edges_sha256"
+    ):
+        problems.append("shuffle audit result-edge hash disagrees with provenance")
+    if shuffle_identity.get("shuffle_seed") != shuffle_audit.get("shuffle_seed"):
+        problems.append("shuffle audit seed disagrees with the graph identity")
+    identity_edges = _exact_nonnegative_count(
+        shuffle_identity.get("edge_count"),
+        "provenance shuffled edge_count",
+        problems,
+    )
+    if identity_edges is not None and identity_edges != int(message_edges.shape[0]):
+        problems.append("shuffled graph identity edge count disagrees with saved edges")
+    accept_factor = _exact_nonnegative_count(
+        shuffle_audit.get("accept_target_factor"),
+        "shuffle audit accept_target_factor",
+        problems,
+    )
+    attempt_factor = _exact_nonnegative_count(
+        shuffle_audit.get("attempt_limit_factor"),
+        "shuffle audit attempt_limit_factor",
+        problems,
+    )
+    if (
+        accept_factor is not None
+        and accept_factor != protocol.SHUFFLE_ACCEPT_FACTOR
+    ):
+        problems.append(
+            "shuffle audit accept_target_factor is not the frozen "
+            f"{protocol.SHUFFLE_ACCEPT_FACTOR}*E budget"
+        )
+    if (
+        attempt_factor is not None
+        and attempt_factor != protocol.SHUFFLE_ATTEMPT_LIMIT_FACTOR
+    ):
+        problems.append(
+            "shuffle audit attempt_limit_factor is not the frozen "
+            f"{protocol.SHUFFLE_ATTEMPT_LIMIT_FACTOR}*E limit"
+        )
+    contexts = shuffle_audit.get("contexts")
+    if not isinstance(contexts, list) or not contexts:
+        problems.append("shuffle audit has no per-context records")
+        return
+    recorded_contexts: List[List[int]] = []
+    for entry in contexts:
+        if not isinstance(entry, Mapping) or not isinstance(
+            entry.get("context"), list
+        ):
+            problems.append("shuffle audit context entry has no context list")
+            return
+        if not all(_exact_int(value) for value in entry["context"]):
+            problems.append("shuffle audit context identity is not exact integers")
+            return
+        recorded_contexts.append([int(value) for value in entry["context"]])
+    expected_context_lists = [list(context) for context in expected_contexts]
+    if recorded_contexts != expected_context_lists:
+        problems.append(
+            "shuffle audit context inventory "
+            f"{recorded_contexts} != expected {expected_context_lists}"
+        )
+        return
+    total_attempts = 0
+    total_accepted = 0
+    total_edges = 0
+    total_changed = 0
+    nonempty_contexts = 0
+    empty_contexts = 0
+    for index, (entry, context) in enumerate(zip(contexts, expected_contexts)):
+        label = f"shuffle audit context {list(context)}"
+        ordinal = _exact_nonnegative_count(
+            entry.get("ordinal"), f"{label} ordinal", problems
+        )
+        if ordinal is not None and ordinal != index:
+            problems.append(f"{label} ordinal {ordinal} != {index}")
+        expected_seed = gvs_shuffle.context_seed_sequence(
+            int(configured_seed), context
+        )
+        if entry.get("seed_sequence") != expected_seed:
+            problems.append(
+                f"{label} seed_sequence {entry.get('seed_sequence')!r} != "
+                f"{expected_seed}"
+            )
+        nodes_global = context_nodes[context]
+        recorded_nodes = _exact_nonnegative_count(
+            entry.get("nodes"), f"{label} nodes", problems
+        )
+        if recorded_nodes is not None and recorded_nodes != int(nodes_global.shape[0]):
+            problems.append(f"{label} node count disagrees with saved nodes")
+        edge_count = _exact_nonnegative_count(
+            entry.get("edge_count"), f"{label} edge_count", problems
+        )
+        attempts = _exact_nonnegative_count(
+            entry.get("attempts"), f"{label} attempts", problems
+        )
+        accepted = _exact_nonnegative_count(
+            entry.get("accepted"), f"{label} accepted", problems
+        )
+        target = _exact_nonnegative_count(
+            entry.get("target_accepted"), f"{label} target_accepted", problems
+        )
+        changed = _exact_nonnegative_count(
+            entry.get("changed_edges"), f"{label} changed_edges", problems
+        )
+        empty_flag = entry.get("empty")
+        if not isinstance(empty_flag, bool):
+            problems.append(f"{label} empty flag is not boolean")
+            continue
+        inverse = np.full(node_count, -1, dtype=np.int64)
+        inverse[nodes_global] = np.arange(nodes_global.shape[0], dtype=np.int64)
+        member = context_code[message_edges[:, 0]] == index if message_edges.size else np.zeros(0, dtype=bool)
+        context_message = (
+            np.stack(
+                [inverse[message_edges[member, 0]], inverse[message_edges[member, 1]]],
+                axis=1,
+            )
+            if message_edges.size
+            else np.zeros((0, 2), dtype=np.int64)
+        )
+        context_message = gvs_graph.canonical_edge_array(context_message)
+        source_member = context_code[source_edges[:, 0]] == index if source_edges.size else np.zeros(0, dtype=bool)
+        context_source = (
+            np.stack(
+                [inverse[source_edges[source_member, 0]], inverse[source_edges[source_member, 1]]],
+                axis=1,
+            )
+            if source_edges.size
+            else np.zeros((0, 2), dtype=np.int64)
+        )
+        context_source = gvs_graph.canonical_edge_array(context_source)
+        if edge_count is not None and edge_count != int(context_message.shape[0]):
+            problems.append(f"{label} edge_count disagrees with saved message edges")
+        if edge_count is not None and edge_count != int(context_source.shape[0]):
+            problems.append(f"{label} edge_count disagrees with saved source edges")
+        original_set = {
+            tuple(int(value) for value in row) for row in context_source.tolist()
+        }
+        result_set = {
+            tuple(int(value) for value in row) for row in context_message.tolist()
+        }
+        removed = original_set - result_set
+        added_set = result_set - original_set
+        intersection_set = original_set & result_set
+        symmetric_set = original_set ^ result_set
+        edge_total = len(original_set)
+        expected_fractions = {
+            "changed_fraction": (
+                len(removed) / edge_total if edge_total else None
+            ),
+            "intersection_fraction": (
+                len(intersection_set) / edge_total if edge_total else None
+            ),
+            "symmetric_difference_fraction": (
+                len(symmetric_set) / (2 * edge_total) if edge_total else None
+            ),
+        }
+        if empty_flag != (context_message.shape[0] == 0):
+            problems.append(f"{label} empty flag disagrees with saved message edges")
+        if attempts is not None:
+            total_attempts += attempts
+        if accepted is not None:
+            total_accepted += accepted
+        if edge_count is not None:
+            total_edges += edge_count
+        if empty_flag:
+            empty_contexts += 1
+            for field, value in (
+                ("edge_count", edge_count),
+                ("attempts", attempts),
+                ("accepted", accepted),
+                ("target_accepted", target),
+                ("changed_edges", changed),
+            ):
+                if value is not None and value != 0:
+                    problems.append(f"{label} empty context has nonzero {field}")
+            if "changed_fraction" not in entry or entry.get(
+                "changed_fraction"
+            ) is not None:
+                problems.append(
+                    f"{label} empty context changed_fraction is not null"
+                )
+            for field in ("intersection_edges", "symmetric_difference_edges"):
+                value = _exact_nonnegative_count(
+                    entry.get(field), f"{label} {field}", problems
+                )
+                if value is not None and value != 0:
+                    problems.append(f"{label} empty context has nonzero {field}")
+            rejections = entry.get("rejections")
+            if not isinstance(rejections, Mapping):
+                problems.append(f"{label} rejections is missing or not an object")
+            else:
+                counts = []
+                for reason, count in rejections.items():
+                    number = _exact_nonnegative_count(
+                        count, f"{label} rejection {reason}", problems
+                    )
+                    if number is not None:
+                        counts.append(number)
+                if len(counts) == len(rejections) and sum(counts) != 0:
+                    problems.append(
+                        f"{label} empty context has nonzero rejection counts"
+                    )
+            continue
+        nonempty_contexts += 1
+        if context_message.shape[0] == 0 or context_source.shape[0] == 0:
+            problems.append(f"{label} nonempty context has no saved edges")
+            continue
+        if changed is not None:
+            total_changed += changed
+        added = _exact_nonnegative_count(
+            entry.get("added_edges"), f"{label} added_edges", problems
+        )
+        intersection = _exact_nonnegative_count(
+            entry.get("intersection_edges"), f"{label} intersection_edges", problems
+        )
+        symmetric_difference = _exact_nonnegative_count(
+            entry.get("symmetric_difference_edges"),
+            f"{label} symmetric_difference_edges",
+            problems,
+        )
+        attempt_limit = _exact_nonnegative_count(
+            entry.get("attempt_limit"), f"{label} attempt_limit", problems
+        )
+        for field, actual, expected in (
+            ("changed_edges", changed, len(removed)),
+            ("added_edges", added, len(added_set)),
+            ("intersection_edges", intersection, len(intersection_set)),
+            (
+                "symmetric_difference_edges",
+                symmetric_difference,
+                len(symmetric_set),
+            ),
+        ):
+            if actual is not None and actual != expected:
+                problems.append(
+                    f"{label} {field} {actual} != saved-set arithmetic {expected}"
+                )
+        if changed is not None and changed <= 0:
+            problems.append(f"{label} nonempty context changed no edges")
+        for field, expected in expected_fractions.items():
+            if field not in entry:
+                problems.append(f"{label} is missing {field}")
+            else:
+                _validate_fraction(
+                    entry.get(field), expected, f"{label} {field}", problems
+                )
+        if accepted is not None and target is not None and accepted != target:
+            problems.append(f"{label} accepted swaps != target")
+        if accepted is not None and attempts is not None and accepted > attempts:
+            problems.append(f"{label} accepted swaps exceed attempts")
+        if (
+            attempts is not None
+            and attempt_limit is not None
+            and attempts > attempt_limit
+        ):
+            problems.append(f"{label} attempts exceed attempt_limit")
+        if accept_factor is not None and target is not None and edge_count is not None:
+            if target != accept_factor * edge_count:
+                problems.append(
+                    f"{label} target_accepted != accept_factor * edge_count"
+                )
+        if (
+            attempt_factor is not None
+            and attempt_limit is not None
+            and edge_count is not None
+            and attempt_limit != attempt_factor * edge_count
+        ):
+            problems.append(
+                f"{label} attempt_limit != attempt_limit_factor * edge_count"
+            )
+        expected_source_hash = gvs_shuffle.context_edge_sha256(
+            context, context_source
+        )
+        if entry.get("source_edges_sha256") != expected_source_hash:
+            problems.append(
+                f"{label} source_edges_sha256 disagrees with saved source edges"
+            )
+        expected_result_hash = gvs_shuffle.context_edge_sha256(
+            context, context_message
+        )
+        if entry.get("result_edges_sha256") != expected_result_hash:
+            problems.append(
+                f"{label} result_edges_sha256 disagrees with saved message edges"
+            )
+        rejections = entry.get("rejections")
+        if not isinstance(rejections, Mapping):
+            problems.append(f"{label} rejections is missing or not an object")
+        else:
+            counts = []
+            for reason, count in rejections.items():
+                number = _exact_nonnegative_count(
+                    count, f"{label} rejection {reason}", problems
+                )
+                if number is not None:
+                    counts.append(number)
+            if (
+                len(counts) == len(rejections)
+                and accepted is not None
+                and attempts is not None
+                and sum(counts) + accepted != attempts
+            ):
+                problems.append(
+                    f"{label} rejection counts + accepted swaps != attempts"
+                )
+    top_changed = _exact_nonnegative_count(
+        shuffle_audit.get("changed_edges"),
+        "shuffle audit changed_edges",
+        problems,
+    )
+    if top_changed is not None and top_changed != total_changed:
+        problems.append(
+            "shuffle audit changed_edges "
+            f"{top_changed} != per-context changed sum {total_changed}"
+        )
+    if shuffle_audit.get("node_keys_sha256") != demand_identity.get(
+        "node_keys_sha256"
+    ):
+        problems.append("shuffle audit node-key hash disagrees with provenance")
+    totals = shuffle_audit.get("totals")
+    if not isinstance(totals, Mapping):
+        problems.append("shuffle audit has no totals record")
+        return
+    expected_totals = {
+        "contexts": len(expected_contexts),
+        "nonempty_contexts": nonempty_contexts,
+        "empty_contexts": empty_contexts,
+        "attempts": total_attempts,
+        "accepted": total_accepted,
+        "edges": total_edges,
+    }
+    for field, expected in expected_totals.items():
+        value = _exact_nonnegative_count(
+            totals.get(field), f"shuffle audit totals {field}", problems
+        )
+        if value is not None and value != expected:
+            problems.append(
+                f"shuffle audit totals {field} {value} != {expected}"
+            )
+    if total_edges != int(message_edges.shape[0]):
+        problems.append(
+            "shuffle audit per-context edges do not sum to the saved message edges"
+        )
 
 
 def _validate_parameters(loaded: LoadedRun, problems: List[str]) -> None:

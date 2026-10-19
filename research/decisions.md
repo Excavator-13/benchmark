@@ -377,3 +377,20 @@ T006 任务状态改为 `in_progress`（实现部分完成）。剩余研究项�
 限制：只更新仓库内副本；不迁移已有 run，不改变封存包与历史产物；本机全局 skill 是否同名不在本次核对范围。
 
 影响：无新实验、无封存、无备份核验；P02 范围与冻结项不变。
+
+## D025: P02-T001 实现研究侧验收与委托回收
+
+提出及接受日期：2026-10-19。状态：`accepted`。
+来源：用户 2026-10-19 报告 OpenSpec 侧完成并要求回收、提交推送；OpenSpec 变更 `add-graph-value-skeleton` 已归档，独立报告 [`Verdict: PASS`](../../openspec/changes/archive/2026-10-19-add-graph-value-skeleton/verification.md)；[实现说明](../../openspec/changes/archive/2026-10-19-add-graph-value-skeleton/implementation-notes.md)；[P02 计划](phases/P02/plan.md) §2/§3 与 [D023](#d023-t008-阶段验收与-p02-骨架范围)。
+
+结果：
+- 结束判据：活跃变更目录已不存在，归档 verification 于 2026-10-19T10:41:02Z 为 PASS；其 Verification Basis 为 `785a32db38c61fbeeae12ddbda58a656fffb0515` 加 8 个脏实现/测试文件的内容哈希。研究侧按报告所列 8 个 SHA256 逐个重算，8/8 与当前工作区一致，基准与当前实现一致。
+- 骨架口径（D023）：`nn.GRU(1,32)` 逐节点编码 + 共享 `nn.Linear(32,3)`；自身分支为空聚合（`ŷ=head(h)`）；图分支 `aggregate_incoming_mean` 为 `h + mean_{distinct N_in(v)} h_u`（非加权、去重），孤立节点用零消息选择保持与自身分支逐元素相等；无可学习图参数，实测 GRU 3,360 + head 99 = 3,459、graph-only 参数为空；打乱图为场景内保入/出度双边交换，seed `0,1,2`，对照取三成员 MAE 平均。
+- 身份与预算：复用 P01 数据/窗口/掩码/`NaiveRef=LastValue`（`test_p01_identity` 元素级一致）；每模型 200 epoch、Adam、hidden 32、验证 MSE 选模；同 seed 重复 `compare` 在 CPU 上 ≤1e-6；产物含预测/标签/身份/掩码/参数/历史/成本，`recompute` 仅读保存材料且不重训。
+- 证据性质：实现行为由合成 fixture 与 `--purpose development` 冒烟证明；仅有一次限定范围的发布 `r0` 自身分支 development 冒烟，`region`/`r2` 发布数据训练与真实发布图打乱未实测，成本记录为 fixture/单次冒烟条件。回收核对未发现正式 run 写入 `research/runs/`，本机未新增封存包。
+
+决定：接受 P02-T001 实现就绪证据，P02 计划 T001 标为 `done`；按 [AGENTS.md](../AGENTS.md) 将 [DELEGATION](../DELEGATION.md) 置为 `closed` 并填写回收记录。沿用 P02 冻结配置，不修改数据/切分/seeds/预算/门槛，不提升科学版本。
+
+限制：这是软件就绪验收，不是图收益证据；没有真实 `region`/`r2` 训练、发布图真实打乱或成本测量，发布图构建时间仍未知。P02-T002 正式对照运行需用户另行授权，且正式比较前须统一确认一次成本（P02 计划 §4）；T003/T004 不受影响。
+
+影响：P02-T001 `done`，委托回收完成；无正式 run、无封存、不改变 P01 已接受结论。本轮记录与实现随同一提交入库并 push（保存事实见[索引](archives/index.md#p02-t001-骨架实现证据2026-10-19)）。

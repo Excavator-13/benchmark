@@ -205,6 +205,18 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 - 内容：逐任务证据表、七项阶段完成条件判定、进入第二阶段的四个条件（"自身时序学习基线"为有条件满足）、P01 未证明事项清单。
 - 边界：P02 的实现变更名 `add-graph-value-skeleton` 只是预登记，未调用任何 OpenSpec 流程、未改代码、未运行新实验。
 
+## P02-T001 骨架实现证据（2026-10-19）
+
+所属任务 P02-T001。OpenSpec 变更 `add-graph-value-skeleton` 已归档，独立报告为 [`Verdict: PASS`](../../openspec/changes/archive/2026-10-19-add-graph-value-skeleton/verification.md)（2026-10-19T10:41:02Z）；研究侧按 [D025](../decisions.md#d025-p02-t001-实现研究侧验收与委托回收) 接受实现就绪证据，并关闭 [DELEGATION](../../DELEGATION.md) 指针。
+
+回收时只读核对：活跃变更目录已不存在；报告 Verification Basis 为 `785a32db38c61fbeeae12ddbda58a656fffb0515` 加 8 个脏实现/测试文件的内容哈希，按报告逐个重算 8/8 与当前工作区一致；另核对 `research/runs/` 无正式 run，旧 run、封存包、`experiments_archive/`、既有 OpenSpec 归档与科学协议未改；`openspec/specs/graph-value-skeleton/spec.md` 与归档 delta 仅差主规格头部与 `Requirements` 标题。
+
+口径：`nn.GRU(1,32)` 逐节点编码 + 共享 `nn.Linear(32,3)`；自身分支为空聚合；图分支 `h + mean_{distinct N_in(v)} h_u`，孤立节点零消息逐元素等于自身分支；参数量 GRU 3,360 + head 99 = 3,459、graph-only 参数为空；打乱图为场景内保入/出度双边交换（seed 0/1/2，三成员 MAE 平均）；200 epoch、Adam、hidden 32、验证 MSE 选模；复用 P01 数据/窗口/掩码/`NaiveRef=LastValue` 身份。
+
+证据性质与限制：实现行为来自合成 fixture 与 `--purpose development` 运行，另有一次限定范围的发布 `r0` 自身分支冒烟；**不是真实 `region`/`r2` 训练、发布图真实打乱或成本结论**，也不构成图收益主张；发布图构建时间仍未知。正式 P02-T002 对照运行与统一成本确认尚未获授权。
+
+保存状态：实现包、测试、`README` §4.6、主规格、归档变更目录与本次研究记录随同一提交入库并 push `origin/xzs`；提交身份从 Git 历史追溯。**未封存，备份与远端恢复未核验**。没有新增 run 或封存包。
+
 ## my-change PR 合入（2026-10-11 接手记录）
 
 用户告知此前已向 `my-change` 发起 PR。本轮只读本地 Git：合并提交 `7cbfe561285b1118c09e3e2510e1e2d711fe7432` 记录 PR #9（`Excavator-13/xzs`），提交时间为 2026-10-08，父提交为 `341e7f8` 与 `98e9fbe`。本地 `xzs`、`my-change` 和缓存的 `origin/my-change` 均指向该合并提交；缓存的 `origin/xzs` 为 `98e9fbe`。合并提交与 `98e9fbe` 的文件树差异为空，后者含此前维护、T010/T011 及保存状态记录。

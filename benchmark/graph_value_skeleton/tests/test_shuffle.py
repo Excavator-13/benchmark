@@ -10,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 import numpy as np
@@ -246,14 +247,14 @@ class ShuffleInvariantTest(unittest.TestCase):
         self.assertIn("context [17]", message)
         self.assertIn("single edge", message)
         # A successful earlier context must not hide the later failing context.
-        multi_keys = [(3, skill) for skill in range(4)] + [(17, skill) for skill in range(2)]
+        multi_keys = [(1, skill) for skill in range(4)] + [(17, skill) for skill in range(2)]
         multi_signal = (
             np.arange(len(multi_keys) * 36, dtype=np.float32).reshape(len(multi_keys), 36)
             + 1.0
         )
         multi_dataset = gvs_data_fixture("r2", multi_keys, multi_signal)
         rows = [
-            (3, source, target)
+            (1, source, target)
             for source, target in fixtures.CONTEXT_EDGES["region"]
         ] + [(17, 0, 1)]
         multi = gvs_graph.from_arrays("r2", multi_dataset.key_array, rows)
@@ -281,6 +282,109 @@ class ShuffleInvariantTest(unittest.TestCase):
             )
         self.assertIn("context [17]", str(context.exception))
         self.assertIn("equals the original", str(context.exception))
+
+
+    def test_rng_uses_context_id_not_ordinal(self) -> None:
+        # Replicates the Appendix F probe: one context 17 with keys 0..6 and raw
+        # global edges 0..5, all inside that context.
+        keys = np.array([[17, skill] for skill in range(7)], dtype=np.int64)
+        edges = np.array(fixtures.CONTEXT_EDGES["r0"], dtype=np.int64)
+        seen = []
+        original = gvs_shuffle._swap_edges
+
+        def observe(local_edges, **kwargs):
+            seen.append(
+                {
+                    "context": list(kwargs["context"]),
+                    "seed_sequence": list(kwargs["seed_sequence"]),
+                }
+            )
+            return original(local_edges, **kwargs)
+
+        with mock.patch.object(gvs_shuffle, "_swap_edges", side_effect=observe):
+            shuffled = gvs_shuffle.shuffle_graph("r2", keys, edges, 0)
+        self.assertEqual([entry["context"] for entry in seen], [[17]])
+        self.assertEqual([entry["seed_sequence"] for entry in seen], [[0, 17]])
+        self.assertEqual(
+            shuffled.audit["seed_derivation"],
+            "PCG64(SeedSequence([shuffle_seed, context_id...]))",
+        )
+        self.assertEqual(
+            shuffled.audit["contexts"][-1]["seed_sequence"], [0, 17]
+        )
+        # Context-ID oracle on the canonicalized local edges (identity mapping
+        # because the only context owns nodes 0..6).
+        expected_local = original(
+            [tuple(int(v) for v in row) for row in edges.tolist()],
+            seed_sequence=[0, 17],
+            accept_factor=10,
+            attempt_factor=100,
+            context=[17],
+        )["result_edges"]
+        np.testing.assert_array_equal(shuffled.edges, expected_local)
+        ordinal_local = original(
+            [tuple(int(v) for v in row) for row in edges.tolist()],
+            seed_sequence=[0, 1],
+            accept_factor=10,
+            attempt_factor=100,
+            context=[17],
+        )["result_edges"]
+        self.assertFalse(np.array_equal(expected_local, ordinal_local))
+
+    def test_each_nonconsecutive_context_uses_its_own_id(self) -> None:
+        keys = np.array(
+            [[3, skill] for skill in range(4)] + [[17, skill] for skill in range(4)],
+            dtype=np.int64,
+        )
+        rows = [(3, a, b) for a, b in fixtures.CONTEXT_EDGES["region"]] + [
+            (17, a, b) for a, b in fixtures.CONTEXT_EDGES["region"]
+        ]
+        graph = gvs_graph.from_arrays("r2", keys, rows)
+        seen = []
+        original = gvs_shuffle._swap_edges
+
+        def observe(local_edges, **kwargs):
+            seen.append(list(kwargs["seed_sequence"]))
+            return original(local_edges, **kwargs)
+
+        with mock.patch.object(gvs_shuffle, "_swap_edges", side_effect=observe):
+            gvs_shuffle.shuffle_graph("r2", keys, graph.edges, 1)
+        self.assertEqual(seen, [[1, 3], [1, 17]])
+
+    def test_empty_earlier_context_still_uses_its_own_id(self) -> None:
+        keys = np.array(
+            [[0, 0]] + [[17, skill] for skill in range(7)], dtype=np.int64
+        )
+        rows = [(17, a, b) for a, b in fixtures.CONTEXT_EDGES["r0"]]
+        graph = gvs_graph.from_arrays("r2", keys, rows)
+        seen = []
+        original = gvs_shuffle._swap_edges
+
+        def observe(local_edges, **kwargs):
+            seen.append(list(kwargs["seed_sequence"]))
+            return original(local_edges, **kwargs)
+
+        with mock.patch.object(gvs_shuffle, "_swap_edges", side_effect=observe):
+            shuffled = gvs_shuffle.shuffle_graph("r2", keys, graph.edges, 0)
+        self.assertEqual(seen, [[0, 0], [0, 17]])
+        empty = [entry for entry in shuffled.audit["contexts"] if entry["empty"]]
+        self.assertEqual(len(empty), 1)
+        self.assertEqual(empty[0]["context"], [0])
+        self.assertEqual(empty[0]["seed_sequence"], [0, 0])
+
+    def test_swap_helper_canonicalizes_input_order(self) -> None:
+        given = [
+            tuple(int(v) for v in row) for row in fixtures.CONTEXT_EDGES["r0"]
+        ]
+        first = gvs_shuffle.swap_context_edges(
+            given, seed_sequence=[0, 17], context=[17]
+        )
+        second = gvs_shuffle.swap_context_edges(
+            sorted(given), seed_sequence=[0, 17], context=[17]
+        )
+        np.testing.assert_array_equal(
+            first["result_edges"], second["result_edges"]
+        )
 
 
 def gvs_data_fixture(data_name, keys, signal):

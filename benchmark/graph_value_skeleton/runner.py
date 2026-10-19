@@ -40,6 +40,17 @@ __all__ = [
 ]
 
 MODEL_METHOD_KEY = "model"
+#: One canonical identity for an empty message graph (the self branch), shared by
+#: graph-audit, provenance and the final source manifest.
+EMPTY_MESSAGE_EDGES_SHA256 = "<empty: self branch propagates no message>"
+
+
+def _message_edges_sha256(message_edges: np.ndarray) -> str:
+    return (
+        gvs_graph.edge_set_sha256(message_edges)
+        if message_edges.shape[0]
+        else EMPTY_MESSAGE_EDGES_SHA256
+    )
 
 
 class RunError(RuntimeError):
@@ -347,11 +358,7 @@ def execute_run(config: RunConfig) -> Dict[str, Any]:
         )
         manifest["node_keys_sha256"] = dataset.identity_payload()["node_keys_sha256"]
         manifest["graph_edges_sha256"] = gvs_graph.edge_set_sha256(graph.edges)
-        manifest["message_edges_sha256"] = (
-            gvs_graph.edge_set_sha256(message_edges)
-            if message_edges.shape[0]
-            else "<empty>"
-        )
+        manifest["message_edges_sha256"] = _message_edges_sha256(message_edges)
         # Revisit every captured execution-source file and the captured protocol
         # identity, so a mid-run edit cannot finish under stale provenance.
         captured_mismatches = artifacts.verify_captured_source(source, repo_root)
@@ -565,11 +572,7 @@ def _write_dataset_artifacts(
     graph_audit["message_edges"] = {
         "method": "self/graph/shuffled selection",
         "edges": int(message_edges.shape[0]),
-        "edges_sha256": (
-            gvs_graph.edge_set_sha256(message_edges)
-            if message_edges.shape[0]
-            else "<empty: self branch propagates no message>"
-        ),
+        "edges_sha256": _message_edges_sha256(message_edges),
         "binary_unique_directed": True,
     }
     run.save_npy("graph/source-edges.npy", graph.edges)
@@ -838,11 +841,7 @@ def _provenance_payload(
             "propagates_messages": config.method != protocol.METHOD_SELF,
             "shuffled": shuffled is not None,
             "message_edges": int(message_edges.shape[0]),
-            "message_edges_sha256": (
-                gvs_graph.edge_set_sha256(message_edges)
-                if message_edges.shape[0]
-                else "<empty: self branch>"
-            ),
+            "message_edges_sha256": _message_edges_sha256(message_edges),
             "shuffle_identity": (
                 shuffled.identity_payload() if shuffled is not None else None
             ),

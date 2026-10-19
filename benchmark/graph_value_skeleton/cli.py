@@ -54,7 +54,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--repo-root",
         default=None,
-        help="repository root override (default: derived from the module location)",
+        help=(
+            "repository root override; must be the project checkout or a "
+            "temporary directory (default: derived from the module location)"
+        ),
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
