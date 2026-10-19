@@ -24,7 +24,7 @@
 | ID | 任务 | 状态 | 依赖 | 完成判据 |
 | --- | --- | --- | --- | --- |
 | P02-T001 | 实现骨架与打乱图 | done | T008 | OpenSpec `add-graph-value-skeleton` 归档 PASS 且研究侧接受实现就绪：[归档报告](../../../openspec/changes/archive/2026-10-19-add-graph-value-skeleton/verification.md)（2026-10-19T10:41:02Z）、[实现说明](../../../openspec/changes/archive/2026-10-19-add-graph-value-skeleton/implementation-notes.md)、[主规格](../../../openspec/specs/graph-value-skeleton/spec.md)、[D025](../../decisions.md#d025-p02-t001-实现研究侧验收与委托回收)。实现符合 D023 骨架口径（参数量 3,459、图分支无额外参数、保度打乱 3 seed、复用 P01 身份）；无正式 run |
-| P02-T002 | 开发对照运行 | todo | T001 | `r0`/`region`/`r2` × seeds 0,1,2 × 自身/真实图/打乱图（3 图平均），同 seed 至少两次重复 |
+| P02-T002 | 开发对照运行 | blocked | T001 | `r0`/`region`/`r2` × seeds 0,1,2 × 自身/真实图/打乱图（3 图平均），同 seed 至少两次重复；[执行入口](t002-execution.md)、[成本失败证据](../../reports/p02-t002-20261019-01/report.md)、[修复交接](t002-repair-handoff.md) |
 | P02-T003 | 门槛判定与诊断 | todo | T002 | 按 §6.2 #1–#5 判定；未过先查实现、尺度与图语义 |
 | P02-T004 | 后续范围决定 | todo | T003 | 通过才进阶段三门控/边选择；否则收敛或改图来源 |
 
@@ -56,3 +56,5 @@
 - 2026-10-18：P01-T008 完成时建立；骨架、数据、seeds 与预算按 [D023](../../decisions.md#d023-t008-阶段验收与-p02-骨架范围) 冻结；P02-T001 的变更名预登记为 `add-graph-value-skeleton`；尚未启动，启动前先按规则登记委托。
 - 2026-10-18（晚于建立）：用户决定启动 P02-T001，已按 [AGENTS.md](../../../AGENTS.md) 在 [DELEGATION](../../../DELEGATION.md) 登记 `add-graph-value-skeleton` 为 `open`，由 OpenSpec 侧执行 propose → apply → verify → archive；本表 T001 状态待归档 PASS 且研究侧接受实现就绪后更新。
 - 2026-10-19：`add-graph-value-skeleton` 归档 PASS，研究侧按 [D025](../../decisions.md#d025-p02-t001-实现研究侧验收与委托回收) 接受实现就绪，T001 → `done` 并回收委托；无正式 run。T002 未启动，正式比较前须统一确认一次成本（§4）。
+- 2026-10-19（T001 回收后）：用户授权启动 T002；开始本机环境准备与成本预检，T002 → `in_progress`。正式比较范围与预算仍按 §4，执行事实见[执行入口](t002-execution.md)。
+- 2026-10-19（成本试跑后）：真实 r2 打乱 seed 0 在现有尝试上限内未完成成功交换目标，T002 → `blocked`；正式比较未开始。原因与后续修复范围见[批次报告](../../reports/p02-t002-20261019-01/report.md)及[交接](t002-repair-handoff.md)，不降低原完成条件。

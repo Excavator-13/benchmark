@@ -1,0 +1,7 @@
+{
+  "reason": "RuntimeError: graph worker exited 1",
+  "run_id": "repair-shuffle-v2-20261019-01",
+  "run_type": "shuffle-readiness",
+  "state": "paused",
+  "updated": "2026-10-19T22:25:38+08:00"
+}

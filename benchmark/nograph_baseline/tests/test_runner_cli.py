@@ -53,6 +53,7 @@ def _init_git_repo(root: Path) -> Path:
     """Create a disposable Git repository so dirty cases are deterministic."""
     root.mkdir(parents=True, exist_ok=True)
     _git(root, "init", "-q")
+    _git(root, "config", "core.autocrlf", "false")
     _git(root, "config", "user.email", "suite@example.invalid")
     _git(root, "config", "user.name", "Baseline Suite")
     _git(root, "config", "commit.gpgsign", "false")
@@ -228,11 +229,8 @@ class RunnerArtifactTests(unittest.TestCase):
             for path, entry in entries.items()
             if entry["git_status"] == "committed_clean"
         }
-        # Committed runtime source must be located by reference, not copied.
-        self.assertTrue(
-            clean_entries,
-            msg="expected at least one clean committed runtime source file",
-        )
+        # This checkout may have no byte-clean files (dirty tree or CRLF).
+        # The disposable repository below requires the clean-reference path.
         for path, entry in entries.items():
             with self.subTest(path=path):
                 self.assertEqual(entry["path"], path)
@@ -265,11 +263,11 @@ class RunnerArtifactTests(unittest.TestCase):
         # Dirty/untracked execution content must be recoverable, exercised on a
         # disposable repository so the result never depends on this checkout.
         repo = _init_git_repo(self.root / "dirty-repo")
-        (repo / "clean.py").write_text("VALUE = 1\n", encoding="utf-8")
-        (repo / "modified.py").write_text("VALUE = 2\n", encoding="utf-8")
+        (repo / "clean.py").write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
+        (repo / "modified.py").write_text("VALUE = 2\n", encoding="utf-8", newline="\n")
         _commit_all(repo)
-        (repo / "modified.py").write_text("VALUE = 999\n", encoding="utf-8")
-        (repo / "untracked.py").write_text("VALUE = 3\n", encoding="utf-8")
+        (repo / "modified.py").write_text("VALUE = 999\n", encoding="utf-8", newline="\n")
+        (repo / "untracked.py").write_text("VALUE = 3\n", encoding="utf-8", newline="\n")
         probe = artifacts.RunDirectory(
             self.root / "dirty-runs", "dirty-probe", "run"
         ).reserve()
@@ -533,7 +531,7 @@ class FailureAndInterruptionTests(unittest.TestCase):
         (run_dir / "status.json").write_text(
             json.dumps({"run_id": "killed-run", "state": "running"}),
             encoding="utf-8",
-        )
+         newline="\n")
         report = runner.check_unfinished(run_dir)
         self.assertTrue(report["unfinished"])
         self.assertFalse(report["finished"])
@@ -548,7 +546,7 @@ class FailureAndInterruptionTests(unittest.TestCase):
             run_id,
         )
         spec_path = self.root / f"{run_id}-spec.json"
-        spec_path.write_text(json.dumps(spec.to_dict()), encoding="utf-8")
+        spec_path.write_text(json.dumps(spec.to_dict()), encoding="utf-8", newline="\n")
         environment = dict(os.environ)
         environment["NOGRAPH_BASELINE_TEST_STAGE_DELAY_SECONDS"] = delay
         process = subprocess.Popen(
@@ -572,6 +570,7 @@ class FailureAndInterruptionTests(unittest.TestCase):
             time.sleep(0.02)
         raise AssertionError("run directory never reached the audit stage")
 
+    @unittest.skipUnless(os.name == 'posix', 'requires catchable POSIX SIGTERM; Windows terminates forcibly')
     def test_sigterm_marks_interrupted_and_retains_partial(self) -> None:
         process, run_dir = self._launch_worker("sigterm-run")
         try:
@@ -589,6 +588,7 @@ class FailureAndInterruptionTests(unittest.TestCase):
         events = (run_dir / "events.jsonl").read_text(encoding="utf-8")
         self.assertIn("run_interrupted", events)
 
+    @unittest.skipUnless(os.name == 'posix', 'requires POSIX child SIGINT delivery; Windows needs console events')
     def test_sigint_marks_interrupted_and_retains_partial(self) -> None:
         process, run_dir = self._launch_worker("sigint-run")
         try:
@@ -925,7 +925,7 @@ def _write_v2_log(
     path.write_text(
         "\n".join(json.dumps(line, sort_keys=True) for line in lines) + "\n",
         encoding="utf-8",
-    )
+     newline="\n")
     return path
 
 
@@ -938,7 +938,7 @@ def _write_v2_source_manifest(
         f"{demand_sha256}  dataset/demand/{data_name}.parquet\n"
         f"{'0' * 64}  dataset/graph/{data_name}.parquet\n",
         encoding="utf-8",
-    )
+     newline="\n")
     return manifest
 
 
@@ -993,7 +993,7 @@ class CliEndToEndTests(unittest.TestCase):
             )
             + "\n",
             encoding="utf-8",
-        )
+         newline="\n")
         return blocker_dir
 
     def test_minimal_dependency_smoke_for_all_schemas(self) -> None:
@@ -1290,7 +1290,7 @@ class CheckAdversarialTests(unittest.TestCase):
     def _mutate_json(self, run_dir: Path, relative: str, mutator) -> None:
         payload = fx.read_json(run_dir / relative)
         mutator(payload)
-        (run_dir / relative).write_text(json.dumps(payload), encoding="utf-8")
+        (run_dir / relative).write_text(json.dumps(payload), encoding="utf-8", newline="\n")
 
     def test_compare_valid_pair_still_ok(self) -> None:
         result = self._compare(self.run_dir, self.run_dir, "adv-compare-valid")
@@ -1656,7 +1656,7 @@ class RecomputeNullSemanticsTests(unittest.TestCase):
         del payload["relative_gains"]["test"][protocol.MODEL_NAME][reference][level][
             "relative_MAE_gain"
         ]
-        (copy / "metrics.json").write_text(json.dumps(payload), encoding="utf-8")
+        (copy / "metrics.json").write_text(json.dumps(payload), encoding="utf-8", newline="\n")
         result = self._recompute(copy, "null-gain-deleted-check")
         self.assertEqual(result["status"], "mismatch")
         comparison = result["report"]["relative_gains_comparison"]
@@ -1670,7 +1670,7 @@ class RecomputeNullSemanticsTests(unittest.TestCase):
         payload["relative_gains"]["test"][protocol.MODEL_NAME][reference][level][
             "status"
         ] = "ok"
-        (copy / "metrics.json").write_text(json.dumps(payload), encoding="utf-8")
+        (copy / "metrics.json").write_text(json.dumps(payload), encoding="utf-8", newline="\n")
         result = self._recompute(copy, "null-gain-status-check")
         self.assertEqual(result["status"], "mismatch")
         self.assertTrue(result["report"]["gain_semantic_problems"])
@@ -1683,7 +1683,7 @@ class RecomputeNullSemanticsTests(unittest.TestCase):
         payload = fx.read_json(copy / "metrics.json")
         method, group = self._empty_group_location()
         del payload["methods"]["test"][method]["activity_groups"][group]["MAE"]
-        (copy / "metrics.json").write_text(json.dumps(payload), encoding="utf-8")
+        (copy / "metrics.json").write_text(json.dumps(payload), encoding="utf-8", newline="\n")
         result = self._recompute(copy, "null-mae-deleted-check")
         self.assertEqual(result["status"], "mismatch")
         self.assertTrue(result["report"]["comparisons"]["test"]["missing_fields"])
@@ -2037,9 +2037,9 @@ class SourceCaptureDeltaTests(unittest.TestCase):
     def _repo(self, name: str) -> Path:
         repo = _init_git_repo(self.root / name)
         (repo / "pkg").mkdir(parents=True, exist_ok=True)
-        (repo / "pkg" / "clean.py").write_text("VALUE = 1\n", encoding="utf-8")
-        (repo / "pkg" / "modified.py").write_text("VALUE = 2\n", encoding="utf-8")
-        (repo / "protocol.md").write_text("protocol v1\n", encoding="utf-8")
+        (repo / "pkg" / "clean.py").write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
+        (repo / "pkg" / "modified.py").write_text("VALUE = 2\n", encoding="utf-8", newline="\n")
+        (repo / "protocol.md").write_text("protocol v1\n", encoding="utf-8", newline="\n")
         _commit_all(repo)
         return repo
 
@@ -2066,7 +2066,7 @@ class SourceCaptureDeltaTests(unittest.TestCase):
 
     def test_modified_tracked_file_is_patched_not_copied(self) -> None:
         repo = self._repo("modified-repo")
-        (repo / "pkg" / "modified.py").write_text("VALUE = 999\n", encoding="utf-8")
+        (repo / "pkg" / "modified.py").write_text("VALUE = 999\n", encoding="utf-8", newline="\n")
         run, record = self._capture(
             repo, "modified", runtime_paths=["pkg/modified.py"]
         )
@@ -2084,7 +2084,7 @@ class SourceCaptureDeltaTests(unittest.TestCase):
 
     def test_untracked_file_content_is_saved_and_manifested(self) -> None:
         repo = self._repo("untracked-repo")
-        (repo / "pkg" / "untracked.py").write_text("NEW = 7\n", encoding="utf-8")
+        (repo / "pkg" / "untracked.py").write_text("NEW = 7\n", encoding="utf-8", newline="\n")
         run, record = self._capture(
             repo, "untracked", runtime_paths=["pkg/untracked.py"]
         )
@@ -2118,7 +2118,7 @@ class SourceCaptureDeltaTests(unittest.TestCase):
     def test_unavailable_git_identity_saves_content_fallback(self) -> None:
         plain = self.root / "no-git"
         plain.mkdir(parents=True, exist_ok=True)
-        (plain / "runtime.py").write_text("X = 1\n", encoding="utf-8")
+        (plain / "runtime.py").write_text("X = 1\n", encoding="utf-8", newline="\n")
         run, record = self._capture(plain, "no-git", runtime_paths=["runtime.py"])
         self.assertFalse(record["identity_available"])
         self.assertIsNone(record["commit"])
@@ -2569,7 +2569,7 @@ class RepairRegressionTests(unittest.TestCase):
     def test_clean_committed_protocol_is_referenced_without_a_copy(self) -> None:
         repo = _init_git_repo(self.root / "clean-protocol-repo")
         protocol_file = repo / "protocol.md"
-        protocol_file.write_text("clean committed protocol\n", encoding="utf-8")
+        protocol_file.write_text("clean committed protocol\n", encoding="utf-8", newline="\n")
         _commit_all(repo)
         run_dir = self._run_with_protocol(repo, protocol_file, "clean-protocol")
         source = fx.read_json(run_dir / "code-source.json")
@@ -2609,9 +2609,9 @@ class RepairRegressionTests(unittest.TestCase):
         # tracked dirty
         dirty_repo = _init_git_repo(self.root / "dirty-protocol-repo")
         dirty_protocol = dirty_repo / "protocol.md"
-        dirty_protocol.write_text("committed protocol\n", encoding="utf-8")
+        dirty_protocol.write_text("committed protocol\n", encoding="utf-8", newline="\n")
         _commit_all(dirty_repo)
-        dirty_protocol.write_text("dirty protocol override\n", encoding="utf-8")
+        dirty_protocol.write_text("dirty protocol override\n", encoding="utf-8", newline="\n")
         dirty_run = run_with(dirty_repo, dirty_protocol, "dirty-protocol")
         self.assertEqual(
             (dirty_run / "protocol.md").read_text(encoding="utf-8"),
@@ -2624,10 +2624,10 @@ class RepairRegressionTests(unittest.TestCase):
 
         # untracked
         untracked_repo = _init_git_repo(self.root / "untracked-protocol-repo")
-        (untracked_repo / "anchor.py").write_text("A = 1\n", encoding="utf-8")
+        (untracked_repo / "anchor.py").write_text("A = 1\n", encoding="utf-8", newline="\n")
         _commit_all(untracked_repo)
         untracked_protocol = untracked_repo / "protocol.md"
-        untracked_protocol.write_text("untracked protocol\n", encoding="utf-8")
+        untracked_protocol.write_text("untracked protocol\n", encoding="utf-8", newline="\n")
         untracked_run = run_with(untracked_repo, untracked_protocol, "untracked-protocol")
         self.assertEqual(
             (untracked_run / "protocol.md").read_text(encoding="utf-8"),
@@ -2639,10 +2639,10 @@ class RepairRegressionTests(unittest.TestCase):
 
         # outside the repository
         outside_repo = _init_git_repo(self.root / "outside-protocol-repo")
-        (outside_repo / "anchor.py").write_text("A = 1\n", encoding="utf-8")
+        (outside_repo / "anchor.py").write_text("A = 1\n", encoding="utf-8", newline="\n")
         _commit_all(outside_repo)
         outside_protocol = self.root / "outside-protocol.md"
-        outside_protocol.write_text("outside repository protocol\n", encoding="utf-8")
+        outside_protocol.write_text("outside repository protocol\n", encoding="utf-8", newline="\n")
         outside_run = run_with(outside_repo, outside_protocol, "outside-protocol")
         self.assertEqual(
             (outside_run / "protocol.md").read_text(encoding="utf-8"),
@@ -2656,7 +2656,7 @@ class RepairRegressionTests(unittest.TestCase):
         plain = self.root / "no-git-protocol"
         plain.mkdir(parents=True, exist_ok=True)
         plain_protocol = plain / "protocol.md"
-        plain_protocol.write_text("no git protocol\n", encoding="utf-8")
+        plain_protocol.write_text("no git protocol\n", encoding="utf-8", newline="\n")
         plain_run = run_with(plain, plain_protocol, "unavailable-protocol")
         self.assertEqual(
             (plain_run / "protocol.md").read_text(encoding="utf-8"),
@@ -2675,7 +2675,7 @@ class RepairRegressionTests(unittest.TestCase):
             with self.subTest(command=command):
                 bad = self.root / f"malformed-{command}"
                 bad.mkdir(parents=True)
-                (bad / "status.json").write_text("{invalid", encoding="utf-8")
+                (bad / "status.json").write_text("{invalid", encoding="utf-8", newline="\n")
                 before = _tree_hash(bad)
                 report = self.reports / f"malformed-{command}.json"
                 if command == "recompute":
@@ -2705,7 +2705,7 @@ class RepairRegressionTests(unittest.TestCase):
     def test_malformed_status_cli_returns_nonzero_with_a_report(self) -> None:
         bad = self.root / "malformed-cli"
         bad.mkdir(parents=True)
-        (bad / "status.json").write_text("{invalid", encoding="utf-8")
+        (bad / "status.json").write_text("{invalid", encoding="utf-8", newline="\n")
         report = self.reports / "malformed-cli.json"
         completed = subprocess.run(
             [
@@ -2732,9 +2732,9 @@ class RepairRegressionTests(unittest.TestCase):
     def test_malformed_metrics_still_writes_an_align_failure_report(self) -> None:
         run_dir = self.root / "malformed-align"
         run_dir.mkdir(parents=True)
-        (run_dir / "metrics.json").write_text("{invalid", encoding="utf-8")
+        (run_dir / "metrics.json").write_text("{invalid", encoding="utf-8", newline="\n")
         reference = self.root / "reference.log"
-        reference.write_text('{"dataset": "r0"}\n', encoding="utf-8")
+        reference.write_text('{"dataset": "r0"}\n', encoding="utf-8", newline="\n")
         report = self.reports / "malformed-align.json"
         result = checks.command_align_v2(
             run_dir=run_dir,
@@ -2774,7 +2774,7 @@ class RepairRegressionTests(unittest.TestCase):
     def test_unsafe_destination_still_produces_no_output(self) -> None:
         bad = self.root / "malformed-unsafe"
         bad.mkdir(parents=True)
-        (bad / "status.json").write_text("{invalid", encoding="utf-8")
+        (bad / "status.json").write_text("{invalid", encoding="utf-8", newline="\n")
         destination = bad / "inside.json"
         with self.assertRaises(checks.CheckError):
             checks.command_recompute(
@@ -2819,6 +2819,8 @@ class RepairRegressionTests(unittest.TestCase):
             applied = subprocess.run(
                 [
                     "git",
+                    "-c",
+                    "core.autocrlf=false",
                     "apply",
                     "--unsafe-paths",
                     str(run.path / (entry["patch_path"] or record["patch_path"])),
@@ -2840,11 +2842,11 @@ class RepairRegressionTests(unittest.TestCase):
     def test_ordinary_modified_and_deleted_runtime_reconstruct_from_patch(self) -> None:
         repo = _init_git_repo(self.root / "reconstruct-repo")
         modified = repo / "modified.py"
-        modified.write_text("VALUE = 1\n", encoding="utf-8")
+        modified.write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
         deleted = repo / "deleted.py"
-        deleted.write_text("GONE = 1\n", encoding="utf-8")
+        deleted.write_text("GONE = 1\n", encoding="utf-8", newline="\n")
         _commit_all(repo)
-        modified.write_text("VALUE = 3\n", encoding="utf-8")
+        modified.write_text("VALUE = 3\n", encoding="utf-8", newline="\n")
         deleted.unlink()
 
         run, record = self._capture(repo, "reconstruct", ["modified.py", "deleted.py"])
@@ -2857,10 +2859,10 @@ class RepairRegressionTests(unittest.TestCase):
     def test_binary_marked_runtime_source_reconstructs_from_patch(self) -> None:
         repo = _init_git_repo(self.root / "binary-diff-repo")
         used = repo / "used.py"
-        used.write_text("VALUE = 1\n", encoding="utf-8")
-        (repo / ".gitattributes").write_text("used.py -diff\n", encoding="utf-8")
+        used.write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
+        (repo / ".gitattributes").write_text("used.py -diff\n", encoding="utf-8", newline="\n")
         _commit_all(repo)
-        used.write_text("VALUE = 2\n", encoding="utf-8")
+        used.write_text("VALUE = 2\n", encoding="utf-8", newline="\n")
 
         run, record = self._capture(repo, "binary-diff", ["used.py"])
         entry = record["files"]["used.py"]
@@ -2876,13 +2878,13 @@ class RepairRegressionTests(unittest.TestCase):
         repo = _init_git_repo(self.root / "mixed-driver-repo")
         good = repo / "good.py"
         broken = repo / "broken.py"
-        good.write_text("VALUE = 1\n", encoding="utf-8")
-        broken.write_text("VALUE = 1\n", encoding="utf-8")
-        (repo / ".gitattributes").write_text("broken.py diff=broken\n", encoding="utf-8")
+        good.write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
+        broken.write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
+        (repo / ".gitattributes").write_text("broken.py diff=broken\n", encoding="utf-8", newline="\n")
         _commit_all(repo)
         _git(repo, "config", "diff.broken.command", "false")
-        good.write_text("VALUE = 2\n", encoding="utf-8")
-        broken.write_text("VALUE = 2\n", encoding="utf-8")
+        good.write_text("VALUE = 2\n", encoding="utf-8", newline="\n")
+        broken.write_text("VALUE = 2\n", encoding="utf-8", newline="\n")
 
         run, record = self._capture(repo, "mixed-driver", ["good.py", "broken.py"])
         # The failing driver must not erase the other path's retained diff.
@@ -2900,13 +2902,13 @@ class RepairRegressionTests(unittest.TestCase):
         repo = _init_git_repo(self.root / "mixed-delete-repo")
         deleted = repo / "deleted.py"
         broken = repo / "broken.py"
-        deleted.write_text("GONE = 1\n", encoding="utf-8")
-        broken.write_text("VALUE = 1\n", encoding="utf-8")
-        (repo / ".gitattributes").write_text("broken.py diff=broken\n", encoding="utf-8")
+        deleted.write_text("GONE = 1\n", encoding="utf-8", newline="\n")
+        broken.write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
+        (repo / ".gitattributes").write_text("broken.py diff=broken\n", encoding="utf-8", newline="\n")
         _commit_all(repo)
         _git(repo, "config", "diff.broken.command", "false")
         deleted.unlink()
-        broken.write_text("VALUE = 2\n", encoding="utf-8")
+        broken.write_text("VALUE = 2\n", encoding="utf-8", newline="\n")
 
         run, record = self._capture(repo, "mixed-delete", ["deleted.py", "broken.py"])
         self.assertEqual(record["patch_unusable_paths"], ["broken.py"])
@@ -2921,13 +2923,13 @@ class RepairRegressionTests(unittest.TestCase):
     def test_external_non_patch_diff_falls_back_to_saved_content(self) -> None:
         repo = _init_git_repo(self.root / "external-junk-repo")
         used = repo / "used.py"
-        used.write_text("VALUE = 1\n", encoding="utf-8")
+        used.write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
         (repo / ".gitattributes").write_text(
             "used.py diff=custom\n", encoding="utf-8"
-        )
+        , newline="\n")
         _commit_all(repo)
         _git(repo, "config", "diff.custom.command", "printf b/used.py")
-        used.write_text("VALUE = 2\n", encoding="utf-8")
+        used.write_text("VALUE = 2\n", encoding="utf-8", newline="\n")
 
         run, record = self._capture(repo, "external-junk", ["used.py"])
         entry = record["files"]["used.py"]
@@ -2939,11 +2941,11 @@ class RepairRegressionTests(unittest.TestCase):
     def test_failed_git_diff_preserves_modified_runtime_content(self) -> None:
         repo = _init_git_repo(self.root / "broken-diff-repo")
         used = repo / "used.py"
-        used.write_text("VALUE = 1\n", encoding="utf-8")
+        used.write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
         _commit_all(repo)
-        (repo / ".gitattributes").write_text("used.py diff=broken\n", encoding="utf-8")
+        (repo / ".gitattributes").write_text("used.py diff=broken\n", encoding="utf-8", newline="\n")
         _git(repo, "config", "diff.broken.command", "false")
-        used.write_text("VALUE = 2\n", encoding="utf-8")
+        used.write_text("VALUE = 2\n", encoding="utf-8", newline="\n")
 
         run = artifacts.RunDirectory(self.root / "run-dirs", "diff-failure", "run").reserve()
         record = artifacts.capture_source(run, repo, runtime_paths=["used.py"])
@@ -2962,9 +2964,9 @@ class RepairRegressionTests(unittest.TestCase):
     def test_failed_git_diff_reports_unrecoverable_deletion(self) -> None:
         repo = _init_git_repo(self.root / "broken-diff-delete")
         used = repo / "used.py"
-        used.write_text("VALUE = 1\n", encoding="utf-8")
+        used.write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
         _commit_all(repo)
-        (repo / ".gitattributes").write_text("used.py diff=broken\n", encoding="utf-8")
+        (repo / ".gitattributes").write_text("used.py diff=broken\n", encoding="utf-8", newline="\n")
         _git(repo, "config", "diff.broken.command", "false")
         used.unlink()
 
@@ -2978,11 +2980,11 @@ class RepairRegressionTests(unittest.TestCase):
     # -- V-004: untracked checker source is not reported scoped-clean -----
     def test_untracked_checker_source_is_reported_scoped_dirty(self) -> None:
         repo = _init_git_repo(self.root / "checker-repo")
-        (repo / "anchor.py").write_text("A = 1\n", encoding="utf-8")
+        (repo / "anchor.py").write_text("A = 1\n", encoding="utf-8", newline="\n")
         _commit_all(repo)
         launcher = repo / "benchmark/nograph_baseline/__main__.py"
         launcher.parent.mkdir(parents=True, exist_ok=True)
-        launcher.write_text("VALUE = 1\n", encoding="utf-8")
+        launcher.write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
 
         identity = artifacts.checker_source_identity(repo)
         self.assertTrue(identity["scoped_state_available"])
@@ -3003,7 +3005,7 @@ class RepairRegressionTests(unittest.TestCase):
         plain = self.root / "no-git-checker"
         launcher = plain / "benchmark/nograph_baseline/__main__.py"
         launcher.parent.mkdir(parents=True, exist_ok=True)
-        launcher.write_text("VALUE = 1\n", encoding="utf-8")
+        launcher.write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
         identity = artifacts.checker_source_identity(plain)
         self.assertFalse(identity["identity_available"])
         self.assertFalse(identity["scoped_state_available"])
@@ -3015,7 +3017,7 @@ class RepairRegressionTests(unittest.TestCase):
         repo = _init_git_repo(self.root / "clean-checker-repo")
         launcher = repo / "benchmark/nograph_baseline/__main__.py"
         launcher.parent.mkdir(parents=True, exist_ok=True)
-        launcher.write_text("VALUE = 1\n", encoding="utf-8")
+        launcher.write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
         _commit_all(repo)
         identity = artifacts.checker_source_identity(repo)
         self.assertTrue(identity["scoped_state_available"])
@@ -3029,9 +3031,9 @@ class RepairRegressionTests(unittest.TestCase):
         repo = _init_git_repo(self.root / "modified-checker-repo")
         launcher = repo / "benchmark/nograph_baseline/__main__.py"
         launcher.parent.mkdir(parents=True, exist_ok=True)
-        launcher.write_text("VALUE = 1\n", encoding="utf-8")
+        launcher.write_text("VALUE = 1\n", encoding="utf-8", newline="\n")
         _commit_all(repo)
-        launcher.write_text("VALUE = 2\n", encoding="utf-8")
+        launcher.write_text("VALUE = 2\n", encoding="utf-8", newline="\n")
         identity = artifacts.checker_source_identity(repo)
         self.assertTrue(identity["scoped_dirty"])
         self.assertEqual(
@@ -3845,7 +3847,7 @@ class R2AlignV2Tests(unittest.TestCase):
     def _mutate_json(run_dir: Path, relative: str, mutator) -> None:
         payload = fx.read_json(run_dir / relative)
         mutator(payload)
-        (run_dir / relative).write_text(json.dumps(payload), encoding="utf-8")
+        (run_dir / relative).write_text(json.dumps(payload), encoding="utf-8", newline="\n")
 
 
 class R2CheckContractTests(unittest.TestCase):
@@ -3901,7 +3903,7 @@ class R2CheckContractTests(unittest.TestCase):
     def _mutate_json(run_dir: Path, relative: str, mutator) -> None:
         payload = fx.read_json(run_dir / relative)
         mutator(payload)
-        (run_dir / relative).write_text(json.dumps(payload), encoding="utf-8")
+        (run_dir / relative).write_text(json.dumps(payload), encoding="utf-8", newline="\n")
 
     @staticmethod
     def _flip_saved_mask(run_dir: Path) -> None:

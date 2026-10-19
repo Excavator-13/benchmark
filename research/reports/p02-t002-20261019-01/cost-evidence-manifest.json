@@ -1,0 +1,350 @@
+{
+  "task": "P02-T002",
+  "copies": [
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\command.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\command.json",
+      "sha256": "454222ad4945406bc7c5280f962b883df45f559e50b18c30694d70247663df10"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\config.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\config.json",
+      "sha256": "008d14134e467fdd4153501165424618465eb48f532ac0f9d456177d10f4a828"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\environment.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\environment.json",
+      "sha256": "7b429935ab15d4079eaec4d11a93124aa8a3c0810c729dcf67abe9e2b58d5b50"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\events.jsonl",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\events.jsonl",
+      "sha256": "e6d63994211c73441ec60d8d5c6349aa17ebdd1f8a66deae99e31d563e8ef18e"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\git-commit.txt",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\git-commit.txt",
+      "sha256": "694a16d16b31eec80e876c040b3f83aa8200c084042cd3ca7e896038f103ef64"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\git-diff.patch",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\git-diff.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\measurements.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\measurements.json",
+      "sha256": "5e34228fd5415413f7766d37bc34feddd8b4e4d78f5d70c1fa3983df931b3758"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\provenance.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\provenance.json",
+      "sha256": "6655c8bb8213866c75f540ecd76cc02766ffa54cbab914eb6cf6fbcfe7308b2d"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\source.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\source.json",
+      "sha256": "8f115d2acfffc94707e3ce408dc956fbd2908e6bb6bac84fe4d36fa1df375cd1"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\status.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\status.json",
+      "sha256": "20aa5571ba33faac35a5a3c98216225cf724fb5bfe20d7d1c1c012a7bd50752a"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\summary.md",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\summary.md",
+      "sha256": "fdfb517649ef529059dd751704449eab8e08523e62520c984a464fe531e27fac"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\manifest.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\manifest.json",
+      "sha256": "e120a40643afc5de84f1e603f27802ddeb91713a849b739527519cdc4f4a43e3"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\artifacts.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\artifacts.py",
+      "sha256": "1b6f1cb88fdc6758fe5f88f9520bdf64db45c507ecfea69e3c1bd55bd999e9b8"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\checks.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\checks.py",
+      "sha256": "44deb79fe46e24722c7070a43e6ebc2497c03a5ac75841440228f5cd19affd59"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\cli.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\cli.py",
+      "sha256": "89c6e60695745cda0c2ac5206547341692dd2a8f365fd7ca16c1b89f102f7603"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\config.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\config.py",
+      "sha256": "76a02b676c63f98400eae7fb4fc97b63e95c98e49def4ae60ac383669c19d8ec"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\data.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\data.py",
+      "sha256": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\graph.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\graph.py",
+      "sha256": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\model.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\model.py",
+      "sha256": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\protocol.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\protocol.py",
+      "sha256": "bcf047157a8b9552cefd39124b9e7661bda1c713f2d93693eab6c93ee8ab5226"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\runner.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\runner.py",
+      "sha256": "b1ad2b2d99accec0f2c2fbce506a670902d72907211f51f0d9d08c426a8c5b3b"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\shuffle.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\shuffle.py",
+      "sha256": "a61df1d0f6f4916f1f38581859b0e2b78702094cca62ff80c3b267dabde7da25"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\training.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\training.py",
+      "sha256": "d97df65ddb65fc36ea88481e6593f4582bf5eae114f602cbbbdc93ed9d9e37b2"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\_worker.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\_worker.py",
+      "sha256": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\__init__.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\__init__.py",
+      "sha256": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\__main__.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\__main__.py",
+      "sha256": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\artifacts.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\artifacts.py",
+      "sha256": "092c6e23e670be4f02f323bd5e752f449be884a17df4ec18fd56f3c474fd68b8"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\baselines.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\baselines.py",
+      "sha256": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\coverage.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\coverage.py",
+      "sha256": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\data.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\data.py",
+      "sha256": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\metrics.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\metrics.py",
+      "sha256": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\protocol.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\protocol.py",
+      "sha256": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\ridge.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\ridge.py",
+      "sha256": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\__init__.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\__init__.py",
+      "sha256": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\logs\\p02-t002-20261019-01-cost-r0-self-s0-cost.log",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r0-self-s0-cost.log",
+      "sha256": "426111975243c3663556ee515b582e81ee718bb0223400f94c956d902527a910"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\command.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\command.json",
+      "sha256": "7dbcdacc9777de3d788ec464cdd6bdec58b6b8adfc7dc99395bcdd8b0ff2f915"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\config.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\config.json",
+      "sha256": "f50e13d3bca6feb2e3d029389bb4b5361bd80dced7ae7303fa874e5b3ad1d713"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\environment.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\environment.json",
+      "sha256": "7b429935ab15d4079eaec4d11a93124aa8a3c0810c729dcf67abe9e2b58d5b50"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\events.jsonl",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\events.jsonl",
+      "sha256": "5f3fc34220458ca93ac466033853c54c8e0db4de097ddac6f55127e0be320f5c"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\failure.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\failure.json",
+      "sha256": "ed07740c7da5fcfb063a5be844adbc0db0c27b0d10991166306c6506fef2ab6b"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\git-commit.txt",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\git-commit.txt",
+      "sha256": "694a16d16b31eec80e876c040b3f83aa8200c084042cd3ca7e896038f103ef64"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\git-diff.patch",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\git-diff.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\source.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\source.json",
+      "sha256": "8d7f38861b82bc443cdfb685cb6e0914b1fa21f903e1984824776334b787818b"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\status.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\status.json",
+      "sha256": "fb093f29d05a520f0d5648e41c77ff170ba2cfbb93d56ca8cb5c9b1242632294"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\manifest.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\manifest.json",
+      "sha256": "e120a40643afc5de84f1e603f27802ddeb91713a849b739527519cdc4f4a43e3"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\artifacts.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\artifacts.py",
+      "sha256": "1b6f1cb88fdc6758fe5f88f9520bdf64db45c507ecfea69e3c1bd55bd999e9b8"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\checks.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\checks.py",
+      "sha256": "44deb79fe46e24722c7070a43e6ebc2497c03a5ac75841440228f5cd19affd59"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\cli.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\cli.py",
+      "sha256": "89c6e60695745cda0c2ac5206547341692dd2a8f365fd7ca16c1b89f102f7603"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\config.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\config.py",
+      "sha256": "76a02b676c63f98400eae7fb4fc97b63e95c98e49def4ae60ac383669c19d8ec"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\data.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\data.py",
+      "sha256": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\graph.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\graph.py",
+      "sha256": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\model.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\model.py",
+      "sha256": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\protocol.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\protocol.py",
+      "sha256": "bcf047157a8b9552cefd39124b9e7661bda1c713f2d93693eab6c93ee8ab5226"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\runner.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\runner.py",
+      "sha256": "b1ad2b2d99accec0f2c2fbce506a670902d72907211f51f0d9d08c426a8c5b3b"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\shuffle.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\shuffle.py",
+      "sha256": "a61df1d0f6f4916f1f38581859b0e2b78702094cca62ff80c3b267dabde7da25"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\training.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\training.py",
+      "sha256": "d97df65ddb65fc36ea88481e6593f4582bf5eae114f602cbbbdc93ed9d9e37b2"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\_worker.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\_worker.py",
+      "sha256": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\__init__.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\__init__.py",
+      "sha256": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\__main__.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\graph_value_skeleton\\__main__.py",
+      "sha256": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\artifacts.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\artifacts.py",
+      "sha256": "092c6e23e670be4f02f323bd5e752f449be884a17df4ec18fd56f3c474fd68b8"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\baselines.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\baselines.py",
+      "sha256": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\coverage.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\coverage.py",
+      "sha256": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\data.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\data.py",
+      "sha256": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\metrics.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\metrics.py",
+      "sha256": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\protocol.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\protocol.py",
+      "sha256": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\ridge.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\ridge.py",
+      "sha256": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\__init__.py",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost\\code-untracked\\benchmark\\nograph_baseline\\__init__.py",
+      "sha256": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\logs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost.log",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost.log",
+      "sha256": "e040ed75c17dc8a799678b54f3969e7e184dd4ceb665341db30a0714eb76f58d"
+    },
+    {
+      "source": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\checks\\cost-r0-recompute.json",
+      "saved": "research\\reports\\p02-t002-20261019-01\\cost-evidence\\cost-r0-recompute.json",
+      "sha256": "5e7201cf5e5b3b9fabe1864d3aa57edea0848ff293ca19e9d13514ffa8948205"
+    }
+  ]
+}

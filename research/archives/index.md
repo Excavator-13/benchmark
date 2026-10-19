@@ -217,6 +217,14 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 
 保存状态：本次收尾分两次提交入库并 push `origin/xzs`——`785a32d`（实现包 14 个模块、10 个测试模块、`README` §4.6 与 OpenSpec 规划/归档前工件）与 `57a733f`（归档目录、`graph-value-skeleton` 主规格、8 个验证修复实现/测试文件与本次研究记录）；上述提交已在本次 push 中同批到达远端。**未封存，备份与远端恢复未核验**。没有新增 run 或封存包。
 
+## P02-T002 成本预检批次（2026-10-19）
+
+产物为 `p02-t002-20261019-01` 的环境/数据预检、90 次预定执行清单、编排脚本、平台差异诊断、成本与失败记录；[批次报告](../reports/p02-t002-20261019-01/report.md)为执行事实入口，[执行指导](../phases/P02/t002-execution.md)及[修复交接](../phases/P02/t002-repair-handoff.md)为恢复接口。没有正式 run，用户已要求暂停，无后台继续执行。
+
+持久位置：`research/reports/p02-t002-20261019-01/`，含按字节复制的关键成本/失败证据及来源副本，复制身份见 `cost-evidence-manifest.json`；完整成本探针仍在忽略的 `scratch/graph-value-skeleton/p02-t002-20261019-01/cost-runs/`。独立运行环境在忽略的 `.venv-pinned/` 与 `.uv-python/`，不是需入库的科学结果。
+
+保存状态：本机已写入；本批次产物尚未 commit/push，未封存，异地备份与远端恢复未核验。本次没有执行 Git 或备份写入。该状态描述交付产物，不单独追踪记录文件自身提交。
+
 ## my-change PR 合入（2026-10-11 接手记录）
 
 用户告知此前已向 `my-change` 发起 PR。本轮只读本地 Git：合并提交 `7cbfe561285b1118c09e3e2510e1e2d711fe7432` 记录 PR #9（`Excavator-13/xzs`），提交时间为 2026-10-08，父提交为 `341e7f8` 与 `98e9fbe`。本地 `xzs`、`my-change` 和缓存的 `origin/my-change` 均指向该合并提交；缓存的 `origin/xzs` 为 `98e9fbe`。合并提交与 `98e9fbe` 的文件树差异为空，后者含此前维护、T010/T011 及保存状态记录。

@@ -73,6 +73,8 @@ class RunSpec:
 
 def measure_peak_rss() -> Dict[str, Any]:
     """Return normalized process peak RSS with its native unit and method."""
+    if platform.system() == "Windows":
+        return artifacts.windows_peak_rss()
     try:
         import resource
     except ImportError:  # pragma: no cover - non-POSIX

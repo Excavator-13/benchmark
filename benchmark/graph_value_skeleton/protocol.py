@@ -121,9 +121,21 @@ NO_EARLY_STOPPING = True
 NO_GRADIENT_CLIPPING = True
 
 SHUFFLE_ALGORITHM = "context-local-directed-double-edge-swap"
-SHUFFLE_VERSION = "dds-v1"
+SHUFFLE_VERSION = "dds-v2"
 SHUFFLE_ACCEPT_FACTOR = 10
-SHUFFLE_ATTEMPT_LIMIT_FACTOR = 100
+SHUFFLE_ATTEMPT_LIMIT_FACTOR = 500
+SHUFFLE_PROPOSAL_BATCH = 4096
+SHUFFLE_CONTRACTS = {
+    "dds-v1": {"accept_target_factor": 10, "attempt_limit_factor": 100, "proposal_batch_size": 1},
+    "dds-v2": {"accept_target_factor": 10, "attempt_limit_factor": 500, "proposal_batch_size": 4096},
+}
+
+
+def shuffle_contract(version):
+    """Return a copy of a recognized, immutable-by-caller work contract."""
+    if version not in SHUFFLE_CONTRACTS:
+        raise ValueError(f"unsupported shuffle version {version!r}")
+    return dict(SHUFFLE_CONTRACTS[version])
 
 MODEL_DEFINITION = (
     "single-layer unidirectional bias-enabled GRU(1,32) shared across nodes; "

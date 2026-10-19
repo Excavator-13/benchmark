@@ -1,0 +1,2 @@
+{"event": "run_reserved", "run_id": "p02-t002-20261019-01-cost-r0-self-s0-cost", "run_type": "run", "time": "2026-10-19T20:39:10+08:00"}
+{"event": "run_success", "method": "self", "nodes": 2335, "run_id": "p02-t002-20261019-01-cost-r0-self-s0-cost", "selected_epoch": 200, "time": "2026-10-19T20:43:23+08:00"}

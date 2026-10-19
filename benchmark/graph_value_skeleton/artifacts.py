@@ -191,9 +191,9 @@ def _reconstruct_from_patch(
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(base or b"")
         patch_file = root / ".check.patch"
-        patch_file.write_text(patch_text, encoding="utf-8")
+        patch_file.write_text(patch_text, encoding="utf-8", newline="\n")
         applied = subprocess.run(
-            ["git", "apply", "--unsafe-paths", str(patch_file)],
+            ["git", "-c", "core.autocrlf=false", "apply", "--unsafe-paths", str(patch_file)],
             cwd=str(root),
             capture_output=True,
             text=True,
@@ -647,6 +647,8 @@ def verify_captured_source(
 
 def measure_peak_rss() -> Dict[str, Any]:
     """Return normalized process peak RSS with native unit, method and scope."""
+    if platform.system() == "Windows":
+        return nb_artifacts.windows_peak_rss()
     try:
         import resource
     except ImportError:  # pragma: no cover - non-POSIX
@@ -683,6 +685,8 @@ def measure_peak_rss() -> Dict[str, Any]:
         "scope": "worker process lifetime",
         "status": "ok",
     }
+
+
 
 
 def source_manifest(

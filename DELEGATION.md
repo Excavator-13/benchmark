@@ -39,12 +39,12 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 
 | 字段 | 值 |
 | --- | --- |
-| Status | `closed` |
-| 变更名 | `add-graph-value-skeleton` |
-| 研究任务 | P02-T001（任务状态见 [P02 计划](research/phases/P02/plan.md) §3） |
-| 登记时间 | 2026-10-18 |
-| 委派给 | OpenSpec 变更流程，由用户在 OpenSpec 侧执行 propose → apply → verify-change → archive-change；研究侧不代跑 |
-| 结束判据 | 本文件 §结束判据两条（变更目录不存在；归档 `verification.md` 为 PASS 且 Verification Basis 与当前实现一致），并按 P02 计划 §2 与 [D023](research/decisions.md#d023-t008-阶段验收与-p02-骨架范围) 的骨架口径核对：每节点 GRU hidden 32 + 共享 `Linear(32,3)`；自身分支 `ŷ=Wh+b`；图分支 `h'=h+mean_{N_in(v)}h_u`，孤立节点消息 0，无额外可学习参数并报告实际参数量；保度双边交换打乱图 3 seed、三图平均口径；复用 P01 数据/切分/掩码/`NaiveRef` 入口与常量。研究侧接受实现就绪后 P02-T001 才转 done |
-| 研究侧收尾 | 核对归档 PASS 与当前实现基准，按上条口径检查骨架、打乱图与参数量；在 P02 计划更新 T001 状态与证据链接，必要时记录决定；把 `Status` 改为 `closed` 并填回收记录；更新 [state](research/state.md) 与下一动作。不启动 P02-T002 正式运行、不封存、不 commit/push（除非另行授权） |
-| 上次核对 | 2026-10-19：两条结束判据均满足——活跃变更目录已不存在；归档报告 2026-10-19T10:41:02Z `Verdict: PASS`，基准 `785a32d` 加 8 个脏实现/测试文件，8/8 内容哈希与当前工作区一致。骨架口径、参数同构（3,459 / graph-only 空）与保度打乱 3 seed 在代码与实现说明中核对通过 |
-| 回收记录 | 2026-10-19：按 [D025](research/decisions.md#d025-p02-t001-实现研究侧验收与委托回收) 接受 P02-T001 实现就绪，P02 计划 T001 改为 `done` 并补证据链接；state 与[索引](research/archives/index.md#p02-t001-骨架实现证据2026-10-19)已更新。无正式 run、无封存；闭环后无在途委托 |
+| Status | `open` |
+| 变更名 | `repair-published-shuffle-budget` |
+| 研究任务 | P02-T002（任务状态见 [P02 计划](research/phases/P02/plan.md) §3） |
+| 登记时间 | 2026-10-19 |
+| 委派给 | OpenSpec 变更流程；本轮先创建完整提案，按技能边界交给后续 apply → 独立 verify-change → archive-change；研究侧不代跑 |
+| 结束判据 | 本文件 §结束判据两条，且修复保留 D026 的科学冻结项；真实 r0/region/r2 × shuffle seed 0/1/2 共 9 张图预检和同 seed 重建通过；优化与缓存不改变度保持、节点身份、成功交换目标和独立模型训练口径；失败审计与暂停控制有证据 |
+| 研究侧收尾 | 核对归档 PASS 与当前实现、9 图预检及复现证据；按 D026 研究验收后回收指针；更新 state 与 T002 证据链接。另用新批次恢复成本确认与原矩阵，执行用户的自动暂停要求；旧失败批次不重启。无封存、commit/push 授权 |
+| 上次核对 | 2026-10-19：项目内 OpenSpec 1.14.3 的 context 解析通过；变更的 proposal/specs/design/tasks 四项规划工件齐全，status 显示 isPlanningComplete=true，validate --strict 通过。尚未实施或独立验证；规划完成不表示修复完成 |
+| 回收记录 | 尚未回收；变更尚未完成，T002 仍 blocked，正式 run 仍为 0 |

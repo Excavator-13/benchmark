@@ -1,0 +1,63 @@
+{
+  "completed_artifacts": [
+    "code-untracked/benchmark/graph_value_skeleton/__init__.py",
+    "code-untracked/benchmark/graph_value_skeleton/__main__.py",
+    "code-untracked/benchmark/graph_value_skeleton/_worker.py",
+    "code-untracked/benchmark/graph_value_skeleton/artifacts.py",
+    "code-untracked/benchmark/graph_value_skeleton/checks.py",
+    "code-untracked/benchmark/graph_value_skeleton/cli.py",
+    "code-untracked/benchmark/graph_value_skeleton/config.py",
+    "code-untracked/benchmark/graph_value_skeleton/data.py",
+    "code-untracked/benchmark/graph_value_skeleton/graph.py",
+    "code-untracked/benchmark/graph_value_skeleton/model.py",
+    "code-untracked/benchmark/graph_value_skeleton/protocol.py",
+    "code-untracked/benchmark/graph_value_skeleton/runner.py",
+    "code-untracked/benchmark/graph_value_skeleton/shuffle.py",
+    "code-untracked/benchmark/graph_value_skeleton/training.py",
+    "code-untracked/benchmark/nograph_baseline/__init__.py",
+    "code-untracked/benchmark/nograph_baseline/artifacts.py",
+    "code-untracked/benchmark/nograph_baseline/baselines.py",
+    "code-untracked/benchmark/nograph_baseline/coverage.py",
+    "code-untracked/benchmark/nograph_baseline/data.py",
+    "code-untracked/benchmark/nograph_baseline/metrics.py",
+    "code-untracked/benchmark/nograph_baseline/protocol.py",
+    "code-untracked/benchmark/nograph_baseline/ridge.py",
+    "code-untracked/manifest.json",
+    "command.json",
+    "config.json",
+    "environment.json",
+    "environment.txt",
+    "events.jsonl",
+    "git-commit.txt",
+    "git-diff.patch",
+    "git-status.txt",
+    "protocol.md",
+    "source.json",
+    "status.json"
+  ],
+  "dataset": "r2",
+  "failure": {
+    "exception_type": "ShuffleError",
+    "message": "context [12]: attempt budget exhausted: accepted 194445 of 224080 swaps within 2240800 attempts",
+    "stage": "shuffle",
+    "state": "failed",
+    "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\benchmark\\graph_value_skeleton\\runner.py\", line 161, in execute_run\n    shuffled = gvs_shuffle.shuffle_graph(\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\benchmark\\graph_value_skeleton\\shuffle.py\", line 270, in shuffle_graph\n    result = _swap_edges(\n             ^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\benchmark\\graph_value_skeleton\\shuffle.py\", line 192, in _swap_edges\n    raise ShuffleError(\nbenchmark.graph_value_skeleton.shuffle.ShuffleError: context [12]: attempt budget exhausted: accepted 194445 of 224080 swaps within 2240800 attempts\n"
+  },
+  "method": "shuffled",
+  "model_seed": 0,
+  "peak_memory": {
+    "bytes": null,
+    "method": "resource.getrusage(RUSAGE_SELF).ru_maxrss",
+    "native_unit": null,
+    "native_value": null,
+    "reason": "resource module unavailable",
+    "scope": "process",
+    "status": "unsupported_platform"
+  },
+  "run_id": "p02-t002-20261019-01-cost-r2-shuffled0-s0-cost",
+  "shuffle_seed": 0,
+  "timings_seconds": {
+    "demand_read": 1.3682742000000871,
+    "graph_read": 6.597521800000322
+  }
+}

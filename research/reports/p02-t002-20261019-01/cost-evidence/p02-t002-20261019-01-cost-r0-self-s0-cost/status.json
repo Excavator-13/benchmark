@@ -1,0 +1,15 @@
+{
+  "edges": 0,
+  "method": "self",
+  "model_seed": 0,
+  "nodes": 2335,
+  "purpose": "development",
+  "run_id": "p02-t002-20261019-01-cost-r0-self-s0-cost",
+  "run_type": "run",
+  "selected_epoch": 200,
+  "shuffle_seed": null,
+  "stage": "complete",
+  "state": "success",
+  "total_seconds": 251.3457395000005,
+  "updated": "2026-10-19T20:43:21+08:00"
+}

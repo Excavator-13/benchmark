@@ -160,7 +160,8 @@ class ArtifactCompletenessTest(unittest.TestCase):
         self.assertEqual(environment["packages"]["numpy"], "1.26.4")
         self.assertEqual(environment["packages"]["pandas"], "2.2.3")
         self.assertEqual(environment["packages"]["pyarrow"], "17.0.0")
-        self.assertEqual(environment["packages"]["torch"], "2.14.1")
+        self.assertEqual(environment["packages"]["torch"], __import__('torch').__version__)
+        self.assertIn(environment["packages"]["torch"], ("2.14.1", "2.14.1+cpu"))
         self.assertFalse(environment["gpu_available"])
         self.assertEqual(environment["torch"]["intra_op_threads"], 1)
         for variable in (
@@ -356,7 +357,8 @@ class ArtifactCompletenessTest(unittest.TestCase):
         self.assertEqual(measurements["input"]["epochs"], 200)
         self.assertEqual(measurements["input"]["training_windows"], 19)
         memory = measurements["peak_memory"]
-        self.assertEqual(memory["method"], "resource.getrusage(RUSAGE_SELF).ru_maxrss")
+        self.assertIn(memory["method"], ("resource.getrusage(RUSAGE_SELF).ru_maxrss",
+                                       "GetProcessMemoryInfo.PeakWorkingSetSize"))
         self.assertEqual(memory["scope"], "worker process lifetime")
         self.assertIn(memory["native_unit"], ("bytes", "KiB"))
         self.assertIsNotNone(memory["bytes"])
@@ -369,7 +371,21 @@ class ArtifactCompletenessTest(unittest.TestCase):
 
 
 class PeakMemoryTest(unittest.TestCase):
+    def test_native_peak_is_measured(self) -> None:
+        memory = artifacts.measure_peak_rss()
+        self.assertEqual(memory['status'], 'ok')
+        self.assertGreater(memory['bytes'], 0)
+        self.assertEqual(memory['scope'], 'worker process lifetime')
+
     def test_darwin_linux_and_unsupported_unit_conversion(self) -> None:
+        from types import SimpleNamespace
+
+        resource = SimpleNamespace(RUSAGE_SELF=0, getrusage=mock.Mock(
+            return_value=SimpleNamespace(ru_maxrss=1234)))
+        with mock.patch.dict("sys.modules", {"resource": resource}):
+            self._check_posix_units()
+
+    def _check_posix_units(self):
         from types import SimpleNamespace
 
         with mock.patch("platform.system", return_value="Darwin"), mock.patch(
@@ -386,7 +402,7 @@ class PeakMemoryTest(unittest.TestCase):
             linux = artifacts.measure_peak_rss()
         self.assertEqual(linux["native_unit"], "KiB")
         self.assertEqual(linux["bytes"], 1234 * 1024)
-        with mock.patch("platform.system", return_value="Windows"):
+        with mock.patch("platform.system", return_value="OtherPOSIX"):
             unsupported = artifacts.measure_peak_rss()
         self.assertEqual(unsupported["status"], "unsupported_platform")
         self.assertIsNone(unsupported["bytes"])
@@ -482,24 +498,25 @@ class SourceCaptureScopeTest(unittest.TestCase):
     def _temp_repo(self) -> Path:
         root = Path(tempfile.mkdtemp(prefix="gvs-git-"))
         self._git(root, "init")
+        self._git(root, "config", "core.autocrlf", "false")
         self._git(root, "config", "user.email", "test@example.com")
         self._git(root, "config", "user.name", "Test")
         (root / "benchmark" / "graph_value_skeleton").mkdir(parents=True)
         (root / "research" / "phases" / "P01").mkdir(parents=True)
-        (root / "benchmark" / "__init__.py").write_text("", encoding="utf-8")
+        (root / "benchmark" / "__init__.py").write_text("", encoding="utf-8", newline="\n")
         (root / "benchmark" / "graph_value_skeleton" / "__init__.py").write_text(
-            "VALUE = 1\n", encoding="utf-8"
+            "VALUE = 1\n", encoding="utf-8", newline="\n"
         )
         (root / "benchmark" / "graph_value_skeleton" / "runner.py").write_text(
-            "RUNNER = 1\n", encoding="utf-8"
+            "RUNNER = 1\n", encoding="utf-8", newline="\n"
         )
         (root / "research" / "phases" / "P01" / "protocol.md").write_text(
-            "# protocol\n", encoding="utf-8"
+            "# protocol\n", encoding="utf-8", newline="\n"
         )
-        (root / "research" / "state.md").write_text("# state\n", encoding="utf-8")
+        (root / "research" / "state.md").write_text("# state\n", encoding="utf-8", newline="\n")
         (root / "benchmark" / "graph_value_skeleton" / "tests").mkdir()
         (root / "benchmark" / "graph_value_skeleton" / "tests" / "test_x.py").write_text(
-            "def test(): pass\n", encoding="utf-8"
+            "def test(): pass\n", encoding="utf-8", newline="\n"
         )
         self._git(root, "add", ".")
         self._git(root, "commit", "-m", "initial")
@@ -508,15 +525,15 @@ class SourceCaptureScopeTest(unittest.TestCase):
     def test_capture_scope_excludes_unrelated_records_tests_and_caches(self) -> None:
         root = self._temp_repo()
         # Unrelated research change, an execution-source change and new content.
-        (root / "research" / "state.md").write_text("# changed state\n", encoding="utf-8")
+        (root / "research" / "state.md").write_text("# changed state\n", encoding="utf-8", newline="\n")
         (root / "benchmark" / "graph_value_skeleton" / "runner.py").write_text(
-            "RUNNER = 2\n", encoding="utf-8"
+            "RUNNER = 2\n", encoding="utf-8", newline="\n"
         )
         (root / "benchmark" / "graph_value_skeleton" / "new_module.py").write_text(
-            "NEW = 1\n", encoding="utf-8"
+            "NEW = 1\n", encoding="utf-8", newline="\n"
         )
         (root / "benchmark" / "graph_value_skeleton" / "tests" / "test_y.py").write_text(
-            "def test(): pass\n", encoding="utf-8"
+            "def test(): pass\n", encoding="utf-8", newline="\n"
         )
         cache = root / "benchmark" / "graph_value_skeleton" / "__pycache__"
         cache.mkdir()
@@ -560,7 +577,7 @@ class SourceCaptureScopeTest(unittest.TestCase):
         root = Path(tempfile.mkdtemp(prefix="gvs-nogit-"))
         (root / "benchmark" / "graph_value_skeleton").mkdir(parents=True)
         (root / "benchmark" / "graph_value_skeleton" / "runner.py").write_text(
-            "RUNNER = 1\n", encoding="utf-8"
+            "RUNNER = 1\n", encoding="utf-8", newline="\n"
         )
         run = artifacts.RunDirectory(root / "runs", "no-git", "run").reserve()
         record = artifacts.capture_source(
@@ -612,9 +629,9 @@ class SourceCaptureScopeTest(unittest.TestCase):
     def test_captured_source_verification_detects_changes(self) -> None:
         root = Path(tempfile.mkdtemp(prefix="gvs-verify-source-"))
         runtime = root / "runtime.py"
-        runtime.write_text("v1\n", encoding="utf-8")
+        runtime.write_text("v1\n", encoding="utf-8", newline="\n")
         protocol_file = root / "protocol.md"
-        protocol_file.write_text("# protocol\n", encoding="utf-8")
+        protocol_file.write_text("# protocol\n", encoding="utf-8", newline="\n")
         source = {
             "files": {"runtime.py": {"sha256": artifacts.sha256_file(runtime)}},
             "protocol": {
@@ -623,7 +640,7 @@ class SourceCaptureScopeTest(unittest.TestCase):
             },
         }
         self.assertEqual(artifacts.verify_captured_source(source, root), [])
-        runtime.write_text("v2\n", encoding="utf-8")
+        runtime.write_text("v2\n", encoding="utf-8", newline="\n")
         self.assertTrue(
             any(
                 "runtime source changed" in message
@@ -637,8 +654,8 @@ class SourceCaptureScopeTest(unittest.TestCase):
                 for message in artifacts.verify_captured_source(source, root)
             )
         )
-        runtime.write_text("v1\n", encoding="utf-8")
-        protocol_file.write_text("# changed\n", encoding="utf-8")
+        runtime.write_text("v1\n", encoding="utf-8", newline="\n")
+        protocol_file.write_text("# changed\n", encoding="utf-8", newline="\n")
         self.assertTrue(
             any(
                 "protocol source changed" in message
@@ -657,7 +674,7 @@ class SourceCaptureScopeTest(unittest.TestCase):
         root = Path(tempfile.mkdtemp(prefix="gvs-runtime-change-"))
         fixture = fixtures.build_fixture(root, "r0")
         probe = root / "runtime_probe.py"
-        probe.write_text("v1\n", encoding="utf-8")
+        probe.write_text("v1\n", encoding="utf-8", newline="\n")
         real_capture = artifacts.capture_source
 
         def capture(run, repo_root, **kwargs):
@@ -670,7 +687,7 @@ class SourceCaptureScopeTest(unittest.TestCase):
             return record
 
         def mutate(*args, **kwargs):
-            probe.write_text("v2\n", encoding="utf-8")
+            probe.write_text("v2\n", encoding="utf-8", newline="\n")
 
         config = fixtures.make_config(
             root, fixture, method="self", run_id="runtime-change"

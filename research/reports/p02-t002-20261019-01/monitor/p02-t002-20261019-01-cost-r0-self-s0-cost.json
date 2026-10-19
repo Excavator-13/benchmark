@@ -1,0 +1,41 @@
+{
+  "started_at": "2026-10-19T12:39:06.592269+00:00",
+  "command": [
+    "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+    "-m",
+    "benchmark.graph_value_skeleton",
+    "run",
+    "--data-name",
+    "r0",
+    "--method",
+    "self",
+    "--model-seed",
+    "0",
+    "--purpose",
+    "development",
+    "--run-id",
+    "p02-t002-20261019-01-cost-r0-self-s0-cost",
+    "--output-root",
+    "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\p02-t002-20261019-01\\cost-runs"
+  ],
+  "cwd": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark",
+  "sampling_seconds": 0.5,
+  "process_tree_peak_sampled_rss_bytes": 448540672,
+  "per_pid_peak_rss_bytes": {
+    "33056": 4526080,
+    "15340": 34516992,
+    "2848": 4538368,
+    "32172": 407105536,
+    "17156": 6840320,
+    "8840": 9457664,
+    "31024": 6836224,
+    "33520": 10104832,
+    "31092": 10952704,
+    "31164": 6836224
+  },
+  "monitor_errors": [],
+  "exit_code": 0,
+  "elapsed_seconds": 257.5789999999997,
+  "finished_at": "2026-10-19T12:43:24.173489+00:00",
+  "log": "scratch\\graph-value-skeleton\\p02-t002-20261019-01\\logs\\p02-t002-20261019-01-cost-r0-self-s0-cost.log"
+}

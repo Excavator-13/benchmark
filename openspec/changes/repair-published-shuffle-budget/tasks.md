@@ -1,0 +1,35 @@
+# Tasks
+
+## 1. Deterministic shuffle execution and diagnostics
+
+- [x] 1.1 Add an explicit new shuffle-version contract with candidate `10E` accepted swaps, `500E` finite attempts and proposal buffer size 4096; retain recognized legacy `dds-v1` rules. Verify configuration tests reject invalid/unknown contracts and document the candidate and version semantics in the existing README chapter.
+- [x] 1.2 Replace per-attempt NumPy calls with buffered uniform ordered proposals consumed sequentially, stopping exactly at the accepted target or attempt limit. Verify decisions, counters and canonical edges against an independent scalar oracle, including non-power-of-two edge counts, budget exhaustion, empty and unchanged-final contexts.
+- [x] 1.3 Benchmark bounded active-node boolean adjacency against tuple/set membership using identical proposal streams; retain the faster backend only with exact decision/edge equality, mapped-back node identity and documented memory/runtime evidence. If it does not improve measured cost, retain tuple/set membership and record the result.
+- [x] 1.4 Add structured shuffle errors and progress snapshots at context boundaries and at most 100,000 consumed proposals apart, retaining prior contexts and failing-context counters/identities/timings. Verify rejection-plus-accepted accounting, failing-context attribution and interrupted/unfinished handling with fixture tests; document progress and failure files alongside the implementation.
+
+## 2. Graph-only artifacts and read-only checking
+
+- [x] 2.1 Implement `prepare-shuffle` with development-only destination validation, exclusive output reservation, canonical numeric arrays, full audit/provenance/checksum manifest and terminal status. Verify fixture CLI preparation never initializes, trains or evaluates a model, refuses collisions and unsafe destinations, and leaves failed/interrupted artifacts unusable. Add executable fixture examples to the README chapter.
+- [x] 2.2 Implement `check-shuffle` with saved-only reads, one exclusive external report, byte checksums, canonical node/edge identity, per-context degree/locality/uniqueness/change checks and audit accounting. Verify success and tampered array/count/hash/seed/version/status cases while asserting input bytes remain unchanged and source data/model access is disabled. Document the command and its verification limits.
+- [ ] 2.3 Make saved checks dispatch strictly by the recorded supported shuffle version and budget rather than only the latest constants. Verify untouched legacy v1 fixture evidence remains checkable, v2 evidence passes its own rules, and unknown versions or contradictory factors fail without changing historical inputs.
+
+## 3. Checked reuse in independently trained runs
+
+- [x] 3.1 Add optional `run --shuffle-artifact` through immutable configuration, worker transport and runner, permitted only for shuffled and validated against current canonical inputs and requested seed before training. Verify incompatible/corrupt/incomplete artifacts fail without regeneration, input mutation or training; self/graph reject the option. Document reuse and identity requirements in the README chapter.
+- [x] 3.2 Persist complete graph evidence and generation provenance in every consuming run; keep artifact path, cache-hit status and read/generation timings outside semantic computational identity while retaining actual source/environment identities. Verify fresh and reused fixture runs independently train 200 epochs, pass repeat comparison at the existing tolerance, and recompute after external preparation becomes unavailable.
+- [x] 3.3 Align the two observed platform-dependent test assumptions with existing contracts: preserve complete torch version metadata while accepting the pinned CPU suffix, and use normalized 1e-6 only for cross-batch-shape equivalence. Verify same-shape reset, isolated-node/empty-graph equality and formal repeat thresholds remain unchanged and exact where specified.
+
+## 4. Published graph readiness and integration evidence
+
+- [x] 4.1 Add a reproducible development graph-only readiness driver with fresh per-member IDs, source/data/environment capture and 10-minute per-graph / 60-second no-progress watchdogs from design.md. Verify fixture failure/watchdog paths stop scheduling and preserve evidence without starting a model or formal run. Document pause controls as operational defaults, separate from deterministic swap work.
+- [ ] 4.2 Run the new published r2/shuffle-seed0 probe first. Save command, progress, audit, invariant check report, elapsed time and memory method. If it fails, is interrupted or hits a watchdog, retain the failed candidate and pause; do not silently increase its budget or mark the task complete. Verify evidence identifies the former context12 failure and all contexts reached.
+- [ ] 4.3 Complete `r0/region/r2 × shuffle seeds 0/1/2` plus one independent regeneration of each in fresh development directories under the same accepted version. Verify all 18 executions, nine matching canonical result hashes, per-context invariants/counts/overlap and read-only artifact checks; save a concise readiness manifest with resolvable paths and checksums. Any missing/failed member leaves this task unfinished.
+- [ ] 4.4 Run the graph-value-skeleton fixture suite and existing nograph-baseline regression suite, including the original no-torch compatibility path as available. Save decisive commands/results and investigate relevant failures; verify no formal run, dataset, archived evidence or research record was changed by apply/testing.
+- [ ] 4.5 Complete implementation-notes.md with source basis, task-to-evidence mapping, candidate acceptance, measured graph costs/backend choice, known limitations and exact independent-verification commands. Include the design's research-side pause/cost/quality handoff and state explicitly that model scheduling controls are not implemented by this change. Verify every claimed result has locatable evidence and no predictive-benefit or T002-completion claim is made.
+
+## Workflow follow-up
+
+- Run the repository's independent `openspec-e13-verify-change` workflow; apply must not author a verification verdict or declare its own independent PASS.
+- After a current independent PASS, archive through the existing archive workflow. The research-side turn then checks acceptance evidence and recycles its own delegation pointer; OpenSpec workflows do not read/write that pointer or research records.
+- Research-side continuation uses a new cost/batch identity, validates cost feasibility, and wires the user's automatic pause policy into the batch controller before any formal run. Formal scheduling and research record changes are outside the tracked implementation tasks.
+- The completed-dataset quality pause, 24-hour estimated remaining local cost limit and graph watchdogs are conservative operational defaults in design.md. They do not reduce the fixed 200 epochs, change scientific gates or make an incomplete matrix a final conclusion.

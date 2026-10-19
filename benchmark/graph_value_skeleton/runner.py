@@ -158,12 +158,19 @@ def execute_run(config: RunConfig) -> Dict[str, Any]:
         started = time.perf_counter()
         shuffled: Optional[gvs_shuffle.ShuffledGraph] = None
         if config.method == protocol.METHOD_SHUFFLED:
-            shuffled = gvs_shuffle.shuffle_graph(
-                config.data_name,
-                dataset.key_array,
-                graph.edges,
-                int(config.shuffle_seed),
-            )
+            from . import prepared
+            if config.shuffle_artifact:
+                shuffled, generation = prepared.load(Path(config.shuffle_artifact),
+                    keys=dataset.key_array, source_edges=graph.edges, data_name=config.data_name,
+                    shuffle_seed=config.shuffle_seed, require_current_generator=True)
+            else:
+                shuffled = gvs_shuffle.shuffle_graph(
+                    config.data_name, dataset.key_array, graph.edges, int(config.shuffle_seed),
+                    progress=lambda payload: run.write_json('shuffle-progress.json', payload))
+                generation = {'generator': prepared.generator_identity()}
+            run.write_json('shuffle-preparation.json', {'artifact_path': config.shuffle_artifact,
+                'reused': config.shuffle_artifact is not None, 'generation': generation,
+                'read_or_generate_seconds': time.perf_counter() - started})
             message_edges = shuffled.edges
         elif config.method == protocol.METHOD_GRAPH:
             message_edges = graph.edges
@@ -470,6 +477,8 @@ def execute_run(config: RunConfig) -> Dict[str, Any]:
         run.append_event("run_interrupted", stage=stage)
         raise
     except BaseException as exc:  # noqa: BLE001 - preserve every failure as evidence
+        if isinstance(exc, gvs_shuffle.ShuffleError):
+            run.write_json('shuffle-failure.json', exc.diagnostics)
         failure = _failure_record(stage, exc, "failed")
         run.set_status("failed", stage=stage, error=failure)
         _write_failure_evidence(run, config, failure, durations)

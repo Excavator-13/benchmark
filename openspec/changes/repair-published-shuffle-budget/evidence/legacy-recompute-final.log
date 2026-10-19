@@ -1,0 +1,6 @@
+test_legacy_saved_run_recomputes_under_current_defaults (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_legacy_saved_run_recomputes_under_current_defaults) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 22.142s
+
+OK

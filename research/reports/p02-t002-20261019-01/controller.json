@@ -1,0 +1,13 @@
+{
+  "pid": 3596,
+  "mode": "cost",
+  "started_at": "2026-10-19T12:39:06.558413+00:00",
+  "command": [
+    "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+    "research/phases/P02/t002_batch.py",
+    "cost",
+    "--batch",
+    "p02-t002-20261019-01"
+  ],
+  "task": "P02-T002"
+}

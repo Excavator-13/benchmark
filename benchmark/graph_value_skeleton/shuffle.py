@@ -4,8 +4,8 @@ A shuffled graph is built by directed double-edge endpoint swaps
 ``(a,b),(c,d) -> (a,d),(c,b)`` within one context.  Every accepted swap and the
 final graph preserve each node's incoming and outgoing degree and the edge count,
 and introduce no self-loop, duplicate edge or cross-context edge.  The work
-budget is deterministic (accept ``10*E_ctx`` swaps, try at most ``100*E_ctx``)
-and the RNG is derived from ``SeedSequence([shuffle_seed, context_ordinal])``, so
+budget is versioned (accept ``10*E_ctx`` swaps, try at most ``500*E_ctx`` in v2)
+and the RNG is derived from ``SeedSequence([shuffle_seed, context_id...])``, so
 the result depends only on the source graph identity and the shuffle seed — not
 on the model seed, run ID, source row order or process hash iteration order.
 
@@ -19,6 +19,7 @@ constraint.
 from __future__ import annotations
 
 import hashlib
+import time
 from collections import Counter
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
@@ -40,6 +41,10 @@ __all__ = [
 
 class ShuffleError(ValueError):
     """Raised when a shuffled control cannot be produced honestly."""
+
+    def __init__(self, message, diagnostics=None):
+        super().__init__(message)
+        self.diagnostics = diagnostics or {}
 
 
 @dataclass
@@ -72,7 +77,7 @@ class ShuffledGraph:
             "edges_sha256": self.edges_sha256,
             "edge_count": self.edge_count,
             "algorithm": protocol.SHUFFLE_ALGORITHM,
-            "algorithm_version": protocol.SHUFFLE_VERSION,
+            "algorithm_version": self.audit.get("algorithm_version", protocol.SHUFFLE_VERSION),
         }
 
 
@@ -127,6 +132,9 @@ def _swap_edges(
     accept_factor: int,
     attempt_factor: int,
     context: Optional[Sequence[int]] = None,
+    proposal_batch_size: int = protocol.SHUFFLE_PROPOSAL_BATCH,
+    progress=None,
+    backend: str = "set",
 ) -> Dict[str, Any]:
     """Run the deterministic double-edge swap budget for one context.
 
@@ -135,6 +143,13 @@ def _swap_edges(
     shuffle seed and the source edge set -- never on the caller's row order.
     """
     label = _context_label(context)
+    for name, value in (("accept_factor", accept_factor), ("attempt_factor", attempt_factor),
+                        ("proposal_batch_size", proposal_batch_size)):
+        if type(value) is not int or value <= 0:
+            raise ShuffleError(f"{name} must be a positive integer")
+    if backend not in ("set", "dense"):
+        raise ShuffleError(f"unknown membership backend {backend!r}")
+    started = time.perf_counter()
     edges: List[Tuple[int, int]] = sorted(
         (int(source), int(target)) for source, target in local_edges
     )
@@ -149,10 +164,6 @@ def _swap_edges(
             "rejections": {},
             "unchanged": True,
         }
-    if edge_count < 2:
-        raise ShuffleError(
-            f"{label} has a single edge ({edge_count}); no legal endpoint swap exists"
-        )
     rng = np.random.Generator(np.random.PCG64(np.random.SeedSequence(list(seed_sequence))))
     target_accepted = accept_factor * edge_count
     attempt_limit = attempt_factor * edge_count
@@ -161,9 +172,43 @@ def _swap_edges(
     rejections: Counter = Counter()
     attempts = 0
     accepted = 0
+    # Only active local endpoints are compacted, preserving canonical edge order.
+    active = sorted({node for edge in edges for node in edge}) if backend == "dense" else []
+    dense_bytes = len(active) ** 2
+    if backend == "dense" and dense_bytes > 16 * 1024 * 1024:
+        raise ShuffleError("active adjacency exceeds the 16 MiB backend bound")
+    inverse = {node: index for index, node in enumerate(active)}
+    adjacency = np.zeros((len(active), len(active)), dtype=np.bool_) if active else None
+    if adjacency is not None:
+        for a, b in edges:
+            adjacency[inverse[a], inverse[b]] = True
+
+    def snapshot(reason=None):
+        return {"context": list(context) if context is not None else None,
+                "seed_sequence": list(seed_sequence), "edge_count": edge_count,
+                "target_accepted": target_accepted, "attempt_limit": attempt_limit,
+                "attempts": attempts, "accepted": accepted,
+                "rejections": dict(sorted(rejections.items())),
+                "elapsed_seconds": time.perf_counter() - started, "reason": reason}
+
+    def fail(message):
+        raise ShuffleError(message, snapshot(message))
+
+    if progress is not None:
+        progress(snapshot())
+    if edge_count < 2:
+        fail(f"{label} has a single edge ({edge_count}); no legal endpoint swap exists")
+    proposals = np.zeros((0, 2), dtype=np.int64)
+    cursor = 0
     while accepted < target_accepted and attempts < attempt_limit:
+        if attempts and attempts % 100000 == 0 and progress is not None:
+            progress(snapshot())
+        if cursor == len(proposals):
+            proposals = rng.integers(0, edge_count, size=(proposal_batch_size, 2))
+            cursor = 0
         attempts += 1
-        pair = rng.integers(0, edge_count, size=2)
+        pair = proposals[cursor]
+        cursor += 1
         first_index, second_index = int(pair[0]), int(pair[1])
         if first_index == second_index:
             rejections["same_edge_index"] += 1
@@ -178,28 +223,37 @@ def _swap_edges(
         if first == second:
             rejections["coincident_new_edges"] += 1
             continue
-        if first in edge_set or second in edge_set:
+        exists = (first in edge_set or second in edge_set) if adjacency is None else (
+            adjacency[inverse[a], inverse[d]] or adjacency[inverse[c], inverse[b]])
+        if exists:
             rejections["existing_edge"] += 1
             continue
         edge_set.discard((a, b))
         edge_set.discard((c, d))
         edge_set.add(first)
         edge_set.add(second)
+        if adjacency is not None:
+            adjacency[inverse[a], inverse[b]] = False
+            adjacency[inverse[c], inverse[d]] = False
+            adjacency[inverse[a], inverse[d]] = True
+            adjacency[inverse[c], inverse[b]] = True
         edges[first_index] = first
         edges[second_index] = second
         accepted += 1
     if accepted < target_accepted:
-        raise ShuffleError(
+        fail(
             f"{label}: attempt budget exhausted: accepted {accepted} of "
             f"{target_accepted} swaps within {attempt_limit} attempts"
         )
     unchanged = edge_set == original
     if unchanged:
-        raise ShuffleError(
+        fail(
             f"{label}: the final edge set equals the original graph; refusing to "
             "label an unchanged graph as shuffled"
         )
     result_edges = np.asarray(sorted(edge_set), dtype=np.int64)
+    if progress is not None:
+        progress(snapshot())
     return {
         "edge_count": edge_count,
         "empty": False,
@@ -240,6 +294,7 @@ def shuffle_graph(
     *,
     accept_factor: int = protocol.SHUFFLE_ACCEPT_FACTOR,
     attempt_factor: int = protocol.SHUFFLE_ATTEMPT_LIMIT_FACTOR,
+    progress=None,
 ) -> ShuffledGraph:
     """Build a context-local degree-preserving shuffled control graph."""
     protocol.validate_dataset_name(data_name)
@@ -253,6 +308,18 @@ def shuffle_graph(
     contexts: List[Dict[str, Any]] = []
     total_attempts = 0
     total_accepted = 0
+    started = time.perf_counter()
+    identity = {"data_name": data_name, "shuffle_seed": int(shuffle_seed),
+                "algorithm_version": protocol.SHUFFLE_VERSION,
+                "source_edges_sha256": gvs_graph.edge_set_sha256(source),
+                "node_keys_sha256": gvs_graph.node_keys_sha256(key_array)}
+
+    def publish(current):
+        payload = {**identity, "completed_contexts": list(contexts),
+                   "current": current, "elapsed_seconds": time.perf_counter() - started}
+        if progress is not None:
+            progress(payload)
+        return payload
     for ordinal, context in enumerate(layout.contexts):
         node_indices = layout.node_indices[context]
         positions = layout.edge_indices[context]
@@ -267,13 +334,14 @@ def shuffle_graph(
             ]
         original_local = list(local_edges)
         seed_sequence = context_seed_sequence(shuffle_seed, context)
-        result = _swap_edges(
-            local_edges,
-            seed_sequence=seed_sequence,
-            accept_factor=accept_factor,
-            attempt_factor=attempt_factor,
-            context=context,
-        )
+        try:
+            result = _swap_edges(
+                local_edges, seed_sequence=seed_sequence, accept_factor=accept_factor,
+                attempt_factor=attempt_factor, context=context, progress=publish,
+            )
+        except ShuffleError as exc:
+            exc.diagnostics = publish(exc.diagnostics)
+            raise
         if result["empty"]:
             contexts.append(
                 {
@@ -293,6 +361,7 @@ def shuffle_graph(
                     "symmetric_difference_edges": 0,
                 }
             )
+            publish({"context": list(context), "empty": True})
             continue
         local_result = result["result_edges"]
         result_blocks.append(node_indices[local_result.reshape(-1)].reshape(-1, 2))
@@ -343,6 +412,7 @@ def shuffle_graph(
                 "result_edges_sha256": _context_edge_sha256(context, local_result),
             }
         )
+        publish({"context": list(context), "complete": True})
     result_edges = (
         gvs_graph.canonical_edge_array(np.concatenate(result_blocks, axis=0))
         if result_blocks
@@ -363,7 +433,8 @@ def shuffle_graph(
         "seed_derivation": "PCG64(SeedSequence([shuffle_seed, context_id...]))",
         "accept_target_factor": int(accept_factor),
         "attempt_limit_factor": int(attempt_factor),
-        "target_rule": "accept 10*E_ctx swaps, attempt at most 100*E_ctx",
+        "target_rule": f"accept {accept_factor}*E_ctx swaps, attempt at most {attempt_factor}*E_ctx",
+        "proposal_batch_size": protocol.SHUFFLE_PROPOSAL_BATCH,
         "contexts": contexts,
         "totals": {
             "contexts": len(contexts),

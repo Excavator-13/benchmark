@@ -1,0 +1,92 @@
+{
+  "cost_scope": {
+    "fixture": false,
+    "input_kind": "published_data",
+    "is_formal_performance_evidence": false,
+    "is_scientific_evidence": false,
+    "label": "development measurement on published data"
+  },
+  "dataset": "r0",
+  "device": "cpu",
+  "input": {
+    "epochs": 200,
+    "message_edges": 0,
+    "nodes": 2335,
+    "source_edges": 60804,
+    "training_chunks_per_epoch": 19,
+    "training_elements_per_epoch": 133095,
+    "training_windows": 19
+  },
+  "machine": {
+    "cpu_count": 24,
+    "machine": "AMD64",
+    "platform": "Windows-10-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "system": "Windows"
+  },
+  "method": "self",
+  "model_seed": 0,
+  "notes": [
+    "durations and peak RSS are measured for this execution only",
+    "no unmeasured performance or graph-benefit promise is recorded"
+  ],
+  "peak_memory": {
+    "bytes": null,
+    "method": "resource.getrusage(RUSAGE_SELF).ru_maxrss",
+    "native_unit": null,
+    "native_value": null,
+    "reason": "resource module unavailable",
+    "scope": "process",
+    "status": "unsupported_platform"
+  },
+  "run_id": "p02-t002-20261019-01-cost-r0-self-s0-cost",
+  "shuffle_seed": null,
+  "stage_definitions": {
+    "artifact_write": "identity, mask and graph artifacts",
+    "demand_read": "read, validate and canonically order the demand source",
+    "graph_read": "read, audit and map the graph; derive coverage and masks",
+    "metrics_output": "metric reduction and prediction/gold writing",
+    "naive_reference": "five naive baselines and validation-MSE references",
+    "selected_inference": "selected-checkpoint validation/test prediction",
+    "selection_write": "history and selection records",
+    "shuffle": "build the shuffled control (zero for self/graph)",
+    "total": "whole worker execution",
+    "training": "200 epochs of chunked forward/backward and optimizer steps",
+    "validation": "post-update validation scoring inside each epoch"
+  },
+  "threads": {
+    "blas_environment": {
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "torch_inter_op": 1,
+    "torch_intra_op": 1
+  },
+  "timings_seconds": {
+    "artifact_write": 0.08507730000019365,
+    "demand_read": 0.10006760000032955,
+    "graph_read": 0.8909449000002496,
+    "metrics_output": 0.1910189000000173,
+    "naive_reference": 0.0013030999998591142,
+    "selected_inference": 0.11269540000012057,
+    "selection_write": 0.08481440000014118,
+    "shuffle": 7.499999810534064e-06,
+    "total": 251.3457395000005,
+    "training": 230.76654329999747,
+    "training_total": 235.2615637000008,
+    "validation": 4.446406699993531
+  },
+  "totals_seconds": {
+    "data_reading": 0.9910125000005792,
+    "output_writing": 0.36091060000035213,
+    "selected_inference": 0.11269540000012057,
+    "shuffling": 7.499999810534064e-06,
+    "total": 251.3457395000005,
+    "training_and_validation": 235.2615637000008,
+    "training_forward_backward": 230.76654329999747,
+    "validation_scoring": 4.446406699993531
+  }
+}

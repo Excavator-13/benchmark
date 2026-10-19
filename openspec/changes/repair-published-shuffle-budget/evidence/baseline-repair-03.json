@@ -1,0 +1,42 @@
+{
+  "command": [
+    "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+    "openspec/changes/repair-published-shuffle-budget/run_tests.py",
+    "baseline",
+    "--label",
+    "baseline-repair-03"
+  ],
+  "cwd": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark",
+  "python": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]",
+  "tests": 287,
+  "failures": 9,
+  "errors": 1,
+  "skips": [
+    [
+      "test_folds.FoldRunArtifactTests.test_fold_purpose_rules_and_no_formal_start",
+      "Windows cannot create symlinks (WinError 1314); alias coverage unavailable"
+    ],
+    [
+      "test_ridge.OptionalSklearnTests.test_sklearn_end_to_end_run_persists_parameters",
+      "optional scikit-learn backend is not installed"
+    ],
+    [
+      "test_ridge.OptionalSklearnTests.test_sklearn_matches_numpy",
+      "optional scikit-learn backend is not installed"
+    ],
+    [
+      "test_runner_cli.CheckReportContractTests.test_symlink_destination_is_rejected",
+      "Windows cannot create symlinks (WinError 1314); alias coverage unavailable"
+    ],
+    [
+      "test_runner_cli.PurposeDeltaTests.test_symlink_alias_to_formal_namespace_is_rejected",
+      "Windows cannot create symlinks (WinError 1314); alias coverage unavailable"
+    ],
+    [
+      "test_runner_cli.RepairRegressionTests.test_unreadable_consumed_input_writes_a_failure_report",
+      "file permissions do not restrict this user"
+    ]
+  ],
+  "elapsed_seconds": 804.2820000000029,
+  "success": false
+}

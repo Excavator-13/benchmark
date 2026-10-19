@@ -1,0 +1,94 @@
+{
+  "purpose": "development membership benchmark",
+  "dataset": "r2",
+  "context": [
+    12
+  ],
+  "target_factor": 1,
+  "nodes_with_edges": 293,
+  "active_bool_adjacency_bytes": 85849,
+  "results": [
+    {
+      "backend": "set",
+      "repeat": 0,
+      "seconds": 0.21762719999969704,
+      "attempts": 257385,
+      "accepted": 22408,
+      "rejections": {
+        "existing_edge": 232133,
+        "same_edge_index": 13,
+        "self_loop": 2831
+      },
+      "result_sha256": "f7427453054cc0341c11636a00bb465dd14c6a5ec631b6ba13bfa0ca6cfe1c40"
+    },
+    {
+      "backend": "dense",
+      "repeat": 0,
+      "seconds": 0.239598100000876,
+      "attempts": 257385,
+      "accepted": 22408,
+      "rejections": {
+        "existing_edge": 232133,
+        "same_edge_index": 13,
+        "self_loop": 2831
+      },
+      "result_sha256": "f7427453054cc0341c11636a00bb465dd14c6a5ec631b6ba13bfa0ca6cfe1c40"
+    },
+    {
+      "backend": "set",
+      "repeat": 1,
+      "seconds": 0.21349949999967066,
+      "attempts": 257385,
+      "accepted": 22408,
+      "rejections": {
+        "existing_edge": 232133,
+        "same_edge_index": 13,
+        "self_loop": 2831
+      },
+      "result_sha256": "f7427453054cc0341c11636a00bb465dd14c6a5ec631b6ba13bfa0ca6cfe1c40"
+    },
+    {
+      "backend": "dense",
+      "repeat": 1,
+      "seconds": 0.24413769999955548,
+      "attempts": 257385,
+      "accepted": 22408,
+      "rejections": {
+        "existing_edge": 232133,
+        "same_edge_index": 13,
+        "self_loop": 2831
+      },
+      "result_sha256": "f7427453054cc0341c11636a00bb465dd14c6a5ec631b6ba13bfa0ca6cfe1c40"
+    },
+    {
+      "backend": "set",
+      "repeat": 2,
+      "seconds": 0.21046609999939392,
+      "attempts": 257385,
+      "accepted": 22408,
+      "rejections": {
+        "existing_edge": 232133,
+        "same_edge_index": 13,
+        "self_loop": 2831
+      },
+      "result_sha256": "f7427453054cc0341c11636a00bb465dd14c6a5ec631b6ba13bfa0ca6cfe1c40"
+    },
+    {
+      "backend": "dense",
+      "repeat": 2,
+      "seconds": 0.2350736999997025,
+      "attempts": 257385,
+      "accepted": 22408,
+      "rejections": {
+        "existing_edge": 232133,
+        "same_edge_index": 13,
+        "self_loop": 2831
+      },
+      "result_sha256": "f7427453054cc0341c11636a00bb465dd14c6a5ec631b6ba13bfa0ca6cfe1c40"
+    }
+  ],
+  "command": [
+    "openspec/changes/repair-published-shuffle-budget/benchmark_membership.py"
+  ],
+  "python": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]"
+}

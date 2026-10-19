@@ -494,6 +494,84 @@ conda run -n job-sdf-baseline python -m unittest discover -s benchmark/graph_val
 conda run -n job-sdf-baseline python -m unittest discover -s benchmark/nograph_baseline/tests -v
 ```
 
+### Prepared shuffled controls (P02 execution repair)
+
+`dds-v2` retains exactly `10*E_ctx` accepted directed swaps and tests a finite
+`500*E_ctx` proposal ceiling. Buffers of 4096 uniform ordered edge-index pairs are
+consumed sequentially against the current graph; unused prefetched pairs are not
+attempts. Accept this candidate only after all nine published conditions and
+independent regenerations pass. A larger ceiling does not guarantee completion
+or uniform mixing. Checkers retain the `dds-v1` `10E/100E` contract and reject
+unknown versions or inconsistent saved budgets.
+
+Preparation does not initialize, fit or evaluate a model. In the local pinned
+environment use `.venv-pinned/Scripts/python.exe` in place of `python`. On Windows
+set `PYTHONUTF8=1` for subprocess diagnostic text in paths containing Chinese.
+Environment evidence requires `python -m pip freeze` to succeed. If a minimal
+virtual environment lacks pip, bootstrap its bundled copy with
+`python -m ensurepip --upgrade` before running checks. Windows peak memory uses
+`GetProcessMemoryInfo.PeakWorkingSetSize` in bytes; Linux/macOS retain their
+native `resource.getrusage` measurements. Both cover the worker process lifetime.
+
+```bash
+# Always use fresh IDs and report paths.
+python -m benchmark.graph_value_skeleton prepare-shuffle \
+    --data-name r2 --shuffle-seed 0 --run-id r2-shuffle0-prepared
+python -m benchmark.graph_value_skeleton check-shuffle \
+    --artifact-dir scratch/graph-value-skeleton/r2-shuffle0-prepared \
+    --report scratch/graph-value-skeleton/reports/r2-shuffle0-checked.json
+
+# Reuse the graph; this model invocation still independently trains 200 epochs.
+python -m benchmark.graph_value_skeleton run \
+    --data-name r2 --method shuffled --shuffle-seed 0 --model-seed 0 \
+    --shuffle-artifact scratch/graph-value-skeleton/r2-shuffle0-prepared \
+    --purpose development --run-id r2-shuffle0-s0-prepared-run
+
+# Graph-only readiness: r2/seed0 first, all nine conditions independently
+# regenerated. This command never schedules a model or formal experiment.
+python -m benchmark.graph_value_skeleton.readiness --run-id shuffled-readiness-v2
+
+# Small fixture alternative to the published preparation command:
+python -c "from pathlib import Path; from benchmark.graph_value_skeleton.tests.fixtures import build_fixture; build_fixture(Path('scratch/graph-value-skeleton/example-fixture'), 'r0')"
+python -m benchmark.graph_value_skeleton prepare-shuffle \
+    --data-name r0 --shuffle-seed 0 --run-id fixture-prepared \
+    --demand-path scratch/graph-value-skeleton/example-fixture/r0-demand.parquet \
+    --graph-path scratch/graph-value-skeleton/example-fixture/r0-graph.parquet
+```
+
+Prepared directories contain canonical int64 node/source/result arrays, complete
+shuffle audits, generator source/runtime provenance, measurements, checksums and
+terminal status. Saved-only `check-shuffle` leaves inputs unchanged and writes
+one fresh external report. It checks canonical identity, all directed degrees,
+no duplicate/self/cross-context edge, changed edges, context counters and hashes.
+It cannot prove the provenance of a forged artifact; independent regeneration
+provides separate reproducibility evidence.
+
+`--shuffle-artifact` is shuffled-only. A mismatched source/node/seed/generator
+source/runtime/version, damaged file or non-success status fails before training
+without fallback generation. Paths, reuse flags and read timing are execution
+metadata. Model runs retain complete graph arrays and audits for recomputation
+without the external preparation directory. Nine prepared graphs can serve 54
+independently trained shuffled runs; three separate MAEs are still averaged for
+each model seed and repetition.
+
+`progress.json` (`shuffle-progress.json` in a model run) records context boundaries
+and snapshots at most 100,000 consumed proposals apart. Exhaustion retains
+`shuffle-failure.json` with prior-context audits and the failing context's target,
+limit, accepted/attempted/rejection counts, identities, reason and elapsed time.
+Interrupted/unfinished artifacts cannot be reused. Partial chains are diagnostic
+recovery points and are not automatically resumed.
+
+The readiness driver pauses at the first failed check or regeneration mismatch,
+after 10 minutes per graph or 60 seconds without observable progress, preserving
+logs and a paused manifest. These are operational watchdogs, not scientific/RNG
+settings. The bounded r2/context12 membership comparison found the tuple/set
+backend faster than compact boolean adjacency, so the default stays tuple/set.
+The comparison script and measurements accompany the change. Generation and
+reuse-read costs are recorded separately; graph costs do not establish training
+speed or predictive quality. Formal execution follows independent verification,
+archive and research-side acceptance/cost confirmation.
+
 ## 5 Directory Structure
 
 The expected structure of files is:

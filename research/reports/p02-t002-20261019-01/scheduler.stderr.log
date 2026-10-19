@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\大创参考论文\JODBSDFres\benchmark\research\phases\P02\t002_batch.py", line 415, in <module>
+    main()
+  File "C:\Users\Lenovo\Documents\大创参考论文\JODBSDFres\benchmark\research\phases\P02\t002_batch.py", line 399, in main
+    continue_after_cost(scratch, saved, args.batch)
+  File "C:\Users\Lenovo\Documents\大创参考论文\JODBSDFres\benchmark\research\phases\P02\t002_batch.py", line 318, in continue_after_cost
+    raise RuntimeError(f"cost controller failed: {status}")
+RuntimeError: cost controller failed: {'status': 'failed', 'mode': 'cost', 'error': 'RuntimeError: p02-t002-20261019-01-cost-r2-shuffled0-s0-cost: exit 1; see C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\p02-t002-20261019-01\\logs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost.log', 'updated_at': '2026-10-19T12:46:56.097760+00:00'}

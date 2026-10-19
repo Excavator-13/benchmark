@@ -528,9 +528,9 @@ def capture_source(
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_bytes(base or b"")
             patch_file = root / ".check.patch"
-            patch_file.write_text(patch_text, encoding="utf-8")
+            patch_file.write_text(patch_text, encoding="utf-8", newline="\n")
             applied = subprocess.run(
-                ["git", "apply", "--unsafe-paths", str(patch_file)],
+                ["git", "-c", "core.autocrlf=false", "apply", "--unsafe-paths", str(patch_file)],
                 cwd=str(root),
                 capture_output=True,
                 text=True,
@@ -940,3 +940,32 @@ def verify_source_hashes(manifest: Mapping[str, Any]) -> List[str]:
                 f"{name}: hash changed {expected} -> {actual} for {path}"
             )
     return mismatches
+
+
+def windows_peak_rss() -> Dict[str, Any]:
+    """Read the current process's lifetime peak working set in bytes."""
+    import ctypes as c
+    from ctypes import wintypes as w
+
+    class Memory(c.Structure):
+        _fields_ = [("cb", w.DWORD), ("faults", w.DWORD)] + [
+            (name, c.c_size_t) for name in (
+                "peak_wset", "wset", "peak_pool_paged", "pool_paged",
+                "peak_pool_nonpaged", "pool_nonpaged", "pagefile", "peak_pagefile"
+            )
+        ]
+
+    kernel = c.WinDLL("kernel32", use_last_error=True)
+    psapi = c.WinDLL("psapi", use_last_error=True)
+    kernel.GetCurrentProcess.restype = w.HANDLE
+    psapi.GetProcessMemoryInfo.argtypes = [w.HANDLE, c.POINTER(Memory), w.DWORD]
+    psapi.GetProcessMemoryInfo.restype = w.BOOL
+    memory = Memory()
+    memory.cb = c.sizeof(memory)
+    if not psapi.GetProcessMemoryInfo(kernel.GetCurrentProcess(), c.byref(memory), memory.cb):
+        raise c.WinError(c.get_last_error())
+    return {
+        "bytes": int(memory.peak_wset), "native_value": int(memory.peak_wset),
+        "native_unit": "bytes", "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+        "scope": "worker process lifetime", "status": "ok",
+    }
