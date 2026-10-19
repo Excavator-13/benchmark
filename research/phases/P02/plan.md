@@ -54,3 +54,4 @@
 ## 7. 计划修订
 
 - 2026-10-18：P01-T008 完成时建立；骨架、数据、seeds 与预算按 [D023](../../decisions.md#d023-t008-阶段验收与-p02-骨架范围) 冻结；P02-T001 的变更名预登记为 `add-graph-value-skeleton`；尚未启动，启动前先按规则登记委托。
+- 2026-10-18（晚于建立）：用户决定启动 P02-T001，已按 [AGENTS.md](../../../AGENTS.md) 在 [DELEGATION](../../../DELEGATION.md) 登记 `add-graph-value-skeleton` 为 `open`，由 OpenSpec 侧执行 propose → apply → verify → archive；本表 T001 状态待归档 PASS 且研究侧接受实现就绪后更新。

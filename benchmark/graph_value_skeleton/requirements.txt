@@ -1,0 +1,11 @@
+# Required third-party dependencies of benchmark/graph_value_skeleton.
+# Install into the dedicated CPU environment:
+#   conda activate job-sdf-baseline
+#   python -m pip install --no-cache-dir -r benchmark/graph_value_skeleton/requirements.txt
+#
+# CPU-only: PyG, DGL, torch-scatter, torch-sparse and CUDA builds are NOT
+# required or used.  PyTorch here is the CPU wheel for the pinned environment.
+numpy==1.26.4
+pandas==2.2.3
+pyarrow==17.0.0
+torch==2.14.1
