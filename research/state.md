@@ -1,22 +1,21 @@
 # 当前状态
 
-更新时间：2026-10-18。
-当前阶段：[P01](phases/P01/plan.md) 已完成；[P02](phases/P02/plan.md) 已生效但未启动，任务状态以 P02 计划为准。
-当前工作：P01 七项阶段条件全部满足，T008 按 [D023](decisions.md#d023-t008-阶段验收与-p02-骨架范围) 验收；P02 的数据/切分/seeds/预算/门槛与小型 GRU 骨架（自身/真实图/保度打乱图，两分支无参数差）已冻结，实现变更名 `add-graph-value-skeleton` 预登记为 P02-T001，尚未启动。
-当前执行者：研究侧；无已知在跑实验或外部执行。
-本次授权范围：研究侧综合、决策与记录维护，以及用户 2026-10-18 明确要求的记录提交与 push；不包含实现、P02 运行或封存。
+更新时间：2026-10-19。
+当前阶段：[P01](phases/P01/plan.md) 已完成；[P02](phases/P02/plan.md) 进行中，任务状态以 P02 计划为准。
+当前工作：P02-T001（实现骨架与打乱图）已 `done`——`add-graph-value-skeleton` 归档 [`Verdict: PASS`](../openspec/changes/archive/2026-10-19-add-graph-value-skeleton/verification.md)，研究侧按 [D025](decisions.md#d025-p02-t001-实现研究侧验收与委托回收) 接受实现就绪，[DELEGATION](../DELEGATION.md) 已 `closed`。P02-T002（开发对照运行）未启动，等待用户授权。
+当前执行者：研究侧；无在跑实验、无外部执行。
+本次授权范围：研究侧记录维护、委托回收，以及用户 2026-10-19 明确要求的 commit 与 push；不包含 P02-T002 正式运行、封存或恢复核验。
 本轮 run：无。
 
 ## 恢复位置
 
-- 2026-10-18：P01 收尾于[阶段汇总](analyses/p01-t008-stage-summary-20261018-01/report.md)与 [D023](decisions.md#d023-t008-阶段验收与-p02-骨架范围)；[P02 计划](phases/P02/plan.md)已建立，P02-T001 未启动，在途委托无（[DELEGATION](../DELEGATION.md) 为 `none`）。
-- 同日记录维护：按 [D024](decisions.md#d024-跟进-research-maintainer-上游版本) 跟进 skill 并对齐记录，科研位置不变。
-- 保存事实见[索引](archives/index.md)；未封存与备份未核验的条目保持原状，本轮不追补核验。
+- 2026-10-19：T001 实现与 `graph-value-skeleton` 主规格已归档并通过独立验证（基准 commit 加 8 个脏文件指纹核对一致）；研究侧回收完成，无正式 run 写入 `research/runs/`。后续由 P02-T002 接手，正式比较前须先统一确认一次成本（P02 计划 §4）。
+- 保存事实见[索引](archives/index.md#p02-t001-骨架实现证据2026-10-19)；未封存与备份未核验的条目保持原状，本轮不追补核验。
 
 ## 下一可执行动作
 
-- P02 是否启动、何时启动由用户决定。启动 P02-T001 时先按 [AGENTS.md](../AGENTS.md) 在 [DELEGATION](../DELEGATION.md) 登记 `add-graph-value-skeleton`（研究任务 P02-T001，结束判据按 P02 计划 §3 与 D023 的骨架口径），再在 OpenSpec 侧 propose；研究侧只读核对结束判据，不代跑 propose/apply/verify/archive。
-- P02 冻结配置在正式比较开始前不得按中间结果修改；改冻结项先记录再运行。图相关结论只作固定评测期证据，严格历史/跨时间主张仍缺时间相符的图证据（[D015](decisions.md#d015-发布图使用范围与重建时机)）。
+- P02-T002 需用户另行授权。启动时按 P02 计划 §4 固定方法轴（自身/真实图/打乱图）、seeds `0,1,2`、`r0`/`region`/`r2`，同 seed 至少两次重复；入口命令与产物契约见 [README §4.6](../README.md) 与[实现说明](../openspec/changes/archive/2026-10-19-add-graph-value-skeleton/implementation-notes.md)，正式 run 写 `research/runs/<run-id>/`（`--purpose formal`），开发冒烟仅写 `scratch/`。
+- 预算与冻结项只能在本阶段正式比较开始前统一调整并记录，不得按中间结果修改；发布图构建时间未知，图相关结论只作固定评测期证据，严格历史/跨时间主张仍缺时间相符的图证据（[D015](decisions.md#d015-发布图使用范围与重建时机)）。
 
 ## 待处理事项
 

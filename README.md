@@ -373,6 +373,127 @@ Automated tests need no GPU and no repository graph data:
 python -m unittest discover -s benchmark/nograph_baseline/tests
 ```
 
+### 4.6 Graph-value skeleton (`benchmark.graph_value_skeleton`)
+
+`benchmark/graph_value_skeleton/` is an independent CPU entry that implements
+the frozen P02-T001 temporal skeleton on the unchanged `P1-count-L6-H3-v3`
+protocol and `P01-records-v2` policy. It reuses the P01 demand identity, main
+split, five naive references, fixed masks and metric arithmetic, and adds only
+the new model, graph propagation, shuffled control, saved artifacts and
+read-only checks. It is software evidence for later authorized comparisons, not
+a scientific result.
+
+**Runtime.** Use the dedicated CPU environment and install only the local
+dependency list (PyG, DGL, `torch-scatter`, `torch-sparse` and CUDA builds are
+not required and are never imported by this entry):
+
+```bash
+conda activate job-sdf-baseline
+python -m pip install --no-cache-dir -r benchmark/graph_value_skeleton/requirements.txt
+```
+
+The pinned runtime used by the tests and documented commands is Python 3.11.17,
+PyTorch 2.14.1 (CPU, `torch.version.cuda=None`), NumPy 1.26.4, pandas 2.2.3 and
+PyArrow 17.0.0. The default `python` 3.13 environment has no torch and is not a
+substitute. BLAS/intra-op/inter-op threads are pinned to 1 and deterministic
+algorithms are enabled before the model is created.
+
+**Model and axes.** Each node's six raw monthly counts are encoded by one
+shared single-layer unidirectional `GRU(1,32)` with an independent zero hidden
+state per node and window; a shared `Linear(32,3)` head produces three raw
+predictions. `self` uses the hidden state directly, `graph` adds the unweighted
+mean of distinct incoming-neighbour hidden states (exactly zero for zero
+in-degree nodes), and `shuffled` uses a context-local degree-preserving
+double-edge swap graph. There is no graph-specific trainable parameter; the
+measured total is 3459 (GRU 3360 + head 99). Every execution trains for exactly
+200 epochs with Adam (`lr=1e-3`, betas 0.9/0.999, eps 1e-8, weight decay 0),
+raw-count mean-squared error, one optimizer step per epoch after a
+context-chunked global-mean gradient accumulation, and selects the checkpoint
+by lowest original-unit validation MSE (earliest epoch on an exact tie). There
+is no scheduler, early stopping, clipping or preprocessing search.
+
+The axis flags are explicit: `--method {self,graph,shuffled}`, `--model-seed`
+(development profile 0..2, final profile 0..4; the profile never schedules
+runs), and `--shuffle-seed 0|1|2` which is required for `shuffled` and forbidden
+otherwise. `--purpose` defaults to `development`.
+
+**Commands** (run from the repository root). Development output goes to the
+ignored `scratch/graph-value-skeleton/<run-id>/`; every save is exclusive and
+never overwrites an existing run ID:
+
+```bash
+# one development run per method (self/graph/shuffled); shuffle seeds 0/1/2
+conda run -n job-sdf-baseline python -m benchmark.graph_value_skeleton run \
+    --data-name r0 --method self --model-seed 0 --purpose development \
+    --run-id gvs-r0-self-s0-a
+conda run -n job-sdf-baseline python -m benchmark.graph_value_skeleton run \
+    --data-name r0 --method graph --model-seed 0 --purpose development \
+    --run-id gvs-r0-graph-s0-a
+conda run -n job-sdf-baseline python -m benchmark.graph_value_skeleton run \
+    --data-name r0 --method shuffled --shuffle-seed 0 --model-seed 0 \
+    --purpose development --run-id gvs-r0-shuffled0-s0-a
+
+# an independent same-seed repetition (same axes, fresh run ID)
+conda run -n job-sdf-baseline python -m benchmark.graph_value_skeleton run \
+    --data-name r0 --method graph --model-seed 0 --purpose development \
+    --run-id gvs-r0-graph-s0-b
+
+# saved-only checks write exactly one exclusive JSON report under ignored
+# scratch or a validated temporary root; inputs are never modified
+conda run -n job-sdf-baseline python -m benchmark.graph_value_skeleton recompute \
+    --run-dir scratch/graph-value-skeleton/gvs-r0-graph-s0-a \
+    --report scratch/graph-value-skeleton/reports/gvs-r0-graph-s0-a-recompute.json
+conda run -n job-sdf-baseline python -m benchmark.graph_value_skeleton compare \
+    --run-a scratch/graph-value-skeleton/gvs-r0-graph-s0-a \
+    --run-b scratch/graph-value-skeleton/gvs-r0-graph-s0-b \
+    --report scratch/graph-value-skeleton/reports/gvs-r0-graph-s0-repeat.json
+
+# the shuffled control for one model seed: the arithmetic mean of the three
+# independently trained shuffle-seed MAEs, (MAE0 + MAE1 + MAE2) / 3. It is not
+# the MAE of averaged predictions and never selects the weakest graph.
+conda run -n job-sdf-baseline python -m benchmark.graph_value_skeleton summarize-shuffled \
+    --run-dirs scratch/graph-value-skeleton/gvs-r0-shuffled0-s0-a \
+               scratch/graph-value-skeleton/gvs-r0-shuffled1-s0-a \
+               scratch/graph-value-skeleton/gvs-r0-shuffled2-s0-a \
+    --report scratch/graph-value-skeleton/reports/gvs-r0-shuffled-s0-summary.json
+```
+
+`--output-root` is development-only and must resolve inside the repository's
+ignored scratch tree or the system temporary directory; a path that resolves
+into `research/`, `experiments_archive/`, the dataset or source tree (including
+through a symlink) is rejected before training. `--purpose formal` resolves a
+fresh `research/runs/<run-id>/` directory and **requires separate research
+authorization**; implementation and independent verification never execute it,
+and this chapter does not schedule any formal run.
+
+**Saved evidence.** Each successful execution records purpose/task, scientific
+and policy versions with content identity, demand/graph/node identity, resolved
+configuration, scoped execution-source identity with necessary uncommitted
+content, environment and thread settings, exact commands, stage timings and
+peak RSS, terminal status, fixed masks, the actual message and source edge sets,
+validation/test gold and predictions (including the five naive methods), the
+selected numerical parameters with measured parameter counts, all 200
+training/validation score rows with the selection reason, and the complete
+metrics/gain report. Failures and interruptions retain available evidence and
+an explicit `failed`/`interrupted` state; a leftover `running` record is
+classified as unfinished by `check_unfinished` rather than as success.
+
+**Evidence boundaries.** The published graph construction cutoff time is
+unknown, so results describe the fixed evaluation period and cannot claim strict
+historical or future graph information. Software readiness and a later
+archived independent verification `PASS` are evidence for a separate
+research-side implementation acceptance decision; they do not change the
+protocol, split, selection rule or §6.2 thresholds, do not start a formal
+P02-T002 comparison, and do not establish predictive benefit.
+
+Automated tests use small synthetic fixtures and need no GPU or full dataset:
+
+```bash
+conda run -n job-sdf-baseline python -m unittest discover -s benchmark/graph_value_skeleton/tests -v
+# the existing graph-free entry keeps its own no-torch-compatible suite
+conda run -n job-sdf-baseline python -m unittest discover -s benchmark/nograph_baseline/tests -v
+```
+
 ## 5 Directory Structure
 
 The expected structure of files is:
