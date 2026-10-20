@@ -39,12 +39,12 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 
 | 字段 | 值 |
 | --- | --- |
-| Status | `open` |
+| Status | `closed` |
 | 变更名 | `repair-published-shuffle-budget` |
 | 研究任务 | P02-T002（任务状态见 [P02 计划](research/phases/P02/plan.md) §3） |
 | 登记时间 | 2026-10-19 |
 | 委派给 | OpenSpec 变更流程；本轮先创建完整提案，按技能边界交给后续 apply → 独立 verify-change → archive-change；研究侧不代跑 |
 | 结束判据 | 本文件 §结束判据两条，且修复保留 D026 的科学冻结项；真实 r0/region/r2 × shuffle seed 0/1/2 共 9 张图预检和同 seed 重建通过；优化与缓存不改变度保持、节点身份、成功交换目标和独立模型训练口径；失败审计与暂停控制有证据 |
 | 研究侧收尾 | 核对归档 PASS 与当前实现、9 图预检及复现证据；按 D026 研究验收后回收指针；更新 state 与 T002 证据链接。另用新批次恢复成本确认与原矩阵，执行用户的自动暂停要求；旧失败批次不重启。无封存、commit/push 授权 |
-| 上次核对 | 2026-10-19：项目内 OpenSpec 1.14.3 的 context 解析通过；变更的 proposal/specs/design/tasks 四项规划工件齐全，status 显示 isPlanningComplete=true，validate --strict 通过。尚未实施或独立验证；规划完成不表示修复完成 |
-| 回收记录 | 尚未回收；变更尚未完成，T002 仍 blocked，正式 run 仍为 0 |
+| 上次核对 | 2026-10-20：活跃目录不存在，归档 verification 为当前 PASS；七组源码/规划/证据指纹与当前字节匹配，真实图预检和独立重建通过。见 D027 与新批次报告 |
+| 回收记录 | 2026-10-20 按 D027 接受软件就绪并回收；[验收与成本报告](research/reports/p02-t002-20261020-01/report.md)。T002实验仍未完成，以新成本判断和阶段计划为准；正式 run 为0 |

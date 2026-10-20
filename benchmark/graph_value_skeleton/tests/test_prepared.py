@@ -4,6 +4,8 @@ import copy
 import json
 from pathlib import Path
 import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
 from unittest import mock
@@ -13,6 +15,23 @@ from benchmark.graph_value_skeleton.tests import fixtures
 
 
 class PreparedTest(unittest.TestCase):
+    def test_prepare_in_fresh_cli_process(self):
+        # An in-process test suite may already have imported torch, hiding the
+        # Windows Arrow-before-torch DLL initialization failure.
+        command = [sys.executable, '-B', '-m', 'benchmark.graph_value_skeleton',
+                   'prepare-shuffle', '--data-name', 'r0', '--shuffle-seed', '0',
+                   '--run-id', 'fresh-cli', '--output-root', str(self.root/'fresh-cli-runs'),
+                   '--demand-path', str(self.fixture['demand_path']),
+                   '--graph-path', str(self.fixture['graph_path'])]
+        result = subprocess.run(command, cwd=protocol.REPO_ROOT, capture_output=True,
+                                text=True, encoding='utf-8', timeout=120)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        directory = self.root/'fresh-cli-runs'/'fresh-cli'
+        self.assertEqual(prepared.read_json(directory/'status.json')['state'], 'success')
+        self.assertFalse((directory/'models').exists())
+        self.assertFalse((directory/'training-history.json').exists())
+        prepared.load(directory, require_current_generator=True)
+
     @classmethod
     def setUpClass(cls):
         training.configure_determinism(0)
@@ -87,6 +106,49 @@ class PreparedTest(unittest.TestCase):
         with mock.patch.object(prepared,'generator_identity',return_value={'bad':'identity'}):
             with self.assertRaises(ValueError): prepared.load(self.directory,require_current_generator=True)
 
+    def test_missing_or_inconsistent_generation_records_fail_saved_check(self):
+        mutations = {
+            'empty-source': ('source.json', lambda a: a.clear()),
+            'empty-environment': ('environment.json', lambda a: a.clear()),
+            'empty-generator': ('provenance.json', lambda a: a.update(generator={})),
+            'missing-generator-file': ('provenance.json', lambda a: a['generator']['source_sha256'].pop('graph.py')),
+            'bad-source-hash': ('source.json', lambda a: a['files']['benchmark/graph_value_skeleton/graph.py'].update(sha256='bad')),
+            'source-generator-mismatch': ('source.json', lambda a: a['files']['benchmark/graph_value_skeleton/graph.py'].update(sha256='0'*64)),
+            'runtime-generator-mismatch': ('environment.json', lambda a: a['packages'].update(numpy='unknown-version')),
+            'empty-protocol': ('source.json', lambda a: a.update(protocol={})),
+            'missing-context-time': ('measurements.json', lambda a: a['context_timings'].pop()),
+            'negative-context-time': ('measurements.json', lambda a: a['context_timings'][0].update(seconds=-1)),
+            'nonfinite-context-time': ('measurements.json', lambda a: a['context_timings'][0].update(seconds=float('nan'))),
+        }
+        for label, (filename, mutate) in mutations.items():
+            directory = self.root / ('provenance-' + label)
+            shutil.copytree(self.directory, directory)
+            value = prepared.read_json(directory / filename)
+            mutate(value)
+            (directory / filename).write_text(json.dumps(value), encoding='utf-8')
+            manifest = prepared.read_json(directory / 'checksums.json')
+            manifest['files'][filename] = prepared.sha(directory / filename)
+            (directory / 'checksums.json').write_text(json.dumps(manifest), encoding='utf-8')
+            before = {p.relative_to(directory).as_posix(): prepared.sha(p)
+                      for p in directory.rglob('*') if p.is_file()}
+            with self.subTest(label=label), \
+                 mock.patch.object(prepared.data, 'load_dataset', side_effect=AssertionError('source read')), \
+                 mock.patch.object(prepared, 'generator_identity', side_effect=AssertionError('current generator read')):
+                result = prepared.check(directory, self.root / (label + '.json'), protocol.REPO_ROOT, ['test'])
+                self.assertEqual(result['status'], 'failed', result)
+                self.assertIn('prepared generation', result['reason'])
+            self.assertEqual(before, {p.relative_to(directory).as_posix(): prepared.sha(p)
+                                     for p in directory.rglob('*') if p.is_file()})
+
+    def test_context_times_are_execution_metadata(self):
+        timings = prepared.read_json(self.directory / 'measurements.json')['context_timings']
+        graph, _ = prepared.load(self.directory)
+        self.assertEqual([row['context'] for row in timings],
+                         [row['context'] for row in graph.audit['contexts']])
+        self.assertTrue(all(row['seconds'] >= 0 for row in timings))
+        self.assertTrue(all('elapsed_seconds' not in row for row in graph.audit['contexts']))
+        self.assertNotIn('context_timings', graph.identity_payload())
+
     def test_cached_and_fresh_fit_independently_and_recompute_without_artifact(self):
         fresh=replace(self.config,run_id='fresh-fit')
         reused=replace(self.config,run_id='reused-fit',shuffle_artifact=str(self.directory))
@@ -128,6 +190,13 @@ class PreparedTest(unittest.TestCase):
         before=copy.deepcopy(audit); problems=[]
         checks.validate_shuffle_audit(dataset.key_array,source.edges,result.edges,audit,0,problems)
         self.assertEqual(problems,[]); self.assertEqual(audit,before)
+        for batch in (1, 4096, -7, 'bogus', True, 1.0):
+            explicit = copy.deepcopy(before)
+            explicit['proposal_batch_size'] = batch
+            problems = []
+            checks.validate_shuffle_audit(dataset.key_array, source.edges, result.edges, explicit, 0, problems)
+            with self.subTest(v1_batch=batch):
+                self.assertEqual(bool(problems), type(batch) is not int or batch != 1)
         for version,limit in [('dds-unknown',100),('dds-v1',500)]:
             audit=copy.deepcopy(before);audit.update(algorithm_version=version,attempt_limit_factor=limit)
             problems=[]; checks.validate_shuffle_audit(dataset.key_array,source.edges,result.edges,audit,0,problems)

@@ -1,0 +1,1871 @@
+{
+  "block_diagonal": true,
+  "columns": [
+    "r2_id",
+    "row_id",
+    "col_id"
+  ],
+  "contexts": [
+    [
+      0
+    ],
+    [
+      1
+    ],
+    [
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5
+    ],
+    [
+      6
+    ],
+    [
+      7
+    ],
+    [
+      8
+    ],
+    [
+      9
+    ],
+    [
+      10
+    ],
+    [
+      11
+    ],
+    [
+      12
+    ],
+    [
+      13
+    ],
+    [
+      14
+    ],
+    [
+      15
+    ],
+    [
+      16
+    ],
+    [
+      17
+    ],
+    [
+      18
+    ],
+    [
+      19
+    ],
+    [
+      20
+    ],
+    [
+      21
+    ],
+    [
+      22
+    ],
+    [
+      23
+    ],
+    [
+      24
+    ],
+    [
+      25
+    ],
+    [
+      26
+    ],
+    [
+      27
+    ],
+    [
+      28
+    ],
+    [
+      29
+    ],
+    [
+      30
+    ],
+    [
+      31
+    ],
+    [
+      32
+    ],
+    [
+      33
+    ],
+    [
+      34
+    ],
+    [
+      35
+    ],
+    [
+      36
+    ],
+    [
+      37
+    ],
+    [
+      38
+    ],
+    [
+      39
+    ],
+    [
+      40
+    ],
+    [
+      41
+    ],
+    [
+      42
+    ],
+    [
+      43
+    ],
+    [
+      44
+    ],
+    [
+      45
+    ],
+    [
+      46
+    ],
+    [
+      47
+    ],
+    [
+      48
+    ],
+    [
+      49
+    ],
+    [
+      50
+    ],
+    [
+      51
+    ]
+  ],
+  "cross_context_edges": 0,
+  "dataset": "r2",
+  "direction": "row_id -> col_id (source -> target); incoming edges are aggregated",
+  "duplicate_rows": 0,
+  "message_edges": {
+    "binary_unique_directed": true,
+    "edges": 321374,
+    "edges_sha256": "0215f7df908200e3c64c7fc26a63c5592f9c176595c29a7ca606176ea8488936",
+    "method": "self/graph/shuffled selection"
+  },
+  "multiplicity": {
+    "binary_adjacency": true,
+    "distribution": {
+      "1": 321374
+    },
+    "duplicate_rows": 0,
+    "is_observed_frequency": false,
+    "max_multiplicity": 1,
+    "note": "multiplicity is an audit of repeated source rows; each distinct context-qualified directed edge contributes exactly once to the incoming-neighbour mean",
+    "weights_edges": false
+  },
+  "publication": {
+    "block_diagonal": true,
+    "columns": [
+      "r2_id",
+      "row_id",
+      "col_id"
+    ],
+    "cross_context_edges": 0,
+    "dataset": "r2",
+    "dense_offset_proven_endpoints": 642748,
+    "duplicate_rows": 0,
+    "expected_rows": 321374,
+    "raw_rows": 321374,
+    "self_loop_rows": 0,
+    "symmetry_rate": 1.0,
+    "unique_edges": 321374,
+    "weight_or_frequency_column": false
+  },
+  "raw_rows": 321374,
+  "rejected_self_loop_rows": 0,
+  "reverse_edge_symmetry_is_not_a_fixture_requirement": true,
+  "self_loop_rows": 0,
+  "shuffle": {
+    "accept_target_factor": 10,
+    "algorithm": "context-local-directed-double-edge-swap",
+    "algorithm_version": "dds-v2",
+    "attempt_limit_factor": 500,
+    "changed_edges": 148691,
+    "contexts": [
+      {
+        "accepted": 11320,
+        "added_edges": 878,
+        "attempt_limit": 566000,
+        "attempts": 18841,
+        "changed_edges": 878,
+        "changed_fraction": 0.7756183745583038,
+        "context": [
+          0
+        ],
+        "edge_count": 1132,
+        "empty": false,
+        "intersection_edges": 254,
+        "intersection_fraction": 0.22438162544169613,
+        "nodes": 2335,
+        "ordinal": 0,
+        "rejections": {
+          "existing_edge": 6973,
+          "same_edge_index": 16,
+          "self_loop": 532
+        },
+        "result_edges_sha256": "0da4d6bf7b96838796d24b7950cda2670bb62a18b5f3cfb027877aae12f5ff7e",
+        "seed_sequence": [
+          2,
+          0
+        ],
+        "source_edges_sha256": "10c573303d22a346eff8f02f450e7143f3366704ba2d931a3222af70170e94dd",
+        "symmetric_difference_edges": 1756,
+        "symmetric_difference_fraction": 0.7756183745583038,
+        "target_accepted": 11320
+      },
+      {
+        "accepted": 89720,
+        "added_edges": 4247,
+        "attempt_limit": 4486000,
+        "attempts": 447889,
+        "changed_edges": 4247,
+        "changed_fraction": 0.47336156932679446,
+        "context": [
+          1
+        ],
+        "edge_count": 8972,
+        "empty": false,
+        "intersection_edges": 4725,
+        "intersection_fraction": 0.5266384306732055,
+        "nodes": 2335,
+        "ordinal": 1,
+        "rejections": {
+          "existing_edge": 350915,
+          "same_edge_index": 47,
+          "self_loop": 7207
+        },
+        "result_edges_sha256": "a2e3f5499a2d55c87583fbd56ac7b0bca1dc8539e308ba367c38ce9a30d9ecf5",
+        "seed_sequence": [
+          2,
+          1
+        ],
+        "source_edges_sha256": "3509fb879c737ce09efc7f038360743d5074991c08ab09f110a75c6c282301cc",
+        "symmetric_difference_edges": 8494,
+        "symmetric_difference_fraction": 0.47336156932679446,
+        "target_accepted": 89720
+      },
+      {
+        "accepted": 222680,
+        "added_edges": 8361,
+        "attempt_limit": 11134000,
+        "attempts": 1879010,
+        "changed_edges": 8361,
+        "changed_fraction": 0.375471528650979,
+        "context": [
+          2
+        ],
+        "edge_count": 22268,
+        "empty": false,
+        "intersection_edges": 13907,
+        "intersection_fraction": 0.624528471349021,
+        "nodes": 2335,
+        "ordinal": 2,
+        "rejections": {
+          "existing_edge": 1636030,
+          "same_edge_index": 82,
+          "self_loop": 20218
+        },
+        "result_edges_sha256": "daf843f09961d7907a04a4fcee2ca1f00ce5c81f4f7a30c966802027b5decaff",
+        "seed_sequence": [
+          2,
+          2
+        ],
+        "source_edges_sha256": "53f2694fd3f240e1b13e387cae49ba638fe878649dc49edd3a4b52b836287e49",
+        "symmetric_difference_edges": 16722,
+        "symmetric_difference_fraction": 0.375471528650979,
+        "target_accepted": 222680
+      },
+      {
+        "accepted": 86960,
+        "added_edges": 4512,
+        "attempt_limit": 4348000,
+        "attempts": 368970,
+        "changed_edges": 4512,
+        "changed_fraction": 0.5188592456301748,
+        "context": [
+          3
+        ],
+        "edge_count": 8696,
+        "empty": false,
+        "intersection_edges": 4184,
+        "intersection_fraction": 0.48114075436982523,
+        "nodes": 2335,
+        "ordinal": 3,
+        "rejections": {
+          "existing_edge": 276039,
+          "same_edge_index": 48,
+          "self_loop": 5923
+        },
+        "result_edges_sha256": "a781037e76ad1740b176dace52d174795525e5f52ffbfc53aeb43ebb6259d543",
+        "seed_sequence": [
+          2,
+          3
+        ],
+        "source_edges_sha256": "c4dc1a5573cfdf8cd4d25a9cc597ae79b26e131a0436a0e8f601ec60f168fe4a",
+        "symmetric_difference_edges": 9024,
+        "symmetric_difference_fraction": 0.5188592456301748,
+        "target_accepted": 86960
+      },
+      {
+        "accepted": 320,
+        "added_edges": 26,
+        "attempt_limit": 16000,
+        "attempts": 472,
+        "changed_edges": 26,
+        "changed_fraction": 0.8125,
+        "context": [
+          4
+        ],
+        "edge_count": 32,
+        "empty": false,
+        "intersection_edges": 6,
+        "intersection_fraction": 0.1875,
+        "nodes": 2335,
+        "ordinal": 4,
+        "rejections": {
+          "existing_edge": 77,
+          "same_edge_index": 21,
+          "self_loop": 54
+        },
+        "result_edges_sha256": "441d55b7b2d9e17293a65c05924944a566c5a38d8121581d9ed157c4b90901de",
+        "seed_sequence": [
+          2,
+          4
+        ],
+        "source_edges_sha256": "2f1ed2891f0e450cb5e8f4b0b2cbac9e08c66599d1ff25ad93c5275779a7dd63",
+        "symmetric_difference_edges": 52,
+        "symmetric_difference_fraction": 0.8125,
+        "target_accepted": 320
+      },
+      {
+        "accepted": 6380,
+        "added_edges": 510,
+        "attempt_limit": 319000,
+        "attempts": 10456,
+        "changed_edges": 510,
+        "changed_fraction": 0.799373040752351,
+        "context": [
+          5
+        ],
+        "edge_count": 638,
+        "empty": false,
+        "intersection_edges": 128,
+        "intersection_fraction": 0.2006269592476489,
+        "nodes": 2335,
+        "ordinal": 5,
+        "rejections": {
+          "existing_edge": 3658,
+          "same_edge_index": 13,
+          "self_loop": 405
+        },
+        "result_edges_sha256": "3757697a792d8a58dd4d404d0f33cd7b9138fb4626a0abf92101d531f192dab5",
+        "seed_sequence": [
+          2,
+          5
+        ],
+        "source_edges_sha256": "00618cb83d1294b5472df84767151d870866d261d889466eff219581e08ff132",
+        "symmetric_difference_edges": 1020,
+        "symmetric_difference_fraction": 0.799373040752351,
+        "target_accepted": 6380
+      },
+      {
+        "accepted": 6060,
+        "added_edges": 502,
+        "attempt_limit": 303000,
+        "attempts": 8961,
+        "changed_edges": 502,
+        "changed_fraction": 0.8283828382838284,
+        "context": [
+          6
+        ],
+        "edge_count": 606,
+        "empty": false,
+        "intersection_edges": 104,
+        "intersection_fraction": 0.1716171617161716,
+        "nodes": 2335,
+        "ordinal": 6,
+        "rejections": {
+          "existing_edge": 2579,
+          "same_edge_index": 12,
+          "self_loop": 310
+        },
+        "result_edges_sha256": "19577f91a1e7e04e960d0f233d0af26e170c545bc4f5cf12b20706316259f417",
+        "seed_sequence": [
+          2,
+          6
+        ],
+        "source_edges_sha256": "8c5b7ffe0a4e694691770fc0b10f88f343eab0b442190e9caf166938f9f39e23",
+        "symmetric_difference_edges": 1004,
+        "symmetric_difference_fraction": 0.8283828382838284,
+        "target_accepted": 6060
+      },
+      {
+        "accepted": 16820,
+        "added_edges": 1035,
+        "attempt_limit": 841000,
+        "attempts": 48206,
+        "changed_edges": 1035,
+        "changed_fraction": 0.6153388822829964,
+        "context": [
+          7
+        ],
+        "edge_count": 1682,
+        "empty": false,
+        "intersection_edges": 647,
+        "intersection_fraction": 0.38466111771700356,
+        "nodes": 2335,
+        "ordinal": 7,
+        "rejections": {
+          "existing_edge": 29865,
+          "same_edge_index": 24,
+          "self_loop": 1497
+        },
+        "result_edges_sha256": "0e482bfffbbf31450399221d5de85a464fbf500000020f68a683c597fab04c55",
+        "seed_sequence": [
+          2,
+          7
+        ],
+        "source_edges_sha256": "be384386f3a715efe9c7271c946b036d43d04c583e1477cb3e35fb82fcd3d24c",
+        "symmetric_difference_edges": 2070,
+        "symmetric_difference_fraction": 0.6153388822829964,
+        "target_accepted": 16820
+      },
+      {
+        "accepted": 133300,
+        "added_edges": 5424,
+        "attempt_limit": 6665000,
+        "attempts": 963668,
+        "changed_edges": 5424,
+        "changed_fraction": 0.40690172543135783,
+        "context": [
+          8
+        ],
+        "edge_count": 13330,
+        "empty": false,
+        "intersection_edges": 7906,
+        "intersection_fraction": 0.5930982745686422,
+        "nodes": 2335,
+        "ordinal": 8,
+        "rejections": {
+          "existing_edge": 816788,
+          "same_edge_index": 73,
+          "self_loop": 13507
+        },
+        "result_edges_sha256": "89806c4b119fe0893c805cf9c53dd43f86194b709e656355cf4f410d9c31009f",
+        "seed_sequence": [
+          2,
+          8
+        ],
+        "source_edges_sha256": "78205a66d26eb20db5a6d7bf37c7669dfbe2a9c73eca266e859c6be3f69c1879",
+        "symmetric_difference_edges": 10848,
+        "symmetric_difference_fraction": 0.40690172543135783,
+        "target_accepted": 133300
+      },
+      {
+        "accepted": 100,
+        "added_edges": 6,
+        "attempt_limit": 5000,
+        "attempts": 328,
+        "changed_edges": 6,
+        "changed_fraction": 0.6,
+        "context": [
+          9
+        ],
+        "edge_count": 10,
+        "empty": false,
+        "intersection_edges": 4,
+        "intersection_fraction": 0.4,
+        "nodes": 2335,
+        "ordinal": 9,
+        "rejections": {
+          "existing_edge": 93,
+          "same_edge_index": 31,
+          "self_loop": 104
+        },
+        "result_edges_sha256": "708c1263950c133db00ac20a6291963ed5f1a8426047cf7f171042420924ccea",
+        "seed_sequence": [
+          2,
+          9
+        ],
+        "source_edges_sha256": "289e58f8909613ddaf3d8a84471fc350846ad87521883bda9ee7e386cd7ed5e9",
+        "symmetric_difference_edges": 12,
+        "symmetric_difference_fraction": 0.6,
+        "target_accepted": 100
+      },
+      {
+        "accepted": 5020,
+        "added_edges": 440,
+        "attempt_limit": 251000,
+        "attempts": 6775,
+        "changed_edges": 440,
+        "changed_fraction": 0.8764940239043825,
+        "context": [
+          10
+        ],
+        "edge_count": 502,
+        "empty": false,
+        "intersection_edges": 62,
+        "intersection_fraction": 0.12350597609561753,
+        "nodes": 2335,
+        "ordinal": 10,
+        "rejections": {
+          "existing_edge": 1538,
+          "same_edge_index": 14,
+          "self_loop": 203
+        },
+        "result_edges_sha256": "28105e573cbd59b539f9d3f5a618c23390d03bdba9b2af94baf149e81a0f233b",
+        "seed_sequence": [
+          2,
+          10
+        ],
+        "source_edges_sha256": "3f345b71d4d61e5ddbe5ef46182051cbf6c55c7c3fb91fc000024d82ebd74363",
+        "symmetric_difference_edges": 880,
+        "symmetric_difference_fraction": 0.8764940239043825,
+        "target_accepted": 5020
+      },
+      {
+        "accepted": 28420,
+        "added_edges": 1706,
+        "attempt_limit": 1421000,
+        "attempts": 80098,
+        "changed_edges": 1706,
+        "changed_fraction": 0.6002814919071077,
+        "context": [
+          11
+        ],
+        "edge_count": 2842,
+        "empty": false,
+        "intersection_edges": 1136,
+        "intersection_fraction": 0.39971850809289233,
+        "nodes": 2335,
+        "ordinal": 11,
+        "rejections": {
+          "existing_edge": 49643,
+          "same_edge_index": 31,
+          "self_loop": 2004
+        },
+        "result_edges_sha256": "3c8293dc0b18fb94bb003bf0c5cfb8e4f62eb57cfd0dd4dc3a3ba83b5ce48354",
+        "seed_sequence": [
+          2,
+          11
+        ],
+        "source_edges_sha256": "8b1033636ea7b9860ee551f0b630c77840f10cbf3f66b987169b59f1aabf8e70",
+        "symmetric_difference_edges": 3412,
+        "symmetric_difference_fraction": 0.6002814919071077,
+        "target_accepted": 28420
+      },
+      {
+        "accepted": 224080,
+        "added_edges": 7296,
+        "attempt_limit": 11204000,
+        "attempts": 2585636,
+        "changed_edges": 7296,
+        "changed_fraction": 0.3255980007140307,
+        "context": [
+          12
+        ],
+        "edge_count": 22408,
+        "empty": false,
+        "intersection_edges": 15112,
+        "intersection_fraction": 0.6744019992859693,
+        "nodes": 2335,
+        "ordinal": 12,
+        "rejections": {
+          "existing_edge": 2332681,
+          "same_edge_index": 121,
+          "self_loop": 28754
+        },
+        "result_edges_sha256": "2080e2d7e9169ea20269c0f742dd62a5aa71558249cfc17b753ead681464286e",
+        "seed_sequence": [
+          2,
+          12
+        ],
+        "source_edges_sha256": "da649a111618e4985596cc48b28238ffd2a759b3c66eae822e015a8ea74a8b57",
+        "symmetric_difference_edges": 14592,
+        "symmetric_difference_fraction": 0.3255980007140307,
+        "target_accepted": 224080
+      },
+      {
+        "accepted": 27740,
+        "added_edges": 1483,
+        "attempt_limit": 1387000,
+        "attempts": 110168,
+        "changed_edges": 1483,
+        "changed_fraction": 0.5346070656092285,
+        "context": [
+          13
+        ],
+        "edge_count": 2774,
+        "empty": false,
+        "intersection_edges": 1291,
+        "intersection_fraction": 0.46539293439077145,
+        "nodes": 2335,
+        "ordinal": 13,
+        "rejections": {
+          "existing_edge": 79317,
+          "same_edge_index": 48,
+          "self_loop": 3063
+        },
+        "result_edges_sha256": "cca029fe01c18b71101909da40bae790e784232b7565205ed0b15d8de6c5ccdc",
+        "seed_sequence": [
+          2,
+          13
+        ],
+        "source_edges_sha256": "a2546c3e29c8e4455325caccef2dd2f0404d934dd2ed7e5c7d6809fa476abc45",
+        "symmetric_difference_edges": 2966,
+        "symmetric_difference_fraction": 0.5346070656092285,
+        "target_accepted": 27740
+      },
+      {
+        "accepted": 33660,
+        "added_edges": 2152,
+        "attempt_limit": 1683000,
+        "attempts": 89090,
+        "changed_edges": 2152,
+        "changed_fraction": 0.6393345216874629,
+        "context": [
+          14
+        ],
+        "edge_count": 3366,
+        "empty": false,
+        "intersection_edges": 1214,
+        "intersection_fraction": 0.36066547831253715,
+        "nodes": 2335,
+        "ordinal": 14,
+        "rejections": {
+          "existing_edge": 53344,
+          "same_edge_index": 28,
+          "self_loop": 2058
+        },
+        "result_edges_sha256": "9f51eb3bf986f9fe6888879e7e7c101974879990b6e5db54803f13176a0ac707",
+        "seed_sequence": [
+          2,
+          14
+        ],
+        "source_edges_sha256": "a7cd75ad99923d0e4e8d4e19eed55637ec29d5752f1ab143a3573d9ace23ada3",
+        "symmetric_difference_edges": 4304,
+        "symmetric_difference_fraction": 0.6393345216874629,
+        "target_accepted": 33660
+      },
+      {
+        "accepted": 8920,
+        "added_edges": 584,
+        "attempt_limit": 446000,
+        "attempts": 21706,
+        "changed_edges": 584,
+        "changed_fraction": 0.6547085201793722,
+        "context": [
+          15
+        ],
+        "edge_count": 892,
+        "empty": false,
+        "intersection_edges": 308,
+        "intersection_fraction": 0.3452914798206278,
+        "nodes": 2335,
+        "ordinal": 15,
+        "rejections": {
+          "existing_edge": 11630,
+          "same_edge_index": 19,
+          "self_loop": 1137
+        },
+        "result_edges_sha256": "35c75c772491ff6ee5ee783de248bd0aa6ce63406d6b2a619456be38f4212316",
+        "seed_sequence": [
+          2,
+          15
+        ],
+        "source_edges_sha256": "ef61517355ddac39fe6f342d2088fa32700a7be1ad49e590359483cb3adbdb70",
+        "symmetric_difference_edges": 1168,
+        "symmetric_difference_fraction": 0.6547085201793722,
+        "target_accepted": 8920
+      },
+      {
+        "accepted": 18960,
+        "added_edges": 1270,
+        "attempt_limit": 948000,
+        "attempts": 42709,
+        "changed_edges": 1270,
+        "changed_fraction": 0.669831223628692,
+        "context": [
+          16
+        ],
+        "edge_count": 1896,
+        "empty": false,
+        "intersection_edges": 626,
+        "intersection_fraction": 0.33016877637130804,
+        "nodes": 2335,
+        "ordinal": 16,
+        "rejections": {
+          "existing_edge": 22590,
+          "same_edge_index": 21,
+          "self_loop": 1138
+        },
+        "result_edges_sha256": "779f0b4e5deb8095efed55ba05ef98516ce2020e4dcece4ab759ca529ca77fc3",
+        "seed_sequence": [
+          2,
+          16
+        ],
+        "source_edges_sha256": "c3b45e96f1418cd07019593604076f79dd0ea19b02ed04cd6e31d626012b57f1",
+        "symmetric_difference_edges": 2540,
+        "symmetric_difference_fraction": 0.669831223628692,
+        "target_accepted": 18960
+      },
+      {
+        "accepted": 2420,
+        "added_edges": 215,
+        "attempt_limit": 121000,
+        "attempts": 3300,
+        "changed_edges": 215,
+        "changed_fraction": 0.8884297520661157,
+        "context": [
+          17
+        ],
+        "edge_count": 242,
+        "empty": false,
+        "intersection_edges": 27,
+        "intersection_fraction": 0.1115702479338843,
+        "nodes": 2335,
+        "ordinal": 17,
+        "rejections": {
+          "existing_edge": 699,
+          "same_edge_index": 12,
+          "self_loop": 169
+        },
+        "result_edges_sha256": "e922747f1d2d9db539a9e69c4ab0490108104cdf33c3d8502af835291483fef4",
+        "seed_sequence": [
+          2,
+          17
+        ],
+        "source_edges_sha256": "0420d497de0b2a6b3e9009616869ccccf48389d07b066293eb284f6c5549dd17",
+        "symmetric_difference_edges": 430,
+        "symmetric_difference_fraction": 0.8884297520661157,
+        "target_accepted": 2420
+      },
+      {
+        "accepted": 105060,
+        "added_edges": 4933,
+        "attempt_limit": 5253000,
+        "attempts": 536065,
+        "changed_edges": 4933,
+        "changed_fraction": 0.46954121454407005,
+        "context": [
+          18
+        ],
+        "edge_count": 10506,
+        "empty": false,
+        "intersection_edges": 5573,
+        "intersection_fraction": 0.53045878545593,
+        "nodes": 2335,
+        "ordinal": 18,
+        "rejections": {
+          "existing_edge": 422896,
+          "same_edge_index": 50,
+          "self_loop": 8059
+        },
+        "result_edges_sha256": "a73e83e69bc0aaee3465677b553b41d12b46e14a35cfe85e45fe9ec2b6154350",
+        "seed_sequence": [
+          2,
+          18
+        ],
+        "source_edges_sha256": "69b109ee556b172b0eb3901db5f367139a33bcd46e8a0069f0d482700ab531d7",
+        "symmetric_difference_edges": 9866,
+        "symmetric_difference_fraction": 0.46954121454407005,
+        "target_accepted": 105060
+      },
+      {
+        "accepted": 1700,
+        "added_edges": 156,
+        "attempt_limit": 85000,
+        "attempts": 2014,
+        "changed_edges": 156,
+        "changed_fraction": 0.9176470588235294,
+        "context": [
+          19
+        ],
+        "edge_count": 170,
+        "empty": false,
+        "intersection_edges": 14,
+        "intersection_fraction": 0.08235294117647059,
+        "nodes": 2335,
+        "ordinal": 19,
+        "rejections": {
+          "existing_edge": 226,
+          "same_edge_index": 13,
+          "self_loop": 75
+        },
+        "result_edges_sha256": "d7bedc2afda42db9c4a66fa9ec29890c3c950172638d6b6742d54e0c106af80c",
+        "seed_sequence": [
+          2,
+          19
+        ],
+        "source_edges_sha256": "4b7b8ed22214357825da5f201c3e2a8f394d75e071a5d72ee3b6b1ebd94a88c0",
+        "symmetric_difference_edges": 312,
+        "symmetric_difference_fraction": 0.9176470588235294,
+        "target_accepted": 1700
+      },
+      {
+        "accepted": 91800,
+        "added_edges": 4177,
+        "attempt_limit": 4590000,
+        "attempts": 510165,
+        "changed_edges": 4177,
+        "changed_fraction": 0.4550108932461874,
+        "context": [
+          20
+        ],
+        "edge_count": 9180,
+        "empty": false,
+        "intersection_edges": 5003,
+        "intersection_fraction": 0.5449891067538126,
+        "nodes": 2335,
+        "ordinal": 20,
+        "rejections": {
+          "existing_edge": 410151,
+          "same_edge_index": 63,
+          "self_loop": 8151
+        },
+        "result_edges_sha256": "7dd7a73ba39f0c6495f70d38c91fa7f8bc5d6eccc6b21493a3d94eff08034004",
+        "seed_sequence": [
+          2,
+          20
+        ],
+        "source_edges_sha256": "25926562d8ed26570b4b50c4a477c7b9810bdb947186524da71ec0d1de269b68",
+        "symmetric_difference_edges": 8354,
+        "symmetric_difference_fraction": 0.4550108932461874,
+        "target_accepted": 91800
+      },
+      {
+        "accepted": 151680,
+        "added_edges": 5848,
+        "attempt_limit": 7584000,
+        "attempts": 1191445,
+        "changed_edges": 5848,
+        "changed_fraction": 0.38554852320675104,
+        "context": [
+          21
+        ],
+        "edge_count": 15168,
+        "empty": false,
+        "intersection_edges": 9320,
+        "intersection_fraction": 0.614451476793249,
+        "nodes": 2335,
+        "ordinal": 21,
+        "rejections": {
+          "existing_edge": 1024094,
+          "same_edge_index": 82,
+          "self_loop": 15589
+        },
+        "result_edges_sha256": "667282ab1f19a53e7ac943859d99eb9e465ddd71fee62afde1a2104c666aee08",
+        "seed_sequence": [
+          2,
+          21
+        ],
+        "source_edges_sha256": "5b1c7a18cdd2811f57c10dba67682225cab43cae4e8fb831236ae9d84f979299",
+        "symmetric_difference_edges": 11696,
+        "symmetric_difference_fraction": 0.38554852320675104,
+        "target_accepted": 151680
+      },
+      {
+        "accepted": 60020,
+        "added_edges": 2999,
+        "attempt_limit": 3001000,
+        "attempts": 259701,
+        "changed_edges": 2999,
+        "changed_fraction": 0.4996667777407531,
+        "context": [
+          22
+        ],
+        "edge_count": 6002,
+        "empty": false,
+        "intersection_edges": 3003,
+        "intersection_fraction": 0.5003332222592469,
+        "nodes": 2335,
+        "ordinal": 22,
+        "rejections": {
+          "existing_edge": 194709,
+          "same_edge_index": 29,
+          "self_loop": 4943
+        },
+        "result_edges_sha256": "36d7a8ad3460caba4b26d436e93f1b7bf96cabd8a5cf2fae4bffce71584cc883",
+        "seed_sequence": [
+          2,
+          22
+        ],
+        "source_edges_sha256": "4b49d997f10d1daba7173e7e3d5e2c90505494511071272d525603acf03c4f87",
+        "symmetric_difference_edges": 5998,
+        "symmetric_difference_fraction": 0.4996667777407531,
+        "target_accepted": 60020
+      },
+      {
+        "accepted": 1560,
+        "added_edges": 137,
+        "attempt_limit": 78000,
+        "attempts": 2011,
+        "changed_edges": 137,
+        "changed_fraction": 0.8782051282051282,
+        "context": [
+          23
+        ],
+        "edge_count": 156,
+        "empty": false,
+        "intersection_edges": 19,
+        "intersection_fraction": 0.12179487179487179,
+        "nodes": 2335,
+        "ordinal": 23,
+        "rejections": {
+          "existing_edge": 314,
+          "same_edge_index": 18,
+          "self_loop": 119
+        },
+        "result_edges_sha256": "21ca34bbcf2b48b1cace761fbec20f08a492ff857d0540f88a3c7114782f09d5",
+        "seed_sequence": [
+          2,
+          23
+        ],
+        "source_edges_sha256": "3a4bc568e3a64bc2d85e7c908325cfde444960195873aeac64d6ae4c1688e23d",
+        "symmetric_difference_edges": 274,
+        "symmetric_difference_fraction": 0.8782051282051282,
+        "target_accepted": 1560
+      },
+      {
+        "accepted": 14500,
+        "added_edges": 947,
+        "attempt_limit": 725000,
+        "attempts": 36249,
+        "changed_edges": 947,
+        "changed_fraction": 0.6531034482758621,
+        "context": [
+          24
+        ],
+        "edge_count": 1450,
+        "empty": false,
+        "intersection_edges": 503,
+        "intersection_fraction": 0.3468965517241379,
+        "nodes": 2335,
+        "ordinal": 24,
+        "rejections": {
+          "existing_edge": 20457,
+          "same_edge_index": 26,
+          "self_loop": 1266
+        },
+        "result_edges_sha256": "303a294df263887ca156ad7968eb43df260759e9e1b0220623145be0bcbfee9d",
+        "seed_sequence": [
+          2,
+          24
+        ],
+        "source_edges_sha256": "8349399675e7a7bf10100b540810abdcb9bf89d979a0b422e2c800b4b51ef994",
+        "symmetric_difference_edges": 1894,
+        "symmetric_difference_fraction": 0.6531034482758621,
+        "target_accepted": 14500
+      },
+      {
+        "accepted": 159220,
+        "added_edges": 5644,
+        "attempt_limit": 7961000,
+        "attempts": 1597974,
+        "changed_edges": 5644,
+        "changed_fraction": 0.3544780806431353,
+        "context": [
+          25
+        ],
+        "edge_count": 15922,
+        "empty": false,
+        "intersection_edges": 10278,
+        "intersection_fraction": 0.6455219193568648,
+        "nodes": 2335,
+        "ordinal": 25,
+        "rejections": {
+          "existing_edge": 1417528,
+          "same_edge_index": 102,
+          "self_loop": 21124
+        },
+        "result_edges_sha256": "88f471b66968958014c365a41ffeb120c2d560e0b088f4d5ab3c86ed7d3d46bb",
+        "seed_sequence": [
+          2,
+          25
+        ],
+        "source_edges_sha256": "56ca0b9b5f7a6dc50a21851d3d65ef49c2d569c975e6700a8a15cc2ccb7f3ad6",
+        "symmetric_difference_edges": 11288,
+        "symmetric_difference_fraction": 0.3544780806431353,
+        "target_accepted": 159220
+      },
+      {
+        "accepted": 16540,
+        "added_edges": 968,
+        "attempt_limit": 827000,
+        "attempts": 49689,
+        "changed_edges": 968,
+        "changed_fraction": 0.585247883917775,
+        "context": [
+          26
+        ],
+        "edge_count": 1654,
+        "empty": false,
+        "intersection_edges": 686,
+        "intersection_fraction": 0.4147521160822249,
+        "nodes": 2335,
+        "ordinal": 26,
+        "rejections": {
+          "existing_edge": 31530,
+          "same_edge_index": 29,
+          "self_loop": 1590
+        },
+        "result_edges_sha256": "7f79e443c3a4570fe2c535eb8c9ecca03bdbe11d9360f79a51444e435ef1dc6c",
+        "seed_sequence": [
+          2,
+          26
+        ],
+        "source_edges_sha256": "07ac7d6546544b831139ab833c3990aadcd5e20ab479e845d3ac9b1f0096d0b1",
+        "symmetric_difference_edges": 1936,
+        "symmetric_difference_fraction": 0.585247883917775,
+        "target_accepted": 16540
+      },
+      {
+        "accepted": 4360,
+        "added_edges": 342,
+        "attempt_limit": 218000,
+        "attempts": 6962,
+        "changed_edges": 342,
+        "changed_fraction": 0.7844036697247706,
+        "context": [
+          27
+        ],
+        "edge_count": 436,
+        "empty": false,
+        "intersection_edges": 94,
+        "intersection_fraction": 0.21559633027522937,
+        "nodes": 2335,
+        "ordinal": 27,
+        "rejections": {
+          "existing_edge": 2274,
+          "same_edge_index": 20,
+          "self_loop": 308
+        },
+        "result_edges_sha256": "7098c9c0a551ed9d2470030b299f8b1bc4fa840a540b8ada55984ede0bb155d6",
+        "seed_sequence": [
+          2,
+          27
+        ],
+        "source_edges_sha256": "b334242cda92e0867a2e61a6f7fdc6b565baa2caec0bd028f07733c4f1bf54a8",
+        "symmetric_difference_edges": 684,
+        "symmetric_difference_fraction": 0.7844036697247706,
+        "target_accepted": 4360
+      },
+      {
+        "accepted": 130440,
+        "added_edges": 5941,
+        "attempt_limit": 6522000,
+        "attempts": 724990,
+        "changed_edges": 5941,
+        "changed_fraction": 0.4554584483287335,
+        "context": [
+          28
+        ],
+        "edge_count": 13044,
+        "empty": false,
+        "intersection_edges": 7103,
+        "intersection_fraction": 0.5445415516712665,
+        "nodes": 2335,
+        "ordinal": 28,
+        "rejections": {
+          "existing_edge": 584623,
+          "same_edge_index": 57,
+          "self_loop": 9870
+        },
+        "result_edges_sha256": "7846cca1a4362ea40bb422893660ffadb7d6a8b7d2a0e47cde29c49d58bd9689",
+        "seed_sequence": [
+          2,
+          28
+        ],
+        "source_edges_sha256": "43c2ff326768d976e2da38a1a38fc1bbb85a7b6f63f189d3282471fcb8d4e729",
+        "symmetric_difference_edges": 11882,
+        "symmetric_difference_fraction": 0.4554584483287335,
+        "target_accepted": 130440
+      },
+      {
+        "accepted": 51360,
+        "added_edges": 2725,
+        "attempt_limit": 2568000,
+        "attempts": 194536,
+        "changed_edges": 2725,
+        "changed_fraction": 0.5305685358255452,
+        "context": [
+          29
+        ],
+        "edge_count": 5136,
+        "empty": false,
+        "intersection_edges": 2411,
+        "intersection_fraction": 0.4694314641744548,
+        "nodes": 2335,
+        "ordinal": 29,
+        "rejections": {
+          "existing_edge": 139186,
+          "same_edge_index": 35,
+          "self_loop": 3955
+        },
+        "result_edges_sha256": "4cb02a25d2a6ec1715e755ea1c1aadce4f725ebd78d4857a17efcff41a640552",
+        "seed_sequence": [
+          2,
+          29
+        ],
+        "source_edges_sha256": "5800ea64219c4d87f9a73d506431bc96c8aac722f200497f102875d471ddcdf0",
+        "symmetric_difference_edges": 5450,
+        "symmetric_difference_fraction": 0.5305685358255452,
+        "target_accepted": 51360
+      },
+      {
+        "accepted": 100160,
+        "added_edges": 4349,
+        "attempt_limit": 5008000,
+        "attempts": 607404,
+        "changed_edges": 4349,
+        "changed_fraction": 0.4342052715654952,
+        "context": [
+          30
+        ],
+        "edge_count": 10016,
+        "empty": false,
+        "intersection_edges": 5667,
+        "intersection_fraction": 0.5657947284345048,
+        "nodes": 2335,
+        "ordinal": 30,
+        "rejections": {
+          "existing_edge": 497706,
+          "same_edge_index": 62,
+          "self_loop": 9476
+        },
+        "result_edges_sha256": "ff9a182a8db9ad45309c711789c3073e5f9a9b1405eb017e1574731099ac6197",
+        "seed_sequence": [
+          2,
+          30
+        ],
+        "source_edges_sha256": "838f7156733a97f3772303ff7808a5d548eb19b83da89e5b442bf2f98d0374a6",
+        "symmetric_difference_edges": 8698,
+        "symmetric_difference_fraction": 0.4342052715654952,
+        "target_accepted": 100160
+      },
+      {
+        "accepted": 76380,
+        "added_edges": 3824,
+        "attempt_limit": 3819000,
+        "attempts": 339600,
+        "changed_edges": 3824,
+        "changed_fraction": 0.5006546216286986,
+        "context": [
+          31
+        ],
+        "edge_count": 7638,
+        "empty": false,
+        "intersection_edges": 3814,
+        "intersection_fraction": 0.4993453783713014,
+        "nodes": 2335,
+        "ordinal": 31,
+        "rejections": {
+          "existing_edge": 257385,
+          "same_edge_index": 34,
+          "self_loop": 5801
+        },
+        "result_edges_sha256": "df3341c848de3d8f1dd1481888d4ee3b7d5ee5461fd2166bf9d34da5d5c17964",
+        "seed_sequence": [
+          2,
+          31
+        ],
+        "source_edges_sha256": "77f0fd0e294b6a0d4c814ae7db8974bbe267a0d5f795de436b892caea321c664",
+        "symmetric_difference_edges": 7648,
+        "symmetric_difference_fraction": 0.5006546216286986,
+        "target_accepted": 76380
+      },
+      {
+        "accepted": 128940,
+        "added_edges": 6035,
+        "attempt_limit": 6447000,
+        "attempts": 675810,
+        "changed_edges": 6035,
+        "changed_fraction": 0.4680471537149062,
+        "context": [
+          32
+        ],
+        "edge_count": 12894,
+        "empty": false,
+        "intersection_edges": 6859,
+        "intersection_fraction": 0.5319528462850939,
+        "nodes": 2335,
+        "ordinal": 32,
+        "rejections": {
+          "existing_edge": 537912,
+          "same_edge_index": 56,
+          "self_loop": 8902
+        },
+        "result_edges_sha256": "282bb09db547fc6ed07f23db001d3eb9d385a98efee5db89fc40d24d441c52af",
+        "seed_sequence": [
+          2,
+          32
+        ],
+        "source_edges_sha256": "3f9a18c615fc82b92ace89e66420143fd45399996dd75ba6072398fae827e1b6",
+        "symmetric_difference_edges": 12070,
+        "symmetric_difference_fraction": 0.4680471537149062,
+        "target_accepted": 128940
+      },
+      {
+        "accepted": 113620,
+        "added_edges": 5102,
+        "attempt_limit": 5681000,
+        "attempts": 647912,
+        "changed_edges": 5102,
+        "changed_fraction": 0.44904066185530717,
+        "context": [
+          33
+        ],
+        "edge_count": 11362,
+        "empty": false,
+        "intersection_edges": 6260,
+        "intersection_fraction": 0.5509593381446929,
+        "nodes": 2335,
+        "ordinal": 33,
+        "rejections": {
+          "existing_edge": 524844,
+          "same_edge_index": 55,
+          "self_loop": 9393
+        },
+        "result_edges_sha256": "c34807a4960e624731d700f6fc704023243de7147c3fe7eadc29a01ecba758ae",
+        "seed_sequence": [
+          2,
+          33
+        ],
+        "source_edges_sha256": "02526dfffc264b09834648e4d5658052ff8406fbce1eb161bd31fa54bbf22a13",
+        "symmetric_difference_edges": 10204,
+        "symmetric_difference_fraction": 0.44904066185530717,
+        "target_accepted": 113620
+      },
+      {
+        "accepted": 184020,
+        "added_edges": 6928,
+        "attempt_limit": 9201000,
+        "attempts": 1533590,
+        "changed_edges": 6928,
+        "changed_fraction": 0.37648081730246713,
+        "context": [
+          34
+        ],
+        "edge_count": 18402,
+        "empty": false,
+        "intersection_edges": 11474,
+        "intersection_fraction": 0.6235191826975329,
+        "nodes": 2335,
+        "ordinal": 34,
+        "rejections": {
+          "existing_edge": 1331291,
+          "same_edge_index": 78,
+          "self_loop": 18201
+        },
+        "result_edges_sha256": "b079585903a56cb6458a27769ad6ad4baf71e40413e02c8fae909e9e59d5913a",
+        "seed_sequence": [
+          2,
+          34
+        ],
+        "source_edges_sha256": "8f3bd272da77abbc66b2c5db5628cb74ba5ff01e6f93b5e64351c680fc25ffff",
+        "symmetric_difference_edges": 13856,
+        "symmetric_difference_fraction": 0.37648081730246713,
+        "target_accepted": 184020
+      },
+      {
+        "accepted": 2680,
+        "added_edges": 222,
+        "attempt_limit": 134000,
+        "attempts": 3716,
+        "changed_edges": 222,
+        "changed_fraction": 0.8283582089552238,
+        "context": [
+          35
+        ],
+        "edge_count": 268,
+        "empty": false,
+        "intersection_edges": 46,
+        "intersection_fraction": 0.17164179104477612,
+        "nodes": 2335,
+        "ordinal": 35,
+        "rejections": {
+          "existing_edge": 831,
+          "same_edge_index": 9,
+          "self_loop": 196
+        },
+        "result_edges_sha256": "f667039466c8813f1222da449f586937981396e6051da62d61bd0cbdae81832f",
+        "seed_sequence": [
+          2,
+          35
+        ],
+        "source_edges_sha256": "1117b2e48920caffe6bee488786fa45cf5ce8224c7cc589a1573a753ca79748b",
+        "symmetric_difference_edges": 444,
+        "symmetric_difference_fraction": 0.8283582089552238,
+        "target_accepted": 2680
+      },
+      {
+        "accepted": 38520,
+        "added_edges": 2198,
+        "attempt_limit": 1926000,
+        "attempts": 123746,
+        "changed_edges": 2198,
+        "changed_fraction": 0.5706126687435099,
+        "context": [
+          36
+        ],
+        "edge_count": 3852,
+        "empty": false,
+        "intersection_edges": 1654,
+        "intersection_fraction": 0.42938733125649015,
+        "nodes": 2335,
+        "ordinal": 36,
+        "rejections": {
+          "existing_edge": 82466,
+          "same_edge_index": 27,
+          "self_loop": 2733
+        },
+        "result_edges_sha256": "056fcaeb39b7532cc778edc0e659f19a2f8f43759efd20db292ba40227b2a6b3",
+        "seed_sequence": [
+          2,
+          36
+        ],
+        "source_edges_sha256": "d782fa8f21bd4af17cb8b3cbb0bef0201ffc35bc193b4bd041ba29e6eaf68d21",
+        "symmetric_difference_edges": 4396,
+        "symmetric_difference_fraction": 0.5706126687435099,
+        "target_accepted": 38520
+      },
+      {
+        "accepted": 2360,
+        "added_edges": 191,
+        "attempt_limit": 118000,
+        "attempts": 3728,
+        "changed_edges": 191,
+        "changed_fraction": 0.809322033898305,
+        "context": [
+          37
+        ],
+        "edge_count": 236,
+        "empty": false,
+        "intersection_edges": 45,
+        "intersection_fraction": 0.1906779661016949,
+        "nodes": 2335,
+        "ordinal": 37,
+        "rejections": {
+          "existing_edge": 1109,
+          "same_edge_index": 20,
+          "self_loop": 239
+        },
+        "result_edges_sha256": "c0ae8010196ea9e4b68c5773894fe019e882bc1f55885f7598a6e5c90eac2414",
+        "seed_sequence": [
+          2,
+          37
+        ],
+        "source_edges_sha256": "0abfd23e9df837e6f20ff9f91e897fffa466f88512e5d76d83a3d68dcfd0bed1",
+        "symmetric_difference_edges": 382,
+        "symmetric_difference_fraction": 0.809322033898305,
+        "target_accepted": 2360
+      },
+      {
+        "accepted": 27100,
+        "added_edges": 1890,
+        "attempt_limit": 1355000,
+        "attempts": 56703,
+        "changed_edges": 1890,
+        "changed_fraction": 0.6974169741697417,
+        "context": [
+          38
+        ],
+        "edge_count": 2710,
+        "empty": false,
+        "intersection_edges": 820,
+        "intersection_fraction": 0.3025830258302583,
+        "nodes": 2335,
+        "ordinal": 38,
+        "rejections": {
+          "existing_edge": 28291,
+          "same_edge_index": 28,
+          "self_loop": 1284
+        },
+        "result_edges_sha256": "8b0ff87bd5f72243020f805d68db517ca906fed70a478eab2693b83dc2375c27",
+        "seed_sequence": [
+          2,
+          38
+        ],
+        "source_edges_sha256": "a6045fd99af5ce0fdde47de093b56db7989029a1e58cb6c5ee724915a6f4fbbb",
+        "symmetric_difference_edges": 3780,
+        "symmetric_difference_fraction": 0.6974169741697417,
+        "target_accepted": 27100
+      },
+      {
+        "accepted": 43620,
+        "added_edges": 2894,
+        "attempt_limit": 2181000,
+        "attempts": 101595,
+        "changed_edges": 2894,
+        "changed_fraction": 0.6634571297569922,
+        "context": [
+          39
+        ],
+        "edge_count": 4362,
+        "empty": false,
+        "intersection_edges": 1468,
+        "intersection_fraction": 0.3365428702430078,
+        "nodes": 2335,
+        "ordinal": 39,
+        "rejections": {
+          "existing_edge": 56098,
+          "same_edge_index": 23,
+          "self_loop": 1854
+        },
+        "result_edges_sha256": "8f913824726da16315f822408fa2ddd5ab642d9e6b99ab2b2187cb16148d348b",
+        "seed_sequence": [
+          2,
+          39
+        ],
+        "source_edges_sha256": "d7b4b2d3b834179ea4189c40881894d8b895f2b6d62fec3b439c8487c3d1b70b",
+        "symmetric_difference_edges": 5788,
+        "symmetric_difference_fraction": 0.6634571297569922,
+        "target_accepted": 43620
+      },
+      {
+        "accepted": 57580,
+        "added_edges": 3352,
+        "attempt_limit": 2879000,
+        "attempts": 179149,
+        "changed_edges": 3352,
+        "changed_fraction": 0.5821465786731504,
+        "context": [
+          40
+        ],
+        "edge_count": 5758,
+        "empty": false,
+        "intersection_edges": 2406,
+        "intersection_fraction": 0.4178534213268496,
+        "nodes": 2335,
+        "ordinal": 40,
+        "rejections": {
+          "existing_edge": 118245,
+          "same_edge_index": 36,
+          "self_loop": 3288
+        },
+        "result_edges_sha256": "ccc6fc95d86d5355bf79efd1fbc6d82b9c8df389a80f52eaae991e38d35dd33d",
+        "seed_sequence": [
+          2,
+          40
+        ],
+        "source_edges_sha256": "d832737fefed15803adff11e694c788e2e8d3d6b589b6a27a6775b9c65eb0b70",
+        "symmetric_difference_edges": 6704,
+        "symmetric_difference_fraction": 0.5821465786731504,
+        "target_accepted": 57580
+      },
+      {
+        "accepted": 162300,
+        "added_edges": 6618,
+        "attempt_limit": 8115000,
+        "attempts": 1100789,
+        "changed_edges": 6618,
+        "changed_fraction": 0.4077634011090573,
+        "context": [
+          41
+        ],
+        "edge_count": 16230,
+        "empty": false,
+        "intersection_edges": 9612,
+        "intersection_fraction": 0.5922365988909427,
+        "nodes": 2335,
+        "ordinal": 41,
+        "rejections": {
+          "existing_edge": 924912,
+          "same_edge_index": 65,
+          "self_loop": 13512
+        },
+        "result_edges_sha256": "8da2defb565f2b1c4cec8258c60b7422bd4fc81d69545a4a3e956ad8977bce73",
+        "seed_sequence": [
+          2,
+          41
+        ],
+        "source_edges_sha256": "d0ca8dcdcf8dfe76dd7a2f57463f78838612f491bd95f9187c516a08ea6ed4f0",
+        "symmetric_difference_edges": 13236,
+        "symmetric_difference_fraction": 0.4077634011090573,
+        "target_accepted": 162300
+      },
+      {
+        "accepted": 41780,
+        "added_edges": 2831,
+        "attempt_limit": 2089000,
+        "attempts": 92344,
+        "changed_edges": 2831,
+        "changed_fraction": 0.6775969363331737,
+        "context": [
+          42
+        ],
+        "edge_count": 4178,
+        "empty": false,
+        "intersection_edges": 1347,
+        "intersection_fraction": 0.32240306366682625,
+        "nodes": 2335,
+        "ordinal": 42,
+        "rejections": {
+          "existing_edge": 48856,
+          "same_edge_index": 22,
+          "self_loop": 1686
+        },
+        "result_edges_sha256": "80ecf56926e989b2e7c50f8cdac738041097bf072a1732565c7e5386bd5b7e17",
+        "seed_sequence": [
+          2,
+          42
+        ],
+        "source_edges_sha256": "0497f52743e3d585ba18f1280c621d80c459ddeb787deb8f31fd40d87069d859",
+        "symmetric_difference_edges": 5662,
+        "symmetric_difference_fraction": 0.6775969363331737,
+        "target_accepted": 41780
+      },
+      {
+        "accepted": 7880,
+        "added_edges": 608,
+        "attempt_limit": 394000,
+        "attempts": 13782,
+        "changed_edges": 608,
+        "changed_fraction": 0.7715736040609137,
+        "context": [
+          43
+        ],
+        "edge_count": 788,
+        "empty": false,
+        "intersection_edges": 180,
+        "intersection_fraction": 0.22842639593908629,
+        "nodes": 2335,
+        "ordinal": 43,
+        "rejections": {
+          "existing_edge": 5356,
+          "same_edge_index": 10,
+          "self_loop": 536
+        },
+        "result_edges_sha256": "4b9152ae46f0e3106c385b625ba6c8a72999c426ffe1b884e787c10b11f3eb6b",
+        "seed_sequence": [
+          2,
+          43
+        ],
+        "source_edges_sha256": "679710ad0630695ca9bf05e3b787a4c5960cc2c5e494cee3a37bb4a928c5a727",
+        "symmetric_difference_edges": 1216,
+        "symmetric_difference_fraction": 0.7715736040609137,
+        "target_accepted": 7880
+      },
+      {
+        "accepted": 51840,
+        "added_edges": 3093,
+        "attempt_limit": 2592000,
+        "attempts": 148252,
+        "changed_edges": 3093,
+        "changed_fraction": 0.5966435185185185,
+        "context": [
+          44
+        ],
+        "edge_count": 5184,
+        "empty": false,
+        "intersection_edges": 2091,
+        "intersection_fraction": 0.40335648148148145,
+        "nodes": 2335,
+        "ordinal": 44,
+        "rejections": {
+          "existing_edge": 93776,
+          "same_edge_index": 32,
+          "self_loop": 2604
+        },
+        "result_edges_sha256": "0d4c0909eac9724451321598ded7e38f8342cad5d0b2bfade856da01cda58b41",
+        "seed_sequence": [
+          2,
+          44
+        ],
+        "source_edges_sha256": "0f8ca3589c5ed071e602f317f79ac488418a09cccca9551cc5e73dace1bf8b39",
+        "symmetric_difference_edges": 6186,
+        "symmetric_difference_fraction": 0.5966435185185185,
+        "target_accepted": 51840
+      },
+      {
+        "accepted": 38020,
+        "added_edges": 2219,
+        "attempt_limit": 1901000,
+        "attempts": 117680,
+        "changed_edges": 2219,
+        "changed_fraction": 0.5836401893740136,
+        "context": [
+          45
+        ],
+        "edge_count": 3802,
+        "empty": false,
+        "intersection_edges": 1583,
+        "intersection_fraction": 0.4163598106259863,
+        "nodes": 2335,
+        "ordinal": 45,
+        "rejections": {
+          "existing_edge": 76988,
+          "same_edge_index": 37,
+          "self_loop": 2635
+        },
+        "result_edges_sha256": "7f0a2ff7b14bfa9c72f0217b2ba69a3e200a75913a8b5688f962edf75e03cf37",
+        "seed_sequence": [
+          2,
+          45
+        ],
+        "source_edges_sha256": "74222daa7fbc3c7e548d382232c6ccf893ebc4fa70734aa1e6a3a9a22634b8ce",
+        "symmetric_difference_edges": 4438,
+        "symmetric_difference_fraction": 0.5836401893740136,
+        "target_accepted": 38020
+      },
+      {
+        "accepted": 62040,
+        "added_edges": 3267,
+        "attempt_limit": 3102000,
+        "attempts": 245297,
+        "changed_edges": 3267,
+        "changed_fraction": 0.526595744680851,
+        "context": [
+          46
+        ],
+        "edge_count": 6204,
+        "empty": false,
+        "intersection_edges": 2937,
+        "intersection_fraction": 0.4734042553191489,
+        "nodes": 2335,
+        "ordinal": 46,
+        "rejections": {
+          "existing_edge": 178714,
+          "same_edge_index": 40,
+          "self_loop": 4503
+        },
+        "result_edges_sha256": "0b3f79f4d28bd2800be9f1868b918b9a0e92be5a3a20e1aaf7a555cb757d2261",
+        "seed_sequence": [
+          2,
+          46
+        ],
+        "source_edges_sha256": "25ea0d04f6093affb277a31e96e51268c421d773183688a7d896b998fdf1e84b",
+        "symmetric_difference_edges": 6534,
+        "symmetric_difference_fraction": 0.526595744680851,
+        "target_accepted": 62040
+      },
+      {
+        "accepted": 107060,
+        "added_edges": 4403,
+        "attempt_limit": 5353000,
+        "attempts": 741617,
+        "changed_edges": 4403,
+        "changed_fraction": 0.41126471137679804,
+        "context": [
+          47
+        ],
+        "edge_count": 10706,
+        "empty": false,
+        "intersection_edges": 6303,
+        "intersection_fraction": 0.5887352886232019,
+        "nodes": 2335,
+        "ordinal": 47,
+        "rejections": {
+          "existing_edge": 623117,
+          "same_edge_index": 70,
+          "self_loop": 11370
+        },
+        "result_edges_sha256": "588023d2fbe1a112090e37f73bca382f3786fb84a9fc107a81bdb0ecfdc77352",
+        "seed_sequence": [
+          2,
+          47
+        ],
+        "source_edges_sha256": "424915025055685d70be2f469a2eba893969577b71265028854c26df9de3aa24",
+        "symmetric_difference_edges": 8806,
+        "symmetric_difference_fraction": 0.41126471137679804,
+        "target_accepted": 107060
+      },
+      {
+        "accepted": 26700,
+        "added_edges": 1665,
+        "attempt_limit": 1335000,
+        "attempts": 77141,
+        "changed_edges": 1665,
+        "changed_fraction": 0.6235955056179775,
+        "context": [
+          48
+        ],
+        "edge_count": 2670,
+        "empty": false,
+        "intersection_edges": 1005,
+        "intersection_fraction": 0.37640449438202245,
+        "nodes": 2335,
+        "ordinal": 48,
+        "rejections": {
+          "existing_edge": 48457,
+          "same_edge_index": 30,
+          "self_loop": 1954
+        },
+        "result_edges_sha256": "b7b27bd72c2bf612e485953eba9eab34471e9159eac7b95444f7597363e435f7",
+        "seed_sequence": [
+          2,
+          48
+        ],
+        "source_edges_sha256": "543b4d51d4f3513bb32b8d32be74d911d1490d81a85aef903993af94a487d4ba",
+        "symmetric_difference_edges": 3330,
+        "symmetric_difference_fraction": 0.6235955056179775,
+        "target_accepted": 26700
+      },
+      {
+        "accepted": 180600,
+        "added_edges": 8266,
+        "attempt_limit": 9030000,
+        "attempts": 955657,
+        "changed_edges": 8266,
+        "changed_fraction": 0.4576965669988926,
+        "context": [
+          49
+        ],
+        "edge_count": 18060,
+        "empty": false,
+        "intersection_edges": 9794,
+        "intersection_fraction": 0.5423034330011074,
+        "nodes": 2335,
+        "ordinal": 49,
+        "rejections": {
+          "existing_edge": 764314,
+          "same_edge_index": 41,
+          "self_loop": 10702
+        },
+        "result_edges_sha256": "17d70994c5459ecb0fdf4f70243312d13c1c20ea44529d507eba7f7e6d6aa50c",
+        "seed_sequence": [
+          2,
+          49
+        ],
+        "source_edges_sha256": "35890ead43bf643672593a6387ed40b4c32ac81556a50eb65fc03ae2f44955c9",
+        "symmetric_difference_edges": 16532,
+        "symmetric_difference_fraction": 0.4576965669988926,
+        "target_accepted": 180600
+      },
+      {
+        "accepted": 38060,
+        "added_edges": 2378,
+        "attempt_limit": 1903000,
+        "attempts": 100611,
+        "changed_edges": 2378,
+        "changed_fraction": 0.6248029427220179,
+        "context": [
+          50
+        ],
+        "edge_count": 3806,
+        "empty": false,
+        "intersection_edges": 1428,
+        "intersection_fraction": 0.37519705727798214,
+        "nodes": 2335,
+        "ordinal": 50,
+        "rejections": {
+          "existing_edge": 60355,
+          "same_edge_index": 32,
+          "self_loop": 2164
+        },
+        "result_edges_sha256": "9b29277dd987ec76731cc666e610a4b33638f7324e49f882320b23177659a481",
+        "seed_sequence": [
+          2,
+          50
+        ],
+        "source_edges_sha256": "46e18ac8d65cbef60c1cd32d012eae9b6ff89cc9f9bcfd526725d7323295d1a6",
+        "symmetric_difference_edges": 4756,
+        "symmetric_difference_fraction": 0.6248029427220179,
+        "target_accepted": 38060
+      },
+      {
+        "accepted": 11360,
+        "added_edges": 894,
+        "attempt_limit": 568000,
+        "attempts": 18651,
+        "changed_edges": 894,
+        "changed_fraction": 0.7869718309859155,
+        "context": [
+          51
+        ],
+        "edge_count": 1136,
+        "empty": false,
+        "intersection_edges": 242,
+        "intersection_fraction": 0.2130281690140845,
+        "nodes": 2335,
+        "ordinal": 51,
+        "rejections": {
+          "existing_edge": 6761,
+          "same_edge_index": 24,
+          "self_loop": 506
+        },
+        "result_edges_sha256": "adc71849cb5d7ad85124b00e676e5c708ea32e5637aee0aaf6277f973d62eeb7",
+        "seed_sequence": [
+          2,
+          51
+        ],
+        "source_edges_sha256": "2d92d783c178af58f14bd976d71ace30e07ee059f9222649a670adc03b9e04a2",
+        "symmetric_difference_edges": 1788,
+        "symmetric_difference_fraction": 0.7869718309859155,
+        "target_accepted": 11360
+      }
+    ],
+    "degree_summary": {
+      "result": {
+        "in_degree_sum": 321374,
+        "isolated_incoming_nodes": 111227,
+        "max_in_degree": 270,
+        "max_out_degree": 270,
+        "out_degree_sum": 321374
+      },
+      "source": {
+        "in_degree_sum": 321374,
+        "isolated_incoming_nodes": 111227,
+        "max_in_degree": 270,
+        "max_out_degree": 270,
+        "out_degree_sum": 321374
+      }
+    },
+    "model_rng_consumed": false,
+    "node_keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+    "preserves_reverse_edge_symmetry": false,
+    "process_hash_iteration_used": false,
+    "proposal_batch_size": 4096,
+    "result_edges_sha256": "0215f7df908200e3c64c7fc26a63c5592f9c176595c29a7ca606176ea8488936",
+    "seed_derivation": "PCG64(SeedSequence([shuffle_seed, context_id...]))",
+    "shuffle_seed": 2,
+    "source_edges_sha256": "148e276b3def4e92fb9511229fcee8f0d276be1edb76bde80c2368d6e118f14e",
+    "symmetry_is_not_a_shuffle_constraint": true,
+    "target_rule": "accept 10*E_ctx swaps, attempt at most 500*E_ctx",
+    "totals": {
+      "accepted": 3213740,
+      "attempts": 19682858,
+      "contexts": 52,
+      "edges": 321374,
+      "empty_contexts": 0,
+      "nonempty_contexts": 52
+    },
+    "uniform_sampling_claimed": false
+  },
+  "source_kind": "published",
+  "source_path": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\dataset\\graph\\r2.parquet",
+  "source_sha256": "4cc1f399dd9061920179ade34d018fcbd58c3e00bb40f303b91e9aba99f9e12c",
+  "symmetry_rate": 1.0,
+  "unique_edges": 321374
+}

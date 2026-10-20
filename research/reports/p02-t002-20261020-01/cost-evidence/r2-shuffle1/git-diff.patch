@@ -1,0 +1,151 @@
+diff --git a/benchmark/graph_value_skeleton/prepared.py b/benchmark/graph_value_skeleton/prepared.py
+index 1f57601..898153c 100644
+--- a/benchmark/graph_value_skeleton/prepared.py
++++ b/benchmark/graph_value_skeleton/prepared.py
+@@ -3,6 +3,7 @@ from __future__ import annotations
+ 
+ import hashlib
+ import json
++import math
+ import os
+ import sys
+ import time
+@@ -24,6 +25,47 @@ def sha(path):
+     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+ 
+ 
++def _validate_generation_records(directory, provenance):
++    """Validate recorded identities using saved JSON only, not current sources."""
++    def digest(value):
++        return (isinstance(value, str) and len(value) == 64
++                and all(character in '0123456789abcdef' for character in value))
++
++    def fail(reason):
++        raise ValueError(f'prepared generation provenance: {reason}')
++
++    generator = provenance.get('generator')
++    if not isinstance(generator, dict):
++        fail('missing generator identity')
++    hashes = generator.get('source_sha256')
++    names = ('shuffle.py', 'graph.py', 'protocol.py')
++    if not isinstance(hashes, dict) or set(hashes) != set(names):
++        fail('incomplete generator source identity')
++    source = read_json(directory / 'source.json')
++    if not isinstance(source, dict) or not isinstance(source.get('files'), dict):
++        fail('missing source identity')
++    for name in names:
++        entry = source['files'].get('benchmark/graph_value_skeleton/' + name)
++        if (not digest(hashes[name]) or not isinstance(entry, dict)
++                or entry.get('sha256') != hashes[name]):
++            fail(f'generator/source identity mismatch: {name}')
++    if not isinstance(source.get('protocol'), dict) or not digest(source['protocol'].get('sha256')):
++        fail('missing scientific protocol identity')
++    environment = read_json(directory / 'environment.json')
++    if not isinstance(environment, dict) or not isinstance(environment.get('packages'), dict):
++        fail('missing environment identity')
++    python_version = generator.get('python')
++    if (not isinstance(python_version, list) or len(python_version) != 3
++            or any(type(value) is not int or value < 0 for value in python_version)
++            or environment.get('python_version_info') != python_version):
++        fail('generator/environment Python identity mismatch')
++    for name in ('numpy', 'pandas', 'pyarrow'):
++        version = generator.get(name)
++        if (not isinstance(version, str) or not version.strip()
++                or environment['packages'].get(name) != version):
++            fail(f'generator/environment package identity mismatch: {name}')
++
++
+ def generator_identity():
+     """Only the generator's numerical source and runtime, independent of paths."""
+     import pandas
+@@ -72,9 +114,18 @@ def prepare(config):
+         durations[stage] = time.perf_counter() - before
+         stage = 'shuffle'
+         before = time.perf_counter()
++        context_times = {}
++        def record_progress(payload):
++            current = payload['current']
++            context = tuple(current['context'])
++            if 'elapsed_seconds' in current:
++                context_times[context] = current['elapsed_seconds']
++            elif current.get('empty'):
++                context_times[context] = 0.0
++            run.write_json('progress.json',
++                {**payload, 'stage': stage, 'updated': artifacts.now()})
+         result = shuffle.shuffle_graph(config.data_name, dataset.key_array, source_graph.edges,
+-            config.shuffle_seed, progress=lambda payload: run.write_json('progress.json',
+-                {**payload, 'stage': stage, 'updated': artifacts.now()}))
++            config.shuffle_seed, progress=record_progress)
+         durations[stage] = time.perf_counter() - before
+         run.save_npy('nodes.npy', dataset.key_array)
+         run.save_npy('source-edges.npy', source_graph.edges)
+@@ -90,6 +141,10 @@ def prepare(config):
+             raise ValueError(f'execution source changed: {problems}')
+         durations['total'] = time.perf_counter() - started
+         run.write_json('measurements.json', {'durations_seconds': durations,
++            'context_timings': [{'context': row['context'],
++                'seconds': context_times[tuple(row['context'])],
++                'method': 'swap progress elapsed; empty context has zero swap work'}
++                for row in result.audit['contexts']],
+             'peak_memory': peak_memory(), 'purpose': 'development graph-only',
+             'nodes': len(dataset.key_array), 'edges': len(result.edges)})
+         run.set_status('success', stage='complete', purpose='development')
+@@ -124,6 +179,7 @@ def load(directory, *, keys=None, source_edges=None, data_name=None, shuffle_see
+     provenance = read_json(directory / 'provenance.json')
+     if provenance.get('schema') != 'prepared-shuffle-v1' or provenance.get('purpose') != 'development':
+         raise ValueError('unsupported prepared artifact schema/purpose')
++    _validate_generation_records(directory, provenance)
+     protocol.validate_dataset_name(provenance.get('data_name'))
+     protocol.validate_shuffle_seed(protocol.METHOD_SHUFFLED, provenance.get('shuffle_seed'))
+     arrays = {name: np.load(directory / name, allow_pickle=False)
+@@ -151,6 +207,15 @@ def load(directory, *, keys=None, source_edges=None, data_name=None, shuffle_see
+     validate_shuffle_audit(saved_keys, original, result_edges, audit, provenance['shuffle_seed'], problems)
+     if problems:
+         raise ValueError('; '.join(problems))
++    measurements = read_json(directory / 'measurements.json')
++    timings = measurements.get('context_timings') if isinstance(measurements, dict) else None
++    if (not isinstance(timings, list) or len(timings) != len(audit['contexts'])
++            or any(not isinstance(row, dict) or row.get('context') != context['context']
++                or type(row.get('seconds')) not in (int, float)
++                or not math.isfinite(row['seconds']) or row['seconds'] < 0
++                or not isinstance(row.get('method'), str) or not row['method'].strip()
++                for row, context in zip(timings, audit['contexts']))):
++        raise ValueError('prepared generation context timings missing or invalid')
+     shuffled = shuffle.ShuffledGraph(provenance['data_name'], provenance['shuffle_seed'], original, result_edges, audit)
+     if provenance.get('shuffle') != shuffled.identity_payload():
+         raise ValueError('prepared shuffle provenance mismatch')
+diff --git a/benchmark/nograph_baseline/artifacts.py b/benchmark/nograph_baseline/artifacts.py
+index f9b3899..a38e612 100644
+--- a/benchmark/nograph_baseline/artifacts.py
++++ b/benchmark/nograph_baseline/artifacts.py
+@@ -19,6 +19,7 @@ import re
+ import subprocess
+ import sys
+ import tempfile
++import time
+ from pathlib import Path
+ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+ 
+@@ -160,7 +161,21 @@ class RunDirectory:
+             os.fsync(handle.fileno())
+         finally:
+             handle.close()
+-        os.replace(handle.name, target)
++        # Windows readers/scanners may briefly hold a handle without delete
++        # sharing. Retry only the atomic rename of these already-flushed bytes;
++        # never regenerate computation or silently discard a failed write.
++        retries = 0
++        while True:
++            try:
++                os.replace(handle.name, target)
++                break
++            except PermissionError as exc:
++                if sys.platform != "win32" or getattr(exc, "winerror", None) not in (5, 32, 33) or retries >= 7:
++                    raise
++                time.sleep(min(0.02 * 2**retries, 0.25))
++                retries += 1
++        if retries:
++            self.append_event("atomic_replace_recovered", path=relative, retries=retries)
+         return target
+ 
+     def write_text(self, relative: str, text: str) -> Path:

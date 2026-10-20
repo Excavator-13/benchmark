@@ -1029,8 +1029,10 @@ def validate_shuffle_audit(key_array, source_edges, message_edges, shuffle_audit
     except ValueError as exc:
         problems.append(str(exc))
         return
-    if contract["proposal_batch_size"] > 1 and shuffle_audit.get("proposal_batch_size") != contract["proposal_batch_size"]:
-        problems.append("shuffle audit proposal batch size disagrees with version")
+    if contract["proposal_batch_size"] > 1 or "proposal_batch_size" in shuffle_audit:
+        batch = shuffle_audit.get("proposal_batch_size")
+        if not _exact_int(batch) or batch != contract["proposal_batch_size"]:
+            problems.append("shuffle audit proposal batch size disagrees with version")
     if shuffle_audit.get('seed_derivation') != 'PCG64(SeedSequence([shuffle_seed, context_id...]))':
         problems.append('shuffle seed derivation disagrees with contract')
     expected_rule = (f"accept {contract['accept_target_factor']}*E_ctx swaps, attempt at most "

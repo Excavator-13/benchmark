@@ -1,0 +1,388 @@
+{
+  "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+  "errors": {},
+  "files": {
+    "benchmark/graph_value_skeleton/__init__.py": {
+      "content_saved": "code-untracked/benchmark/graph_value_skeleton/__init__.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/__init__.py",
+        "sha256": "1bbf471faae5bcdab3d7f76fa8a44c229217f993dfabd740330f16cb8df67a27"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/__init__.py",
+      "sha256": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/graph_value_skeleton/__main__.py": {
+      "content_saved": "code-untracked/benchmark/graph_value_skeleton/__main__.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/__main__.py",
+        "sha256": "7aab10a21f9d5137e9acd0b8c6c34b763341ecfa00850ee66ab811649f9319eb"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/__main__.py",
+      "sha256": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/graph_value_skeleton/_worker.py": {
+      "content_saved": "code-untracked/benchmark/graph_value_skeleton/_worker.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/_worker.py",
+        "sha256": "c49ccba736ced5987f4c6c4c8b0f5bf88ef75bea94780269fd00a9df9266aa16"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/_worker.py",
+      "sha256": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/graph_value_skeleton/artifacts.py": {
+      "content_saved": null,
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/artifacts.py",
+        "sha256": "a05b58786d6c4ac5fe22dc618ba7b425aeee5110a454977f4afd12418613bc53"
+      },
+      "git_status": "committed_clean",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/artifacts.py",
+      "sha256": "a05b58786d6c4ac5fe22dc618ba7b425aeee5110a454977f4afd12418613bc53",
+      "unavailable_reason": null
+    },
+    "benchmark/graph_value_skeleton/checks.py": {
+      "content_saved": "code-untracked/benchmark/graph_value_skeleton/checks.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/checks.py",
+        "sha256": "bf727337a4b5887cbf865344994e1e79eb9c1844dde4febce68c9032b04a8487"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/checks.py",
+      "sha256": "16e071b5e4384e7ec9f77ca9c4fcdc387632794ea665b4be0a01ad1e9969e8bc",
+      "unavailable_reason": "no reconstructable patch; executing content saved under code-untracked"
+    },
+    "benchmark/graph_value_skeleton/cli.py": {
+      "content_saved": "code-untracked/benchmark/graph_value_skeleton/cli.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/cli.py",
+        "sha256": "e14a321e995eae8c67ea712533aa0e61392433ff4c47bce87c97b2c261a7bde4"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/cli.py",
+      "sha256": "e42c6d4a0c1c742ac5f9b660c1fc4089c35b168235a25dd50182055efbb61c84",
+      "unavailable_reason": "no reconstructable patch; executing content saved under code-untracked"
+    },
+    "benchmark/graph_value_skeleton/config.py": {
+      "content_saved": "code-untracked/benchmark/graph_value_skeleton/config.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/config.py",
+        "sha256": "36df807ea6be829ce68af1ea14213c5e04f12e63419a604030a4594eb66b504e"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/config.py",
+      "sha256": "85d180e6a49cf0e03d7935c5b55e300479f7619054b5b816c21c4430ac89dec6",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/graph_value_skeleton/data.py": {
+      "content_saved": "code-untracked/benchmark/graph_value_skeleton/data.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/data.py",
+        "sha256": "2c3440088830c3e75c57a2455eb89401d810167a92fab7ad8cf45c07d9bf3658"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/data.py",
+      "sha256": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/graph_value_skeleton/graph.py": {
+      "content_saved": "code-untracked/benchmark/graph_value_skeleton/graph.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/graph.py",
+        "sha256": "c4dc75d116f5d7f9bfa54581b29438fc3a7561578d1e7d6a154dc35a65892b7e"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/graph.py",
+      "sha256": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/graph_value_skeleton/model.py": {
+      "content_saved": "code-untracked/benchmark/graph_value_skeleton/model.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/model.py",
+        "sha256": "45b3b3dab2cd71da0e481f54e9db881b261e341aecf66655c894c061826308e7"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/model.py",
+      "sha256": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/graph_value_skeleton/prepared.py": {
+      "content_saved": null,
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/prepared.py",
+        "sha256": "c68bb898606f980cd1567a2f7d8285f84c0be3f8f3e0b589e7f6482607dc6ed6"
+      },
+      "git_status": "modified",
+      "patch_path": "git-diff.patch",
+      "path": "benchmark/graph_value_skeleton/prepared.py",
+      "sha256": "277cb86e54c49a7bd55710955690c5401207ef356b8f64b6e86552ce1e8d4372",
+      "unavailable_reason": null
+    },
+    "benchmark/graph_value_skeleton/protocol.py": {
+      "content_saved": "code-untracked/benchmark/graph_value_skeleton/protocol.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/protocol.py",
+        "sha256": "98d484d2400ef232092a1819b643225acc5bb471cb3386dd9ac2bf5dc0ea331f"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/protocol.py",
+      "sha256": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/graph_value_skeleton/readiness.py": {
+      "content_saved": null,
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/readiness.py",
+        "sha256": "327d1ef9b023bc093630e90d10166ca37b85ddf87313c8ea8516e4a032eb6783"
+      },
+      "git_status": "committed_clean",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/readiness.py",
+      "sha256": "327d1ef9b023bc093630e90d10166ca37b85ddf87313c8ea8516e4a032eb6783",
+      "unavailable_reason": null
+    },
+    "benchmark/graph_value_skeleton/runner.py": {
+      "content_saved": "code-untracked/benchmark/graph_value_skeleton/runner.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/runner.py",
+        "sha256": "981f5a87f5d70b3e2e931865827c05cd9d9ddfb00b8f1c595fc1b739629b26a5"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/runner.py",
+      "sha256": "d18f24423ebc0371aaa9e4f56951ec9f0bc802e90f7927075753e9d1e665a814",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/graph_value_skeleton/shuffle.py": {
+      "content_saved": "code-untracked/benchmark/graph_value_skeleton/shuffle.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/shuffle.py",
+        "sha256": "f1332af6d86ba67bdfbf934bcb0a94f859e705b109a8d6547690e9cb18df9b6e"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/shuffle.py",
+      "sha256": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/graph_value_skeleton/training.py": {
+      "content_saved": "code-untracked/benchmark/graph_value_skeleton/training.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/graph_value_skeleton/training.py",
+        "sha256": "3f14bc66ce88c30d1c99c26440796b717c8e8d22b1e81abffa7720acb1a51bbc"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/graph_value_skeleton/training.py",
+      "sha256": "d97df65ddb65fc36ea88481e6593f4582bf5eae114f602cbbbdc93ed9d9e37b2",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/nograph_baseline/__init__.py": {
+      "content_saved": "code-untracked/benchmark/nograph_baseline/__init__.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/nograph_baseline/__init__.py",
+        "sha256": "d9c569ef793ad4575f7fef38f798f059687e3fd118a471b4d091bfec74c17d78"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/nograph_baseline/__init__.py",
+      "sha256": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/nograph_baseline/artifacts.py": {
+      "content_saved": null,
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/nograph_baseline/artifacts.py",
+        "sha256": "a21c0bb5729dfa280bf225bb176249af8cc184c774b8defdb357d2fdd933a636"
+      },
+      "git_status": "modified",
+      "patch_path": "git-diff.patch",
+      "path": "benchmark/nograph_baseline/artifacts.py",
+      "sha256": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86",
+      "unavailable_reason": null
+    },
+    "benchmark/nograph_baseline/baselines.py": {
+      "content_saved": "code-untracked/benchmark/nograph_baseline/baselines.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/nograph_baseline/baselines.py",
+        "sha256": "90030ee66ddd71ef18677dc6195fde06ae3574b6298b5ac070a977372e5d293a"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/nograph_baseline/baselines.py",
+      "sha256": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/nograph_baseline/coverage.py": {
+      "content_saved": "code-untracked/benchmark/nograph_baseline/coverage.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/nograph_baseline/coverage.py",
+        "sha256": "fad3fa9302e9da44a3cc348977c5f2beaae0951a188cb4cdb983ef0b53177b22"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/nograph_baseline/coverage.py",
+      "sha256": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/nograph_baseline/data.py": {
+      "content_saved": "code-untracked/benchmark/nograph_baseline/data.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/nograph_baseline/data.py",
+        "sha256": "790dd78339e6b7f5476a34a9d272e4fbef1be21075a5b57691e7dff22871cc63"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/nograph_baseline/data.py",
+      "sha256": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/nograph_baseline/metrics.py": {
+      "content_saved": "code-untracked/benchmark/nograph_baseline/metrics.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/nograph_baseline/metrics.py",
+        "sha256": "476040954e611cafeb05eea71731cd43209ef7601455999f6772c0e21ebf127c"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/nograph_baseline/metrics.py",
+      "sha256": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/nograph_baseline/protocol.py": {
+      "content_saved": "code-untracked/benchmark/nograph_baseline/protocol.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/nograph_baseline/protocol.py",
+        "sha256": "7b941e0f097ccd3b3f1a02337fab497dbbdadae3d478cce74011ea5f8591d73b"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/nograph_baseline/protocol.py",
+      "sha256": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "benchmark/nograph_baseline/ridge.py": {
+      "content_saved": "code-untracked/benchmark/nograph_baseline/ridge.py",
+      "git_reference": {
+        "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+        "path": "benchmark/nograph_baseline/ridge.py",
+        "sha256": "663c78c60792b696cb08380256a4b098aadb5df1021aca4a7433a8e06437cd5e"
+      },
+      "git_status": "modified",
+      "patch_path": null,
+      "path": "benchmark/nograph_baseline/ridge.py",
+      "sha256": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    }
+  },
+  "generated": "2026-10-20T14:10:31+08:00",
+  "identity_available": true,
+  "patch_bytes": 7997,
+  "patch_path": "git-diff.patch",
+  "patch_unusable_paths": [
+    "benchmark/graph_value_skeleton/__init__.py",
+    "benchmark/graph_value_skeleton/__main__.py",
+    "benchmark/graph_value_skeleton/_worker.py",
+    "benchmark/graph_value_skeleton/checks.py",
+    "benchmark/graph_value_skeleton/cli.py",
+    "benchmark/graph_value_skeleton/config.py",
+    "benchmark/graph_value_skeleton/data.py",
+    "benchmark/graph_value_skeleton/graph.py",
+    "benchmark/graph_value_skeleton/model.py",
+    "benchmark/graph_value_skeleton/protocol.py",
+    "benchmark/graph_value_skeleton/runner.py",
+    "benchmark/graph_value_skeleton/shuffle.py",
+    "benchmark/graph_value_skeleton/training.py",
+    "benchmark/nograph_baseline/__init__.py",
+    "benchmark/nograph_baseline/baselines.py",
+    "benchmark/nograph_baseline/coverage.py",
+    "benchmark/nograph_baseline/data.py",
+    "benchmark/nograph_baseline/metrics.py",
+    "benchmark/nograph_baseline/protocol.py",
+    "benchmark/nograph_baseline/ridge.py"
+  ],
+  "policy": "P01-records-v2",
+  "protocol": {
+    "content_saved": "protocol.md",
+    "git_reference": {
+      "commit": "dc9933081e396f3d6c92c801c2f080954de464ec",
+      "path": "research/phases/P01/protocol.md",
+      "sha256": "b510beb0da9a482507072f78282d06bcf9dc93c3758dd7f16b1f8c326ba1d61a"
+    },
+    "git_status": "modified",
+    "patch_path": null,
+    "path": "research/phases/P01/protocol.md",
+    "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c",
+    "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+  },
+  "runtime_scope": [
+    "benchmark/graph_value_skeleton/__init__.py",
+    "benchmark/graph_value_skeleton/__main__.py",
+    "benchmark/graph_value_skeleton/_worker.py",
+    "benchmark/graph_value_skeleton/artifacts.py",
+    "benchmark/graph_value_skeleton/checks.py",
+    "benchmark/graph_value_skeleton/cli.py",
+    "benchmark/graph_value_skeleton/config.py",
+    "benchmark/graph_value_skeleton/data.py",
+    "benchmark/graph_value_skeleton/graph.py",
+    "benchmark/graph_value_skeleton/model.py",
+    "benchmark/graph_value_skeleton/prepared.py",
+    "benchmark/graph_value_skeleton/protocol.py",
+    "benchmark/graph_value_skeleton/readiness.py",
+    "benchmark/graph_value_skeleton/runner.py",
+    "benchmark/graph_value_skeleton/shuffle.py",
+    "benchmark/graph_value_skeleton/training.py",
+    "benchmark/nograph_baseline/__init__.py",
+    "benchmark/nograph_baseline/artifacts.py",
+    "benchmark/nograph_baseline/baselines.py",
+    "benchmark/nograph_baseline/coverage.py",
+    "benchmark/nograph_baseline/data.py",
+    "benchmark/nograph_baseline/metrics.py",
+    "benchmark/nograph_baseline/protocol.py",
+    "benchmark/nograph_baseline/ridge.py"
+  ],
+  "scope_note": "only execution-relevant benchmark runtime modules and the academic protocol are captured; unrelated research records, tests and caches are outside the scope",
+  "scoped_dirty": true,
+  "unrecoverable_paths": [],
+  "whole_repository_dirty": true
+}

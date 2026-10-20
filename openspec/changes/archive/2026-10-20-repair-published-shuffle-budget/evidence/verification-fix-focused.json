@@ -1,0 +1,14 @@
+{
+  "tests": 12,
+  "failures": 0,
+  "errors": 0,
+  "success": true,
+  "elapsed_seconds": 31.235000000000127,
+  "names": [
+    "benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_missing_or_inconsistent_generation_records_fail_saved_check",
+    "benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_legacy_audit_contract_unchanged_and_unknown_rejected",
+    "benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_prepare_and_saved_only_check",
+    "benchmark.graph_value_skeleton.tests.test_atomic_writes",
+    "benchmark.graph_value_skeleton.tests.test_shuffle_v2"
+  ]
+}

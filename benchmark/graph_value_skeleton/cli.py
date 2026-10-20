@@ -210,6 +210,11 @@ def _handle_run(args: argparse.Namespace) -> int:
 
 
 def _handle_prepare(args):
+    # Windows Arrow/pandas DLLs can prevent a later c10.dll initialization.
+    # Preparation already records torch runtime evidence; load it before the
+    # config/data modules load Arrow. This does not construct or train a model.
+    if _os.name == 'nt':
+        import torch  # noqa: F401
     from .config import resolve_config
     from .prepared import prepare
     config = resolve_config(data_name=args.data_name, method='shuffled', model_seed=0,

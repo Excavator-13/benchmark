@@ -1,0 +1,14 @@
+{
+  "error": {
+    "exception_type": "RunInterrupted",
+    "message": "bounded diagnostic sample complete",
+    "stage": "training",
+    "state": "interrupted",
+    "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\benchmark\\graph_value_skeleton\\runner.py\", line 249, in execute_run\n    result = training.train(\n             ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\research\\reports\\p02-t002-20261020-01\\diagnose_training_cost.py\", line 68, in wrapped_train\n    return original_train(*positional, **keywords)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\benchmark\\graph_value_skeleton\\training.py\", line 275, in train\n    optimizer.step()\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Lib\\site-packages\\torch\\optim\\optimizer.py\", line 549, in wrapper\n    out = func(*args, **kwargs)\n          ^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\research\\reports\\p02-t002-20261020-01\\diagnose_training_cost.py\", line 95, in wrapped_step\n    raise runner.RunInterrupted(observed['stop_reason'])\nbenchmark.graph_value_skeleton.runner.RunInterrupted: bounded diagnostic sample complete\n"
+  },
+  "run_id": "p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic",
+  "run_type": "run",
+  "stage": "training",
+  "state": "interrupted",
+  "updated": "2026-10-20T14:11:40+08:00"
+}

@@ -512,6 +512,9 @@ virtual environment lacks pip, bootstrap its bundled copy with
 `python -m ensurepip --upgrade` before running checks. Windows peak memory uses
 `GetProcessMemoryInfo.PeakWorkingSetSize` in bytes; Linux/macOS retain their
 native `resource.getrusage` measurements. Both cover the worker process lifetime.
+On Windows, `prepare-shuffle` imports the recorded PyTorch runtime before the
+pandas/Arrow data modules to avoid a reproduced `c10.dll` initialization failure
+in this pinned environment. It still creates no model and performs no training.
 
 ```bash
 # Always use fresh IDs and report paths.
@@ -562,6 +565,12 @@ limit, accepted/attempted/rejection counts, identities, reason and elapsed time.
 Interrupted/unfinished artifacts cannot be reused. Partial chains are diagnostic
 recovery points and are not automatically resumed.
 
+On Windows, JSON/text publication retries only sharing/access-denied replacement
+errors (WinError 5/32/33), using the same flushed temporary file for at most eight
+attempts and 1.05 seconds of backoff. Recovery is recorded as
+`atomic_replace_recovered`; persistent denial raises and preserves the previous
+checkpoint and temporary bytes. This does not retry graph computation.
+
 The readiness driver pauses at the first failed check or regeneration mismatch,
 after 10 minutes per graph or 60 seconds without observable progress, preserving
 logs and a paused manifest. These are operational watchdogs, not scientific/RNG
@@ -571,6 +580,12 @@ The comparison script and measurements accompany the change. Generation and
 reuse-read costs are recorded separately; graph costs do not establish training
 speed or predictive quality. Formal execution follows independent verification,
 archive and research-side acceptance/cost confirmation.
+
+Prepared `measurements.json` retains one `context_timings` record per context
+from swap progress elapsed time (zero swap work for empty contexts). These wall
+clock measurements stay outside deterministic graph identity. Saved checks also
+require consistent generator source hashes and recorded Python/package metadata;
+they validate those saved records without reading the original sources.
 
 ## 5 Directory Structure
 

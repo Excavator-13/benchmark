@@ -1,0 +1,3435 @@
+{
+  "generator": {
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "pyarrow": "17.0.0",
+    "python": [
+      3,
+      11,
+      17
+    ],
+    "source_sha256": {
+      "graph.py": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf",
+      "protocol.py": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267",
+      "shuffle.py": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be"
+    }
+  },
+  "idle_seconds": 60,
+  "matching_regenerations": 9,
+  "max_seconds": 600,
+  "members": [
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\r2-shuffle0-a",
+      "checksums_sha256": "675a796901553bd340d56c7b2120bacf2e63615589f25447c2a6cde5daeb5703",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r2",
+        "--shuffle-seed",
+        "0",
+        "--run-id",
+        "r2-shuffle0-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "r2",
+      "elapsed_seconds": 46.797000000000025,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.018230299999686395
+          },
+          {
+            "context": [
+              1
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.3265299999998206
+          },
+          {
+            "context": [
+              2
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.3989302999998472
+          },
+          {
+            "context": [
+              3
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.2811954000003425
+          },
+          {
+            "context": [
+              4
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.004917300000215619
+          },
+          {
+            "context": [
+              5
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.012259199999789416
+          },
+          {
+            "context": [
+              6
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.011255899999923713
+          },
+          {
+            "context": [
+              7
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.03619190000017625
+          },
+          {
+            "context": [
+              8
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.6830813999999918
+          },
+          {
+            "context": [
+              9
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.003963299999668379
+          },
+          {
+            "context": [
+              10
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.01099759999942762
+          },
+          {
+            "context": [
+              11
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.06134409999958734
+          },
+          {
+            "context": [
+              12
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.8746449000000212
+          },
+          {
+            "context": [
+              13
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.08467349999955331
+          },
+          {
+            "context": [
+              14
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.06711830000040209
+          },
+          {
+            "context": [
+              15
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.021253399999295652
+          },
+          {
+            "context": [
+              16
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.03458370000043942
+          },
+          {
+            "context": [
+              17
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.006054900000890484
+          },
+          {
+            "context": [
+              18
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4095558999997593
+          },
+          {
+            "context": [
+              19
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.006440399999519286
+          },
+          {
+            "context": [
+              20
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.3674752000006265
+          },
+          {
+            "context": [
+              21
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.8694268999997803
+          },
+          {
+            "context": [
+              22
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.1871449999998731
+          },
+          {
+            "context": [
+              23
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.006245900000067195
+          },
+          {
+            "context": [
+              24
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.02944850000039878
+          },
+          {
+            "context": [
+              25
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.1556185999997979
+          },
+          {
+            "context": [
+              26
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.0394415000000663
+          },
+          {
+            "context": [
+              27
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.009556699999848206
+          },
+          {
+            "context": [
+              28
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.5359457000004113
+          },
+          {
+            "context": [
+              29
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.14429800000016257
+          },
+          {
+            "context": [
+              30
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4528787999997803
+          },
+          {
+            "context": [
+              31
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.26248950000081095
+          },
+          {
+            "context": [
+              32
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.49263669999982085
+          },
+          {
+            "context": [
+              33
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.46801439999944705
+          },
+          {
+            "context": [
+              34
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.12127910000072
+          },
+          {
+            "context": [
+              35
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.008440699999482604
+          },
+          {
+            "context": [
+              36
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.092708400000447
+          },
+          {
+            "context": [
+              37
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.008739799999602837
+          },
+          {
+            "context": [
+              38
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.04465059999984078
+          },
+          {
+            "context": [
+              39
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.08219089999965945
+          },
+          {
+            "context": [
+              40
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.1347408000001451
+          },
+          {
+            "context": [
+              41
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.8097001000005548
+          },
+          {
+            "context": [
+              42
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.08032900000034715
+          },
+          {
+            "context": [
+              43
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.014990600000601262
+          },
+          {
+            "context": [
+              44
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.11927910000031261
+          },
+          {
+            "context": [
+              45
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.09184749999985797
+          },
+          {
+            "context": [
+              46
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.18325389999972685
+          },
+          {
+            "context": [
+              47
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.5264203999995516
+          },
+          {
+            "context": [
+              48
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.057301900000311434
+          },
+          {
+            "context": [
+              49
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.718061100000341
+          },
+          {
+            "context": [
+              50
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.07584829999996145
+          },
+          {
+            "context": [
+              51
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.018881199999668752
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.44184139999970284,
+          "graph_read": 1.5915477999997165,
+          "shuffle": 32.242351699999745,
+          "total": 40.57935020000059
+        },
+        "edges": 321374,
+        "nodes": 121420,
+        "peak_memory": {
+          "bytes": 548265984,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 548265984,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\r2-shuffle0-a.json",
+      "report_sha256": "09f208732df48a24a4da2c574d0060e98be74024587d1c802e7cf41775f860da",
+      "result_sha256": "ad3e9775af9ed369a487f75c3891871f41260d22fc8746c1b4986dbbee173cc0",
+      "shuffle_seed": 0,
+      "context_timing_records": 52,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\r2-shuffle0-b",
+      "checksums_sha256": "e9779797570810367fb0cf2cf2d5f28780152fd515b063f53429ee094d9f815c",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r2",
+        "--shuffle-seed",
+        "0",
+        "--run-id",
+        "r2-shuffle0-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "r2",
+      "elapsed_seconds": 47.01600000000053,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.02152620000015304
+          },
+          {
+            "context": [
+              1
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.3368368000001283
+          },
+          {
+            "context": [
+              2
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.384458800000175
+          },
+          {
+            "context": [
+              3
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.27302200000031007
+          },
+          {
+            "context": [
+              4
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.005038600000261795
+          },
+          {
+            "context": [
+              5
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.012013699999442906
+          },
+          {
+            "context": [
+              6
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.011429899999711779
+          },
+          {
+            "context": [
+              7
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.03624559999934718
+          },
+          {
+            "context": [
+              8
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.6933770000005097
+          },
+          {
+            "context": [
+              9
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.004704800000581599
+          },
+          {
+            "context": [
+              10
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.009274299999560753
+          },
+          {
+            "context": [
+              11
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.058676200000263634
+          },
+          {
+            "context": [
+              12
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.8581082000000606
+          },
+          {
+            "context": [
+              13
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.08460120000017923
+          },
+          {
+            "context": [
+              14
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.06800850000036007
+          },
+          {
+            "context": [
+              15
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.020403099999384722
+          },
+          {
+            "context": [
+              16
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.03438360000018292
+          },
+          {
+            "context": [
+              17
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.0070279999999911524
+          },
+          {
+            "context": [
+              18
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4100185999996029
+          },
+          {
+            "context": [
+              19
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.006229599999642232
+          },
+          {
+            "context": [
+              20
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.36756310000055237
+          },
+          {
+            "context": [
+              21
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.8610531000003903
+          },
+          {
+            "context": [
+              22
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.19231829999989714
+          },
+          {
+            "context": [
+              23
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.00603179999961867
+          },
+          {
+            "context": [
+              24
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.0295468999993318
+          },
+          {
+            "context": [
+              25
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.1402806999994937
+          },
+          {
+            "context": [
+              26
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.038970200000221666
+          },
+          {
+            "context": [
+              27
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.009867799999483395
+          },
+          {
+            "context": [
+              28
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.5426986999991641
+          },
+          {
+            "context": [
+              29
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.14372869999988325
+          },
+          {
+            "context": [
+              30
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4530629000000772
+          },
+          {
+            "context": [
+              31
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.256392300000698
+          },
+          {
+            "context": [
+              32
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.49079579999943235
+          },
+          {
+            "context": [
+              33
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.47580370000014227
+          },
+          {
+            "context": [
+              34
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.1363487000007808
+          },
+          {
+            "context": [
+              35
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.008863199999723292
+          },
+          {
+            "context": [
+              36
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.09610659999998461
+          },
+          {
+            "context": [
+              37
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.007392000000436383
+          },
+          {
+            "context": [
+              38
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.045816199999535456
+          },
+          {
+            "context": [
+              39
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.08294740000019374
+          },
+          {
+            "context": [
+              40
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.13617809999959718
+          },
+          {
+            "context": [
+              41
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.7968974999994316
+          },
+          {
+            "context": [
+              42
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.07340609999937442
+          },
+          {
+            "context": [
+              43
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.015156100000240258
+          },
+          {
+            "context": [
+              44
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.11701720000019122
+          },
+          {
+            "context": [
+              45
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.09110320000036154
+          },
+          {
+            "context": [
+              46
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.1814900999997917
+          },
+          {
+            "context": [
+              47
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.5253588000005038
+          },
+          {
+            "context": [
+              48
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.058777700000064215
+          },
+          {
+            "context": [
+              49
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.7217151000004378
+          },
+          {
+            "context": [
+              50
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.07701989999986836
+          },
+          {
+            "context": [
+              51
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.01886319999994157
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.4753307999999379,
+          "graph_read": 1.538454599999568,
+          "shuffle": 32.0982826999998,
+          "total": 40.7551254
+        },
+        "edges": 321374,
+        "nodes": 121420,
+        "peak_memory": {
+          "bytes": 549470208,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 549470208,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\r2-shuffle0-b.json",
+      "report_sha256": "9d2c9e0564c0bc39396aa7b74ba8b96ab86cc7adfec361a3d423811e83825d48",
+      "result_sha256": "ad3e9775af9ed369a487f75c3891871f41260d22fc8746c1b4986dbbee173cc0",
+      "shuffle_seed": 0,
+      "context_timing_records": 52,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\r0-shuffle0-a",
+      "checksums_sha256": "c348a612a135b60fd44fa5e8983612cb4ff90515867d8eb091e2d2fa7c189180",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r0",
+        "--shuffle-seed",
+        "0",
+        "--run-id",
+        "r0-shuffle0-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "r0",
+      "elapsed_seconds": 20.84400000000005,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 9.990660299999945
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.052052699999876495,
+          "graph_read": 0.22008249999998952,
+          "shuffle": 10.343177200000355,
+          "total": 17.064695699999902
+        },
+        "edges": 60804,
+        "nodes": 2335,
+        "peak_memory": {
+          "bytes": 300552192,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 300552192,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\r0-shuffle0-a.json",
+      "report_sha256": "9eba7da16af5f78efd974b185ed7a48b34f324f0a2fb7a9aaa7fb88b2853c12f",
+      "result_sha256": "58f493fd11d6b09d63587511a0ad7d23f2d4deadf0eee1da5990e44ff938ab50",
+      "shuffle_seed": 0,
+      "context_timing_records": 1,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\r0-shuffle0-b",
+      "checksums_sha256": "28655b8d27f579825e8e24e482849094a14aa817a4b46403e0929233843fdb0c",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r0",
+        "--shuffle-seed",
+        "0",
+        "--run-id",
+        "r0-shuffle0-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "r0",
+      "elapsed_seconds": 22.625,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 12.180197800000315
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.06918380000024626,
+          "graph_read": 0.2827937000001839,
+          "shuffle": 12.587616199999502,
+          "total": 18.988612699999976
+        },
+        "edges": 60804,
+        "nodes": 2335,
+        "peak_memory": {
+          "bytes": 300904448,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 300904448,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\r0-shuffle0-b.json",
+      "report_sha256": "ff9f9741d7fc48cc33bd0bf278d31c62d1ca6081e95e8db6ce150ac782bb3ef0",
+      "result_sha256": "58f493fd11d6b09d63587511a0ad7d23f2d4deadf0eee1da5990e44ff938ab50",
+      "shuffle_seed": 0,
+      "context_timing_records": 1,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\r0-shuffle1-a",
+      "checksums_sha256": "94abf103a3635019301ffaec9cd6aa11b0a76712d4c543a9c8c055732404669f",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r0",
+        "--shuffle-seed",
+        "1",
+        "--run-id",
+        "r0-shuffle1-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "r0",
+      "elapsed_seconds": 21.85900000000038,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 10.875836999999592
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.05738660000042728,
+          "graph_read": 0.21543189999920287,
+          "shuffle": 11.251098199999433,
+          "total": 17.99625349999951
+        },
+        "edges": 60804,
+        "nodes": 2335,
+        "peak_memory": {
+          "bytes": 301662208,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 301662208,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\r0-shuffle1-a.json",
+      "report_sha256": "b88be345e2c06e23dec03638a9e76afedbd94372ad3e540868597a315cc6a767",
+      "result_sha256": "a5144032cc32054e0e79ec9e863b76c3caceb027eff904f59d87d7e71cd9972c",
+      "shuffle_seed": 1,
+      "context_timing_records": 1,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\r0-shuffle1-b",
+      "checksums_sha256": "e066db31e1bce0ccae8986091b910f70f7e22ed8e3a8adac972749c734a2f40c",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r0",
+        "--shuffle-seed",
+        "1",
+        "--run-id",
+        "r0-shuffle1-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "r0",
+      "elapsed_seconds": 21.60900000000038,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 10.521590899999865
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.05277849999947648,
+          "graph_read": 0.20758610000029876,
+          "shuffle": 10.895412699999724,
+          "total": 17.71425259999978
+        },
+        "edges": 60804,
+        "nodes": 2335,
+        "peak_memory": {
+          "bytes": 301289472,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 301289472,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\r0-shuffle1-b.json",
+      "report_sha256": "1ddd0d50e86c7f5def95d33ba547cc04d21ab3acbf7db332783e16e855740cb5",
+      "result_sha256": "a5144032cc32054e0e79ec9e863b76c3caceb027eff904f59d87d7e71cd9972c",
+      "shuffle_seed": 1,
+      "context_timing_records": 1,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\r0-shuffle2-a",
+      "checksums_sha256": "c06d2714a79279915449639849233565685678041e3036598d74d512f61ad7fa",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r0",
+        "--shuffle-seed",
+        "2",
+        "--run-id",
+        "r0-shuffle2-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "r0",
+      "elapsed_seconds": 20.875,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 10.379675199999838
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.051259200000458804,
+          "graph_read": 0.20970140000008541,
+          "shuffle": 10.727440600000591,
+          "total": 17.07590170000003
+        },
+        "edges": 60804,
+        "nodes": 2335,
+        "peak_memory": {
+          "bytes": 302096384,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 302096384,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\r0-shuffle2-a.json",
+      "report_sha256": "e173b374c0e0563a6ed0dd76a1f8f7ea38298281d6e8fb23dcfe5ea6ed02ff1c",
+      "result_sha256": "58975be937b47c66d8c6cae4df1f4838ad2ed68486381a8c89d85c1a77b4cbdd",
+      "shuffle_seed": 2,
+      "context_timing_records": 1,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\r0-shuffle2-b",
+      "checksums_sha256": "9f3bef45c7a7ef39d22511f6ae83c699771d0f528e492be65e8a5ec6f2d9e431",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r0",
+        "--shuffle-seed",
+        "2",
+        "--run-id",
+        "r0-shuffle2-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "r0",
+      "elapsed_seconds": 21.140000000000327,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 10.540435700000671
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.04816780000055587,
+          "graph_read": 0.20129240000005666,
+          "shuffle": 10.882994399999916,
+          "total": 17.482865300000412
+        },
+        "edges": 60804,
+        "nodes": 2335,
+        "peak_memory": {
+          "bytes": 300711936,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 300711936,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\r0-shuffle2-b.json",
+      "report_sha256": "bbd9c1c4770017fd0fb808644e27e7c6039405f1bc446afde8ca9fc9f3d5de52",
+      "result_sha256": "58975be937b47c66d8c6cae4df1f4838ad2ed68486381a8c89d85c1a77b4cbdd",
+      "shuffle_seed": 2,
+      "context_timing_records": 1,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\region-shuffle0-a",
+      "checksums_sha256": "21b94f44a7229b757e9d1cea5fc7e283ee891863f360cb18ee11d4afa34df069",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "region",
+        "--shuffle-seed",
+        "0",
+        "--run-id",
+        "region-shuffle0-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "region",
+      "elapsed_seconds": 28.92199999999957,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.21685230000002775
+          },
+          {
+            "context": [
+              1
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 4.542643400000088
+          },
+          {
+            "context": [
+              2
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.9317841000001863
+          },
+          {
+            "context": [
+              3
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 3.268850999999813
+          },
+          {
+            "context": [
+              4
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 3.1411756999996214
+          },
+          {
+            "context": [
+              5
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4894848000003549
+          },
+          {
+            "context": [
+              6
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.9743714000005639
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.11570089999986521,
+          "graph_read": 0.9034474000000046,
+          "shuffle": 16.040709699999752,
+          "total": 23.592082900000605
+        },
+        "edges": 218840,
+        "nodes": 16345,
+        "peak_memory": {
+          "bytes": 406245376,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 406245376,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\region-shuffle0-a.json",
+      "report_sha256": "0d787a0d08631d5e6a82725d6a7868bbe8c3db17e17b6ad1403ef01c41dd6103",
+      "result_sha256": "90e8f2a68391d88d970683e13aa6a686f174dd40d20264f63a76d8e69e4130ee",
+      "shuffle_seed": 0,
+      "context_timing_records": 7,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\region-shuffle0-b",
+      "checksums_sha256": "c4e972972d3443707c375794ade81577e103ac4611a8921586526a4e52992843",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "region",
+        "--shuffle-seed",
+        "0",
+        "--run-id",
+        "region-shuffle0-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "region",
+      "elapsed_seconds": 28.92199999999957,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.2275406999997358
+          },
+          {
+            "context": [
+              1
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 4.4967821999998705
+          },
+          {
+            "context": [
+              2
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.9163389000004827
+          },
+          {
+            "context": [
+              3
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 3.3192755000000034
+          },
+          {
+            "context": [
+              4
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 3.2903543000002173
+          },
+          {
+            "context": [
+              5
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.49138679999941814
+          },
+          {
+            "context": [
+              6
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.9333625999997821
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.11631589999979042,
+          "graph_read": 0.9300780999992639,
+          "shuffle": 16.068801200000053,
+          "total": 23.679283100000248
+        },
+        "edges": 218840,
+        "nodes": 16345,
+        "peak_memory": {
+          "bytes": 404774912,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 404774912,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\region-shuffle0-b.json",
+      "report_sha256": "dd2a368c54d6c7d604fe1b06d0b867a7d4e91c2f2b00ccc58748af34069c6c84",
+      "result_sha256": "90e8f2a68391d88d970683e13aa6a686f174dd40d20264f63a76d8e69e4130ee",
+      "shuffle_seed": 0,
+      "context_timing_records": 7,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\region-shuffle1-a",
+      "checksums_sha256": "078ec84583b61a93309a3f526b387d879f85f551b3b9b553d9b513c1dce3f587",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "region",
+        "--shuffle-seed",
+        "1",
+        "--run-id",
+        "region-shuffle1-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "region",
+      "elapsed_seconds": 29.15599999999995,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.2103173000004972
+          },
+          {
+            "context": [
+              1
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 4.420022400000562
+          },
+          {
+            "context": [
+              2
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.9430157000006147
+          },
+          {
+            "context": [
+              3
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 3.4363728999996965
+          },
+          {
+            "context": [
+              4
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 3.100260599999274
+          },
+          {
+            "context": [
+              5
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4800764000001436
+          },
+          {
+            "context": [
+              6
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.9009530999992421
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.1249790000001667,
+          "graph_read": 0.8975691999994524,
+          "shuffle": 15.844494299999496,
+          "total": 23.79148090000035
+        },
+        "edges": 218840,
+        "nodes": 16345,
+        "peak_memory": {
+          "bytes": 403812352,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 403812352,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\region-shuffle1-a.json",
+      "report_sha256": "d56f41e3486bf7f3f7f99501adbac654c4d0fbf59e72e87c92287bdbe14766c9",
+      "result_sha256": "81726979b7e78544b6c8b61d3ea2c98d222d26236412a05d0a5d6655a8804a99",
+      "shuffle_seed": 1,
+      "context_timing_records": 7,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\region-shuffle1-b",
+      "checksums_sha256": "617cff838e02afca40fe247bb7ff6c9c7a1674ea713239ce92c0091e13a5341d",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "region",
+        "--shuffle-seed",
+        "1",
+        "--run-id",
+        "region-shuffle1-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "region",
+      "elapsed_seconds": 28.40599999999995,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.22030479999921226
+          },
+          {
+            "context": [
+              1
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 4.424334299999828
+          },
+          {
+            "context": [
+              2
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.9312003999993976
+          },
+          {
+            "context": [
+              3
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 3.3660429000001386
+          },
+          {
+            "context": [
+              4
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 3.1125550000006115
+          },
+          {
+            "context": [
+              5
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4978752999995777
+          },
+          {
+            "context": [
+              6
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.9092238000002908
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.12468059999991965,
+          "graph_read": 0.9007307000001674,
+          "shuffle": 15.84768720000011,
+          "total": 23.234610900000007
+        },
+        "edges": 218840,
+        "nodes": 16345,
+        "peak_memory": {
+          "bytes": 405630976,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 405630976,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\region-shuffle1-b.json",
+      "report_sha256": "13da5c96bf4a123e45a9eb6bf5f2bbd9370e59f63616c72f6fa56d777ce889e1",
+      "result_sha256": "81726979b7e78544b6c8b61d3ea2c98d222d26236412a05d0a5d6655a8804a99",
+      "shuffle_seed": 1,
+      "context_timing_records": 7,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\region-shuffle2-a",
+      "checksums_sha256": "befdda820460b9ec2ef2a00f521d1dbcf5fd89cb9739605c539a0f9d402370cf",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "region",
+        "--shuffle-seed",
+        "2",
+        "--run-id",
+        "region-shuffle2-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "region",
+      "elapsed_seconds": 29.40599999999995,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.2213689999998678
+          },
+          {
+            "context": [
+              1
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 4.6424887000002855
+          },
+          {
+            "context": [
+              2
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.9512100000001737
+          },
+          {
+            "context": [
+              3
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 3.518906700000116
+          },
+          {
+            "context": [
+              4
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 3.4681578999998237
+          },
+          {
+            "context": [
+              5
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4981827000001431
+          },
+          {
+            "context": [
+              6
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.9425451999995857
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.1165539000003264,
+          "graph_read": 0.8784905000002254,
+          "shuffle": 16.641773399999693,
+          "total": 24.06516830000055
+        },
+        "edges": 218840,
+        "nodes": 16345,
+        "peak_memory": {
+          "bytes": 404742144,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 404742144,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\region-shuffle2-a.json",
+      "report_sha256": "8d1e8e9be72cdbbb0663de64622fdb3c92a30e3d972ccda9ef0040c9d8d1be5d",
+      "result_sha256": "ab99ce10892946beb95baf71fbafb1f1411d5ad0b5cca2fc8359e5bd4212a60c",
+      "shuffle_seed": 2,
+      "context_timing_records": 7,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\region-shuffle2-b",
+      "checksums_sha256": "28f3b8054794a14de640879e3bd2ebada4054b19744c0b94dfed72ef282e895d",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "region",
+        "--shuffle-seed",
+        "2",
+        "--run-id",
+        "region-shuffle2-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "region",
+      "elapsed_seconds": 28.42199999999957,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.2209000000002561
+          },
+          {
+            "context": [
+              1
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 4.411125000000538
+          },
+          {
+            "context": [
+              2
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.9144307000005938
+          },
+          {
+            "context": [
+              3
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 3.2687559999994846
+          },
+          {
+            "context": [
+              4
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 3.1481936000000132
+          },
+          {
+            "context": [
+              5
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4868436999995538
+          },
+          {
+            "context": [
+              6
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.9015348000002632
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.11619309999969119,
+          "graph_read": 0.9311711000000287,
+          "shuffle": 15.78801040000053,
+          "total": 23.125179800000296
+        },
+        "edges": 218840,
+        "nodes": 16345,
+        "peak_memory": {
+          "bytes": 405917696,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 405917696,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\region-shuffle2-b.json",
+      "report_sha256": "a18776acb095679e0e4a604c62bc4b805ef39311098224969224b8c4d136072d",
+      "result_sha256": "ab99ce10892946beb95baf71fbafb1f1411d5ad0b5cca2fc8359e5bd4212a60c",
+      "shuffle_seed": 2,
+      "context_timing_records": 7,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\r2-shuffle1-a",
+      "checksums_sha256": "7a7d10593522d6fec405df8b0f82cfe1f2b75b12e77de56c9e6d0430eb5991ba",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r2",
+        "--shuffle-seed",
+        "1",
+        "--run-id",
+        "r2-shuffle1-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "r2",
+      "elapsed_seconds": 47.78200000000015,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.02851219999956811
+          },
+          {
+            "context": [
+              1
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.34201710000070307
+          },
+          {
+            "context": [
+              2
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.4035255000007965
+          },
+          {
+            "context": [
+              3
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.277603900000031
+          },
+          {
+            "context": [
+              4
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.005814400000417663
+          },
+          {
+            "context": [
+              5
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.01217610000003333
+          },
+          {
+            "context": [
+              6
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.01068219999979192
+          },
+          {
+            "context": [
+              7
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.03657709999970393
+          },
+          {
+            "context": [
+              8
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.7236703999997189
+          },
+          {
+            "context": [
+              9
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.0045184999999037245
+          },
+          {
+            "context": [
+              10
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.01249680000000808
+          },
+          {
+            "context": [
+              11
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.059214500000052794
+          },
+          {
+            "context": [
+              12
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.9090501000000586
+          },
+          {
+            "context": [
+              13
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.08458389999941573
+          },
+          {
+            "context": [
+              14
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.06651509999937844
+          },
+          {
+            "context": [
+              15
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.01957490000040707
+          },
+          {
+            "context": [
+              16
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.03485189999992144
+          },
+          {
+            "context": [
+              17
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.007229599999845959
+          },
+          {
+            "context": [
+              18
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.3984262999993007
+          },
+          {
+            "context": [
+              19
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.006509400000140886
+          },
+          {
+            "context": [
+              20
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.38138510000044334
+          },
+          {
+            "context": [
+              21
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.8916511000006722
+          },
+          {
+            "context": [
+              22
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.1906699999999546
+          },
+          {
+            "context": [
+              23
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.00649989999965328
+          },
+          {
+            "context": [
+              24
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.030817100000604114
+          },
+          {
+            "context": [
+              25
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.1628058000005694
+          },
+          {
+            "context": [
+              26
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.03869510000004084
+          },
+          {
+            "context": [
+              27
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.010901900000135356
+          },
+          {
+            "context": [
+              28
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.5393172999993112
+          },
+          {
+            "context": [
+              29
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.14755280000008497
+          },
+          {
+            "context": [
+              30
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4484039999997549
+          },
+          {
+            "context": [
+              31
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.25765119999960007
+          },
+          {
+            "context": [
+              32
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.49793140000019775
+          },
+          {
+            "context": [
+              33
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4680599000002985
+          },
+          {
+            "context": [
+              34
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.1350462999998854
+          },
+          {
+            "context": [
+              35
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.007074300000567746
+          },
+          {
+            "context": [
+              36
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.09547550000024785
+          },
+          {
+            "context": [
+              37
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.007599999999911233
+          },
+          {
+            "context": [
+              38
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.04484649999994872
+          },
+          {
+            "context": [
+              39
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.08269490000020596
+          },
+          {
+            "context": [
+              40
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.14187760000004346
+          },
+          {
+            "context": [
+              41
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.7926987000000736
+          },
+          {
+            "context": [
+              42
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.07107610000002751
+          },
+          {
+            "context": [
+              43
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.01567070000055537
+          },
+          {
+            "context": [
+              44
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.11217829999986861
+          },
+          {
+            "context": [
+              45
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.0895169999994323
+          },
+          {
+            "context": [
+              46
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.17913339999995515
+          },
+          {
+            "context": [
+              47
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.523380100000395
+          },
+          {
+            "context": [
+              48
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.05860870000014984
+          },
+          {
+            "context": [
+              49
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.705912299999909
+          },
+          {
+            "context": [
+              50
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.07524909999938245
+          },
+          {
+            "context": [
+              51
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.019010500000149477
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.4722697999995944,
+          "graph_read": 1.5629269000000932,
+          "shuffle": 32.351166499999636,
+          "total": 41.1533559999998
+        },
+        "edges": 321374,
+        "nodes": 121420,
+        "peak_memory": {
+          "bytes": 548683776,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 548683776,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\r2-shuffle1-a.json",
+      "report_sha256": "1ec9998f7245abca9490b9d36bc55838370c25c44ed6db3ef4780d82b7cbf096",
+      "result_sha256": "3aa28dc59eccf6be87d8072227e5d81f150a4e85d556c96768481189d4cff8ac",
+      "shuffle_seed": 1,
+      "context_timing_records": 52,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\r2-shuffle1-b",
+      "checksums_sha256": "d1353fe46cabad682bdd6c81313702661b623bda94343cb4e3b43a7b929627cd",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r2",
+        "--shuffle-seed",
+        "1",
+        "--run-id",
+        "r2-shuffle1-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "r2",
+      "elapsed_seconds": 50.79699999999957,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.017505899999378016
+          },
+          {
+            "context": [
+              1
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.32764380000025994
+          },
+          {
+            "context": [
+              2
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.3989415000005465
+          },
+          {
+            "context": [
+              3
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.2681683000000703
+          },
+          {
+            "context": [
+              4
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.004024800000479445
+          },
+          {
+            "context": [
+              5
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.01090219999969122
+          },
+          {
+            "context": [
+              6
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.01271939999969618
+          },
+          {
+            "context": [
+              7
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.03648030000022118
+          },
+          {
+            "context": [
+              8
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.7780714999998963
+          },
+          {
+            "context": [
+              9
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.006006699999488774
+          },
+          {
+            "context": [
+              10
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.009306699999797274
+          },
+          {
+            "context": [
+              11
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.06703560000005382
+          },
+          {
+            "context": [
+              12
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 2.184918399999333
+          },
+          {
+            "context": [
+              13
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.11784540000007837
+          },
+          {
+            "context": [
+              14
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.10031100000014703
+          },
+          {
+            "context": [
+              15
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.021696899999369634
+          },
+          {
+            "context": [
+              16
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.03513509999993403
+          },
+          {
+            "context": [
+              17
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.008398699999816017
+          },
+          {
+            "context": [
+              18
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4333642999999938
+          },
+          {
+            "context": [
+              19
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.006540399999721558
+          },
+          {
+            "context": [
+              20
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4374391999999716
+          },
+          {
+            "context": [
+              21
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.9771811999999045
+          },
+          {
+            "context": [
+              22
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.2503483000000415
+          },
+          {
+            "context": [
+              23
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.0076488000004246715
+          },
+          {
+            "context": [
+              24
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.029573200000413635
+          },
+          {
+            "context": [
+              25
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.343118499999946
+          },
+          {
+            "context": [
+              26
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.04628049999973882
+          },
+          {
+            "context": [
+              27
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.009273300000131712
+          },
+          {
+            "context": [
+              28
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.6021971999998641
+          },
+          {
+            "context": [
+              29
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.15514770000027056
+          },
+          {
+            "context": [
+              30
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.44687809999959427
+          },
+          {
+            "context": [
+              31
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.25007759999971313
+          },
+          {
+            "context": [
+              32
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.5045074999998178
+          },
+          {
+            "context": [
+              33
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.49574610000036046
+          },
+          {
+            "context": [
+              34
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.1101740000003701
+          },
+          {
+            "context": [
+              35
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.00809930000013992
+          },
+          {
+            "context": [
+              36
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.09666370000013558
+          },
+          {
+            "context": [
+              37
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.007237400000121852
+          },
+          {
+            "context": [
+              38
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.04517450000003009
+          },
+          {
+            "context": [
+              39
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.08381850000023405
+          },
+          {
+            "context": [
+              40
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.13399159999971744
+          },
+          {
+            "context": [
+              41
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.8875373999999283
+          },
+          {
+            "context": [
+              42
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.09961939999993774
+          },
+          {
+            "context": [
+              43
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.01624450000053912
+          },
+          {
+            "context": [
+              44
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.12535010000010516
+          },
+          {
+            "context": [
+              45
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.0982441000005565
+          },
+          {
+            "context": [
+              46
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.21005499999955646
+          },
+          {
+            "context": [
+              47
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.6395223999998052
+          },
+          {
+            "context": [
+              48
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.07413379999979952
+          },
+          {
+            "context": [
+              49
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.859504700000798
+          },
+          {
+            "context": [
+              50
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.0796331999999893
+          },
+          {
+            "context": [
+              51
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.01976479999939329
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.4574435000004087,
+          "graph_read": 1.6893810000001395,
+          "shuffle": 34.97487860000001,
+          "total": 43.90243740000005
+        },
+        "edges": 321374,
+        "nodes": 121420,
+        "peak_memory": {
+          "bytes": 549298176,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 549298176,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\r2-shuffle1-b.json",
+      "report_sha256": "eb748bd3dd0bea0711dd3d80c3f764bd20bd7ce2336e80190f9944ebdce64f53",
+      "result_sha256": "3aa28dc59eccf6be87d8072227e5d81f150a4e85d556c96768481189d4cff8ac",
+      "shuffle_seed": 1,
+      "context_timing_records": 52,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\r2-shuffle2-a",
+      "checksums_sha256": "f0e0c70bd17ae64e839e19cfc3307ff866ad8a33e884ab4da23197406b65ba4e",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r2",
+        "--shuffle-seed",
+        "2",
+        "--run-id",
+        "r2-shuffle2-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "r2",
+      "elapsed_seconds": 49.03099999999995,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.021663399999852118
+          },
+          {
+            "context": [
+              1
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.33795759999975417
+          },
+          {
+            "context": [
+              2
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.3910232000007454
+          },
+          {
+            "context": [
+              3
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.2833616999996593
+          },
+          {
+            "context": [
+              4
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.004280799999833107
+          },
+          {
+            "context": [
+              5
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.011123300000690506
+          },
+          {
+            "context": [
+              6
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.010291799999322393
+          },
+          {
+            "context": [
+              7
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.036474200000157
+          },
+          {
+            "context": [
+              8
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.6959660000002259
+          },
+          {
+            "context": [
+              9
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.0039175000001705484
+          },
+          {
+            "context": [
+              10
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.008994900000288908
+          },
+          {
+            "context": [
+              11
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.06061719999979687
+          },
+          {
+            "context": [
+              12
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.947436700000253
+          },
+          {
+            "context": [
+              13
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.08862030000000232
+          },
+          {
+            "context": [
+              14
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.0668268999997963
+          },
+          {
+            "context": [
+              15
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.02254460000040126
+          },
+          {
+            "context": [
+              16
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.033957000000555126
+          },
+          {
+            "context": [
+              17
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.007036700000753626
+          },
+          {
+            "context": [
+              18
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.41276680000009947
+          },
+          {
+            "context": [
+              19
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.007356600000093749
+          },
+          {
+            "context": [
+              20
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.3786889000002702
+          },
+          {
+            "context": [
+              21
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.8940361999993911
+          },
+          {
+            "context": [
+              22
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.19827760000043781
+          },
+          {
+            "context": [
+              23
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.006201600000167673
+          },
+          {
+            "context": [
+              24
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.029111099999681755
+          },
+          {
+            "context": [
+              25
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.1442038000004686
+          },
+          {
+            "context": [
+              26
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.03937370000039664
+          },
+          {
+            "context": [
+              27
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.01097120000031282
+          },
+          {
+            "context": [
+              28
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.540933700000096
+          },
+          {
+            "context": [
+              29
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.14390710000043327
+          },
+          {
+            "context": [
+              30
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4497129000001223
+          },
+          {
+            "context": [
+              31
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.2572121999992305
+          },
+          {
+            "context": [
+              32
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.5112945000000764
+          },
+          {
+            "context": [
+              33
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4740861999998742
+          },
+          {
+            "context": [
+              34
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.118998200000533
+          },
+          {
+            "context": [
+              35
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.006958199999644421
+          },
+          {
+            "context": [
+              36
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.09593560000030266
+          },
+          {
+            "context": [
+              37
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.007167899999330984
+          },
+          {
+            "context": [
+              38
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.04449949999980163
+          },
+          {
+            "context": [
+              39
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.08517050000045856
+          },
+          {
+            "context": [
+              40
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.13931119999961084
+          },
+          {
+            "context": [
+              41
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.8044319999999061
+          },
+          {
+            "context": [
+              42
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.0729682999999568
+          },
+          {
+            "context": [
+              43
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.015348100000665
+          },
+          {
+            "context": [
+              44
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.114622999999483
+          },
+          {
+            "context": [
+              45
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.09737649999988207
+          },
+          {
+            "context": [
+              46
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.18409719999999652
+          },
+          {
+            "context": [
+              47
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.5397851999996419
+          },
+          {
+            "context": [
+              48
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.058990699999412755
+          },
+          {
+            "context": [
+              49
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.7385260999999446
+          },
+          {
+            "context": [
+              50
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.09069799999997485
+          },
+          {
+            "context": [
+              51
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.01856260000022303
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.45999380000012025,
+          "graph_read": 1.6018746999998257,
+          "shuffle": 33.87671379999938,
+          "total": 42.81763789999968
+        },
+        "edges": 321374,
+        "nodes": 121420,
+        "peak_memory": {
+          "bytes": 549412864,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 549412864,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\r2-shuffle2-a.json",
+      "report_sha256": "e97436865e9c25843803ca6bf84592c064e3335b49885b33f6e9bd5cf1e6f825",
+      "result_sha256": "0215f7df908200e3c64c7fc26a63c5592f9c176595c29a7ca606176ea8488936",
+      "shuffle_seed": 2,
+      "context_timing_records": 52,
+      "same_result_as_matrix05": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\r2-shuffle2-b",
+      "checksums_sha256": "aa1c7733a51ae5cfac6b86b733fe745f7eccfdf4f6e045f79bf89d8a444bd388",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r2",
+        "--shuffle-seed",
+        "2",
+        "--run-id",
+        "r2-shuffle2-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs"
+      ],
+      "dataset": "r2",
+      "elapsed_seconds": 47.01600000000053,
+      "measurements": {
+        "context_timings": [
+          {
+            "context": [
+              0
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.020154099999672326
+          },
+          {
+            "context": [
+              1
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.34684759999981907
+          },
+          {
+            "context": [
+              2
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.4263950000004115
+          },
+          {
+            "context": [
+              3
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.29656530000011116
+          },
+          {
+            "context": [
+              4
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.00420010000016191
+          },
+          {
+            "context": [
+              5
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.012315500000113389
+          },
+          {
+            "context": [
+              6
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.010675700000319921
+          },
+          {
+            "context": [
+              7
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.03628070000013395
+          },
+          {
+            "context": [
+              8
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.717605700000604
+          },
+          {
+            "context": [
+              9
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.006869100000585604
+          },
+          {
+            "context": [
+              10
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.010541000000557688
+          },
+          {
+            "context": [
+              11
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.05873570000039763
+          },
+          {
+            "context": [
+              12
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.880721900000026
+          },
+          {
+            "context": [
+              13
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.08466390000012325
+          },
+          {
+            "context": [
+              14
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.06650320000062493
+          },
+          {
+            "context": [
+              15
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.019762799999625713
+          },
+          {
+            "context": [
+              16
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.03422320000026957
+          },
+          {
+            "context": [
+              17
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.00720279999950435
+          },
+          {
+            "context": [
+              18
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.4054095999999845
+          },
+          {
+            "context": [
+              19
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.006550399999468937
+          },
+          {
+            "context": [
+              20
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.367735900000298
+          },
+          {
+            "context": [
+              21
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.8788020000001779
+          },
+          {
+            "context": [
+              22
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.19971220000024914
+          },
+          {
+            "context": [
+              23
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.010188600000219594
+          },
+          {
+            "context": [
+              24
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.029577300000710238
+          },
+          {
+            "context": [
+              25
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.133452899999611
+          },
+          {
+            "context": [
+              26
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.038621300000158953
+          },
+          {
+            "context": [
+              27
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.009559699999954319
+          },
+          {
+            "context": [
+              28
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.5200919999997495
+          },
+          {
+            "context": [
+              29
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.1431057999998302
+          },
+          {
+            "context": [
+              30
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.47291099999984
+          },
+          {
+            "context": [
+              31
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.25624169999991864
+          },
+          {
+            "context": [
+              32
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.5230364999997619
+          },
+          {
+            "context": [
+              33
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.47612800000024436
+          },
+          {
+            "context": [
+              34
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 1.1369213000007221
+          },
+          {
+            "context": [
+              35
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.0072752999994918355
+          },
+          {
+            "context": [
+              36
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.096784999999727
+          },
+          {
+            "context": [
+              37
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.007309999999961292
+          },
+          {
+            "context": [
+              38
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.044718099999954575
+          },
+          {
+            "context": [
+              39
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.08502140000018699
+          },
+          {
+            "context": [
+              40
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.14320800000041345
+          },
+          {
+            "context": [
+              41
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.8297902999993312
+          },
+          {
+            "context": [
+              42
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.07371229999989737
+          },
+          {
+            "context": [
+              43
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.015132700000322075
+          },
+          {
+            "context": [
+              44
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.12212060000001657
+          },
+          {
+            "context": [
+              45
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.09396280000055413
+          },
+          {
+            "context": [
+              46
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.1915634000006321
+          },
+          {
+            "context": [
+              47
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.5553238000002239
+          },
+          {
+            "context": [
+              48
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.058093199999348144
+          },
+          {
+            "context": [
+              49
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.7413958999995884
+          },
+          {
+            "context": [
+              50
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.0862966000004235
+          },
+          {
+            "context": [
+              51
+            ],
+            "method": "swap progress elapsed; empty context has zero swap work",
+            "seconds": 0.019385399999919173
+          }
+        ],
+        "durations_seconds": {
+          "demand_read": 0.4495774999995774,
+          "graph_read": 1.5392435000003388,
+          "shuffle": 32.17398300000059,
+          "total": 40.74740689999999
+        },
+        "edges": 321374,
+        "nodes": 121420,
+        "peak_memory": {
+          "bytes": 550211584,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 550211584,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\checks\\r2-shuffle2-b.json",
+      "report_sha256": "85b81c65c1200e8460db9504f2440fcdf7aa975f6e6485545c84fcb5d0687931",
+      "result_sha256": "0215f7df908200e3c64c7fc26a63c5592f9c176595c29a7ca606176ea8488936",
+      "shuffle_seed": 2,
+      "context_timing_records": 52,
+      "same_result_as_matrix05": true
+    }
+  ],
+  "purpose": "development graph-only",
+  "state": "success",
+  "readiness_path": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\readiness.json",
+  "readiness_sha256": "684fcb4b7c97d009ffd5f4e057a47c146f2550b5b0430ab9d7b29f7cd48dfc93",
+  "all_18_results_equal_matrix05": true,
+  "candidate_contract": {
+    "algorithm_version": "dds-v2",
+    "accept_factor": 10,
+    "attempt_factor": 500,
+    "proposal_batch_size": 4096
+  }
+}

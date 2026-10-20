@@ -1,0 +1,38 @@
+{
+  "runtime": ".venv-pinned Python 3.11.17, torch 2.14.1+cpu",
+  "cases": [
+    {
+      "imports": "torch",
+      "exit": 0
+    },
+    {
+      "imports": "numpy; torch",
+      "exit": 0
+    },
+    {
+      "imports": "pandas; torch",
+      "exit": 1,
+      "error": "WinError1114 c10.dll"
+    },
+    {
+      "imports": "pyarrow; torch",
+      "exit": 1,
+      "error": "WinError1114 c10.dll"
+    },
+    {
+      "imports": "torch; numpy,pandas,pyarrow",
+      "exit": 0
+    }
+  ],
+  "fix": "Windows prepare-shuffle loads torch before config imports pandas/Arrow; no model construction",
+  "cli_sha256": "e42c6d4a0c1c742ac5f9b660c1fc4089c35b168235a25dd50182055efbb61c84",
+  "probe_manifest": "r2-probe-dll-fixed.json",
+  "regression_log": "dll-repair-targeted.log",
+  "regression": {
+    "tests": 24,
+    "failures": 0,
+    "errors": 2,
+    "errors_reason": "WinError1314 symlink privilege, existing limitation",
+    "fresh_cli_prepare": "passed"
+  }
+}

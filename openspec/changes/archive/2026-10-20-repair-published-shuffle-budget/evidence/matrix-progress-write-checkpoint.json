@@ -1,0 +1,95 @@
+{
+  "algorithm_version": "dds-v2",
+  "completed_contexts": [
+    {
+      "accepted": 11320,
+      "added_edges": 876,
+      "attempt_limit": 566000,
+      "attempts": 18846,
+      "changed_edges": 876,
+      "changed_fraction": 0.773851590106007,
+      "context": [
+        0
+      ],
+      "edge_count": 1132,
+      "empty": false,
+      "intersection_edges": 256,
+      "intersection_fraction": 0.22614840989399293,
+      "nodes": 2335,
+      "ordinal": 0,
+      "rejections": {
+        "existing_edge": 6948,
+        "same_edge_index": 10,
+        "self_loop": 568
+      },
+      "result_edges_sha256": "a8d20a9c6fddf00937c82a6e95fab4a8d0b8b50aedf23396a4f571f5cf6ffb74",
+      "seed_sequence": [
+        0,
+        0
+      ],
+      "source_edges_sha256": "10c573303d22a346eff8f02f450e7143f3366704ba2d931a3222af70170e94dd",
+      "symmetric_difference_edges": 1752,
+      "symmetric_difference_fraction": 0.773851590106007,
+      "target_accepted": 11320
+    },
+    {
+      "accepted": 89720,
+      "added_edges": 4229,
+      "attempt_limit": 4486000,
+      "attempts": 447353,
+      "changed_edges": 4229,
+      "changed_fraction": 0.47135532768613464,
+      "context": [
+        1
+      ],
+      "edge_count": 8972,
+      "empty": false,
+      "intersection_edges": 4743,
+      "intersection_fraction": 0.5286446723138654,
+      "nodes": 2335,
+      "ordinal": 1,
+      "rejections": {
+        "existing_edge": 350400,
+        "same_edge_index": 50,
+        "self_loop": 7183
+      },
+      "result_edges_sha256": "d4298d80b6f92dcf1666adc86ca8b0e124b4e4a48158314802520aab4a7009b3",
+      "seed_sequence": [
+        0,
+        1
+      ],
+      "source_edges_sha256": "3509fb879c737ce09efc7f038360743d5074991c08ab09f110a75c6c282301cc",
+      "symmetric_difference_edges": 8458,
+      "symmetric_difference_fraction": 0.47135532768613464,
+      "target_accepted": 89720
+    }
+  ],
+  "current": {
+    "accepted": 130317,
+    "attempt_limit": 11134000,
+    "attempts": 1100000,
+    "context": [
+      2
+    ],
+    "edge_count": 22268,
+    "elapsed_seconds": 0.803116599999953,
+    "reason": null,
+    "rejections": {
+      "existing_edge": 957611,
+      "same_edge_index": 47,
+      "self_loop": 12025
+    },
+    "seed_sequence": [
+      0,
+      2
+    ],
+    "target_accepted": 222680
+  },
+  "data_name": "r2",
+  "elapsed_seconds": 1.3450821000000133,
+  "node_keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+  "shuffle_seed": 0,
+  "source_edges_sha256": "148e276b3def4e92fb9511229fcee8f0d276be1edb76bde80c2368d6e118f14e",
+  "stage": "shuffle",
+  "updated": "2026-10-20T12:46:12+08:00"
+}

@@ -225,6 +225,14 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 
 保存状态：本机已写入；本批次产物尚未 commit/push，未封存，异地备份与远端恢复未核验。本次没有执行 Git 或备份写入。该状态描述交付产物，不单独追踪记录文件自身提交。
 
+## P02-T002 修复验收与限时成本交付（2026-10-20）
+
+产物为`repair-published-shuffle-budget`实现/独立验收交付，以及`p02-t002-20261020-01`真实r2短程成本诊断；[报告](../reports/p02-t002-20261020-01/report.md)为事实入口，[D027](../decisions.md#d027-发布图修复验收与限时成本门)记录研究侧软件接受与自动暂停决定。没有正式拟合完成，不构成图收益证据。
+
+持久位置：实现规划、源码/证据指纹与独立报告保存在`openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/`，主规格已同步；成本脚本、结构化决定与按字节复制的关键证据保存在`research/reports/p02-t002-20261020-01/`。复制清单为[cost-evidence-manifest.json](../reports/p02-t002-20261020-01/cost-evidence-manifest.json)，记录原位置、文件大小及SHA256；大型数组和完整原诊断仍在忽略的`scratch/graph-value-skeleton/p02-t002-20261020-01/`。图预生成与独立检查的原scratch路径及校验和由归档变更的就绪证据引用。
+
+保存状态：用户随后授权记录预测并提交推送；本次修复差异、验收归档目录、新成本交付及预测汇总随本次提交入库，提交身份从Git历史追溯，推送目标为`origin/FJWP2T002`。执行源码身份仍按各报告记录的历史commit与实际字节定位。未封存，异地备份与远端恢复未独立核验；没有启动新的备份检查。此条描述交付产物，记录文件自身不另补提交回执。
+
 ## my-change PR 合入（2026-10-11 接手记录）
 
 用户告知此前已向 `my-change` 发起 PR。本轮只读本地 Git：合并提交 `7cbfe561285b1118c09e3e2510e1e2d711fe7432` 记录 PR #9（`Excavator-13/xzs`），提交时间为 2026-10-08，父提交为 `341e7f8` 与 `98e9fbe`。本地 `xzs`、`my-change` 和缓存的 `origin/my-change` 均指向该合并提交；缓存的 `origin/xzs` 为 `98e9fbe`。合并提交与 `98e9fbe` 的文件树差异为空，后者含此前维护、T010/T011 及保存状态记录。

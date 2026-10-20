@@ -19,6 +19,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
@@ -160,7 +161,21 @@ class RunDirectory:
             os.fsync(handle.fileno())
         finally:
             handle.close()
-        os.replace(handle.name, target)
+        # Windows readers/scanners may briefly hold a handle without delete
+        # sharing. Retry only the atomic rename of these already-flushed bytes;
+        # never regenerate computation or silently discard a failed write.
+        retries = 0
+        while True:
+            try:
+                os.replace(handle.name, target)
+                break
+            except PermissionError as exc:
+                if sys.platform != "win32" or getattr(exc, "winerror", None) not in (5, 32, 33) or retries >= 7:
+                    raise
+                time.sleep(min(0.02 * 2**retries, 0.25))
+                retries += 1
+        if retries:
+            self.append_event("atomic_replace_recovered", path=relative, retries=retries)
         return target
 
     def write_text(self, relative: str, text: str) -> Path:

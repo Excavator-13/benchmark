@@ -1,5 +1,34 @@
 # Implementation Notes
 
+## Latest status — 2026-10-20 (Asia/Shanghai)
+
+**12/15 tasks checked; paused on a new Windows progress-file replacement error.**
+See [DLL resolution and readiness evidence](evidence/dll-resolution-20261020.md)
+for the current task mapping, exact commands, source basis, tests and evidence.
+This section supersedes older immediate-blocker/status text below, retained as
+historical handoff context.
+
+DLL failure is now reproducible by import order and avoided by loading torch
+before pandas/Arrow in the Windows graph-preparation command. Fresh CLI fixture
+regression succeeds; targeted24 tests have no assertion failures and two known
+symlink-privilege errors. r2/seed0 probe and independent regeneration succeed,
+with matching graph hashes;52 contexts complete, including formerly failing
+context12. Task2.3 (v1 fixture saved evidence) and4.2 (r2 probe) are checked.
+
+Full matrix attempt `repair-shuffle-v2-20261020-04` fails at its first worker
+after26.1 s: os.replace of the owned progress.json raises PermissionError
+WinError5. Paused manifest and checkpoint/temp file are retained; zero members
+complete. No further attempt was scheduled. The specific file-lock/permission
+cause is unproven. Task4.3 remains incomplete, as do4.4/4.5; there is no new
+complete regression-suite PASS, full-matrix readiness, predictive-benefit claim,
+formal training, independent verification, or research acceptance.
+
+Implementation roots/store/base remain as recorded below. This session changes
+cli.py, tests/test_prepared.py and README plus change-local notes/evidence/tasks;
+no global package reinstall or global Git-setting changes.
+
+## Historical implementation and repair notes
+
 Diagnostic follow-up: see [evidence/diagnosis-20261019.md](evidence/diagnosis-20261019.md). Confirmed missing pip evidence, Windows resource-module assumptions, and CRLF patch reconstruction failure. Isolated torch import succeeds; original DLL failure remains unexplained. No implementation fixes or matrix retries in this follow-up.
 
 - Change: `repair-published-shuffle-budget`

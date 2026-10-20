@@ -1,0 +1,45 @@
+ M DELEGATION.md
+ M README.md
+ M benchmark/graph_value_skeleton/checks.py
+ M benchmark/graph_value_skeleton/cli.py
+ M benchmark/graph_value_skeleton/prepared.py
+ M benchmark/graph_value_skeleton/tests/test_prepared.py
+ M benchmark/nograph_baseline/artifacts.py
+ D openspec/changes/repair-published-shuffle-budget/.openspec.yaml
+ D openspec/changes/repair-published-shuffle-budget/benchmark_membership.py
+ D openspec/changes/repair-published-shuffle-budget/design.md
+ D openspec/changes/repair-published-shuffle-budget/evidence/baseline-regression-02.log
+ D openspec/changes/repair-published-shuffle-budget/evidence/baseline-regression.log
+ D openspec/changes/repair-published-shuffle-budget/evidence/baseline-repair-03.json
+ D openspec/changes/repair-published-shuffle-budget/evidence/baseline-repair-03.log
+ D openspec/changes/repair-published-shuffle-budget/evidence/baseline-repair-focused-final.log
+ D openspec/changes/repair-published-shuffle-budget/evidence/baseline-repair-focused.log
+ D openspec/changes/repair-published-shuffle-budget/evidence/diagnosis-20261019.md
+ D openspec/changes/repair-published-shuffle-budget/evidence/legacy-recompute-final.log
+ D openspec/changes/repair-published-shuffle-budget/evidence/membership.json
+ D openspec/changes/repair-published-shuffle-budget/evidence/pause-summary.json
+ D openspec/changes/repair-published-shuffle-budget/evidence/r2-probe-r2-shuffle0-a.log
+ D openspec/changes/repair-published-shuffle-budget/evidence/r2-probe-readiness.json
+ D openspec/changes/repair-published-shuffle-budget/evidence/r2-probe-repair-readiness.json
+ D openspec/changes/repair-published-shuffle-budget/evidence/r2-probe-repair-worker-status.json
+ D openspec/changes/repair-published-shuffle-budget/evidence/r2-probe-repair.log
+ D openspec/changes/repair-published-shuffle-budget/evidence/r2-probe-status.json
+ D openspec/changes/repair-published-shuffle-budget/evidence/r2-probe-worker-status.json
+ D openspec/changes/repair-published-shuffle-budget/evidence/repair-followup.md
+ D openspec/changes/repair-published-shuffle-budget/evidence/skeleton-repair-04.json
+ D openspec/changes/repair-published-shuffle-budget/evidence/skeleton-repair-04.log
+ D openspec/changes/repair-published-shuffle-budget/evidence/skeleton-v2.log
+ D openspec/changes/repair-published-shuffle-budget/evidence/targeted-tests.log
+ D openspec/changes/repair-published-shuffle-budget/implementation-notes.md
+ D openspec/changes/repair-published-shuffle-budget/proposal.md
+ D openspec/changes/repair-published-shuffle-budget/run_tests.py
+ D openspec/changes/repair-published-shuffle-budget/specs/graph-value-skeleton/spec.md
+ D openspec/changes/repair-published-shuffle-budget/tasks.md
+ M openspec/specs/graph-value-skeleton/spec.md
+ M research/decisions.md
+ M research/phases/P02/plan.md
+ M research/phases/P02/t002-execution.md
+ M research/state.md
+?? benchmark/graph_value_skeleton/tests/test_atomic_writes.py
+?? openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/
+?? research/reports/p02-t002-20261020-01/

@@ -1,0 +1,692 @@
+[
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/audit.json",
+    "saved": "cost-evidence/r2-shuffle0/audit.json",
+    "bytes": 20812,
+    "sha256": "f94199ca6db1de5c429871fdd416e752543f267179d4962f6ab736fd316ce4e0"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/__init__.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/graph_value_skeleton/__init__.py",
+    "bytes": 694,
+    "sha256": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/__main__.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/graph_value_skeleton/__main__.py",
+    "bytes": 205,
+    "sha256": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/_worker.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/graph_value_skeleton/_worker.py",
+    "bytes": 2192,
+    "sha256": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/checks.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/graph_value_skeleton/checks.py",
+    "bytes": 93945,
+    "sha256": "16e071b5e4384e7ec9f77ca9c4fcdc387632794ea665b4be0a01ad1e9969e8bc"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/cli.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/graph_value_skeleton/cli.py",
+    "bytes": 12245,
+    "sha256": "e42c6d4a0c1c742ac5f9b660c1fc4089c35b168235a25dd50182055efbb61c84"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/config.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/graph_value_skeleton/config.py",
+    "bytes": 14371,
+    "sha256": "85d180e6a49cf0e03d7935c5b55e300479f7619054b5b816c21c4430ac89dec6"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/data.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/graph_value_skeleton/data.py",
+    "bytes": 13911,
+    "sha256": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/graph.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/graph_value_skeleton/graph.py",
+    "bytes": 19576,
+    "sha256": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/model.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/graph_value_skeleton/model.py",
+    "bytes": 12039,
+    "sha256": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/protocol.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/graph_value_skeleton/protocol.py",
+    "bytes": 10999,
+    "sha256": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/runner.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/graph_value_skeleton/runner.py",
+    "bytes": 45831,
+    "sha256": "d18f24423ebc0371aaa9e4f56951ec9f0bc802e90f7927075753e9d1e665a814"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/shuffle.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/graph_value_skeleton/shuffle.py",
+    "bytes": 21415,
+    "sha256": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/training.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/graph_value_skeleton/training.py",
+    "bytes": 15876,
+    "sha256": "d97df65ddb65fc36ea88481e6593f4582bf5eae114f602cbbbdc93ed9d9e37b2"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/nograph_baseline/__init__.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/nograph_baseline/__init__.py",
+    "bytes": 662,
+    "sha256": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/nograph_baseline/baselines.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/nograph_baseline/baselines.py",
+    "bytes": 6055,
+    "sha256": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/nograph_baseline/coverage.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/nograph_baseline/coverage.py",
+    "bytes": 14549,
+    "sha256": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/nograph_baseline/data.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/nograph_baseline/data.py",
+    "bytes": 20195,
+    "sha256": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/nograph_baseline/metrics.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/nograph_baseline/metrics.py",
+    "bytes": 16170,
+    "sha256": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/nograph_baseline/protocol.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/nograph_baseline/protocol.py",
+    "bytes": 30218,
+    "sha256": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/benchmark/nograph_baseline/ridge.py",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/benchmark/nograph_baseline/ridge.py",
+    "bytes": 16638,
+    "sha256": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/code-untracked/manifest.json",
+    "saved": "cost-evidence/r2-shuffle0/code-untracked/manifest.json",
+    "bytes": 2349,
+    "sha256": "ca42130792dbb8cea348834920528205df0e69538e5676ad5c9375337dfa9011"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/command.json",
+    "saved": "cost-evidence/r2-shuffle0/command.json",
+    "bytes": 956,
+    "sha256": "9f1947cf03584fe2d42c4695497c37011a557e61cc771750b3c901c66daa6b2a"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/config.json",
+    "saved": "cost-evidence/r2-shuffle0/config.json",
+    "bytes": 4549,
+    "sha256": "cb6af0cf9ca7360d9464eb6fe827f072ba1ba5f6fdd349a810b22f28122f4c02"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/cost-observation.json",
+    "saved": "cost-evidence/r2-shuffle0/cost-observation.json",
+    "bytes": 1884,
+    "sha256": "6a1da4b037d80d6e03938899f72ac5d37e0180adc5cae5b774a7d44fcf1e0e8c"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/environment.json",
+    "saved": "cost-evidence/r2-shuffle0/environment.json",
+    "bytes": 4387,
+    "sha256": "3c9787c818285dbaddef5c8dc1f908f532cae63ee8053cecf6fc3035409c9c2f"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/environment.txt",
+    "saved": "cost-evidence/r2-shuffle0/environment.txt",
+    "bytes": 262,
+    "sha256": "dd0b78ab4ea8def43c745f7c900369b43cf78077a74c86d326b3e3ca5fb6abe3"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/events.jsonl",
+    "saved": "cost-evidence/r2-shuffle0/events.jsonl",
+    "bytes": 303,
+    "sha256": "f1c40025c6e45e3696190c828fbe061cd4e44793d88c161c7deb392a06478aca"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/failure.json",
+    "saved": "cost-evidence/r2-shuffle0/failure.json",
+    "bytes": 3807,
+    "sha256": "d03a641e76ce24b9c9f3d3a4bd7f51b06bf63d5d6b159b0f7521009633d19ea0"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/git-commit.txt",
+    "saved": "cost-evidence/r2-shuffle0/git-commit.txt",
+    "bytes": 41,
+    "sha256": "fb79c06fcf8b99182becdfaa60be29fb495685f1e47e99b5eee7d207df97e1f4"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/git-diff.patch",
+    "saved": "cost-evidence/r2-shuffle0/git-diff.patch",
+    "bytes": 7997,
+    "sha256": "4ced5b3cf2a94a52634c5b3b6399502c3be2cf37166f73b60bc29966ef246060"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/git-status.txt",
+    "saved": "cost-evidence/r2-shuffle0/git-status.txt",
+    "bytes": 2992,
+    "sha256": "d77b6aa2dd69c1a1ccad177688830a4248e247c13f1367b29470e9fbe8f3505e"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/graph-audit.json",
+    "saved": "cost-evidence/r2-shuffle0/graph-audit.json",
+    "bytes": 54905,
+    "sha256": "82a60a022ce02c50381dbfd56890dd4fd5b62bafcf17023a40f0d8dc74d92709"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/protocol.md",
+    "saved": "cost-evidence/r2-shuffle0/protocol.md",
+    "bytes": 28508,
+    "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/shuffle-preparation.json",
+    "saved": "cost-evidence/r2-shuffle0/shuffle-preparation.json",
+    "bytes": 4874,
+    "sha256": "750b3f27024aa7f9fd26e2c715d4575e09214087cc26ef7927657216a5f36538"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/source.json",
+    "saved": "cost-evidence/r2-shuffle0/source.json",
+    "bytes": 19197,
+    "sha256": "f9f5a68344a7b454e50f806dde1ac367fd5a2daa98d1666104a063f51adbd7e2"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/status.json",
+    "saved": "cost-evidence/r2-shuffle0/status.json",
+    "bytes": 1632,
+    "sha256": "c0d2f7bfed343591efd627438779913abb7931e5db156fec0b0792cfaabf61e3"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic/windows.json",
+    "saved": "cost-evidence/r2-shuffle0/windows.json",
+    "bytes": 9865,
+    "sha256": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/audit.json",
+    "saved": "cost-evidence/r2-shuffle1/audit.json",
+    "bytes": 20812,
+    "sha256": "f94199ca6db1de5c429871fdd416e752543f267179d4962f6ab736fd316ce4e0"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/__init__.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/graph_value_skeleton/__init__.py",
+    "bytes": 694,
+    "sha256": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/__main__.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/graph_value_skeleton/__main__.py",
+    "bytes": 205,
+    "sha256": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/_worker.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/graph_value_skeleton/_worker.py",
+    "bytes": 2192,
+    "sha256": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/checks.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/graph_value_skeleton/checks.py",
+    "bytes": 93945,
+    "sha256": "16e071b5e4384e7ec9f77ca9c4fcdc387632794ea665b4be0a01ad1e9969e8bc"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/cli.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/graph_value_skeleton/cli.py",
+    "bytes": 12245,
+    "sha256": "e42c6d4a0c1c742ac5f9b660c1fc4089c35b168235a25dd50182055efbb61c84"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/config.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/graph_value_skeleton/config.py",
+    "bytes": 14371,
+    "sha256": "85d180e6a49cf0e03d7935c5b55e300479f7619054b5b816c21c4430ac89dec6"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/data.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/graph_value_skeleton/data.py",
+    "bytes": 13911,
+    "sha256": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/graph.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/graph_value_skeleton/graph.py",
+    "bytes": 19576,
+    "sha256": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/model.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/graph_value_skeleton/model.py",
+    "bytes": 12039,
+    "sha256": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/protocol.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/graph_value_skeleton/protocol.py",
+    "bytes": 10999,
+    "sha256": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/runner.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/graph_value_skeleton/runner.py",
+    "bytes": 45831,
+    "sha256": "d18f24423ebc0371aaa9e4f56951ec9f0bc802e90f7927075753e9d1e665a814"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/shuffle.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/graph_value_skeleton/shuffle.py",
+    "bytes": 21415,
+    "sha256": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/training.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/graph_value_skeleton/training.py",
+    "bytes": 15876,
+    "sha256": "d97df65ddb65fc36ea88481e6593f4582bf5eae114f602cbbbdc93ed9d9e37b2"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/nograph_baseline/__init__.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/nograph_baseline/__init__.py",
+    "bytes": 662,
+    "sha256": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/nograph_baseline/baselines.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/nograph_baseline/baselines.py",
+    "bytes": 6055,
+    "sha256": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/nograph_baseline/coverage.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/nograph_baseline/coverage.py",
+    "bytes": 14549,
+    "sha256": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/nograph_baseline/data.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/nograph_baseline/data.py",
+    "bytes": 20195,
+    "sha256": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/nograph_baseline/metrics.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/nograph_baseline/metrics.py",
+    "bytes": 16170,
+    "sha256": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/nograph_baseline/protocol.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/nograph_baseline/protocol.py",
+    "bytes": 30218,
+    "sha256": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/benchmark/nograph_baseline/ridge.py",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/benchmark/nograph_baseline/ridge.py",
+    "bytes": 16638,
+    "sha256": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/code-untracked/manifest.json",
+    "saved": "cost-evidence/r2-shuffle1/code-untracked/manifest.json",
+    "bytes": 2349,
+    "sha256": "ca42130792dbb8cea348834920528205df0e69538e5676ad5c9375337dfa9011"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/command.json",
+    "saved": "cost-evidence/r2-shuffle1/command.json",
+    "bytes": 987,
+    "sha256": "92ac54f70ce32105911e439756711b6f4227581274b60d076421e7f768ff67bd"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/config.json",
+    "saved": "cost-evidence/r2-shuffle1/config.json",
+    "bytes": 4584,
+    "sha256": "53765d5fe92346a4055470b7e0b6d0552241783cd28b7098d16d98f1f24515dc"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/cost-observation.json",
+    "saved": "cost-evidence/r2-shuffle1/cost-observation.json",
+    "bytes": 1941,
+    "sha256": "c00ecf870c0dd7dd54c13d1616ad7678f41bd8ae49e9a01d20810e1945f70046"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/environment.json",
+    "saved": "cost-evidence/r2-shuffle1/environment.json",
+    "bytes": 4387,
+    "sha256": "3c9787c818285dbaddef5c8dc1f908f532cae63ee8053cecf6fc3035409c9c2f"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/environment.txt",
+    "saved": "cost-evidence/r2-shuffle1/environment.txt",
+    "bytes": 262,
+    "sha256": "dd0b78ab4ea8def43c745f7c900369b43cf78077a74c86d326b3e3ca5fb6abe3"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/events.jsonl",
+    "saved": "cost-evidence/r2-shuffle1/events.jsonl",
+    "bytes": 303,
+    "sha256": "38aa009afe778e79a8d74f26897d039e026735271e05ddc6f4c32f5800fec68f"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/failure.json",
+    "saved": "cost-evidence/r2-shuffle1/failure.json",
+    "bytes": 3807,
+    "sha256": "336520f279c120d0e39ecd8a16e99878ca340af66699a31436e682f0695a31e1"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/git-commit.txt",
+    "saved": "cost-evidence/r2-shuffle1/git-commit.txt",
+    "bytes": 41,
+    "sha256": "fb79c06fcf8b99182becdfaa60be29fb495685f1e47e99b5eee7d207df97e1f4"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/git-diff.patch",
+    "saved": "cost-evidence/r2-shuffle1/git-diff.patch",
+    "bytes": 7997,
+    "sha256": "4ced5b3cf2a94a52634c5b3b6399502c3be2cf37166f73b60bc29966ef246060"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/git-status.txt",
+    "saved": "cost-evidence/r2-shuffle1/git-status.txt",
+    "bytes": 3033,
+    "sha256": "43bfe1b0b93f73a29b6c0347fe67a92eacb2f9998e698d9c2804da788d756105"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/graph-audit.json",
+    "saved": "cost-evidence/r2-shuffle1/graph-audit.json",
+    "bytes": 54907,
+    "sha256": "57ec1444c98a5c2f19e9b1b3a937badb0269185ea68110fe4b40d5d095032fb0"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/protocol.md",
+    "saved": "cost-evidence/r2-shuffle1/protocol.md",
+    "bytes": 28508,
+    "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/shuffle-preparation.json",
+    "saved": "cost-evidence/r2-shuffle1/shuffle-preparation.json",
+    "bytes": 4874,
+    "sha256": "ae96f35fa60aaf94a83f8775d83ba4c03ded1bab9734c51a6532ccfd5e045213"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/source.json",
+    "saved": "cost-evidence/r2-shuffle1/source.json",
+    "bytes": 19197,
+    "sha256": "e210e4eeabca0a00a7d3c746fa06f720209a2a96f4b70a9508aad9f5c0e6cd3d"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/status.json",
+    "saved": "cost-evidence/r2-shuffle1/status.json",
+    "bytes": 1632,
+    "sha256": "2b876cbba7a8f962bd856f4539ad240ef9965bbc7d66692f83f7b7e1f5fe3744"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic/windows.json",
+    "saved": "cost-evidence/r2-shuffle1/windows.json",
+    "bytes": 9865,
+    "sha256": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/audit.json",
+    "saved": "cost-evidence/r2-shuffle2/audit.json",
+    "bytes": 20812,
+    "sha256": "f94199ca6db1de5c429871fdd416e752543f267179d4962f6ab736fd316ce4e0"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/__init__.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/graph_value_skeleton/__init__.py",
+    "bytes": 694,
+    "sha256": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/__main__.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/graph_value_skeleton/__main__.py",
+    "bytes": 205,
+    "sha256": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/_worker.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/graph_value_skeleton/_worker.py",
+    "bytes": 2192,
+    "sha256": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/checks.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/graph_value_skeleton/checks.py",
+    "bytes": 93945,
+    "sha256": "16e071b5e4384e7ec9f77ca9c4fcdc387632794ea665b4be0a01ad1e9969e8bc"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/cli.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/graph_value_skeleton/cli.py",
+    "bytes": 12245,
+    "sha256": "e42c6d4a0c1c742ac5f9b660c1fc4089c35b168235a25dd50182055efbb61c84"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/config.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/graph_value_skeleton/config.py",
+    "bytes": 14371,
+    "sha256": "85d180e6a49cf0e03d7935c5b55e300479f7619054b5b816c21c4430ac89dec6"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/data.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/graph_value_skeleton/data.py",
+    "bytes": 13911,
+    "sha256": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/graph.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/graph_value_skeleton/graph.py",
+    "bytes": 19576,
+    "sha256": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/model.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/graph_value_skeleton/model.py",
+    "bytes": 12039,
+    "sha256": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/protocol.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/graph_value_skeleton/protocol.py",
+    "bytes": 10999,
+    "sha256": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/runner.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/graph_value_skeleton/runner.py",
+    "bytes": 45831,
+    "sha256": "d18f24423ebc0371aaa9e4f56951ec9f0bc802e90f7927075753e9d1e665a814"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/shuffle.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/graph_value_skeleton/shuffle.py",
+    "bytes": 21415,
+    "sha256": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/graph_value_skeleton/training.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/graph_value_skeleton/training.py",
+    "bytes": 15876,
+    "sha256": "d97df65ddb65fc36ea88481e6593f4582bf5eae114f602cbbbdc93ed9d9e37b2"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/nograph_baseline/__init__.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/nograph_baseline/__init__.py",
+    "bytes": 662,
+    "sha256": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/nograph_baseline/baselines.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/nograph_baseline/baselines.py",
+    "bytes": 6055,
+    "sha256": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/nograph_baseline/coverage.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/nograph_baseline/coverage.py",
+    "bytes": 14549,
+    "sha256": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/nograph_baseline/data.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/nograph_baseline/data.py",
+    "bytes": 20195,
+    "sha256": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/nograph_baseline/metrics.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/nograph_baseline/metrics.py",
+    "bytes": 16170,
+    "sha256": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/nograph_baseline/protocol.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/nograph_baseline/protocol.py",
+    "bytes": 30218,
+    "sha256": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/benchmark/nograph_baseline/ridge.py",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/benchmark/nograph_baseline/ridge.py",
+    "bytes": 16638,
+    "sha256": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/code-untracked/manifest.json",
+    "saved": "cost-evidence/r2-shuffle2/code-untracked/manifest.json",
+    "bytes": 2349,
+    "sha256": "ca42130792dbb8cea348834920528205df0e69538e5676ad5c9375337dfa9011"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/command.json",
+    "saved": "cost-evidence/r2-shuffle2/command.json",
+    "bytes": 987,
+    "sha256": "3805c07320b4c953199eef2a0c2f215ac790d2b5ec2fbc4b02a60dad5a02e258"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/config.json",
+    "saved": "cost-evidence/r2-shuffle2/config.json",
+    "bytes": 4584,
+    "sha256": "e462635d582b7cf41a690256f34fa606d8ed150f05fa742fd10879416273b2db"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/cost-observation.json",
+    "saved": "cost-evidence/r2-shuffle2/cost-observation.json",
+    "bytes": 1852,
+    "sha256": "a0fa2509e812ad920302ebcb19d3b17b58e9df9b5005f0cec01807b634e2debe"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/cost-observation.tmp",
+    "saved": "cost-evidence/r2-shuffle2/cost-observation.tmp",
+    "bytes": 1941,
+    "sha256": "481ca034cbe92a017707e127657b6ace953f0aef697c78ace9084c2cf795de5a"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/environment.json",
+    "saved": "cost-evidence/r2-shuffle2/environment.json",
+    "bytes": 4387,
+    "sha256": "3c9787c818285dbaddef5c8dc1f908f532cae63ee8053cecf6fc3035409c9c2f"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/environment.txt",
+    "saved": "cost-evidence/r2-shuffle2/environment.txt",
+    "bytes": 262,
+    "sha256": "dd0b78ab4ea8def43c745f7c900369b43cf78077a74c86d326b3e3ca5fb6abe3"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/events.jsonl",
+    "saved": "cost-evidence/r2-shuffle2/events.jsonl",
+    "bytes": 331,
+    "sha256": "b26b09cabb7fbd88c13790d09948b298c1c09b56c1c9c1e9aea9ea8ff30c8640"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/failure.json",
+    "saved": "cost-evidence/r2-shuffle2/failure.json",
+    "bytes": 4902,
+    "sha256": "66946339233810c28da043ca25d0cd141c3a4cace2c1cf0078610a1149b5346f"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/git-commit.txt",
+    "saved": "cost-evidence/r2-shuffle2/git-commit.txt",
+    "bytes": 41,
+    "sha256": "fb79c06fcf8b99182becdfaa60be29fb495685f1e47e99b5eee7d207df97e1f4"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/git-diff.patch",
+    "saved": "cost-evidence/r2-shuffle2/git-diff.patch",
+    "bytes": 7997,
+    "sha256": "4ced5b3cf2a94a52634c5b3b6399502c3be2cf37166f73b60bc29966ef246060"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/git-status.txt",
+    "saved": "cost-evidence/r2-shuffle2/git-status.txt",
+    "bytes": 3033,
+    "sha256": "43bfe1b0b93f73a29b6c0347fe67a92eacb2f9998e698d9c2804da788d756105"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/graph-audit.json",
+    "saved": "cost-evidence/r2-shuffle2/graph-audit.json",
+    "bytes": 54906,
+    "sha256": "20ce2c6469b4be38ea707a12162da6f0aa02e946b5d9f10f751756c32c129e24"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/protocol.md",
+    "saved": "cost-evidence/r2-shuffle2/protocol.md",
+    "bytes": 28508,
+    "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/shuffle-preparation.json",
+    "saved": "cost-evidence/r2-shuffle2/shuffle-preparation.json",
+    "bytes": 4875,
+    "sha256": "6a31610d3e906c2c05de5e1684d02dfa97d96d8d3339ae6ac47f0841020a232d"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/source.json",
+    "saved": "cost-evidence/r2-shuffle2/source.json",
+    "bytes": 19197,
+    "sha256": "b6e0f9c26621fd1abdc92f5334d367c33880946255f28de7aadf0fab325d44f4"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/status.json",
+    "saved": "cost-evidence/r2-shuffle2/status.json",
+    "bytes": 2697,
+    "sha256": "388fe04c8233b95b74555ea037e8baf1b366df48298001505d8dab0c87c151a8"
+  },
+  {
+    "source": "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs/p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic/windows.json",
+    "saved": "cost-evidence/r2-shuffle2/windows.json",
+    "bytes": 9865,
+    "sha256": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf"
+  }
+]
