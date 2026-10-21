@@ -1,0 +1,311 @@
+{
+  "change": "add-graph-value-skeleton",
+  "created": "2026-10-22T04:21:54+08:00",
+  "dataset": "r0",
+  "demand": {
+    "dataset": "r0",
+    "key_columns": [
+      "r0_id",
+      "skill_id"
+    ],
+    "mode": "count",
+    "node_keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+    "nodes": 2335,
+    "published_assertions": {
+      "complete_grid": true,
+      "contexts": [
+        0
+      ],
+      "dataset": "r0",
+      "dense_offset": {
+        "context_ordinals": {
+          "0": 0
+        },
+        "formula": "context_ordinal*2335 + skill_id",
+        "proven_nodes": 2335,
+        "stride": 2335
+      },
+      "finite_nonnegative": true,
+      "months": 36,
+      "nodes": 2335,
+      "skill_count": 2335,
+      "skill_range": [
+        0,
+        2334
+      ],
+      "unique_keys": 2335
+    },
+    "source_kind": "published",
+    "source_path": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\dataset\\demand\\r0.parquet",
+    "source_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946"
+  },
+  "design_decision": "D023",
+  "environment": {
+    "cpu_count": 24,
+    "execution_settings": {
+      "blas_thread_environment": {
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "device": "cpu",
+      "numpy_seed": 2,
+      "python_seed": 2,
+      "torch_deterministic_algorithms": true,
+      "torch_inter_op_threads": 1,
+      "torch_intra_op_threads": 1,
+      "torch_seed": 2
+    },
+    "gpu_available": false,
+    "graph_extensions": {
+      "dgl": {
+        "available": false,
+        "imported_in_this_process": false,
+        "used_by_this_entry": false
+      },
+      "torch_geometric": {
+        "available": false,
+        "imported_in_this_process": false,
+        "used_by_this_entry": false
+      },
+      "torch_scatter": {
+        "available": false,
+        "imported_in_this_process": false,
+        "used_by_this_entry": false
+      },
+      "torch_sparse": {
+        "available": false,
+        "imported_in_this_process": false,
+        "used_by_this_entry": false
+      }
+    },
+    "machine": "AMD64",
+    "packages": {
+      "numpy": "1.26.4",
+      "pandas": "2.2.3",
+      "pyarrow": "17.0.0",
+      "torch": "2.14.1+cpu"
+    },
+    "platform": "Windows-10-10.0.26300-SP0",
+    "python_version": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]",
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "torch": {
+      "cuda_available": false,
+      "cuda_version": null,
+      "deterministic_algorithms_enabled": true,
+      "deterministic_algorithms_warn_only": false,
+      "device_count": 0,
+      "inter_op_threads": 1,
+      "intra_op_threads": 1,
+      "version": "2.14.1+cpu"
+    }
+  },
+  "evidence_role": "formal (requires separate research authorization)",
+  "git": {
+    "commit": "815f1cc6a546ef81a4deb005dc12b5f70a8c5501",
+    "dirty": true,
+    "errors": {},
+    "identity_available": true,
+    "scope": "source.json",
+    "scoped_dirty": true
+  },
+  "graph": {
+    "block_diagonal": true,
+    "columns": [
+      "r0_id",
+      "row_id",
+      "col_id"
+    ],
+    "dataset": "r0",
+    "duplicate_rows": 0,
+    "edges_sha256": "ed483949d31129db9350e6cb6ba89fad43a380e5900f88304879b3d06906e427",
+    "node_keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+    "nodes": 2335,
+    "published": true,
+    "raw_rows": 60804,
+    "self_loop_rows": 0,
+    "source_kind": "published",
+    "source_path": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\dataset\\graph\\r0.parquet",
+    "source_sha256": "c49bc2ecfddd24ddc7a6c6654fdc7bf2e908820139a987f99a115c11b583aa5b",
+    "symmetry_rate": 1.0,
+    "unique_edges": 60804
+  },
+  "graph_used": {
+    "message_edges": 0,
+    "message_edges_sha256": "<empty: self branch propagates no message>",
+    "method": "self",
+    "propagates_messages": false,
+    "shuffle_identity": null,
+    "shuffled": false,
+    "training_edges": {
+      "edge_count": 0,
+      "edges_sha256": "16075f9a04892974f83dc0e653e081c7e3e7af107a57b9a80e5af155bb14b3cb",
+      "matches_message_edges": true,
+      "method": "chunk-local edges converted to canonical global indices",
+      "windows_verified": 19
+    }
+  },
+  "implementation_readiness_does_not_establish_predictive_benefit": true,
+  "masks": {
+    "activity_definition": "nonzero-month fraction over the 27 unique training observation months; groups inactive==0, low (0,1/3], medium (1/3,2/3], high (2/3,1]",
+    "activity_group_counts": {
+      "high": 2068,
+      "inactive": 27,
+      "low": 111,
+      "medium": 129
+    },
+    "array_sha256": {
+      "activity_high": "3b1605ff483125656fcba9e97c575b76481f8b741ab5eed21471b65e9660cebd",
+      "activity_inactive": "d50e3126c04f58b849d826fc92825db5b8cc110787a2b7acead5f725073f6333",
+      "activity_low": "11e63a423714254733cd17ee2c3675e2c3d9785d36c1c294748377fcf8f14b68",
+      "activity_medium": "6e7e1c94a35f3babd142a45f6c871e98defa3710e45bf8b4967e7419d3c3ba50",
+      "constant_train27": "d50e3126c04f58b849d826fc92825db5b8cc110787a2b7acead5f725073f6333",
+      "has_nonself_neighbor": "c7957ed64e8baadfb9bd68513bdad71ef2b5db2b738af31a59bdbcc7e6b415f0",
+      "nonzero_activity_train27": "1b570ddc5a004504d72d7685695935c518073b0b4ac610b35f194c5f8a189497"
+    },
+    "constant_definition": "float64 training-27 standard deviation == 0 (ddof=0)",
+    "constant_node_count": 27,
+    "has_nonself_neighbor_count": 314,
+    "neighbor_definition": "context-qualified non-self endpoint coverage: a node has a neighbour when it is an endpoint (row_id or col_id) of a graph row whose row_id != col_id within the same context; self-loop rows supply no neighbour",
+    "neighbor_definition_id": "p1-count-L6-H3-context-qualified-nonself-endpoints-v1",
+    "neighbor_source": {
+      "coverage_fraction": 0.13447537473233404,
+      "covered_nodes": 314,
+      "definition": "context-qualified non-self endpoint coverage: a node has a neighbour when it is an endpoint (row_id or col_id) of a graph row whose row_id != col_id within the same context; self-loop rows supply no neighbour",
+      "directed_source_rows": 60804,
+      "graph_columns": [
+        "r0_id",
+        "row_id",
+        "col_id"
+      ],
+      "key_columns": [
+        "r0_id",
+        "skill_id"
+      ],
+      "node_keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+      "nodes": 2335,
+      "non-self rows used": 60804,
+      "self_loop_rows": 0,
+      "source": "raw_graph_parquet",
+      "source_path": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\dataset\\graph\\r0.parquet",
+      "source_sha256": "c49bc2ecfddd24ddc7a6c6654fdc7bf2e908820139a987f99a115c11b583aa5b",
+      "used_for_forecasting": false
+    },
+    "recomputed_from_shuffled_adjacency": false,
+    "scope": "train27 (2021-01..2023-03)",
+    "shared_by_methods": [
+      "self",
+      "graph",
+      "shuffled"
+    ],
+    "train_observation_months": [
+      "2021-01",
+      "2021-02",
+      "2021-03",
+      "2021-04",
+      "2021-05",
+      "2021-06",
+      "2021-07",
+      "2021-08",
+      "2021-09",
+      "2021-10",
+      "2021-11",
+      "2021-12",
+      "2022-01",
+      "2022-02",
+      "2022-03",
+      "2022-04",
+      "2022-05",
+      "2022-06",
+      "2022-07",
+      "2022-08",
+      "2022-09",
+      "2022-10",
+      "2022-11",
+      "2022-12",
+      "2023-01",
+      "2023-02",
+      "2023-03"
+    ]
+  },
+  "method": "self",
+  "mode": "count",
+  "model_definition": "single-layer unidirectional bias-enabled GRU(1,32) shared across nodes; zero hidden state per node per window; shared Linear(32,3) head; graph and shuffled branches add the unweighted mean of distinct incoming neighbour hidden states before the head; no graph-specific trainable tensor",
+  "model_seed": 2,
+  "naive_reference": {
+    "NaiveRef": "LastValue",
+    "NaiveRef6": "LastValue",
+    "published_expected": "LastValue",
+    "published_identity_checked": true,
+    "selection_metric": "validation MSE"
+  },
+  "parameter_counts_measured": {
+    "graph_only": 0,
+    "gru": 3360,
+    "head": 99,
+    "total": 3459
+  },
+  "preprocessing": "none: raw counts feed the encoder and the loss",
+  "purpose": "formal",
+  "records_policy": {
+    "name": "P01-records-v2",
+    "sources": {
+      "records_policy": {
+        "available": true,
+        "path": "AGENTS.md",
+        "sha256": "5860997dae395db403bc038a08c5d91bfb3646f303b202f107b90a8f23758358"
+      },
+      "records_policy_origin": {
+        "available": true,
+        "path": "research/archives/migrations/20261008-evidence-maintenance.md",
+        "sha256": "115e5f7cc49bf3a6ba4224e66808d0c3ff3554432af91b55526d8d2128bfcf88"
+      },
+      "scientific_protocol": {
+        "available": true,
+        "path": "research/phases/P01/protocol.md",
+        "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c"
+      }
+    }
+  },
+  "recovery": {
+    "ancestry": [
+      "f8c72e962748479584893fc5176a92c7"
+    ],
+    "completed_epoch_at_start": 0,
+    "parent_checkpoint": null,
+    "run_id": "p02-t002-r0-20261022-01-r0-self-s2-a",
+    "schema": 1
+  },
+  "run_id": "p02-t002-r0-20261022-01-r0-self-s2-a",
+  "run_type": "run",
+  "scientific_acceptance": false,
+  "scientific_protocol": {
+    "available": true,
+    "path": "research/phases/P01/protocol.md",
+    "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c",
+    "version": "P1-count-L6-H3-v3"
+  },
+  "seed_profile": {
+    "development": true,
+    "final": true
+  },
+  "shuffle_seed": null,
+  "skeleton_version": "P02-skeleton-v1",
+  "source_capture": {
+    "commit": "815f1cc6a546ef81a4deb005dc12b5f70a8c5501",
+    "file": "source.json",
+    "patch_bytes": 0,
+    "patch_path": "git-diff.patch",
+    "scoped_dirty": true,
+    "unrecoverable_paths": []
+  },
+  "task": "P02-T001"
+}

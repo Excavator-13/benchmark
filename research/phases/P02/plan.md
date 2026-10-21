@@ -24,7 +24,7 @@
 | ID | 任务 | 状态 | 依赖 | 完成判据 |
 | --- | --- | --- | --- | --- |
 | P02-T001 | 实现骨架与打乱图 | done | T008 | OpenSpec `add-graph-value-skeleton` 归档 PASS 且研究侧接受实现就绪：[归档报告](../../../openspec/changes/archive/2026-10-19-add-graph-value-skeleton/verification.md)（2026-10-19T10:41:02Z）、[实现说明](../../../openspec/changes/archive/2026-10-19-add-graph-value-skeleton/implementation-notes.md)、[主规格](../../../openspec/specs/graph-value-skeleton/spec.md)、[D025](../../decisions.md#d025-p02-t001-实现研究侧验收与委托回收)。实现符合 D023 骨架口径（参数量 3,459、图分支无额外参数、保度打乱 3 seed、复用 P01 身份）；无正式 run |
-| P02-T002 | 开发对照运行 | in_progress | T001 | `r0`/`region`/`r2` × seeds 0,1,2 × 自身/真实图/打乱图（3 图平均），同 seed 至少两次重复；[执行入口](t002-execution.md)、[成本失败证据](../../reports/p02-t002-20261019-01/report.md)、[修复交接](t002-repair-handoff.md)、[新成本与验收](../../reports/p02-t002-20261020-01/report.md)、[r2重启批次](../../reports/p02-t002-r2-20261020-02/report.md) |
+| P02-T002 | 开发对照运行 | in_progress | T001 | `r0`/`region`/`r2` × seeds 0,1,2 × 自身/真实图/打乱图（3 图平均），同 seed 至少两次重复；[执行入口](t002-execution.md)、[成本失败证据](../../reports/p02-t002-20261019-01/report.md)、[修复交接](t002-repair-handoff.md)、[新成本与验收](../../reports/p02-t002-20261020-01/report.md)、[r2重启批次](../../reports/p02-t002-r2-20261020-02/report.md)、[region/r0组合](../../reports/p02-t002-remaining-20261022-01/report.md) |
 | P02-T003 | 门槛判定与诊断 | todo | T002 | 按 §6.2 #1–#5 判定；未过先查实现、尺度与图语义 |
 | P02-T004 | 后续范围决定 | todo | T003 | 通过才进阶段三门控/边选择；否则收敛或改图来源 |
 
@@ -63,3 +63,5 @@
 - 2026-10-20（D028）：用户重新授权r2运行窗口并允许D盘独立副本，r2正式顺序批次启动，T002 → `in_progress`。本批次只覆盖r2，不改变完整任务的r0/region依赖或科学验收门槛；全部r2拟合与检查成功后按用户要求提交推送。
 
 - 2026-10-20（D029）：检查点变更独立PASS归档并研究侧验收，回收委托；r2使用新批次20-02重启，旧中断现场不变。T002仍in_progress，软件就绪不替代30次/51项检查及完整数据范围验收。
+
+- 2026-10-22（D030）：r2执行块已全部通过并推送，用户要求完成region及r0；建立新组合批次顺序执行，T002仍in_progress，原完成条件不变。

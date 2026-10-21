@@ -1,0 +1,9 @@
+{
+  "batch": "p02-t002-region-20261022-01",
+  "completed_at": "2026-10-21T19:30:38.818737+00:00",
+  "dataset": "region",
+  "formal_fits": 30,
+  "no_T003_or_graph_benefit_verdict": true,
+  "status": "region_ready_for_research_acceptance",
+  "successful_checks": 51
+}

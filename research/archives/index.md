@@ -269,3 +269,9 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 产物：已独立PASS的检查点实现/测试、归档变更`2026-10-20-add-resumable-training-checkpoints`及r2新批次`p02-t002-r2-20261020-02`。[报告](../reports/p02-t002-r2-20261020-02/report.md)为当前执行入口；D029接受软件就绪，实验完成仍待实际30次和51项检查。
 
 保存：实现/验收记录当前在C本地工作区，已按授权清单同步D执行根；原20-01现场保留。正式数组及运行期JSON在D，新批次全成功才提交推送到origin/FJWP2T002，实际回执由publication.json及Git历史定位；尚未提交推送，不记录未来commit哈希。不封存，异地备份和远端恢复未核验。
+
+## P02-T002 r2交付与region/r0新执行（2026-10-22）
+
+r2产物：D执行批次p02-t002-r2-20261020-02于2026-10-21 23:36:58完成30拟合/51检查；publication.json记录23:37:08成功推送origin/FJWP2T002，提交815f1cc6a546ef81a4deb005dc12b5f70a8c5501。可读记录/检查及验收实现已入库，完整数组仍在D，未封存或独立核验远端恢复。
+
+新产物：[region/r0组合报告](../reports/p02-t002-remaining-20261022-01/report.md)、调度适配器和两组执行批次（region/r0-20261022-01）。目前准备预检/启动，C记录及D运行位置仍沿用原独立副本，成功分支才提交推送；新产物尚未提交推送，不记未来commit。无封存或备份恢复操作。

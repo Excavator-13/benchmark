@@ -1,0 +1,699 @@
+{
+  "checker": {
+    "protocol_version": "P1-count-L6-H3-v3",
+    "skeleton_version": "P02-skeleton-v1",
+    "source": {
+      "commit": "815f1cc6a546ef81a4deb005dc12b5f70a8c5501",
+      "errors": {},
+      "files": {
+        "benchmark/graph_value_skeleton/__init__.py": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996",
+        "benchmark/graph_value_skeleton/__main__.py": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f",
+        "benchmark/graph_value_skeleton/_worker.py": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8",
+        "benchmark/graph_value_skeleton/artifacts.py": "a05b58786d6c4ac5fe22dc618ba7b425aeee5110a454977f4afd12418613bc53",
+        "benchmark/graph_value_skeleton/checkpoints.py": "1d8fd80660224d38af8084618f2495fa8e66bbf9f9cac3415edea328f10796c0",
+        "benchmark/graph_value_skeleton/checks.py": "7ef80c6bca83c0b612310748f4d713fc44483a8981bfedf882c573975cc95c47",
+        "benchmark/graph_value_skeleton/cli.py": "eb6fc8260983af939a10a0a391a8755a005ca4528e81bd129d55bca24e9285e5",
+        "benchmark/graph_value_skeleton/config.py": "8ff24265bdc6d419260531373084431023ff5025dad6561150e19c38b77c00e1",
+        "benchmark/graph_value_skeleton/data.py": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0",
+        "benchmark/graph_value_skeleton/graph.py": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf",
+        "benchmark/graph_value_skeleton/model.py": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d",
+        "benchmark/graph_value_skeleton/prepared.py": "277cb86e54c49a7bd55710955690c5401207ef356b8f64b6e86552ce1e8d4372",
+        "benchmark/graph_value_skeleton/protocol.py": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267",
+        "benchmark/graph_value_skeleton/readiness.py": "327d1ef9b023bc093630e90d10166ca37b85ddf87313c8ea8516e4a032eb6783",
+        "benchmark/graph_value_skeleton/runner.py": "21b5b6ab36fbab581f6d999acd4aaf6b1d70400f2a39acd339ddbdf2ed812fb8",
+        "benchmark/graph_value_skeleton/shuffle.py": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be",
+        "benchmark/graph_value_skeleton/training.py": "62692dabd5cfbb5eb52fded6e2e98c20f156a34666cde38e97e5b2afefacb36b",
+        "benchmark/nograph_baseline/__init__.py": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee",
+        "benchmark/nograph_baseline/artifacts.py": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86",
+        "benchmark/nograph_baseline/baselines.py": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9",
+        "benchmark/nograph_baseline/checks.py": "385d84b7c023aa9c9faf0c3627ad657e09a992a10dab0a0654d00e2a356ebaaa",
+        "benchmark/nograph_baseline/coverage.py": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467",
+        "benchmark/nograph_baseline/data.py": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4",
+        "benchmark/nograph_baseline/metrics.py": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c",
+        "benchmark/nograph_baseline/protocol.py": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4",
+        "benchmark/nograph_baseline/ridge.py": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704"
+      },
+      "identity_available": true,
+      "patch_bytes": 0,
+      "patch_eligible_files": [],
+      "patch_included": false,
+      "patch_omitted_reason": null,
+      "policy": "P01-records-v2",
+      "scoped_dirty": false,
+      "scoped_files": [],
+      "scoped_state_available": true,
+      "source_patch": null,
+      "untracked_files": [],
+      "whole_repository_dirty": true
+    }
+  },
+  "command": {
+    "argv": [
+      "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+      "-m",
+      "benchmark.graph_value_skeleton",
+      "compare",
+      "--run-a",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-region-20261022-01-region-graph-s2-a",
+      "--run-b",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-region-20261022-01-region-graph-s2-b",
+      "--report",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\scratch\\graph-value-skeleton\\p02-t002-region-20261022-01\\checks\\p02-t002-region-20261022-01-region-graph-s2-repeat.json"
+    ],
+    "cwd": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01"
+  },
+  "created": "2026-10-22T03:28:54+08:00",
+  "errors": [],
+  "inputs": {
+    "consumed_sha256": {
+      "run_a": {
+        "audit.json": "0e1a8532770611659d69615b1901b42103980502564411648ae0c5cc0a53b011",
+        "config.json": "31a57e346d1c988f6f382653f70b6fb370cb04c193035121f9b59e0c2dbacb50",
+        "environment.json": "54acf86f692bf71a800d895ec65a56cdab8fce6bb57079f4a81d55747445de6e",
+        "gold/test.npy": "00143fc9ca93cbca51c24e5e3d407d4b46c1831898a0dd721be78a32114819e3",
+        "gold/validation.npy": "3e84911365069f6c04a8f9e8a15151fa7fce73b3b511fea81b6c0e089026f409",
+        "graph-audit.json": "517297ed574ee79dcdcb92a1269d722b6290f174a34d83ad0241b927ec2b0b92",
+        "masks.npz": "6cf8d588c25995858aba6ab869aedaf11ba573db6fadc0d22d41f44ca97e9e8e",
+        "metrics.json": "c95e7e9f302f447ac1909a1f34ef99d7ee88855ca565c07a3109b1b5bec2872c",
+        "models/selected.npz": "877935697a6269bb668e6c369f7261968de785bc845361608b5fcd3e2037276d",
+        "nodes.parquet": "75af3fb6261bb058701dc9fd16f38adb580a94e0348f0a40533c05439286a134",
+        "predictions/LastValue/test.npy": "acc461da849903312728b779860621671a03efce5b8ff8345a87ab61648820e3",
+        "predictions/LastValue/validation.npy": "0030d5ba957e7b555789d4b993eb604db0944b033239fc51144f7dcb5a3463d7",
+        "predictions/SeasonalNaive12/test.npy": "3c26ec64190df9e7c8bce03ee3f74a112ed50343c4d75a51c1886bdfe90fd351",
+        "predictions/SeasonalNaive12/validation.npy": "cee7607b99fde406132b7b7022b4b56dbd5990fa128109af97d007a982305af6",
+        "predictions/TrainMean27/test.npy": "37a39bc08a5b400b4578064038e3d62af1f743b733c9bdf853641515927d7b15",
+        "predictions/TrainMean27/validation.npy": "1f17bab4257fd7932a78232801178d5a0c34c3cdf20d9a564eefc991c96a82f8",
+        "predictions/WindowMean6/test.npy": "3533e223df4b81710f8195e8670ea5be726ab2bedfd8192466364845c064e6c3",
+        "predictions/WindowMean6/validation.npy": "c4f36fe1bd5ac3a4b29e96d24aab40f070479495ffc127d504ec220c441099e9",
+        "predictions/Zero/test.npy": "81e655c096f64c946e42f023b75c0e2d552ac0281ef484c401fb7390bc3bcc02",
+        "predictions/Zero/validation.npy": "8b95e41eaf14b97403c38b853d4c05f9d737403b4027601847b671553d7710a2",
+        "predictions/graph/test.npy": "fef1d6d225ea17f136d404dc9b4fc97bf6e21c0286818770ae5e9f01e29f134d",
+        "predictions/graph/validation.npy": "e20f4db3c12e3d72853989c260bb2da43b5845d59a5b721bc6edc4022599571b",
+        "provenance.json": "f2f7bd803bb59f9b57561e2b18cc89a30def4d3b439562521a82ff0abd7a0a3e",
+        "recovery.json": "83459c174dc620b5d779a9752b91b3fc8b8713275f33161b6766659bffc12276",
+        "selection.json": "97b3eabe2ea5ea10496f6966a06cf5f79e04b4cb2ef31af5a1e704e634343a65",
+        "source.json": "8e4f63d2ebace1a78330354de3bd3ebed4b467c9d702dd5f39c0d4d1a6c99b67",
+        "training-history.json": "52de99c0b0ec53d93cd0f9cb03c3048774cdd505bbc9e18e7a439056b9457a09",
+        "windows.json": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf"
+      },
+      "run_b": {
+        "audit.json": "0e1a8532770611659d69615b1901b42103980502564411648ae0c5cc0a53b011",
+        "config.json": "231f9ad0fb5aecd1f52eebd75baaaef1010b373e9c8b0beeb0822b505b4a77bc",
+        "environment.json": "54acf86f692bf71a800d895ec65a56cdab8fce6bb57079f4a81d55747445de6e",
+        "gold/test.npy": "00143fc9ca93cbca51c24e5e3d407d4b46c1831898a0dd721be78a32114819e3",
+        "gold/validation.npy": "3e84911365069f6c04a8f9e8a15151fa7fce73b3b511fea81b6c0e089026f409",
+        "graph-audit.json": "517297ed574ee79dcdcb92a1269d722b6290f174a34d83ad0241b927ec2b0b92",
+        "masks.npz": "6cf8d588c25995858aba6ab869aedaf11ba573db6fadc0d22d41f44ca97e9e8e",
+        "metrics.json": "b3b313d82fd1dbf2da976a81951370f9a0d13a537ff18fcbe046b4386d36c51c",
+        "models/selected.npz": "877935697a6269bb668e6c369f7261968de785bc845361608b5fcd3e2037276d",
+        "nodes.parquet": "75af3fb6261bb058701dc9fd16f38adb580a94e0348f0a40533c05439286a134",
+        "predictions/LastValue/test.npy": "acc461da849903312728b779860621671a03efce5b8ff8345a87ab61648820e3",
+        "predictions/LastValue/validation.npy": "0030d5ba957e7b555789d4b993eb604db0944b033239fc51144f7dcb5a3463d7",
+        "predictions/SeasonalNaive12/test.npy": "3c26ec64190df9e7c8bce03ee3f74a112ed50343c4d75a51c1886bdfe90fd351",
+        "predictions/SeasonalNaive12/validation.npy": "cee7607b99fde406132b7b7022b4b56dbd5990fa128109af97d007a982305af6",
+        "predictions/TrainMean27/test.npy": "37a39bc08a5b400b4578064038e3d62af1f743b733c9bdf853641515927d7b15",
+        "predictions/TrainMean27/validation.npy": "1f17bab4257fd7932a78232801178d5a0c34c3cdf20d9a564eefc991c96a82f8",
+        "predictions/WindowMean6/test.npy": "3533e223df4b81710f8195e8670ea5be726ab2bedfd8192466364845c064e6c3",
+        "predictions/WindowMean6/validation.npy": "c4f36fe1bd5ac3a4b29e96d24aab40f070479495ffc127d504ec220c441099e9",
+        "predictions/Zero/test.npy": "81e655c096f64c946e42f023b75c0e2d552ac0281ef484c401fb7390bc3bcc02",
+        "predictions/Zero/validation.npy": "8b95e41eaf14b97403c38b853d4c05f9d737403b4027601847b671553d7710a2",
+        "predictions/graph/test.npy": "fef1d6d225ea17f136d404dc9b4fc97bf6e21c0286818770ae5e9f01e29f134d",
+        "predictions/graph/validation.npy": "e20f4db3c12e3d72853989c260bb2da43b5845d59a5b721bc6edc4022599571b",
+        "provenance.json": "eb6eb921b2b63031fd6544f46e1012142fa843a111a890484b2d6d75e1a4b9c6",
+        "recovery.json": "26fe16aa308270b526f47fb1878bd004842c891616fba6f00d6f91a80d32d594",
+        "selection.json": "f5b19b1ae731717113358b96f7468d3ac9fc9cece217d2a0ebbb852f34da108d",
+        "source.json": "c0ff12831a6d08a2eee982c7848bd00444933b4fe59f96c589cc1621f891cf46",
+        "training-history.json": "d62351cd6fdb1b8349896e672006c4d3a05a2cf13bf0e1c718c5a5cbc7824deb",
+        "windows.json": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf"
+      }
+    },
+    "dataset": "region",
+    "method": "graph",
+    "model_seed": 2,
+    "resolved_run_a": "D:/research-runs/JODBSDFres/benchmark-r2-20261020-01/research/runs/p02-t002-region-20261022-01-region-graph-s2-a",
+    "resolved_run_b": "D:/research-runs/JODBSDFres/benchmark-r2-20261020-01/research/runs/p02-t002-region-20261022-01-region-graph-s2-b",
+    "run_a": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-region-20261022-01-region-graph-s2-a",
+    "run_a_id": "p02-t002-region-20261022-01-region-graph-s2-a",
+    "run_b": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-region-20261022-01-region-graph-s2-b",
+    "run_b_id": "p02-t002-region-20261022-01-region-graph-s2-b",
+    "shuffle_seed": null
+  },
+  "kind": "compare",
+  "result": {
+    "condition_identity": {
+      "differences": [],
+      "run_a": {
+        "computational": {
+          "adam": {
+            "amsgrad": false,
+            "betas": [
+              0.9,
+              0.999
+            ],
+            "eps": 1e-08,
+            "lr": 0.001,
+            "weight_decay": 0.0
+          },
+          "batch_rule": "one epoch covers the 19 training windows and all nodes/horizons with equal element weighting; chunks follow ascending window then ascending context with complete per-context adjacency; one optimizer step per epoch after global mean-loss gradient accumulation",
+          "data_name": "region",
+          "early_stopping": false,
+          "epochs": 200,
+          "gradient_clipping": null,
+          "hidden_dim": 32,
+          "horizon": 3,
+          "input_length": 6,
+          "loss": "mean_squared_error_on_raw_counts",
+          "masks_scope": "train27 activity/constant; published-graph nonself coverage",
+          "method": "graph",
+          "mode": "count",
+          "model": "single-layer unidirectional bias-enabled GRU(1,32) shared across nodes; zero hidden state per node per window; shared Linear(32,3) head; graph and shuffled branches add the unweighted mean of distinct incoming neighbour hidden states before the head; no graph-specific trainable tensor",
+          "model_seed": 2,
+          "n_windows": 28,
+          "naive_methods": [
+            "Zero",
+            "LastValue",
+            "WindowMean6",
+            "TrainMean27",
+            "SeasonalNaive12"
+          ],
+          "parameter_counts": {
+            "gru": 3360,
+            "head": 99,
+            "total": 3459
+          },
+          "preprocessing": "none: raw counts feed the encoder and the loss",
+          "records_policy": "P01-records-v2",
+          "scheduler": null,
+          "scientific_protocol_version": "P1-count-L6-H3-v3",
+          "selection_metric": "validation MSE (original units)",
+          "shuffle": {
+            "accept_target_factor": 10,
+            "algorithm": "context-local-directed-double-edge-swap",
+            "attempt_limit_factor": 500,
+            "proposal_batch_size": 4096,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "version": "dds-v2"
+          },
+          "shuffle_seed": null,
+          "skeleton_version": "P02-skeleton-v1",
+          "splits": {
+            "test": [
+              24,
+              25,
+              26,
+              27
+            ],
+            "train": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18
+            ],
+            "validation": [
+              21
+            ]
+          },
+          "tie_break": "earliest epoch"
+        },
+        "dataset_identity": {
+          "key_columns": [
+            "region_id",
+            "skill_id"
+          ],
+          "node_keys_sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+          "nodes": 16345,
+          "source_kind": "published",
+          "source_sha256": "27a946c787efcd5f1d2b25ca35bebd1392320d9b10920e771405a664db5e4a3f"
+        },
+        "environment_identity": {
+          "cpu_count": 24,
+          "gpu_available": false,
+          "graph_extensions": {
+            "dgl": {
+              "available": false,
+              "imported_in_this_process": false,
+              "used_by_this_entry": false
+            },
+            "torch_geometric": {
+              "available": false,
+              "imported_in_this_process": false,
+              "used_by_this_entry": false
+            },
+            "torch_scatter": {
+              "available": false,
+              "imported_in_this_process": false,
+              "used_by_this_entry": false
+            },
+            "torch_sparse": {
+              "available": false,
+              "imported_in_this_process": false,
+              "used_by_this_entry": false
+            }
+          },
+          "machine": "AMD64",
+          "numpy_blas_config": "{\n  \"Compilers\": {\n    \"c\": {\n      \"name\": \"msvc\",\n      \"linker\": \"link\",\n      \"version\": \"19.29.30153\",\n      \"commands\": \"cl\"\n    },\n    \"cython\": {\n      \"name\": \"cython\",\n      \"linker\": \"cython\",\n      \"version\": \"3.0.8\",\n      \"commands\": \"cython\"\n    },\n    \"c++\": {\n      \"name\": \"msvc\",\n      \"linker\": \"link\",\n      \"version\": \"19.29.30153\",\n      \"commands\": \"cl\"\n    }\n  },\n  \"Machine Information\": {\n    \"host\": {\n      \"cpu\": \"x86_64\",\n      \"family\": \"x86_64\",\n      \"endian\": \"little\",\n      \"system\": \"windows\"\n    },\n    \"build\": {\n      \"cpu\": \"x86_64\",\n      \"family\": \"x86_64\",\n      \"endian\": \"little\",\n      \"system\": \"windows\"\n    }\n  },\n  \"Build Dependencies\": {\n    \"blas\": {\n      \"name\": \"openblas64\",\n      \"found\": true,\n      \"version\": \"0.3.23.dev\",\n      \"detection method\": \"pkgconfig\",\n      \"include directory\": \"/c/opt/64/include\",\n      \"lib directory\": \"/c/opt/64/lib\",\n      \"openblas configuration\": \"USE_64BITINT=1 DYNAMIC_ARCH=1 DYNAMIC_OLDER= NO_CBLAS= NO_LAPACK= NO_LAPACKE= NO_AFFINITY=1 USE_OPENMP= SKYLAKEX MAX_THREADS=2\",\n      \"pc file directory\": \"C:/opt/64/lib/pkgconfig\"\n    },\n    \"lapack\": {\n      \"name\": \"dep2270588361616\",\n      \"found\": true,\n      \"version\": \"1.26.4\",\n      \"detection method\": \"internal\",\n      \"include directory\": \"unknown\",\n      \"lib directory\": \"unknown\",\n      \"openblas configuration\": \"unknown\",\n      \"pc file directory\": \"unknown\"\n    }\n  },\n  \"Python Information\": {\n    \"path\": \"C:\\\\Users\\\\runneradmin\\\\AppData\\\\Local\\\\Temp\\\\cibw-run-j442zwj6\\\\cp311-win_amd64\\\\build\\\\venv\\\\Scripts\\\\python.exe\",\n    \"version\": \"3.11\"\n  },\n  \"SIMD Extensions\": {\n    \"baseline\": [\n      \"SSE\",\n      \"SSE2\",\n      \"SSE3\"\n    ],\n    \"found\": [\n      \"SSSE3\",\n      \"SSE41\",\n      \"POPCNT\",\n      \"SSE42\",\n      \"AVX\",\n      \"F16C\",\n      \"FMA3\",\n      \"AVX2\"\n    ],\n    \"not found\": [\n      \"AVX512F\",\n      \"AVX512CD\",\n      \"AVX512_SKX\",\n      \"AVX512_CLX\",\n      \"AVX512_CNL\",\n      \"AVX512_ICL\"\n    ]\n  }\n}\n",
+          "packages": {
+            "numpy": "1.26.4",
+            "pandas": "2.2.3",
+            "pyarrow": "17.0.0",
+            "torch": "2.14.1+cpu"
+          },
+          "platform": "Windows-10-10.0.26300-SP0",
+          "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+          "python_version": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]",
+          "python_version_info": [
+            3,
+            11,
+            17
+          ],
+          "system": "Windows",
+          "thread_environment": {
+            "MKL_NUM_THREADS": "1",
+            "NUMEXPR_NUM_THREADS": "1",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "VECLIB_MAXIMUM_THREADS": "1"
+          },
+          "torch": {
+            "cuda_available": false,
+            "cuda_version": null,
+            "deterministic_algorithms_enabled": true,
+            "deterministic_algorithms_warn_only": false,
+            "device_count": 0,
+            "inter_op_threads": 1,
+            "intra_op_threads": 1,
+            "version": "2.14.1+cpu"
+          }
+        },
+        "graph_identity": {
+          "message_edges_sha256": "b7362020b8e9420fc8d622c42169e49f091e2b0287f65c3131131d9a3f179308",
+          "raw_rows": 218840,
+          "shuffle_identity": null,
+          "source_edges_sha256": "b7362020b8e9420fc8d622c42169e49f091e2b0287f65c3131131d9a3f179308",
+          "source_path": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\dataset\\graph\\region.parquet",
+          "source_sha256": "c0bed3290be3691fbb07c4834c96e8d567e1f54cdfb2120d8a0846a86b64d87c"
+        },
+        "mask_sha256": {
+          "activity_high": "bf77424ca83c9cd5c5f42b31206cb46d6fc187f790ea9d1235b11186f63009f3",
+          "activity_inactive": "6dd4561594c691623265315a918e15f7aff2c375fce4c8d8b6783066ab64aaa2",
+          "activity_low": "19d8d4f99fb7f2129fa6ee89906a365bd3a336e6c1cfbc433e27b0aa00cf1d43",
+          "activity_medium": "55da91906db9cf1bb462f8d6b5425d9487c74b1cedc9e687541228b37233fb36",
+          "constant_train27": "6dd4561594c691623265315a918e15f7aff2c375fce4c8d8b6783066ab64aaa2",
+          "has_nonself_neighbor": "3d4c2ae861088c6b3a6f53e4035889132b64e7c0fcf71cd39b84b613a6143456",
+          "nonzero_activity_train27": "35cbbd4b50babaa277ec2130e7e16197eb8288411cafa9ed66195a8b14713083"
+        },
+        "policy_identity": {
+          "name": "P01-records-v2",
+          "sources": {
+            "records_policy": {
+              "available": true,
+              "path": "AGENTS.md",
+              "sha256": "5860997dae395db403bc038a08c5d91bfb3646f303b202f107b90a8f23758358"
+            },
+            "records_policy_origin": {
+              "available": true,
+              "path": "research/archives/migrations/20261008-evidence-maintenance.md",
+              "sha256": "115e5f7cc49bf3a6ba4224e66808d0c3ff3554432af91b55526d8d2128bfcf88"
+            },
+            "scientific_protocol": {
+              "available": true,
+              "path": "research/phases/P01/protocol.md",
+              "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c"
+            }
+          }
+        },
+        "protocol_identity": {
+          "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c",
+          "version": "P1-count-L6-H3-v3"
+        },
+        "skeleton_version": "P02-skeleton-v1",
+        "source_identity": {
+          "commit": "815f1cc6a546ef81a4deb005dc12b5f70a8c5501",
+          "files": {
+            "benchmark/graph_value_skeleton/__init__.py": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996",
+            "benchmark/graph_value_skeleton/__main__.py": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f",
+            "benchmark/graph_value_skeleton/_worker.py": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8",
+            "benchmark/graph_value_skeleton/artifacts.py": "a05b58786d6c4ac5fe22dc618ba7b425aeee5110a454977f4afd12418613bc53",
+            "benchmark/graph_value_skeleton/checkpoints.py": "1d8fd80660224d38af8084618f2495fa8e66bbf9f9cac3415edea328f10796c0",
+            "benchmark/graph_value_skeleton/checks.py": "7ef80c6bca83c0b612310748f4d713fc44483a8981bfedf882c573975cc95c47",
+            "benchmark/graph_value_skeleton/cli.py": "eb6fc8260983af939a10a0a391a8755a005ca4528e81bd129d55bca24e9285e5",
+            "benchmark/graph_value_skeleton/config.py": "8ff24265bdc6d419260531373084431023ff5025dad6561150e19c38b77c00e1",
+            "benchmark/graph_value_skeleton/data.py": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0",
+            "benchmark/graph_value_skeleton/graph.py": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf",
+            "benchmark/graph_value_skeleton/model.py": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d",
+            "benchmark/graph_value_skeleton/prepared.py": "277cb86e54c49a7bd55710955690c5401207ef356b8f64b6e86552ce1e8d4372",
+            "benchmark/graph_value_skeleton/protocol.py": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267",
+            "benchmark/graph_value_skeleton/readiness.py": "327d1ef9b023bc093630e90d10166ca37b85ddf87313c8ea8516e4a032eb6783",
+            "benchmark/graph_value_skeleton/runner.py": "21b5b6ab36fbab581f6d999acd4aaf6b1d70400f2a39acd339ddbdf2ed812fb8",
+            "benchmark/graph_value_skeleton/shuffle.py": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be",
+            "benchmark/graph_value_skeleton/training.py": "62692dabd5cfbb5eb52fded6e2e98c20f156a34666cde38e97e5b2afefacb36b",
+            "benchmark/nograph_baseline/__init__.py": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee",
+            "benchmark/nograph_baseline/artifacts.py": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86",
+            "benchmark/nograph_baseline/baselines.py": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9",
+            "benchmark/nograph_baseline/coverage.py": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467",
+            "benchmark/nograph_baseline/data.py": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4",
+            "benchmark/nograph_baseline/metrics.py": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c",
+            "benchmark/nograph_baseline/protocol.py": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4",
+            "benchmark/nograph_baseline/ridge.py": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704"
+          },
+          "identity_available": true,
+          "unrecoverable_paths": []
+        }
+      },
+      "run_b": {
+        "computational": {
+          "adam": {
+            "amsgrad": false,
+            "betas": [
+              0.9,
+              0.999
+            ],
+            "eps": 1e-08,
+            "lr": 0.001,
+            "weight_decay": 0.0
+          },
+          "batch_rule": "one epoch covers the 19 training windows and all nodes/horizons with equal element weighting; chunks follow ascending window then ascending context with complete per-context adjacency; one optimizer step per epoch after global mean-loss gradient accumulation",
+          "data_name": "region",
+          "early_stopping": false,
+          "epochs": 200,
+          "gradient_clipping": null,
+          "hidden_dim": 32,
+          "horizon": 3,
+          "input_length": 6,
+          "loss": "mean_squared_error_on_raw_counts",
+          "masks_scope": "train27 activity/constant; published-graph nonself coverage",
+          "method": "graph",
+          "mode": "count",
+          "model": "single-layer unidirectional bias-enabled GRU(1,32) shared across nodes; zero hidden state per node per window; shared Linear(32,3) head; graph and shuffled branches add the unweighted mean of distinct incoming neighbour hidden states before the head; no graph-specific trainable tensor",
+          "model_seed": 2,
+          "n_windows": 28,
+          "naive_methods": [
+            "Zero",
+            "LastValue",
+            "WindowMean6",
+            "TrainMean27",
+            "SeasonalNaive12"
+          ],
+          "parameter_counts": {
+            "gru": 3360,
+            "head": 99,
+            "total": 3459
+          },
+          "preprocessing": "none: raw counts feed the encoder and the loss",
+          "records_policy": "P01-records-v2",
+          "scheduler": null,
+          "scientific_protocol_version": "P1-count-L6-H3-v3",
+          "selection_metric": "validation MSE (original units)",
+          "shuffle": {
+            "accept_target_factor": 10,
+            "algorithm": "context-local-directed-double-edge-swap",
+            "attempt_limit_factor": 500,
+            "proposal_batch_size": 4096,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "version": "dds-v2"
+          },
+          "shuffle_seed": null,
+          "skeleton_version": "P02-skeleton-v1",
+          "splits": {
+            "test": [
+              24,
+              25,
+              26,
+              27
+            ],
+            "train": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18
+            ],
+            "validation": [
+              21
+            ]
+          },
+          "tie_break": "earliest epoch"
+        },
+        "dataset_identity": {
+          "key_columns": [
+            "region_id",
+            "skill_id"
+          ],
+          "node_keys_sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+          "nodes": 16345,
+          "source_kind": "published",
+          "source_sha256": "27a946c787efcd5f1d2b25ca35bebd1392320d9b10920e771405a664db5e4a3f"
+        },
+        "environment_identity": {
+          "cpu_count": 24,
+          "gpu_available": false,
+          "graph_extensions": {
+            "dgl": {
+              "available": false,
+              "imported_in_this_process": false,
+              "used_by_this_entry": false
+            },
+            "torch_geometric": {
+              "available": false,
+              "imported_in_this_process": false,
+              "used_by_this_entry": false
+            },
+            "torch_scatter": {
+              "available": false,
+              "imported_in_this_process": false,
+              "used_by_this_entry": false
+            },
+            "torch_sparse": {
+              "available": false,
+              "imported_in_this_process": false,
+              "used_by_this_entry": false
+            }
+          },
+          "machine": "AMD64",
+          "numpy_blas_config": "{\n  \"Compilers\": {\n    \"c\": {\n      \"name\": \"msvc\",\n      \"linker\": \"link\",\n      \"version\": \"19.29.30153\",\n      \"commands\": \"cl\"\n    },\n    \"cython\": {\n      \"name\": \"cython\",\n      \"linker\": \"cython\",\n      \"version\": \"3.0.8\",\n      \"commands\": \"cython\"\n    },\n    \"c++\": {\n      \"name\": \"msvc\",\n      \"linker\": \"link\",\n      \"version\": \"19.29.30153\",\n      \"commands\": \"cl\"\n    }\n  },\n  \"Machine Information\": {\n    \"host\": {\n      \"cpu\": \"x86_64\",\n      \"family\": \"x86_64\",\n      \"endian\": \"little\",\n      \"system\": \"windows\"\n    },\n    \"build\": {\n      \"cpu\": \"x86_64\",\n      \"family\": \"x86_64\",\n      \"endian\": \"little\",\n      \"system\": \"windows\"\n    }\n  },\n  \"Build Dependencies\": {\n    \"blas\": {\n      \"name\": \"openblas64\",\n      \"found\": true,\n      \"version\": \"0.3.23.dev\",\n      \"detection method\": \"pkgconfig\",\n      \"include directory\": \"/c/opt/64/include\",\n      \"lib directory\": \"/c/opt/64/lib\",\n      \"openblas configuration\": \"USE_64BITINT=1 DYNAMIC_ARCH=1 DYNAMIC_OLDER= NO_CBLAS= NO_LAPACK= NO_LAPACKE= NO_AFFINITY=1 USE_OPENMP= SKYLAKEX MAX_THREADS=2\",\n      \"pc file directory\": \"C:/opt/64/lib/pkgconfig\"\n    },\n    \"lapack\": {\n      \"name\": \"dep2270588361616\",\n      \"found\": true,\n      \"version\": \"1.26.4\",\n      \"detection method\": \"internal\",\n      \"include directory\": \"unknown\",\n      \"lib directory\": \"unknown\",\n      \"openblas configuration\": \"unknown\",\n      \"pc file directory\": \"unknown\"\n    }\n  },\n  \"Python Information\": {\n    \"path\": \"C:\\\\Users\\\\runneradmin\\\\AppData\\\\Local\\\\Temp\\\\cibw-run-j442zwj6\\\\cp311-win_amd64\\\\build\\\\venv\\\\Scripts\\\\python.exe\",\n    \"version\": \"3.11\"\n  },\n  \"SIMD Extensions\": {\n    \"baseline\": [\n      \"SSE\",\n      \"SSE2\",\n      \"SSE3\"\n    ],\n    \"found\": [\n      \"SSSE3\",\n      \"SSE41\",\n      \"POPCNT\",\n      \"SSE42\",\n      \"AVX\",\n      \"F16C\",\n      \"FMA3\",\n      \"AVX2\"\n    ],\n    \"not found\": [\n      \"AVX512F\",\n      \"AVX512CD\",\n      \"AVX512_SKX\",\n      \"AVX512_CLX\",\n      \"AVX512_CNL\",\n      \"AVX512_ICL\"\n    ]\n  }\n}\n",
+          "packages": {
+            "numpy": "1.26.4",
+            "pandas": "2.2.3",
+            "pyarrow": "17.0.0",
+            "torch": "2.14.1+cpu"
+          },
+          "platform": "Windows-10-10.0.26300-SP0",
+          "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+          "python_version": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]",
+          "python_version_info": [
+            3,
+            11,
+            17
+          ],
+          "system": "Windows",
+          "thread_environment": {
+            "MKL_NUM_THREADS": "1",
+            "NUMEXPR_NUM_THREADS": "1",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "VECLIB_MAXIMUM_THREADS": "1"
+          },
+          "torch": {
+            "cuda_available": false,
+            "cuda_version": null,
+            "deterministic_algorithms_enabled": true,
+            "deterministic_algorithms_warn_only": false,
+            "device_count": 0,
+            "inter_op_threads": 1,
+            "intra_op_threads": 1,
+            "version": "2.14.1+cpu"
+          }
+        },
+        "graph_identity": {
+          "message_edges_sha256": "b7362020b8e9420fc8d622c42169e49f091e2b0287f65c3131131d9a3f179308",
+          "raw_rows": 218840,
+          "shuffle_identity": null,
+          "source_edges_sha256": "b7362020b8e9420fc8d622c42169e49f091e2b0287f65c3131131d9a3f179308",
+          "source_path": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\dataset\\graph\\region.parquet",
+          "source_sha256": "c0bed3290be3691fbb07c4834c96e8d567e1f54cdfb2120d8a0846a86b64d87c"
+        },
+        "mask_sha256": {
+          "activity_high": "bf77424ca83c9cd5c5f42b31206cb46d6fc187f790ea9d1235b11186f63009f3",
+          "activity_inactive": "6dd4561594c691623265315a918e15f7aff2c375fce4c8d8b6783066ab64aaa2",
+          "activity_low": "19d8d4f99fb7f2129fa6ee89906a365bd3a336e6c1cfbc433e27b0aa00cf1d43",
+          "activity_medium": "55da91906db9cf1bb462f8d6b5425d9487c74b1cedc9e687541228b37233fb36",
+          "constant_train27": "6dd4561594c691623265315a918e15f7aff2c375fce4c8d8b6783066ab64aaa2",
+          "has_nonself_neighbor": "3d4c2ae861088c6b3a6f53e4035889132b64e7c0fcf71cd39b84b613a6143456",
+          "nonzero_activity_train27": "35cbbd4b50babaa277ec2130e7e16197eb8288411cafa9ed66195a8b14713083"
+        },
+        "policy_identity": {
+          "name": "P01-records-v2",
+          "sources": {
+            "records_policy": {
+              "available": true,
+              "path": "AGENTS.md",
+              "sha256": "5860997dae395db403bc038a08c5d91bfb3646f303b202f107b90a8f23758358"
+            },
+            "records_policy_origin": {
+              "available": true,
+              "path": "research/archives/migrations/20261008-evidence-maintenance.md",
+              "sha256": "115e5f7cc49bf3a6ba4224e66808d0c3ff3554432af91b55526d8d2128bfcf88"
+            },
+            "scientific_protocol": {
+              "available": true,
+              "path": "research/phases/P01/protocol.md",
+              "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c"
+            }
+          }
+        },
+        "protocol_identity": {
+          "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c",
+          "version": "P1-count-L6-H3-v3"
+        },
+        "skeleton_version": "P02-skeleton-v1",
+        "source_identity": {
+          "commit": "815f1cc6a546ef81a4deb005dc12b5f70a8c5501",
+          "files": {
+            "benchmark/graph_value_skeleton/__init__.py": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996",
+            "benchmark/graph_value_skeleton/__main__.py": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f",
+            "benchmark/graph_value_skeleton/_worker.py": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8",
+            "benchmark/graph_value_skeleton/artifacts.py": "a05b58786d6c4ac5fe22dc618ba7b425aeee5110a454977f4afd12418613bc53",
+            "benchmark/graph_value_skeleton/checkpoints.py": "1d8fd80660224d38af8084618f2495fa8e66bbf9f9cac3415edea328f10796c0",
+            "benchmark/graph_value_skeleton/checks.py": "7ef80c6bca83c0b612310748f4d713fc44483a8981bfedf882c573975cc95c47",
+            "benchmark/graph_value_skeleton/cli.py": "eb6fc8260983af939a10a0a391a8755a005ca4528e81bd129d55bca24e9285e5",
+            "benchmark/graph_value_skeleton/config.py": "8ff24265bdc6d419260531373084431023ff5025dad6561150e19c38b77c00e1",
+            "benchmark/graph_value_skeleton/data.py": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0",
+            "benchmark/graph_value_skeleton/graph.py": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf",
+            "benchmark/graph_value_skeleton/model.py": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d",
+            "benchmark/graph_value_skeleton/prepared.py": "277cb86e54c49a7bd55710955690c5401207ef356b8f64b6e86552ce1e8d4372",
+            "benchmark/graph_value_skeleton/protocol.py": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267",
+            "benchmark/graph_value_skeleton/readiness.py": "327d1ef9b023bc093630e90d10166ca37b85ddf87313c8ea8516e4a032eb6783",
+            "benchmark/graph_value_skeleton/runner.py": "21b5b6ab36fbab581f6d999acd4aaf6b1d70400f2a39acd339ddbdf2ed812fb8",
+            "benchmark/graph_value_skeleton/shuffle.py": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be",
+            "benchmark/graph_value_skeleton/training.py": "62692dabd5cfbb5eb52fded6e2e98c20f156a34666cde38e97e5b2afefacb36b",
+            "benchmark/nograph_baseline/__init__.py": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee",
+            "benchmark/nograph_baseline/artifacts.py": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86",
+            "benchmark/nograph_baseline/baselines.py": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9",
+            "benchmark/nograph_baseline/coverage.py": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467",
+            "benchmark/nograph_baseline/data.py": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4",
+            "benchmark/nograph_baseline/metrics.py": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c",
+            "benchmark/nograph_baseline/protocol.py": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4",
+            "benchmark/nograph_baseline/ridge.py": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704"
+          },
+          "identity_available": true,
+          "unrecoverable_paths": []
+        }
+      }
+    },
+    "failed_checks": [],
+    "inputs_bytewise_unchanged": {
+      "run_a": true,
+      "run_b": true
+    },
+    "metric_comparisons": {
+      "test": {
+        "compared_fields": 1146,
+        "extra_fields": [],
+        "failed_fields": [],
+        "label": "compare:test",
+        "max_difference_path": null,
+        "max_normalized_difference": 0.0,
+        "missing_fields": [],
+        "null_field_paths": [],
+        "null_fields": 0,
+        "status": "ok",
+        "tolerance": 1e-06
+      },
+      "validation": {
+        "compared_fields": 930,
+        "extra_fields": [],
+        "failed_fields": [],
+        "label": "compare:validation",
+        "max_difference_path": null,
+        "max_normalized_difference": 0.0,
+        "missing_fields": [],
+        "null_field_paths": [],
+        "null_fields": 0,
+        "status": "ok",
+        "tolerance": 1e-06
+      }
+    },
+    "model_forward_called": false,
+    "model_trained": false,
+    "nonfinite_fields": [],
+    "permitted_execution_metadata_differences": [
+      "run_id",
+      "output location",
+      "timestamps",
+      "measured costs"
+    ],
+    "predictions": {
+      "test": {
+        "MAE_a": 162.92799974653934,
+        "MAE_b": 162.92799974653934,
+        "MAE_normalized_difference": 0.0,
+        "elements": 196140,
+        "elementwise_tolerance": 1e-06,
+        "gold_labels_equal": true,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      },
+      "validation": {
+        "MAE_a": 145.26397458641515,
+        "MAE_b": 145.26397458641515,
+        "MAE_normalized_difference": 0.0,
+        "elements": 49035,
+        "elementwise_tolerance": 1e-06,
+        "gold_labels_equal": true,
+        "max_absolute_difference": 0.0,
+        "max_normalized_difference": 0.0,
+        "status": "ok"
+      }
+    },
+    "source_data_read": false,
+    "status": "ok"
+  },
+  "status": "ok",
+  "tolerances": {
+    "MAE_normalized": 1e-06,
+    "derived_sums": "absolute/squared error sums and contribution fractions are derived from the compared error metrics and exactly-compared element counts",
+    "elementwise_prediction_normalized": 1e-06,
+    "formula": "abs(a-b)/max(1,abs(a),abs(b))",
+    "identity_conditions": "exact",
+    "other_error_metrics_normalized": 1e-06
+  },
+  "version": 1
+}

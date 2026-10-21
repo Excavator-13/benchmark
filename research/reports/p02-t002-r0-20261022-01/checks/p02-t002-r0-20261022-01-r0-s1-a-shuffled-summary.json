@@ -1,0 +1,229 @@
+{
+  "checker": {
+    "protocol_version": "P1-count-L6-H3-v3",
+    "skeleton_version": "P02-skeleton-v1",
+    "source": {
+      "commit": "815f1cc6a546ef81a4deb005dc12b5f70a8c5501",
+      "errors": {},
+      "files": {
+        "benchmark/graph_value_skeleton/__init__.py": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996",
+        "benchmark/graph_value_skeleton/__main__.py": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f",
+        "benchmark/graph_value_skeleton/_worker.py": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8",
+        "benchmark/graph_value_skeleton/artifacts.py": "a05b58786d6c4ac5fe22dc618ba7b425aeee5110a454977f4afd12418613bc53",
+        "benchmark/graph_value_skeleton/checkpoints.py": "1d8fd80660224d38af8084618f2495fa8e66bbf9f9cac3415edea328f10796c0",
+        "benchmark/graph_value_skeleton/checks.py": "7ef80c6bca83c0b612310748f4d713fc44483a8981bfedf882c573975cc95c47",
+        "benchmark/graph_value_skeleton/cli.py": "eb6fc8260983af939a10a0a391a8755a005ca4528e81bd129d55bca24e9285e5",
+        "benchmark/graph_value_skeleton/config.py": "8ff24265bdc6d419260531373084431023ff5025dad6561150e19c38b77c00e1",
+        "benchmark/graph_value_skeleton/data.py": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0",
+        "benchmark/graph_value_skeleton/graph.py": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf",
+        "benchmark/graph_value_skeleton/model.py": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d",
+        "benchmark/graph_value_skeleton/prepared.py": "277cb86e54c49a7bd55710955690c5401207ef356b8f64b6e86552ce1e8d4372",
+        "benchmark/graph_value_skeleton/protocol.py": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267",
+        "benchmark/graph_value_skeleton/readiness.py": "327d1ef9b023bc093630e90d10166ca37b85ddf87313c8ea8516e4a032eb6783",
+        "benchmark/graph_value_skeleton/runner.py": "21b5b6ab36fbab581f6d999acd4aaf6b1d70400f2a39acd339ddbdf2ed812fb8",
+        "benchmark/graph_value_skeleton/shuffle.py": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be",
+        "benchmark/graph_value_skeleton/training.py": "62692dabd5cfbb5eb52fded6e2e98c20f156a34666cde38e97e5b2afefacb36b",
+        "benchmark/nograph_baseline/__init__.py": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee",
+        "benchmark/nograph_baseline/artifacts.py": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86",
+        "benchmark/nograph_baseline/baselines.py": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9",
+        "benchmark/nograph_baseline/checks.py": "385d84b7c023aa9c9faf0c3627ad657e09a992a10dab0a0654d00e2a356ebaaa",
+        "benchmark/nograph_baseline/coverage.py": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467",
+        "benchmark/nograph_baseline/data.py": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4",
+        "benchmark/nograph_baseline/metrics.py": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c",
+        "benchmark/nograph_baseline/protocol.py": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4",
+        "benchmark/nograph_baseline/ridge.py": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704"
+      },
+      "identity_available": true,
+      "patch_bytes": 0,
+      "patch_eligible_files": [],
+      "patch_included": false,
+      "patch_omitted_reason": null,
+      "policy": "P01-records-v2",
+      "scoped_dirty": false,
+      "scoped_files": [],
+      "scoped_state_available": true,
+      "source_patch": null,
+      "untracked_files": [],
+      "whole_repository_dirty": true
+    }
+  },
+  "command": {
+    "argv": [
+      "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+      "-m",
+      "benchmark.graph_value_skeleton",
+      "summarize-shuffled",
+      "--run-dirs",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r0-20261022-01-r0-shuffled0-s1-a",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r0-20261022-01-r0-shuffled1-s1-a",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r0-20261022-01-r0-shuffled2-s1-a",
+      "--report",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\scratch\\graph-value-skeleton\\p02-t002-r0-20261022-01\\checks\\p02-t002-r0-20261022-01-r0-s1-a-shuffled-summary.json"
+    ],
+    "cwd": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01"
+  },
+  "created": "2026-10-22T04:28:15+08:00",
+  "errors": [],
+  "inputs": {
+    "members": [
+      {
+        "consumed_sha256": {
+          "audit.json": "f5dde0675cb282fb51d3ed4c33c5c0e4a7df25d79bae7faf501594ee4db4751a",
+          "config.json": "9594e4e229cb462ec20a053de126f4e8278541657bd399d3b830dae55010f573",
+          "environment.json": "54acf86f692bf71a800d895ec65a56cdab8fce6bb57079f4a81d55747445de6e",
+          "gold/test.npy": "12a1e2cf909d682b47aeeac751afdfa064b48d1b741040dab89693a7c603904f",
+          "gold/validation.npy": "baa0e2c1b9d97b65780e228197b0f8f71a20d764865ea7235874cad816459a21",
+          "graph-audit.json": "8ae45ac68f7e328df3073bfabf798f8ed44ba929fa5af0384bd453dcb9ce2ba3",
+          "masks.npz": "4dc592ab211108557d195796d17bf7ab73c26ba8dbf43b733358ebdabd5ed500",
+          "metrics.json": "cb644ceead0a57852d3d6be60af36bba140ef9245898aabc07ef8ca1a8907cac",
+          "models/selected.npz": "09a9cfa786b210ec0219633d626867fa72d1c3871f8b3d054874e142ddaca07e",
+          "nodes.parquet": "c64a58acdf8102ebb838a7e23c57c51282fedcb049f3bf94ff49ba3522866e09",
+          "predictions/shuffled/test.npy": "2c0b269657708539bbfeb4747e0de0e4fe4e461f685fab4d994a1b6f7a0a8b29",
+          "predictions/shuffled/validation.npy": "88b9e129b5843f3de191b4eb138dcb25d670b9ab942b4edc8ffe0f6090bd39f2",
+          "provenance.json": "3b25fe47bc53498490930202a1ce587319e5093cf3d8bb93ef4468008b8b1544",
+          "recovery.json": "cec3ed3cbf4ebefe30536fbe4061cd92888f8e879696ecf48f5ef87d79b5d657",
+          "selection.json": "dd5d6744c39d90438cd0e3195c38986b6c2ab41b0330d799517f445b0e52c7df",
+          "source.json": "87ffee428328aab4847d528ce58137f942ec389210638b996fc18bbf760f417d",
+          "training-history.json": "0fa6a2617f1e6fe7011c23416059c61a31329c5a0172e4436c8be57b94a40d82",
+          "windows.json": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf"
+        },
+        "run_dir": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r0-20261022-01-r0-shuffled0-s1-a",
+        "run_id": "p02-t002-r0-20261022-01-r0-shuffled0-s1-a",
+        "shuffle_seed": 0
+      },
+      {
+        "consumed_sha256": {
+          "audit.json": "f5dde0675cb282fb51d3ed4c33c5c0e4a7df25d79bae7faf501594ee4db4751a",
+          "config.json": "dc1d0e44470d19ed604e5630d841dba9aa73f1eb8b5e52105e56bb730e6879e8",
+          "environment.json": "54acf86f692bf71a800d895ec65a56cdab8fce6bb57079f4a81d55747445de6e",
+          "gold/test.npy": "12a1e2cf909d682b47aeeac751afdfa064b48d1b741040dab89693a7c603904f",
+          "gold/validation.npy": "baa0e2c1b9d97b65780e228197b0f8f71a20d764865ea7235874cad816459a21",
+          "graph-audit.json": "b4f7bcb10f7154bc6bc5f0e245606513b6868d04ccf9a3ccbd269471dd937c82",
+          "masks.npz": "4dc592ab211108557d195796d17bf7ab73c26ba8dbf43b733358ebdabd5ed500",
+          "metrics.json": "46e919f2a37694a0bb71d670de1c93ddc43a9462f5f175a0bbbbfacc4b9db82d",
+          "models/selected.npz": "d747ab524813fcf1f930465434473e306a5f81233f52a2e2e9e91c9c4b02b00e",
+          "nodes.parquet": "c64a58acdf8102ebb838a7e23c57c51282fedcb049f3bf94ff49ba3522866e09",
+          "predictions/shuffled/test.npy": "3cb1bc1a2a86da5af03d2c78bbf40e9b5c892fb481536e30d1341a1f39659527",
+          "predictions/shuffled/validation.npy": "e85de6ab7b7554166b45e4ae642538c8c88f512ed445e44bfc352c2d25e1421f",
+          "provenance.json": "12e70c88b05a67f125d0f16737b80dd2f256e465617d964efa4bca4ec0eb3cc8",
+          "recovery.json": "7705d6087c842859c309b2312c34a5a5b21cdba248347e934b66dfcffcfede0c",
+          "selection.json": "cfff535bb5e5d4bdf2cff1e4c77039cde09c8be56efff4a181f2ebff1e36bc7e",
+          "source.json": "b8ca4102728ddd0c1a84b04b207091547214eaab9474edcfd863e60583b51e30",
+          "training-history.json": "e55a59ed99953a5ef34e0e76eb2b5321de34b5681998e4fdc97609dddddbb6c6",
+          "windows.json": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf"
+        },
+        "run_dir": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r0-20261022-01-r0-shuffled1-s1-a",
+        "run_id": "p02-t002-r0-20261022-01-r0-shuffled1-s1-a",
+        "shuffle_seed": 1
+      },
+      {
+        "consumed_sha256": {
+          "audit.json": "f5dde0675cb282fb51d3ed4c33c5c0e4a7df25d79bae7faf501594ee4db4751a",
+          "config.json": "90baec7f387d17902ce90e016ca86ce3a93668fc3b0f05f5fe62ea1eec275b64",
+          "environment.json": "54acf86f692bf71a800d895ec65a56cdab8fce6bb57079f4a81d55747445de6e",
+          "gold/test.npy": "12a1e2cf909d682b47aeeac751afdfa064b48d1b741040dab89693a7c603904f",
+          "gold/validation.npy": "baa0e2c1b9d97b65780e228197b0f8f71a20d764865ea7235874cad816459a21",
+          "graph-audit.json": "91af2b9b5be7c2b44b1a73a66f3ffc664f5053095112b6ed044426d54ffd6322",
+          "masks.npz": "4dc592ab211108557d195796d17bf7ab73c26ba8dbf43b733358ebdabd5ed500",
+          "metrics.json": "604ee9ce4d9fc62a7d4912d27493d32f6ba00e7ac9da76e18324cd99623da1c5",
+          "models/selected.npz": "5c66087f70fc95cb4b7f5a252c0d9d9bce620744fa0a03cf20c73b266f8eafe4",
+          "nodes.parquet": "c64a58acdf8102ebb838a7e23c57c51282fedcb049f3bf94ff49ba3522866e09",
+          "predictions/shuffled/test.npy": "f171868cd2b4037b7af7512e894dbc70eec078e0f5990d996b1a86323f6264d7",
+          "predictions/shuffled/validation.npy": "ffb75fd38e62097b9d4650f0c1b032efa722694fdd9b22516248edecd971cb6c",
+          "provenance.json": "845134afd623d6c508c9778fd9b3d85ca6f3ca2839b6d2f03f28678d4a26e083",
+          "recovery.json": "18e8fdda4b4825a1ec01e2fa3debfe1d4828af4d2e64c9461c8c22c1fa50d4b3",
+          "selection.json": "655b0cf96e10bbc474f64a634df7177f47f3741a0cc707a9630c706f2e684a4f",
+          "source.json": "b75aba230d3c3acdd6b18324291d9b5188a5394291f3544bc119bdb0757e9823",
+          "training-history.json": "012e49eb2b5511a1d46729dd8ccb99710e093ab87b72a3ddb81ea18c135576ad",
+          "windows.json": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf"
+        },
+        "run_dir": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r0-20261022-01-r0-shuffled2-s1-a",
+        "run_id": "p02-t002-r0-20261022-01-r0-shuffled2-s1-a",
+        "shuffle_seed": 2
+      }
+    ],
+    "run_dirs": [
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r0-20261022-01-r0-shuffled0-s1-a",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r0-20261022-01-r0-shuffled1-s1-a",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r0-20261022-01-r0-shuffled2-s1-a"
+    ]
+  },
+  "kind": "summarize-shuffled",
+  "result": {
+    "condition_differences": [],
+    "control_definition": "(MAE_shuffle0 + MAE_shuffle1 + MAE_shuffle2) / 3 over the three independently trained shuffled graphs at the same model seed",
+    "control_test_MAE": 1158.6655692320394,
+    "control_validation_MAE": 1035.9717015400065,
+    "dataset": "r0",
+    "failed_checks": [],
+    "individual_test_MAEs": {
+      "0": 1158.665765052519,
+      "1": 1158.665732773162,
+      "2": 1158.6652098704371
+    },
+    "individual_validation_MAEs": {
+      "0": 1035.9719022041554,
+      "1": 1035.9718654282683,
+      "2": 1035.9713369875956
+    },
+    "inputs_bytewise_unchanged": true,
+    "mae_of_averaged_predictions": 1158.6655692763877,
+    "mae_of_averaged_predictions_is_not_the_control": true,
+    "member_identity_retained": true,
+    "member_order": [
+      "0",
+      "1",
+      "2"
+    ],
+    "members": {
+      "0": {
+        "model_seed": 1,
+        "recompute_status": "ok",
+        "run_dir": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r0-20261022-01-r0-shuffled0-s1-a",
+        "run_id": "p02-t002-r0-20261022-01-r0-shuffled0-s1-a",
+        "shuffle_seed": 0,
+        "shuffled_graph_edges_sha256": "58f493fd11d6b09d63587511a0ad7d23f2d4deadf0eee1da5990e44ff938ab50",
+        "source_graph_edges_sha256": "ed483949d31129db9350e6cb6ba89fad43a380e5900f88304879b3d06906e427",
+        "test_MAE": 1158.665765052519,
+        "validation_MAE": 1035.9719022041554
+      },
+      "1": {
+        "model_seed": 1,
+        "recompute_status": "ok",
+        "run_dir": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r0-20261022-01-r0-shuffled1-s1-a",
+        "run_id": "p02-t002-r0-20261022-01-r0-shuffled1-s1-a",
+        "shuffle_seed": 1,
+        "shuffled_graph_edges_sha256": "a5144032cc32054e0e79ec9e863b76c3caceb027eff904f59d87d7e71cd9972c",
+        "source_graph_edges_sha256": "ed483949d31129db9350e6cb6ba89fad43a380e5900f88304879b3d06906e427",
+        "test_MAE": 1158.665732773162,
+        "validation_MAE": 1035.9718654282683
+      },
+      "2": {
+        "model_seed": 1,
+        "recompute_status": "ok",
+        "run_dir": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r0-20261022-01-r0-shuffled2-s1-a",
+        "run_id": "p02-t002-r0-20261022-01-r0-shuffled2-s1-a",
+        "shuffle_seed": 2,
+        "shuffled_graph_edges_sha256": "58975be937b47c66d8c6cae4df1f4838ad2ed68486381a8c89d85c1a77b4cbdd",
+        "source_graph_edges_sha256": "ed483949d31129db9350e6cb6ba89fad43a380e5900f88304879b3d06906e427",
+        "test_MAE": 1158.6652098704371,
+        "validation_MAE": 1035.9713369875956
+      }
+    },
+    "method": "shuffled",
+    "model_forward_called": false,
+    "model_seed": 1,
+    "model_trained": false,
+    "ranking_used": false,
+    "source_data_read": false,
+    "status": "ok",
+    "weakest_graph_selected": false
+  },
+  "status": "ok",
+  "tolerances": {
+    "formula": "abs(a-b)/max(1,abs(a),abs(b))",
+    "non_numeric": "exact (keys, schema, dtype, shape, masks, null status, counts)",
+    "numeric": 1e-12
+  },
+  "version": 1
+}

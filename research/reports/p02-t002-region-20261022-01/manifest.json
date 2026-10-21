@@ -1,0 +1,254 @@
+{
+  "batch": "p02-t002-region-20261022-01",
+  "checks": {
+    "recompute": 30,
+    "repeat_compare": 15,
+    "three_graph_average": 6
+  },
+  "concurrent_training_processes": 1,
+  "dataset_name": "region",
+  "formal_count": 30,
+  "frozen_epochs": 200,
+  "schedule": [
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 0,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled0-s0-a",
+      "shuffle_seed": 0
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 0,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled0-s0-b",
+      "shuffle_seed": 0
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 0,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled1-s0-a",
+      "shuffle_seed": 1
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 0,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled1-s0-b",
+      "shuffle_seed": 1
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 0,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled2-s0-a",
+      "shuffle_seed": 2
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 0,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled2-s0-b",
+      "shuffle_seed": 2
+    },
+    {
+      "dataset": "region",
+      "method": "self",
+      "model_seed": 0,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-self-s0-a",
+      "shuffle_seed": null
+    },
+    {
+      "dataset": "region",
+      "method": "self",
+      "model_seed": 0,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-self-s0-b",
+      "shuffle_seed": null
+    },
+    {
+      "dataset": "region",
+      "method": "graph",
+      "model_seed": 0,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-graph-s0-a",
+      "shuffle_seed": null
+    },
+    {
+      "dataset": "region",
+      "method": "graph",
+      "model_seed": 0,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-graph-s0-b",
+      "shuffle_seed": null
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 1,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled0-s1-a",
+      "shuffle_seed": 0
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 1,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled0-s1-b",
+      "shuffle_seed": 0
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 1,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled1-s1-a",
+      "shuffle_seed": 1
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 1,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled1-s1-b",
+      "shuffle_seed": 1
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 1,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled2-s1-a",
+      "shuffle_seed": 2
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 1,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled2-s1-b",
+      "shuffle_seed": 2
+    },
+    {
+      "dataset": "region",
+      "method": "self",
+      "model_seed": 1,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-self-s1-a",
+      "shuffle_seed": null
+    },
+    {
+      "dataset": "region",
+      "method": "self",
+      "model_seed": 1,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-self-s1-b",
+      "shuffle_seed": null
+    },
+    {
+      "dataset": "region",
+      "method": "graph",
+      "model_seed": 1,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-graph-s1-a",
+      "shuffle_seed": null
+    },
+    {
+      "dataset": "region",
+      "method": "graph",
+      "model_seed": 1,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-graph-s1-b",
+      "shuffle_seed": null
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 2,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled0-s2-a",
+      "shuffle_seed": 0
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 2,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled0-s2-b",
+      "shuffle_seed": 0
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 2,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled1-s2-a",
+      "shuffle_seed": 1
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 2,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled1-s2-b",
+      "shuffle_seed": 1
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 2,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled2-s2-a",
+      "shuffle_seed": 2
+    },
+    {
+      "dataset": "region",
+      "method": "shuffled",
+      "model_seed": 2,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-shuffled2-s2-b",
+      "shuffle_seed": 2
+    },
+    {
+      "dataset": "region",
+      "method": "self",
+      "model_seed": 2,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-self-s2-a",
+      "shuffle_seed": null
+    },
+    {
+      "dataset": "region",
+      "method": "self",
+      "model_seed": 2,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-self-s2-b",
+      "shuffle_seed": null
+    },
+    {
+      "dataset": "region",
+      "method": "graph",
+      "model_seed": 2,
+      "repeat": "a",
+      "run_id": "p02-t002-region-20261022-01-region-graph-s2-a",
+      "shuffle_seed": null
+    },
+    {
+      "dataset": "region",
+      "method": "graph",
+      "model_seed": 2,
+      "repeat": "b",
+      "run_id": "p02-t002-region-20261022-01-region-graph-s2-b",
+      "shuffle_seed": null
+    }
+  ]
+}

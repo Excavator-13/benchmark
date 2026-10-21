@@ -1,0 +1,323 @@
+{
+  "change": "add-graph-value-skeleton",
+  "created": "2026-10-22T02:10:36+08:00",
+  "dataset": "region",
+  "demand": {
+    "dataset": "region",
+    "key_columns": [
+      "region_id",
+      "skill_id"
+    ],
+    "mode": "count",
+    "node_keys_sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+    "nodes": 16345,
+    "published_assertions": {
+      "complete_grid": true,
+      "contexts": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "dataset": "region",
+      "dense_offset": {
+        "context_ordinals": {
+          "0": 0,
+          "1": 1,
+          "2": 2,
+          "3": 3,
+          "4": 4,
+          "5": 5,
+          "6": 6
+        },
+        "formula": "context_ordinal*2335 + skill_id",
+        "proven_nodes": 16345,
+        "stride": 2335
+      },
+      "finite_nonnegative": true,
+      "months": 36,
+      "nodes": 16345,
+      "skill_count": 2335,
+      "skill_range": [
+        0,
+        2334
+      ],
+      "unique_keys": 16345
+    },
+    "source_kind": "published",
+    "source_path": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\dataset\\demand\\region.parquet",
+    "source_sha256": "27a946c787efcd5f1d2b25ca35bebd1392320d9b10920e771405a664db5e4a3f"
+  },
+  "design_decision": "D023",
+  "environment": {
+    "cpu_count": 24,
+    "execution_settings": {
+      "blas_thread_environment": {
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "device": "cpu",
+      "numpy_seed": 1,
+      "python_seed": 1,
+      "torch_deterministic_algorithms": true,
+      "torch_inter_op_threads": 1,
+      "torch_intra_op_threads": 1,
+      "torch_seed": 1
+    },
+    "gpu_available": false,
+    "graph_extensions": {
+      "dgl": {
+        "available": false,
+        "imported_in_this_process": false,
+        "used_by_this_entry": false
+      },
+      "torch_geometric": {
+        "available": false,
+        "imported_in_this_process": false,
+        "used_by_this_entry": false
+      },
+      "torch_scatter": {
+        "available": false,
+        "imported_in_this_process": false,
+        "used_by_this_entry": false
+      },
+      "torch_sparse": {
+        "available": false,
+        "imported_in_this_process": false,
+        "used_by_this_entry": false
+      }
+    },
+    "machine": "AMD64",
+    "packages": {
+      "numpy": "1.26.4",
+      "pandas": "2.2.3",
+      "pyarrow": "17.0.0",
+      "torch": "2.14.1+cpu"
+    },
+    "platform": "Windows-10-10.0.26300-SP0",
+    "python_version": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]",
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "torch": {
+      "cuda_available": false,
+      "cuda_version": null,
+      "deterministic_algorithms_enabled": true,
+      "deterministic_algorithms_warn_only": false,
+      "device_count": 0,
+      "inter_op_threads": 1,
+      "intra_op_threads": 1,
+      "version": "2.14.1+cpu"
+    }
+  },
+  "evidence_role": "formal (requires separate research authorization)",
+  "git": {
+    "commit": "815f1cc6a546ef81a4deb005dc12b5f70a8c5501",
+    "dirty": true,
+    "errors": {},
+    "identity_available": true,
+    "scope": "source.json",
+    "scoped_dirty": true
+  },
+  "graph": {
+    "block_diagonal": true,
+    "columns": [
+      "region_id",
+      "row_id",
+      "col_id"
+    ],
+    "dataset": "region",
+    "duplicate_rows": 0,
+    "edges_sha256": "b7362020b8e9420fc8d622c42169e49f091e2b0287f65c3131131d9a3f179308",
+    "node_keys_sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+    "nodes": 16345,
+    "published": true,
+    "raw_rows": 218840,
+    "self_loop_rows": 0,
+    "source_kind": "published",
+    "source_path": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\dataset\\graph\\region.parquet",
+    "source_sha256": "c0bed3290be3691fbb07c4834c96e8d567e1f54cdfb2120d8a0846a86b64d87c",
+    "symmetry_rate": 1.0,
+    "unique_edges": 218840
+  },
+  "graph_used": {
+    "message_edges": 0,
+    "message_edges_sha256": "<empty: self branch propagates no message>",
+    "method": "self",
+    "propagates_messages": false,
+    "shuffle_identity": null,
+    "shuffled": false,
+    "training_edges": {
+      "edge_count": 0,
+      "edges_sha256": "16075f9a04892974f83dc0e653e081c7e3e7af107a57b9a80e5af155bb14b3cb",
+      "matches_message_edges": true,
+      "method": "chunk-local edges converted to canonical global indices",
+      "windows_verified": 19
+    }
+  },
+  "implementation_readiness_does_not_establish_predictive_benefit": true,
+  "masks": {
+    "activity_definition": "nonzero-month fraction over the 27 unique training observation months; groups inactive==0, low (0,1/3], medium (1/3,2/3], high (2/3,1]",
+    "activity_group_counts": {
+      "high": 10294,
+      "inactive": 1349,
+      "low": 2885,
+      "medium": 1817
+    },
+    "array_sha256": {
+      "activity_high": "bf77424ca83c9cd5c5f42b31206cb46d6fc187f790ea9d1235b11186f63009f3",
+      "activity_inactive": "6dd4561594c691623265315a918e15f7aff2c375fce4c8d8b6783066ab64aaa2",
+      "activity_low": "19d8d4f99fb7f2129fa6ee89906a365bd3a336e6c1cfbc433e27b0aa00cf1d43",
+      "activity_medium": "55da91906db9cf1bb462f8d6b5425d9487c74b1cedc9e687541228b37233fb36",
+      "constant_train27": "6dd4561594c691623265315a918e15f7aff2c375fce4c8d8b6783066ab64aaa2",
+      "has_nonself_neighbor": "3d4c2ae861088c6b3a6f53e4035889132b64e7c0fcf71cd39b84b613a6143456",
+      "nonzero_activity_train27": "35cbbd4b50babaa277ec2130e7e16197eb8288411cafa9ed66195a8b14713083"
+    },
+    "constant_definition": "float64 training-27 standard deviation == 0 (ddof=0)",
+    "constant_node_count": 1349,
+    "has_nonself_neighbor_count": 2185,
+    "neighbor_definition": "context-qualified non-self endpoint coverage: a node has a neighbour when it is an endpoint (row_id or col_id) of a graph row whose row_id != col_id within the same context; self-loop rows supply no neighbour",
+    "neighbor_definition_id": "p1-count-L6-H3-context-qualified-nonself-endpoints-v1",
+    "neighbor_source": {
+      "coverage_fraction": 0.1336800244723157,
+      "covered_nodes": 2185,
+      "definition": "context-qualified non-self endpoint coverage: a node has a neighbour when it is an endpoint (row_id or col_id) of a graph row whose row_id != col_id within the same context; self-loop rows supply no neighbour",
+      "directed_source_rows": 218840,
+      "graph_columns": [
+        "region_id",
+        "row_id",
+        "col_id"
+      ],
+      "key_columns": [
+        "region_id",
+        "skill_id"
+      ],
+      "node_keys_sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+      "nodes": 16345,
+      "non-self rows used": 218840,
+      "self_loop_rows": 0,
+      "source": "raw_graph_parquet",
+      "source_path": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\dataset\\graph\\region.parquet",
+      "source_sha256": "c0bed3290be3691fbb07c4834c96e8d567e1f54cdfb2120d8a0846a86b64d87c",
+      "used_for_forecasting": false
+    },
+    "recomputed_from_shuffled_adjacency": false,
+    "scope": "train27 (2021-01..2023-03)",
+    "shared_by_methods": [
+      "self",
+      "graph",
+      "shuffled"
+    ],
+    "train_observation_months": [
+      "2021-01",
+      "2021-02",
+      "2021-03",
+      "2021-04",
+      "2021-05",
+      "2021-06",
+      "2021-07",
+      "2021-08",
+      "2021-09",
+      "2021-10",
+      "2021-11",
+      "2021-12",
+      "2022-01",
+      "2022-02",
+      "2022-03",
+      "2022-04",
+      "2022-05",
+      "2022-06",
+      "2022-07",
+      "2022-08",
+      "2022-09",
+      "2022-10",
+      "2022-11",
+      "2022-12",
+      "2023-01",
+      "2023-02",
+      "2023-03"
+    ]
+  },
+  "method": "self",
+  "mode": "count",
+  "model_definition": "single-layer unidirectional bias-enabled GRU(1,32) shared across nodes; zero hidden state per node per window; shared Linear(32,3) head; graph and shuffled branches add the unweighted mean of distinct incoming neighbour hidden states before the head; no graph-specific trainable tensor",
+  "model_seed": 1,
+  "naive_reference": {
+    "NaiveRef": "LastValue",
+    "NaiveRef6": "LastValue",
+    "published_expected": "LastValue",
+    "published_identity_checked": true,
+    "selection_metric": "validation MSE"
+  },
+  "parameter_counts_measured": {
+    "graph_only": 0,
+    "gru": 3360,
+    "head": 99,
+    "total": 3459
+  },
+  "preprocessing": "none: raw counts feed the encoder and the loss",
+  "purpose": "formal",
+  "records_policy": {
+    "name": "P01-records-v2",
+    "sources": {
+      "records_policy": {
+        "available": true,
+        "path": "AGENTS.md",
+        "sha256": "5860997dae395db403bc038a08c5d91bfb3646f303b202f107b90a8f23758358"
+      },
+      "records_policy_origin": {
+        "available": true,
+        "path": "research/archives/migrations/20261008-evidence-maintenance.md",
+        "sha256": "115e5f7cc49bf3a6ba4224e66808d0c3ff3554432af91b55526d8d2128bfcf88"
+      },
+      "scientific_protocol": {
+        "available": true,
+        "path": "research/phases/P01/protocol.md",
+        "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c"
+      }
+    }
+  },
+  "recovery": {
+    "ancestry": [
+      "ef2c11e092c646a889b27c2241c1c27e"
+    ],
+    "completed_epoch_at_start": 0,
+    "parent_checkpoint": null,
+    "run_id": "p02-t002-region-20261022-01-region-self-s1-b",
+    "schema": 1
+  },
+  "run_id": "p02-t002-region-20261022-01-region-self-s1-b",
+  "run_type": "run",
+  "scientific_acceptance": false,
+  "scientific_protocol": {
+    "available": true,
+    "path": "research/phases/P01/protocol.md",
+    "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c",
+    "version": "P1-count-L6-H3-v3"
+  },
+  "seed_profile": {
+    "development": true,
+    "final": true
+  },
+  "shuffle_seed": null,
+  "skeleton_version": "P02-skeleton-v1",
+  "source_capture": {
+    "commit": "815f1cc6a546ef81a4deb005dc12b5f70a8c5501",
+    "file": "source.json",
+    "patch_bytes": 0,
+    "patch_path": "git-diff.patch",
+    "scoped_dirty": true,
+    "unrecoverable_paths": []
+  },
+  "task": "P02-T001"
+}

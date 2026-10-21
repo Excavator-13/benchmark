@@ -1,0 +1,341 @@
+{
+  "adapter_sha256": "d8db50cdda47eb76405891c8a21b458ad553a6573e426cdb82295b11f840c627",
+  "batch": "p02-t002-region-20261022-01",
+  "controller_sha256": "d517e2a660ec278d0ecd5937f26cd60693a3abdc4c2618fe3e036cb31fd29cda",
+  "created_at": "2026-10-21T16:14:13.976016+00:00",
+  "dataset_name": "region",
+  "disk_free_bytes": 64656007168,
+  "git_head": "815f1cc6a546ef81a4deb005dc12b5f70a8c5501",
+  "inputs": {
+    "dataset/demand/region.parquet": "27a946c787efcd5f1d2b25ca35bebd1392320d9b10920e771405a664db5e4a3f",
+    "dataset/graph/region.parquet": "c0bed3290be3691fbb07c4834c96e8d567e1f54cdfb2120d8a0846a86b64d87c"
+  },
+  "nodes": 16345,
+  "prepared_files": {
+    "0": {
+      "checksums.json": "21b94f44a7229b757e9d1cea5fc7e283ee891863f360cb18ee11d4afa34df069",
+      "command.json": "0c67052d913c9cf50fdbcb3c5e354c1656e999b6f36837726fde7cec95410155",
+      "config.json": "fc4fb93280c3195c8ea245a5ce778fb538734cca311b46289da772d101a21df2",
+      "edges.npy": "b027175de50d19dbf1c4a48ba6b3f207aaa784386f0cdd37113d64d87a9e57de",
+      "environment.json": "551b53bba22b9b982e15f88258ab4706a32e0f709ffce092db22518d94080bee",
+      "events.jsonl": "960bfd2df680d61f8a4055c96c1ed0c289926d3f49921f1c002837b2899bd8e4",
+      "git-commit.txt": "fb79c06fcf8b99182becdfaa60be29fb495685f1e47e99b5eee7d207df97e1f4",
+      "git-diff.patch": "4ced5b3cf2a94a52634c5b3b6399502c3be2cf37166f73b60bc29966ef246060",
+      "git-status.txt": "9576a95f4fcba70c85aea2eb8863e4d37906bc9c2a36bc7b6382cc9ad3c0b85e",
+      "measurements.json": "316a4d9e145223e7c06faaf2e45e83e28f6215dbc0480aff5572faebd29bb0c6",
+      "nodes.npy": "23c8344028f3ff3e2156653b3aee306b080c8f514856cd5de406c8db41365add",
+      "progress.json": "55a6eced127840c12c3eb8f568c169d7355f3eac34b63b2e53c659e3dd57b116",
+      "protocol.md": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c",
+      "provenance.json": "2256cf6280f0d973aa18974cab0a1e0b7faa740ed117b90862b388d5ca544933",
+      "shuffle-audit.json": "0d4656c1aabd322ed935856f5fff5beff15a48f650951836e2add9ef225fe159",
+      "source-edges.npy": "da4eb287295f64e2b5600feafacb9e3a5d72329811147c7df196094bcc931e7a",
+      "source.json": "8ee5a217265e64f0021862c1eb89bacf513da143f86dc3653a9c60a58c0bd6d8",
+      "status.json": "932f1885fb8423db4dfdfba368efbf55fb1c873dc4a9f88bb7f77d8e9a8327a2"
+    },
+    "1": {
+      "checksums.json": "078ec84583b61a93309a3f526b387d879f85f551b3b9b553d9b513c1dce3f587",
+      "command.json": "a43ef95e62a8d3934cda84200798401e8a2443b836914df77457e822570c3990",
+      "config.json": "8217b337a78db0179113bb328de53e47c805b30e803ca76b02ebcb3b4b559d78",
+      "edges.npy": "c1b7967fbae7ff4745ba72be54a5e23de3ddd13a2c1872c9c833d571558ff153",
+      "environment.json": "551b53bba22b9b982e15f88258ab4706a32e0f709ffce092db22518d94080bee",
+      "events.jsonl": "f220ef992e790c2542079148952424f192bdf42a606e6c64625e010ffb5ffbe9",
+      "git-commit.txt": "fb79c06fcf8b99182becdfaa60be29fb495685f1e47e99b5eee7d207df97e1f4",
+      "git-diff.patch": "4ced5b3cf2a94a52634c5b3b6399502c3be2cf37166f73b60bc29966ef246060",
+      "git-status.txt": "9576a95f4fcba70c85aea2eb8863e4d37906bc9c2a36bc7b6382cc9ad3c0b85e",
+      "measurements.json": "2cef7a6be99d8c8a7b1562ff3607028e5ea4896ef8775053ce0b4e4d8699aff3",
+      "nodes.npy": "23c8344028f3ff3e2156653b3aee306b080c8f514856cd5de406c8db41365add",
+      "progress.json": "b553689a8f1e25357e0f506c09e6956bf686ef5fe0d1675a9e372c04abe25e04",
+      "protocol.md": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c",
+      "provenance.json": "4fddfa79bceca1632c0ad01391779febb0b9bb2c3176ded1fd44baa9863aff01",
+      "shuffle-audit.json": "4e86ff5e88af376b71877ad59d721583b82d81f24be0f58da58d03eaf70e3009",
+      "source-edges.npy": "da4eb287295f64e2b5600feafacb9e3a5d72329811147c7df196094bcc931e7a",
+      "source.json": "3d314e2c80db8a18c03ac314e7575ba1b46bc6704c10a99e3383821b4b754a4b",
+      "status.json": "a020c406f5345e8147d1180eb39d54915346fe4da301c50a340e6da58cdd8075"
+    },
+    "2": {
+      "checksums.json": "befdda820460b9ec2ef2a00f521d1dbcf5fd89cb9739605c539a0f9d402370cf",
+      "command.json": "5f0a05a2e9ddb94b3823d022f79f7c44b2beccaae99af57e3c548678567ed3c5",
+      "config.json": "4baa9384f8a45ef5abc5c528da81b207f679f28f3037ef5238e3ce8aafb92ebc",
+      "edges.npy": "4da9322b38cff6f8028a3330ff20efb1e72a7f9603c832f31d395f5ab4557b1d",
+      "environment.json": "551b53bba22b9b982e15f88258ab4706a32e0f709ffce092db22518d94080bee",
+      "events.jsonl": "92396658286471bc07e2d4338cfffba50b8b624443f10efd8fdb22d2d75e847f",
+      "git-commit.txt": "fb79c06fcf8b99182becdfaa60be29fb495685f1e47e99b5eee7d207df97e1f4",
+      "git-diff.patch": "4ced5b3cf2a94a52634c5b3b6399502c3be2cf37166f73b60bc29966ef246060",
+      "git-status.txt": "9576a95f4fcba70c85aea2eb8863e4d37906bc9c2a36bc7b6382cc9ad3c0b85e",
+      "measurements.json": "b25e0b7141a1c207b400f8239fb16c08681f441cb16e8ba0352b85999e73b1c6",
+      "nodes.npy": "23c8344028f3ff3e2156653b3aee306b080c8f514856cd5de406c8db41365add",
+      "progress.json": "16292e825427df81807e46462ff1154e2e2ddba292a6f261005ca89dfa91215e",
+      "protocol.md": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c",
+      "provenance.json": "d1c8ff97f5450b71c788d5879ffb9f2e0bc2069eb71489882f04c7d4d0c5dbf5",
+      "shuffle-audit.json": "327b23caf28579938aec6390f63dac29718db1b1d26d9dbee85c1994852a5f29",
+      "source-edges.npy": "da4eb287295f64e2b5600feafacb9e3a5d72329811147c7df196094bcc931e7a",
+      "source.json": "5bbc215d822cdd9b3fd5663d49323b927a3e50728bf409a3a1506530be03d527",
+      "status.json": "16982089dac57b388afb485046ed1c35d443747e17d45b5da09e21f525a8780a"
+    }
+  },
+  "prepared_graphs": {
+    "0": {
+      "algorithm": "context-local-directed-double-edge-swap",
+      "algorithm_version": "dds-v2",
+      "data_name": "region",
+      "edge_count": 218840,
+      "edges_sha256": "90e8f2a68391d88d970683e13aa6a686f174dd40d20264f63a76d8e69e4130ee",
+      "shuffle_seed": 0,
+      "source_edges_sha256": "b7362020b8e9420fc8d622c42169e49f091e2b0287f65c3131131d9a3f179308"
+    },
+    "1": {
+      "algorithm": "context-local-directed-double-edge-swap",
+      "algorithm_version": "dds-v2",
+      "data_name": "region",
+      "edge_count": 218840,
+      "edges_sha256": "81726979b7e78544b6c8b61d3ea2c98d222d26236412a05d0a5d6655a8804a99",
+      "shuffle_seed": 1,
+      "source_edges_sha256": "b7362020b8e9420fc8d622c42169e49f091e2b0287f65c3131131d9a3f179308"
+    },
+    "2": {
+      "algorithm": "context-local-directed-double-edge-swap",
+      "algorithm_version": "dds-v2",
+      "data_name": "region",
+      "edge_count": 218840,
+      "edges_sha256": "ab99ce10892946beb95baf71fbafb1f1411d5ad0b5cca2fc8359e5bd4212a60c",
+      "shuffle_seed": 2,
+      "source_edges_sha256": "b7362020b8e9420fc8d622c42169e49f091e2b0287f65c3131131d9a3f179308"
+    }
+  },
+  "python": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+  "python_version": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]",
+  "reuse_identity": {
+    "dataset": {
+      "dataset": "region",
+      "key_columns": [
+        "region_id",
+        "skill_id"
+      ],
+      "mode": "count",
+      "node_keys_sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+      "nodes": 16345,
+      "published_assertions": {
+        "complete_grid": true,
+        "contexts": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "dataset": "region",
+        "dense_offset": {
+          "context_ordinals": {
+            "0": 0,
+            "1": 1,
+            "2": 2,
+            "3": 3,
+            "4": 4,
+            "5": 5,
+            "6": 6
+          },
+          "formula": "context_ordinal*2335 + skill_id",
+          "proven_nodes": 16345,
+          "stride": 2335
+        },
+        "finite_nonnegative": true,
+        "months": 36,
+        "nodes": 16345,
+        "skill_count": 2335,
+        "skill_range": [
+          0,
+          2334
+        ],
+        "unique_keys": 16345
+      },
+      "source_kind": "published",
+      "source_path": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\dataset\\demand\\region.parquet",
+      "source_sha256": "27a946c787efcd5f1d2b25ca35bebd1392320d9b10920e771405a664db5e4a3f"
+    },
+    "execution": {
+      "blas_thread_environment": {
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "device": "cpu",
+      "numpy_seed": 0,
+      "python_seed": 0,
+      "torch_deterministic_algorithms": true,
+      "torch_inter_op_threads": 1,
+      "torch_intra_op_threads": 1,
+      "torch_seed": 0
+    },
+    "graph": {
+      "block_diagonal": true,
+      "columns": [
+        "region_id",
+        "row_id",
+        "col_id"
+      ],
+      "dataset": "region",
+      "duplicate_rows": 0,
+      "edges_sha256": "b7362020b8e9420fc8d622c42169e49f091e2b0287f65c3131131d9a3f179308",
+      "node_keys_sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+      "nodes": 16345,
+      "published": true,
+      "raw_rows": 218840,
+      "self_loop_rows": 0,
+      "source_kind": "published",
+      "source_path": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\dataset\\graph\\region.parquet",
+      "source_sha256": "c0bed3290be3691fbb07c4834c96e8d567e1f54cdfb2120d8a0846a86b64d87c",
+      "symmetry_rate": 1.0,
+      "unique_edges": 218840
+    },
+    "masks": {
+      "activity_high": "bf77424ca83c9cd5c5f42b31206cb46d6fc187f790ea9d1235b11186f63009f3",
+      "activity_inactive": "6dd4561594c691623265315a918e15f7aff2c375fce4c8d8b6783066ab64aaa2",
+      "activity_low": "19d8d4f99fb7f2129fa6ee89906a365bd3a336e6c1cfbc433e27b0aa00cf1d43",
+      "activity_medium": "55da91906db9cf1bb462f8d6b5425d9487c74b1cedc9e687541228b37233fb36",
+      "constant_train27": "6dd4561594c691623265315a918e15f7aff2c375fce4c8d8b6783066ab64aaa2",
+      "has_nonself_neighbor": "3d4c2ae861088c6b3a6f53e4035889132b64e7c0fcf71cd39b84b613a6143456",
+      "nonzero_activity_train27": "35cbbd4b50babaa277ec2130e7e16197eb8288411cafa9ed66195a8b14713083"
+    },
+    "message_edges": {
+      "0": "90e8f2a68391d88d970683e13aa6a686f174dd40d20264f63a76d8e69e4130ee",
+      "1": "81726979b7e78544b6c8b61d3ea2c98d222d26236412a05d0a5d6655a8804a99",
+      "2": "ab99ce10892946beb95baf71fbafb1f1411d5ad0b5cca2fc8359e5bd4212a60c",
+      "graph": "b7362020b8e9420fc8d622c42169e49f091e2b0287f65c3131131d9a3f179308",
+      "self": "<empty: self branch propagates no message>"
+    },
+    "protocol_sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c",
+    "runtime": {
+      "cpu_count": 24,
+      "gpu_available": false,
+      "graph_extensions": {
+        "dgl": {
+          "available": false,
+          "imported_in_this_process": false,
+          "used_by_this_entry": false
+        },
+        "torch_geometric": {
+          "available": false,
+          "imported_in_this_process": false,
+          "used_by_this_entry": false
+        },
+        "torch_scatter": {
+          "available": false,
+          "imported_in_this_process": false,
+          "used_by_this_entry": false
+        },
+        "torch_sparse": {
+          "available": false,
+          "imported_in_this_process": false,
+          "used_by_this_entry": false
+        }
+      },
+      "machine": "AMD64",
+      "numpy_blas_config": "{\n  \"Compilers\": {\n    \"c\": {\n      \"name\": \"msvc\",\n      \"linker\": \"link\",\n      \"version\": \"19.29.30153\",\n      \"commands\": \"cl\"\n    },\n    \"cython\": {\n      \"name\": \"cython\",\n      \"linker\": \"cython\",\n      \"version\": \"3.0.8\",\n      \"commands\": \"cython\"\n    },\n    \"c++\": {\n      \"name\": \"msvc\",\n      \"linker\": \"link\",\n      \"version\": \"19.29.30153\",\n      \"commands\": \"cl\"\n    }\n  },\n  \"Machine Information\": {\n    \"host\": {\n      \"cpu\": \"x86_64\",\n      \"family\": \"x86_64\",\n      \"endian\": \"little\",\n      \"system\": \"windows\"\n    },\n    \"build\": {\n      \"cpu\": \"x86_64\",\n      \"family\": \"x86_64\",\n      \"endian\": \"little\",\n      \"system\": \"windows\"\n    }\n  },\n  \"Build Dependencies\": {\n    \"blas\": {\n      \"name\": \"openblas64\",\n      \"found\": true,\n      \"version\": \"0.3.23.dev\",\n      \"detection method\": \"pkgconfig\",\n      \"include directory\": \"/c/opt/64/include\",\n      \"lib directory\": \"/c/opt/64/lib\",\n      \"openblas configuration\": \"USE_64BITINT=1 DYNAMIC_ARCH=1 DYNAMIC_OLDER= NO_CBLAS= NO_LAPACK= NO_LAPACKE= NO_AFFINITY=1 USE_OPENMP= SKYLAKEX MAX_THREADS=2\",\n      \"pc file directory\": \"C:/opt/64/lib/pkgconfig\"\n    },\n    \"lapack\": {\n      \"name\": \"dep2270588361616\",\n      \"found\": true,\n      \"version\": \"1.26.4\",\n      \"detection method\": \"internal\",\n      \"include directory\": \"unknown\",\n      \"lib directory\": \"unknown\",\n      \"openblas configuration\": \"unknown\",\n      \"pc file directory\": \"unknown\"\n    }\n  },\n  \"Python Information\": {\n    \"path\": \"C:\\\\Users\\\\runneradmin\\\\AppData\\\\Local\\\\Temp\\\\cibw-run-j442zwj6\\\\cp311-win_amd64\\\\build\\\\venv\\\\Scripts\\\\python.exe\",\n    \"version\": \"3.11\"\n  },\n  \"SIMD Extensions\": {\n    \"baseline\": [\n      \"SSE\",\n      \"SSE2\",\n      \"SSE3\"\n    ],\n    \"found\": [\n      \"SSSE3\",\n      \"SSE41\",\n      \"POPCNT\",\n      \"SSE42\",\n      \"AVX\",\n      \"F16C\",\n      \"FMA3\",\n      \"AVX2\"\n    ],\n    \"not found\": [\n      \"AVX512F\",\n      \"AVX512CD\",\n      \"AVX512_SKX\",\n      \"AVX512_CLX\",\n      \"AVX512_CNL\",\n      \"AVX512_ICL\"\n    ]\n  }\n}\n",
+      "packages": {
+        "numpy": "1.26.4",
+        "pandas": "2.2.3",
+        "pyarrow": "17.0.0",
+        "torch": "2.14.1+cpu"
+      },
+      "platform": "Windows-10-10.0.26300-SP0",
+      "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+      "python_version": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]",
+      "python_version_info": [
+        3,
+        11,
+        17
+      ],
+      "system": "Windows",
+      "thread_environment": {
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "torch": {
+        "cuda_available": false,
+        "cuda_version": null,
+        "deterministic_algorithms_enabled": true,
+        "deterministic_algorithms_warn_only": false,
+        "device_count": 0,
+        "inter_op_threads": 1,
+        "intra_op_threads": 1,
+        "version": "2.14.1+cpu"
+      }
+    },
+    "source": {
+      "benchmark/graph_value_skeleton/__init__.py": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996",
+      "benchmark/graph_value_skeleton/__main__.py": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f",
+      "benchmark/graph_value_skeleton/_worker.py": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8",
+      "benchmark/graph_value_skeleton/artifacts.py": "a05b58786d6c4ac5fe22dc618ba7b425aeee5110a454977f4afd12418613bc53",
+      "benchmark/graph_value_skeleton/checkpoints.py": "1d8fd80660224d38af8084618f2495fa8e66bbf9f9cac3415edea328f10796c0",
+      "benchmark/graph_value_skeleton/checks.py": "7ef80c6bca83c0b612310748f4d713fc44483a8981bfedf882c573975cc95c47",
+      "benchmark/graph_value_skeleton/cli.py": "eb6fc8260983af939a10a0a391a8755a005ca4528e81bd129d55bca24e9285e5",
+      "benchmark/graph_value_skeleton/config.py": "8ff24265bdc6d419260531373084431023ff5025dad6561150e19c38b77c00e1",
+      "benchmark/graph_value_skeleton/data.py": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0",
+      "benchmark/graph_value_skeleton/graph.py": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf",
+      "benchmark/graph_value_skeleton/model.py": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d",
+      "benchmark/graph_value_skeleton/prepared.py": "277cb86e54c49a7bd55710955690c5401207ef356b8f64b6e86552ce1e8d4372",
+      "benchmark/graph_value_skeleton/protocol.py": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267",
+      "benchmark/graph_value_skeleton/readiness.py": "327d1ef9b023bc093630e90d10166ca37b85ddf87313c8ea8516e4a032eb6783",
+      "benchmark/graph_value_skeleton/runner.py": "21b5b6ab36fbab581f6d999acd4aaf6b1d70400f2a39acd339ddbdf2ed812fb8",
+      "benchmark/graph_value_skeleton/shuffle.py": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be",
+      "benchmark/graph_value_skeleton/training.py": "62692dabd5cfbb5eb52fded6e2e98c20f156a34666cde38e97e5b2afefacb36b",
+      "benchmark/nograph_baseline/__init__.py": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee",
+      "benchmark/nograph_baseline/artifacts.py": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86",
+      "benchmark/nograph_baseline/baselines.py": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9",
+      "benchmark/nograph_baseline/coverage.py": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467",
+      "benchmark/nograph_baseline/data.py": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4",
+      "benchmark/nograph_baseline/metrics.py": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c",
+      "benchmark/nograph_baseline/protocol.py": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4",
+      "benchmark/nograph_baseline/ridge.py": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704"
+    }
+  },
+  "root": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01",
+  "source": {
+    "benchmark/graph_value_skeleton/__init__.py": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996",
+    "benchmark/graph_value_skeleton/__main__.py": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f",
+    "benchmark/graph_value_skeleton/_worker.py": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8",
+    "benchmark/graph_value_skeleton/artifacts.py": "a05b58786d6c4ac5fe22dc618ba7b425aeee5110a454977f4afd12418613bc53",
+    "benchmark/graph_value_skeleton/checkpoints.py": "1d8fd80660224d38af8084618f2495fa8e66bbf9f9cac3415edea328f10796c0",
+    "benchmark/graph_value_skeleton/checks.py": "7ef80c6bca83c0b612310748f4d713fc44483a8981bfedf882c573975cc95c47",
+    "benchmark/graph_value_skeleton/cli.py": "eb6fc8260983af939a10a0a391a8755a005ca4528e81bd129d55bca24e9285e5",
+    "benchmark/graph_value_skeleton/config.py": "8ff24265bdc6d419260531373084431023ff5025dad6561150e19c38b77c00e1",
+    "benchmark/graph_value_skeleton/data.py": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0",
+    "benchmark/graph_value_skeleton/graph.py": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf",
+    "benchmark/graph_value_skeleton/model.py": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d",
+    "benchmark/graph_value_skeleton/prepared.py": "277cb86e54c49a7bd55710955690c5401207ef356b8f64b6e86552ce1e8d4372",
+    "benchmark/graph_value_skeleton/protocol.py": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267",
+    "benchmark/graph_value_skeleton/readiness.py": "327d1ef9b023bc093630e90d10166ca37b85ddf87313c8ea8516e4a032eb6783",
+    "benchmark/graph_value_skeleton/runner.py": "21b5b6ab36fbab581f6d999acd4aaf6b1d70400f2a39acd339ddbdf2ed812fb8",
+    "benchmark/graph_value_skeleton/shuffle.py": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be",
+    "benchmark/graph_value_skeleton/training.py": "62692dabd5cfbb5eb52fded6e2e98c20f156a34666cde38e97e5b2afefacb36b",
+    "benchmark/nograph_baseline/__init__.py": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee",
+    "benchmark/nograph_baseline/__main__.py": "72db178365f943df31e992dbc551c3b7acb1f993158a7c90f29f1de2ef8bc230",
+    "benchmark/nograph_baseline/_worker.py": "0e07b3ce8e55c0e3034604d960d1f3d3e05bf22a5712d95d9c02b4fde273756e",
+    "benchmark/nograph_baseline/artifacts.py": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86",
+    "benchmark/nograph_baseline/baselines.py": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9",
+    "benchmark/nograph_baseline/checks.py": "385d84b7c023aa9c9faf0c3627ad657e09a992a10dab0a0654d00e2a356ebaaa",
+    "benchmark/nograph_baseline/cli.py": "113f8ac025e551bb51f08d96ed12449094fa56dfdec70fa1afbdbe0216116f97",
+    "benchmark/nograph_baseline/coverage.py": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467",
+    "benchmark/nograph_baseline/data.py": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4",
+    "benchmark/nograph_baseline/metrics.py": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c",
+    "benchmark/nograph_baseline/protocol.py": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4",
+    "benchmark/nograph_baseline/ridge.py": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704",
+    "benchmark/nograph_baseline/runner.py": "9b023c593e3f997ca588384d7377c4a6af96480d9bbd6ebbab0510a6cd5f5932",
+    "research/phases/P01/protocol.md": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c"
+  },
+  "status": "ok",
+  "task": "P02-T002",
+  "versions": {
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "pyarrow": "17.0.0",
+    "torch": "2.14.1"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+    "-m",
+    "benchmark.graph_value_skeleton",
+    "run",
+    "--data-name",
+    "r0",
+    "--method",
+    "graph",
+    "--model-seed",
+    "0",
+    "--purpose",
+    "formal",
+    "--run-id",
+    "p02-t002-r0-20261022-01-r0-graph-s0-b"
+  ],
+  "cwd": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01",
+  "launcher_cwd": "D:/research-runs/JODBSDFres/benchmark-r2-20261020-01",
+  "module": "benchmark.graph_value_skeleton",
+  "python": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+  "replayable": true
+}
