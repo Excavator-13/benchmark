@@ -1,0 +1,305 @@
+{
+  "previous_batch": "research\\reports\\p02-t002-r2-20261020-01",
+  "slots": [
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 0,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled0-s0-a",
+      "shuffle_seed": 0,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled0-s0-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 0,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled0-s0-b",
+      "shuffle_seed": 0,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled0-s0-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 0,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled1-s0-a",
+      "shuffle_seed": 1,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled1-s0-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 0,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled1-s0-b",
+      "shuffle_seed": 1,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled1-s0-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 0,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled2-s0-a",
+      "shuffle_seed": 2,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled2-s0-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 0,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled2-s0-b",
+      "shuffle_seed": 2,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled2-s0-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "self",
+      "model_seed": 0,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-self-s0-a",
+      "shuffle_seed": null,
+      "source_run": "p02-t002-r2-20261020-01-r2-self-s0-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "self",
+      "model_seed": 0,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-self-s0-b",
+      "shuffle_seed": null,
+      "source_run": "p02-t002-r2-20261020-01-r2-self-s0-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "graph",
+      "model_seed": 0,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-graph-s0-a",
+      "shuffle_seed": null,
+      "source_run": "p02-t002-r2-20261020-01-r2-graph-s0-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "graph",
+      "model_seed": 0,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-graph-s0-b",
+      "shuffle_seed": null,
+      "source_run": "p02-t002-r2-20261020-01-r2-graph-s0-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 1,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled0-s1-a",
+      "shuffle_seed": 0,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled0-s1-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 1,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled0-s1-b",
+      "shuffle_seed": 0,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled0-s1-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 1,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled1-s1-a",
+      "shuffle_seed": 1,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled1-s1-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 1,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled1-s1-b",
+      "shuffle_seed": 1,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled1-s1-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 1,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled2-s1-a",
+      "shuffle_seed": 2,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled2-s1-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 1,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled2-s1-b",
+      "shuffle_seed": 2,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled2-s1-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "self",
+      "model_seed": 1,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-self-s1-a",
+      "shuffle_seed": null,
+      "source_run": "p02-t002-r2-20261020-01-r2-self-s1-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "self",
+      "model_seed": 1,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-self-s1-b",
+      "shuffle_seed": null,
+      "source_run": "p02-t002-r2-20261020-01-r2-self-s1-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "graph",
+      "model_seed": 1,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-graph-s1-a",
+      "shuffle_seed": null,
+      "source_run": "p02-t002-r2-20261020-01-r2-graph-s1-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "graph",
+      "model_seed": 1,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-graph-s1-b",
+      "shuffle_seed": null,
+      "source_run": "p02-t002-r2-20261020-01-r2-graph-s1-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 2,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled0-s2-a",
+      "shuffle_seed": 0,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled0-s2-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 2,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled0-s2-b",
+      "shuffle_seed": 0,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled0-s2-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 2,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled1-s2-a",
+      "shuffle_seed": 1,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled1-s2-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 2,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled1-s2-b",
+      "shuffle_seed": 1,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled1-s2-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 2,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled2-s2-a",
+      "shuffle_seed": 2,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled2-s2-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "shuffled",
+      "model_seed": 2,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-shuffled2-s2-b",
+      "shuffle_seed": 2,
+      "source_run": "p02-t002-r2-20261020-01-r2-shuffled2-s2-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "self",
+      "model_seed": 2,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-self-s2-a",
+      "shuffle_seed": null,
+      "source_run": "p02-t002-r2-20261020-01-r2-self-s2-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "self",
+      "model_seed": 2,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-self-s2-b",
+      "shuffle_seed": null,
+      "source_run": "p02-t002-r2-20261020-01-r2-self-s2-b"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "graph",
+      "model_seed": 2,
+      "repeat": "a",
+      "run_id": "p02-t002-r2-20261020-02-r2-graph-s2-a",
+      "shuffle_seed": null,
+      "source_run": "p02-t002-r2-20261020-01-r2-graph-s2-a"
+    },
+    {
+      "action": "fresh",
+      "dataset": "r2",
+      "method": "graph",
+      "model_seed": 2,
+      "repeat": "b",
+      "run_id": "p02-t002-r2-20261020-02-r2-graph-s2-b",
+      "shuffle_seed": null,
+      "source_run": "p02-t002-r2-20261020-01-r2-graph-s2-b"
+    }
+  ]
+}

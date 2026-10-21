@@ -1,0 +1,421 @@
+{
+  "change": "add-graph-value-skeleton",
+  "created": "2026-10-21T07:10:48+08:00",
+  "dataset": "r2",
+  "demand": {
+    "dataset": "r2",
+    "key_columns": [
+      "r2_id",
+      "skill_id"
+    ],
+    "mode": "count",
+    "node_keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+    "nodes": 121420,
+    "published_assertions": {
+      "complete_grid": true,
+      "contexts": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ],
+      "dataset": "r2",
+      "dense_offset": {
+        "context_ordinals": {
+          "0": 0,
+          "1": 1,
+          "10": 10,
+          "11": 11,
+          "12": 12,
+          "13": 13,
+          "14": 14,
+          "15": 15,
+          "16": 16,
+          "17": 17,
+          "18": 18,
+          "19": 19,
+          "2": 2,
+          "20": 20,
+          "21": 21,
+          "22": 22,
+          "23": 23,
+          "24": 24,
+          "25": 25,
+          "26": 26,
+          "27": 27,
+          "28": 28,
+          "29": 29,
+          "3": 3,
+          "30": 30,
+          "31": 31,
+          "32": 32,
+          "33": 33,
+          "34": 34,
+          "35": 35,
+          "36": 36,
+          "37": 37,
+          "38": 38,
+          "39": 39,
+          "4": 4,
+          "40": 40,
+          "41": 41,
+          "42": 42,
+          "43": 43,
+          "44": 44,
+          "45": 45,
+          "46": 46,
+          "47": 47,
+          "48": 48,
+          "49": 49,
+          "5": 5,
+          "50": 50,
+          "51": 51,
+          "6": 6,
+          "7": 7,
+          "8": 8,
+          "9": 9
+        },
+        "formula": "context_ordinal*2335 + skill_id",
+        "proven_nodes": 121420,
+        "stride": 2335
+      },
+      "finite_nonnegative": true,
+      "months": 36,
+      "nodes": 121420,
+      "skill_count": 2335,
+      "skill_range": [
+        0,
+        2334
+      ],
+      "unique_keys": 121420
+    },
+    "source_kind": "published",
+    "source_path": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\dataset\\demand\\r2.parquet",
+    "source_sha256": "4ada154773b8678ae7d25b42e36a8309a51490bbe9fe059f015bb61724ed4c3c"
+  },
+  "design_decision": "D023",
+  "environment": {
+    "cpu_count": 24,
+    "execution_settings": {
+      "blas_thread_environment": {
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "device": "cpu",
+      "numpy_seed": 1,
+      "python_seed": 1,
+      "torch_deterministic_algorithms": true,
+      "torch_inter_op_threads": 1,
+      "torch_intra_op_threads": 1,
+      "torch_seed": 1
+    },
+    "gpu_available": false,
+    "graph_extensions": {
+      "dgl": {
+        "available": false,
+        "imported_in_this_process": false,
+        "used_by_this_entry": false
+      },
+      "torch_geometric": {
+        "available": false,
+        "imported_in_this_process": false,
+        "used_by_this_entry": false
+      },
+      "torch_scatter": {
+        "available": false,
+        "imported_in_this_process": false,
+        "used_by_this_entry": false
+      },
+      "torch_sparse": {
+        "available": false,
+        "imported_in_this_process": false,
+        "used_by_this_entry": false
+      }
+    },
+    "machine": "AMD64",
+    "packages": {
+      "numpy": "1.26.4",
+      "pandas": "2.2.3",
+      "pyarrow": "17.0.0",
+      "torch": "2.14.1+cpu"
+    },
+    "platform": "Windows-10-10.0.26300-SP0",
+    "python_version": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]",
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "torch": {
+      "cuda_available": false,
+      "cuda_version": null,
+      "deterministic_algorithms_enabled": true,
+      "deterministic_algorithms_warn_only": false,
+      "device_count": 0,
+      "inter_op_threads": 1,
+      "intra_op_threads": 1,
+      "version": "2.14.1+cpu"
+    }
+  },
+  "evidence_role": "formal (requires separate research authorization)",
+  "git": {
+    "commit": "2ca56dd68fb72ff632f9612dc1dbbc6eee66b723",
+    "dirty": true,
+    "errors": {},
+    "identity_available": true,
+    "scope": "source.json",
+    "scoped_dirty": true
+  },
+  "graph": {
+    "block_diagonal": true,
+    "columns": [
+      "r2_id",
+      "row_id",
+      "col_id"
+    ],
+    "dataset": "r2",
+    "duplicate_rows": 0,
+    "edges_sha256": "148e276b3def4e92fb9511229fcee8f0d276be1edb76bde80c2368d6e118f14e",
+    "node_keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+    "nodes": 121420,
+    "published": true,
+    "raw_rows": 321374,
+    "self_loop_rows": 0,
+    "source_kind": "published",
+    "source_path": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\dataset\\graph\\r2.parquet",
+    "source_sha256": "4cc1f399dd9061920179ade34d018fcbd58c3e00bb40f303b91e9aba99f9e12c",
+    "symmetry_rate": 1.0,
+    "unique_edges": 321374
+  },
+  "graph_used": {
+    "message_edges": 321374,
+    "message_edges_sha256": "ad3e9775af9ed369a487f75c3891871f41260d22fc8746c1b4986dbbee173cc0",
+    "method": "shuffled",
+    "propagates_messages": true,
+    "shuffle_identity": {
+      "algorithm": "context-local-directed-double-edge-swap",
+      "algorithm_version": "dds-v2",
+      "data_name": "r2",
+      "edge_count": 321374,
+      "edges_sha256": "ad3e9775af9ed369a487f75c3891871f41260d22fc8746c1b4986dbbee173cc0",
+      "shuffle_seed": 0,
+      "source_edges_sha256": "148e276b3def4e92fb9511229fcee8f0d276be1edb76bde80c2368d6e118f14e"
+    },
+    "shuffled": true,
+    "training_edges": {
+      "edge_count": 321374,
+      "edges_sha256": "ad3e9775af9ed369a487f75c3891871f41260d22fc8746c1b4986dbbee173cc0",
+      "matches_message_edges": true,
+      "method": "chunk-local edges converted to canonical global indices",
+      "windows_verified": 19
+    }
+  },
+  "implementation_readiness_does_not_establish_predictive_benefit": true,
+  "masks": {
+    "activity_definition": "nonzero-month fraction over the 27 unique training observation months; groups inactive==0, low (0,1/3], medium (1/3,2/3], high (2/3,1]",
+    "activity_group_counts": {
+      "high": 25292,
+      "inactive": 54207,
+      "low": 31364,
+      "medium": 10557
+    },
+    "array_sha256": {
+      "activity_high": "f1cc9e0de65f31ca8c0c4c95fe0774bc286bfa3f07b3b97b31432fe6655e8c59",
+      "activity_inactive": "d3ab7cc4ae6cfdbd202d50b7deea28626695f200bb66cbbef47add1f50282718",
+      "activity_low": "5fdb782ccc475c7ec48656e28029d6625451ceeefe161a27fba6e5fa31a465af",
+      "activity_medium": "c4a02f93a894925a432fed1150a380f06ec3dc95c6cbd1144aab4dc124b09f53",
+      "constant_train27": "d3ab7cc4ae6cfdbd202d50b7deea28626695f200bb66cbbef47add1f50282718",
+      "has_nonself_neighbor": "5ee90d0708b2b0d6277cc34bcf879b34e9f0a04226ee45193d56938779766e46",
+      "nonzero_activity_train27": "c49dc29b33d095d350e8af821a806b84666131953828da5ff67a931f382facc6"
+    },
+    "constant_definition": "float64 training-27 standard deviation == 0 (ddof=0)",
+    "constant_node_count": 54207,
+    "has_nonself_neighbor_count": 10193,
+    "neighbor_definition": "context-qualified non-self endpoint coverage: a node has a neighbour when it is an endpoint (row_id or col_id) of a graph row whose row_id != col_id within the same context; self-loop rows supply no neighbour",
+    "neighbor_definition_id": "p1-count-L6-H3-context-qualified-nonself-endpoints-v1",
+    "neighbor_source": {
+      "coverage_fraction": 0.08394827870202602,
+      "covered_nodes": 10193,
+      "definition": "context-qualified non-self endpoint coverage: a node has a neighbour when it is an endpoint (row_id or col_id) of a graph row whose row_id != col_id within the same context; self-loop rows supply no neighbour",
+      "directed_source_rows": 321374,
+      "graph_columns": [
+        "r2_id",
+        "row_id",
+        "col_id"
+      ],
+      "key_columns": [
+        "r2_id",
+        "skill_id"
+      ],
+      "node_keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+      "nodes": 121420,
+      "non-self rows used": 321374,
+      "self_loop_rows": 0,
+      "source": "raw_graph_parquet",
+      "source_path": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\dataset\\graph\\r2.parquet",
+      "source_sha256": "4cc1f399dd9061920179ade34d018fcbd58c3e00bb40f303b91e9aba99f9e12c",
+      "used_for_forecasting": false
+    },
+    "recomputed_from_shuffled_adjacency": false,
+    "scope": "train27 (2021-01..2023-03)",
+    "shared_by_methods": [
+      "self",
+      "graph",
+      "shuffled"
+    ],
+    "train_observation_months": [
+      "2021-01",
+      "2021-02",
+      "2021-03",
+      "2021-04",
+      "2021-05",
+      "2021-06",
+      "2021-07",
+      "2021-08",
+      "2021-09",
+      "2021-10",
+      "2021-11",
+      "2021-12",
+      "2022-01",
+      "2022-02",
+      "2022-03",
+      "2022-04",
+      "2022-05",
+      "2022-06",
+      "2022-07",
+      "2022-08",
+      "2022-09",
+      "2022-10",
+      "2022-11",
+      "2022-12",
+      "2023-01",
+      "2023-02",
+      "2023-03"
+    ]
+  },
+  "method": "shuffled",
+  "mode": "count",
+  "model_definition": "single-layer unidirectional bias-enabled GRU(1,32) shared across nodes; zero hidden state per node per window; shared Linear(32,3) head; graph and shuffled branches add the unweighted mean of distinct incoming neighbour hidden states before the head; no graph-specific trainable tensor",
+  "model_seed": 1,
+  "naive_reference": {
+    "NaiveRef": "LastValue",
+    "NaiveRef6": "LastValue",
+    "published_expected": "LastValue",
+    "published_identity_checked": true,
+    "selection_metric": "validation MSE"
+  },
+  "parameter_counts_measured": {
+    "graph_only": 0,
+    "gru": 3360,
+    "head": 99,
+    "total": 3459
+  },
+  "preprocessing": "none: raw counts feed the encoder and the loss",
+  "purpose": "formal",
+  "records_policy": {
+    "name": "P01-records-v2",
+    "sources": {
+      "records_policy": {
+        "available": true,
+        "path": "AGENTS.md",
+        "sha256": "5860997dae395db403bc038a08c5d91bfb3646f303b202f107b90a8f23758358"
+      },
+      "records_policy_origin": {
+        "available": true,
+        "path": "research/archives/migrations/20261008-evidence-maintenance.md",
+        "sha256": "115e5f7cc49bf3a6ba4224e66808d0c3ff3554432af91b55526d8d2128bfcf88"
+      },
+      "scientific_protocol": {
+        "available": true,
+        "path": "research/phases/P01/protocol.md",
+        "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c"
+      }
+    }
+  },
+  "recovery": {
+    "ancestry": [
+      "eee3dadcc2e6425faa938ca760414a69"
+    ],
+    "completed_epoch_at_start": 0,
+    "parent_checkpoint": null,
+    "run_id": "p02-t002-r2-20261020-02-r2-shuffled0-s1-b",
+    "schema": 1
+  },
+  "run_id": "p02-t002-r2-20261020-02-r2-shuffled0-s1-b",
+  "run_type": "run",
+  "scientific_acceptance": false,
+  "scientific_protocol": {
+    "available": true,
+    "path": "research/phases/P01/protocol.md",
+    "sha256": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c",
+    "version": "P1-count-L6-H3-v3"
+  },
+  "seed_profile": {
+    "development": true,
+    "final": true
+  },
+  "shuffle_seed": 0,
+  "skeleton_version": "P02-skeleton-v1",
+  "source_capture": {
+    "commit": "2ca56dd68fb72ff632f9612dc1dbbc6eee66b723",
+    "file": "source.json",
+    "patch_bytes": 0,
+    "patch_path": "git-diff.patch",
+    "scoped_dirty": true,
+    "unrecoverable_paths": []
+  },
+  "task": "P02-T001"
+}

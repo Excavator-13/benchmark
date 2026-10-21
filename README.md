@@ -375,6 +375,73 @@ python -m unittest discover -s benchmark/nograph_baseline/tests
 
 ### 4.6 Graph-value skeleton (`benchmark.graph_value_skeleton`)
 
+#### Epoch checkpoints and explicit recovery
+
+Every fully trained and validated epoch publishes an object-free numeric NPZ
+generation under `<run>/checkpoints/`, then atomically publishes `latest.json`
+with schema, filename, SHA256, size, completed epoch and previous generation.
+The latest two committed generations are retained. The payload contains current
+and selected parameters, Adam slots and counters, Python/NumPy/CPU torch RNG,
+history, selection and cumulative training/validation time. No pickle is loaded.
+Flushed writes and bounded Windows sharing retries preserve the previous pointer
+on publication failure; arbitrary hardware power-loss durability is not promised.
+
+Resume an unfinished run explicitly into a **fresh** run ID, repeating its original
+data/method/model/shuffle/purpose options and adding:
+
+```bash
+python -m benchmark.graph_value_skeleton run --data-name r0 --method graph \
+    --model-seed 0 --run-id gvs-r0-graph-s0-recovered \
+    --resume-from scratch/graph-value-skeleton/gvs-r0-graph-s0-a/checkpoints
+```
+
+Source bytes, runtime, protocol, input identities, graph, masks and ordered chunks
+must agree. Invalid or absent checkpoints fail explicitly. Parent evidence stays
+unchanged; the recovery input and ancestry are copied into the new run. The next
+epoch follows the committed epoch; total training remains 200 epochs. An epoch-200
+checkpoint resumes finalization without another update. Successful runs cannot
+be resumed. Branches sharing training ancestry cannot count as independent repeats.
+Old successful runs without recovery metadata remain readable by saved-only checks.
+
+`training-progress.json` reports `completed_epoch`, checkpoint digest, cumulative
+work, `last_epoch_seconds`, rolling `estimate_samples` and
+`remaining_seconds_estimate` (null before a full epoch). Its `completion` is always
+false; only terminal success artifacts establish completion. Chunk/stage updates
+help diagnose a slow first epoch but cannot recover partial epoch gradients.
+Downtime is excluded from cumulative work; attempt wall time and checkpoint I/O
+are separate. ETA is provisional and excludes final checks and startup.
+
+For an authorized r2 batch, inspect a recovery plan without training:
+
+```bash
+python -B research/phases/P02/t002_r2_batch.py plan --batch p02-t002-r2-recovered \
+    --recover-from research/reports/p02-t002-r2-20261020-01
+```
+
+Use the same `--recover-from` with `prepare`, then `run --batch <new-batch>`.
+Preparation fixes the recovery ledger; execution recomputes reused completed fits,
+resumes eligible checkpoints or starts fresh replacements. OS ownership locking
+and live-worker inspection prevent duplicate controllers; stale reboot records
+alone do not block a fresh batch. Defaults pause after 24 hours per fit or 30
+minutes without stage progress; override explicitly with `--fit-timeout-seconds`
+and `--stall-timeout-seconds`. Failures pause further scheduling and preserve logs
+and committed checkpoints. Only 30 completed fits and all 51 original checks permit
+completion and optional `--push-on-success`; unmeasured methods have no batch ETA.
+
+The bounded subprocess example used for recovery verification is:
+
+```bash
+python -B -m benchmark.graph_value_skeleton.tests.checkpoint_worker \
+    scratch/graph-value-skeleton/checkpoint-demo graph interrupted --cut 37
+python -B -m benchmark.graph_value_skeleton.tests.checkpoint_worker \
+    scratch/graph-value-skeleton/checkpoint-demo graph recovered \
+    --resume scratch/graph-value-skeleton/checkpoint-demo/runs/interrupted/checkpoints
+```
+
+The first command deliberately exits 73 after publishing epoch 37; the second
+completes epoch 38 through 200. These commands use tiny synthetic Parquet fixtures
+and never execute a formal research run.
+
 `benchmark/graph_value_skeleton/` is an independent CPU entry that implements
 the frozen P02-T001 temporal skeleton on the unchanged `P1-count-L6-H3-v3`
 protocol and `P01-records-v2` policy. It reuses the P01 demand identity, main

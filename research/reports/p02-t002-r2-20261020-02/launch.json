@@ -1,0 +1,17 @@
+﻿{
+    "independent_verification":  "PASS",
+    "preflight":  "ok",
+    "arguments":  [
+                      "-B",
+                      "research/phases/P02/t002_r2_batch.py",
+                      "run",
+                      "--batch",
+                      "p02-t002-r2-20261020-02",
+                      "--push-on-success"
+                  ],
+    "push_on_success":  true,
+    "cwd":  "D:/research-runs/JODBSDFres/benchmark-r2-20261020-01",
+    "launcher_pid":  17404,
+    "executable":  "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+    "started_at_utc":  "2026-10-20T15:50:45.2369514Z"
+}

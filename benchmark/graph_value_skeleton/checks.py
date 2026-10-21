@@ -318,6 +318,59 @@ def _prediction_relative(method: str, split: str) -> str:
     return f"predictions/{method}/{split}.npy"
 
 
+def _consumed_relative(run_dir: Path) -> List[str]:
+    return [*_CONSUMED_RELATIVE, *[name for name in (
+        'recovery.json', 'recovery/input.npz', 'recovery/input-manifest.json'
+    ) if (Path(run_dir) / name).exists()]]
+
+
+def _recovery_ancestry(loaded) -> set:
+    path = loaded.run_dir / 'recovery.json'
+    declared = loaded.provenance.get('recovery')
+    if not path.exists():
+        if declared is not None:
+            raise CheckError('Missing declared recovery evidence')
+        return set()
+    value = _read_json(path)
+    if declared != value or set(value) != {'schema', 'run_id', 'ancestry', 'parent_checkpoint', 'completed_epoch_at_start'}:
+        raise CheckError('Recovery evidence disagrees with provenance or schema')
+    ancestry = value['ancestry']
+    if (type(value['schema']) is not int or value['schema'] != 1 or value['run_id'] != loaded.provenance.get('run_id')
+            or not isinstance(ancestry, list) or not ancestry
+            or any(not isinstance(v, str) or not v for v in ancestry)
+            or len(set(ancestry)) != len(ancestry)):
+        raise CheckError('Invalid recovery ancestry')
+    epoch = value['completed_epoch_at_start']
+    parent = value['parent_checkpoint']
+    if type(epoch) is not int or not 0 <= epoch <= 200:
+        raise CheckError('Invalid recovery epoch')
+    if parent is None:
+        if epoch != 0 or len(ancestry) != 1:
+            raise CheckError('Invalid fresh recovery identity')
+    else:
+        manifest = _read_json(loaded.run_dir / 'recovery/input-manifest.json')
+        raw = loaded.run_dir / 'recovery/input.npz'
+        if (not isinstance(parent, str) or len(parent) != 64 or len(ancestry) < 2 or epoch == 0
+                or manifest.get('sha256') != parent or manifest.get('epoch') != epoch
+                or raw.stat().st_size != manifest.get('size') or sha256_file(raw) != parent):
+            raise CheckError('Invalid recovery input integrity')
+        # Read the object-free metadata locally; no external parent or model
+        # inference is needed to bind the ancestry prefix to the copied bytes.
+        from .checkpoints import decode, CheckpointError
+        try:
+            payload = decode(raw.read_bytes())
+            if (set(payload) != {'schema', 'identity', 'lineage', 'state'}
+                    or type(payload['schema']) is not int or payload['schema'] != 1
+                    or type(manifest.get('schema')) is not int or manifest['schema'] != 1
+                    or type(payload['state'].get('epoch')) is not int
+                    or payload['state']['epoch'] != epoch
+                    or payload['lineage'] != ancestry[:-1]):
+                raise CheckError('Recovery ancestry/epoch disagrees with copied parent payload')
+        except (CheckpointError, KeyError, TypeError) as exc:
+            raise CheckError('Invalid copied parent checkpoint metadata') from exc
+    return set(ancestry)
+
+
 @dataclass
 class LoadedRun:
     run_dir: Path
@@ -441,6 +494,7 @@ def _json_equal(left: Any, right: Any) -> bool:
 def _validate_loaded(loaded: LoadedRun) -> Dict[str, Any]:
     """Validate saved identity/schema and return the recomputation inputs."""
     problems: List[str] = []
+    _recovery_ancestry(loaded)
     run_dir = loaded.run_dir
     node_count = int(loaded.nodes.shape[0])
     key_columns = [column for column in loaded.nodes.columns if column != "node_index"]
@@ -1620,7 +1674,7 @@ def command_recompute(
     inputs: Dict[str, Any] = {"input_run_dir": str(run_dir)}
     before: Dict[str, str] = {}
     try:
-        before = _hash_files(_CONSUMED_RELATIVE, run_dir)
+        before = _hash_files(_consumed_relative(run_dir), run_dir)
         loaded = load_run(run_dir)
         before.update(
             {
@@ -1852,8 +1906,10 @@ def command_compare(
                 f"(run_id={left_execution!r}); a copied or aliased run cannot "
                 "establish an independent repeat"
             )
+        if _recovery_ancestry(left) & _recovery_ancestry(right):
+            raise CheckError('Shared training ancestry cannot establish an independent repeat')
         consumed_a = [
-            *_CONSUMED_RELATIVE,
+            *_consumed_relative(run_a),
             *(
                 _prediction_relative(name, split)
                 for split in left.splits
@@ -1861,7 +1917,7 @@ def command_compare(
             ),
         ]
         consumed_b = [
-            *_CONSUMED_RELATIVE,
+            *_consumed_relative(run_b),
             *(
                 _prediction_relative(name, split)
                 for split in right.splits
@@ -2015,7 +2071,7 @@ def command_summarize_shuffled(
                 )
         consumed_by_member = {
             str(member.run_dir): [
-                *_CONSUMED_RELATIVE,
+                *_consumed_relative(member.run_dir),
                 *(
                     _prediction_relative(member.method, split)
                     for split in member.splits

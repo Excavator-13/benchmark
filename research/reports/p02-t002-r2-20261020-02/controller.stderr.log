@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "D:\research-runs\JODBSDFres\benchmark-r2-20261020-01\research\phases\P02\t002_r2_batch.py", line 572, in <module>
+    main()
+  File "D:\research-runs\JODBSDFres\benchmark-r2-20261020-01\research\phases\P02\t002_r2_batch.py", line 560, in main
+    assert_no_live_workers()
+  File "D:\research-runs\JODBSDFres\benchmark-r2-20261020-01\research\phases\P02\t002_r2_batch.py", line 188, in assert_no_live_workers
+    output = subprocess.check_output(['powershell', '-NoProfile', '-Command', script], text=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\Documents\大创参考论文\JODBSDFres\benchmark\.uv-python\manual-cpython-3.11.17\python\Lib\subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\Documents\大创参考论文\JODBSDFres\benchmark\.uv-python\manual-cpython-3.11.17\python\Lib\subprocess.py", line 550, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\Documents\大创参考论文\JODBSDFres\benchmark\.uv-python\manual-cpython-3.11.17\python\Lib\subprocess.py", line 1196, in communicate
+    stdout = self.stdout.read()
+             ^^^^^^^^^^^^^^^^^^
+  File "<frozen codecs>", line 322, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb4 in position 67: invalid start byte

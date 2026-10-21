@@ -182,6 +182,7 @@ class RunConfig:
     demand_path: Optional[str] = None
     graph_path: Optional[str] = None
     shuffle_artifact: Optional[str] = None
+    resume_from: Optional[str] = None
     published: bool = True
     command: Sequence[str] = field(default_factory=tuple)
     launcher_cwd: Optional[str] = None
@@ -326,6 +327,7 @@ def resolve_config(
     demand_path: Optional[str] = None,
     graph_path: Optional[str] = None,
     shuffle_artifact: Optional[str] = None,
+    resume_from: Optional[str] = None,
     command: Sequence[str] = (),
     launcher_cwd: Optional[Path] = None,
 ) -> RunConfig:
@@ -359,6 +361,7 @@ def resolve_config(
         ),
         graph_path=resolved_graph.as_posix() if resolved_graph is not None else None,
         shuffle_artifact=resolved_artifact.as_posix() if resolved_artifact is not None else None,
+        resume_from=_resolve_input_path(resume_from, base).resolve().as_posix() if resume_from else None,
         published=bool(published),
         command=tuple(command),
         launcher_cwd=(Path(launcher_cwd).as_posix() if launcher_cwd is not None else None),

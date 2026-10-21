@@ -1,0 +1,10 @@
+& : 无法将“C:/Users/Lenovo/Documents/澶у垱鍙傝€冭鏂?JODBSDFres/benchmark/.venv-pinned/Scripts/python.exe”项识别为 cmdlet、函数、脚本文件或可运
+行程序的名称。请检查名称的拼写，如果包括路径，请确保路径正确，然后再试一次。
+所在位置 D:\research-runs\JODBSDFres\benchmark-r2-20261020-01\research\reports\p02-t002-r2-20261020-02\launch-utf8.ps1:6 字符
+: 3
++ & 'C:/Users/Lenovo/Documents/澶у垱鍙傝€冭鏂?JODBSDFres/benchmark/.venv-pin ...
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:/Users/Lenovo...ipts/python.exe:String) [], ParentContainsErrorRecord 
+   Exception
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 

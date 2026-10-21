@@ -107,6 +107,7 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--demand-path", default=None, help=argparse.SUPPRESS)
     run.add_argument("--graph-path", default=None, help=argparse.SUPPRESS)
     run.add_argument("--shuffle-artifact", default=None, help="checked prepared graph; shuffled only")
+    run.add_argument("--resume-from", default=None, help="committed checkpoint directory or latest.json; requires a fresh run ID")
     run.set_defaults(handler=_handle_run)
 
     prepare = subparsers.add_parser('prepare-shuffle', help='prepare one development graph without training')
@@ -199,6 +200,7 @@ def _handle_run(args: argparse.Namespace) -> int:
         demand_path=args.demand_path,
         graph_path=args.graph_path,
         shuffle_artifact=args.shuffle_artifact,
+        resume_from=args.resume_from,
         command=_canonical_command(args),
         launcher_cwd=launcher_cwd,
     )
