@@ -1,0 +1,54 @@
+{
+  "task": "P02-T002",
+  "batch": "p02-t002-20261020-01",
+  "recorded_at": "2026-10-20T06:18:01.585338+00:00",
+  "deadline_utc": "2026-10-20T10:23:51+00:00",
+  "decision": "paused_before_formal_scheduling",
+  "formal_completed_fits": 0,
+  "observations": [
+    {
+      "shuffle_seed": 0,
+      "run_id": "p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic",
+      "actual_run_state": "interrupted",
+      "intervals_seconds": [
+        10.99715500000002,
+        11.679812200000015
+      ],
+      "fastest_interval_seconds": 10.99715500000002,
+      "peak_working_set_bytes": 1164210176
+    },
+    {
+      "shuffle_seed": 1,
+      "run_id": "p02-t002-20261020-01-cost-r2-shuffled1-s0-diagnostic",
+      "actual_run_state": "interrupted",
+      "intervals_seconds": [
+        10.716573400000016,
+        14.193403500000386
+      ],
+      "fastest_interval_seconds": 10.716573400000016,
+      "peak_working_set_bytes": 1166102528
+    },
+    {
+      "shuffle_seed": 2,
+      "run_id": "p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic",
+      "actual_run_state": "failed",
+      "intervals_seconds": [
+        14.544373300000188,
+        13.990717099999529
+      ],
+      "fastest_interval_seconds": 13.990717099999529,
+      "peak_working_set_bytes": 1164279808
+    }
+  ],
+  "forecast_scope": "18 r2 shuffled fits only",
+  "excluded_scope": "72 other fits, startup, final prediction, saving and acceptance checks",
+  "schedule": "current verified serial route; one CPU thread per training process",
+  "projected_serial_seconds": 42845.33459999948,
+  "projected_seconds_at_twice_measured_speed": 21422.66729999974,
+  "seconds_until_deadline": 14749.414662,
+  "reason": "Even the twice-speed serial extrapolation for 18 fits misses the deadline.",
+  "limitation": "Two intervals per shuffle seed, model seed 0 only. Assumes stable epoch cost; not a runtime lower bound or completed fit. Parallel throughput unmeasured.",
+  "diagnostic_save_failure": "Seed 2 obtained and saved three steps and two intervals, then WinError 5 replacing its final stop marker. Runner preserved failed status; temporary file retained. This diagnostic writer uses os.replace directly, outside the verified shared atomic writer.",
+  "scientific_configuration_changed": false,
+  "no_automatic_resume": true
+}

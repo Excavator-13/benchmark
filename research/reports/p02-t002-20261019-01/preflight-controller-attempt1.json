@@ -1,0 +1,6 @@
+{
+  "status": "failed",
+  "mode": "preflight",
+  "error": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\Lenovo\\\\Documents\\\\大创参考论文\\\\JODBSDFres\\\\benchmark\\\\benchmark\\\\__init__.py'",
+  "updated_at": "2026-10-19T12:35:55.190068+00:00"
+}

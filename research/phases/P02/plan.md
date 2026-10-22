@@ -24,7 +24,7 @@
 | ID | 任务 | 状态 | 依赖 | 完成判据 |
 | --- | --- | --- | --- | --- |
 | P02-T001 | 实现骨架与打乱图 | done | T008 | OpenSpec `add-graph-value-skeleton` 归档 PASS 且研究侧接受实现就绪：[归档报告](../../../openspec/changes/archive/2026-10-19-add-graph-value-skeleton/verification.md)（2026-10-19T10:41:02Z）、[实现说明](../../../openspec/changes/archive/2026-10-19-add-graph-value-skeleton/implementation-notes.md)、[主规格](../../../openspec/specs/graph-value-skeleton/spec.md)、[D025](../../decisions.md#d025-p02-t001-实现研究侧验收与委托回收)。实现符合 D023 骨架口径（参数量 3,459、图分支无额外参数、保度打乱 3 seed、复用 P01 身份）；无正式 run |
-| P02-T002 | 开发对照运行 | todo | T001 | `r0`/`region`/`r2` × seeds 0,1,2 × 自身/真实图/打乱图（3 图平均），同 seed 至少两次重复 |
+| P02-T002 | 开发对照运行 | in_progress | T001 | `r0`/`region`/`r2` × seeds 0,1,2 × 自身/真实图/打乱图（3 图平均），同 seed 至少两次重复；[执行入口](t002-execution.md)、[成本失败证据](../../reports/p02-t002-20261019-01/report.md)、[修复交接](t002-repair-handoff.md)、[新成本与验收](../../reports/p02-t002-20261020-01/report.md)、[r2重启批次](../../reports/p02-t002-r2-20261020-02/report.md)、[region/r0组合](../../reports/p02-t002-remaining-20261022-01/report.md) |
 | P02-T003 | 门槛判定与诊断 | todo | T002 | 按 §6.2 #1–#5 判定；未过先查实现、尺度与图语义 |
 | P02-T004 | 后续范围决定 | todo | T003 | 通过才进阶段三门控/边选择；否则收敛或改图来源 |
 
@@ -56,3 +56,12 @@
 - 2026-10-18：P01-T008 完成时建立；骨架、数据、seeds 与预算按 [D023](../../decisions.md#d023-t008-阶段验收与-p02-骨架范围) 冻结；P02-T001 的变更名预登记为 `add-graph-value-skeleton`；尚未启动，启动前先按规则登记委托。
 - 2026-10-18（晚于建立）：用户决定启动 P02-T001，已按 [AGENTS.md](../../../AGENTS.md) 在 [DELEGATION](../../../DELEGATION.md) 登记 `add-graph-value-skeleton` 为 `open`，由 OpenSpec 侧执行 propose → apply → verify → archive；本表 T001 状态待归档 PASS 且研究侧接受实现就绪后更新。
 - 2026-10-19：`add-graph-value-skeleton` 归档 PASS，研究侧按 [D025](../../decisions.md#d025-p02-t001-实现研究侧验收与委托回收) 接受实现就绪，T001 → `done` 并回收委托；无正式 run。T002 未启动，正式比较前须统一确认一次成本（§4）。
+- 2026-10-19（T001 回收后）：用户授权启动 T002；开始本机环境准备与成本预检，T002 → `in_progress`。正式比较范围与预算仍按 §4，执行事实见[执行入口](t002-execution.md)。
+- 2026-10-19（成本试跑后）：真实 r2 打乱 seed 0 在现有尝试上限内未完成成功交换目标，T002 → `blocked`；正式比较未开始。原因与后续修复范围见[批次报告](../../reports/p02-t002-20261019-01/report.md)及[交接](t002-repair-handoff.md)，不降低原完成条件。
+- 2026-10-20（D027）：修复归档并接受软件就绪，回收委托；T002解除实现阻塞，恢复限时成本判断，正式矩阵须通过成本门。旧运行与科学配置不变。
+- 2026-10-20（成本判断）：按D027与用户预定停止条件，当前路线预计无法在截止前完成，T002 → `paused`；诊断证据见[报告](../../reports/p02-t002-20261020-01/report.md)，不启动正式矩阵、不自动续跑，不降低原完成条件。
+- 2026-10-20（D028）：用户重新授权r2运行窗口并允许D盘独立副本，r2正式顺序批次启动，T002 → `in_progress`。本批次只覆盖r2，不改变完整任务的r0/region依赖或科学验收门槛；全部r2拟合与检查成功后按用户要求提交推送。
+
+- 2026-10-20（D029）：检查点变更独立PASS归档并研究侧验收，回收委托；r2使用新批次20-02重启，旧中断现场不变。T002仍in_progress，软件就绪不替代30次/51项检查及完整数据范围验收。
+
+- 2026-10-22（D030）：r2执行块已全部通过并推送，用户要求完成region及r0；建立新组合批次顺序执行，T002仍in_progress，原完成条件不变。

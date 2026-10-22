@@ -1,0 +1,13 @@
+﻿{
+    "preflights":  "both ok",
+    "datasets":  [
+                     "region",
+                     "r0"
+                 ],
+    "script":  "launch.ps1",
+    "wrapper_pid":  14504,
+    "push_after_both":  true,
+    "total_checks":  102,
+    "started_at_utc":  "2026-10-21T16:15:30.9996409Z",
+    "total_fits":  60
+}

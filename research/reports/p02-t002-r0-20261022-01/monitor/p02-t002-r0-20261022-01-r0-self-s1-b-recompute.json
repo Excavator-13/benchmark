@@ -1,0 +1,21 @@
+{
+  "child_pid": 37616,
+  "command": [
+    "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+    "-B",
+    "-m",
+    "benchmark.graph_value_skeleton",
+    "recompute",
+    "--run-dir",
+    "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r0-20261022-01-r0-self-s1-b",
+    "--report",
+    "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\scratch\\graph-value-skeleton\\p02-t002-r0-20261022-01\\checks\\p02-t002-r0-20261022-01-r0-self-s1-b-recompute.json"
+  ],
+  "cwd": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01",
+  "elapsed_seconds": 15.031000000002678,
+  "exit_code": 0,
+  "finished_at": "2026-10-21T20:04:35.584647+00:00",
+  "log": "scratch/graph-value-skeleton/p02-t002-r0-20261022-01/logs/p02-t002-r0-20261022-01-r0-self-s1-b-recompute.log",
+  "name": "p02-t002-r0-20261022-01-r0-self-s1-b-recompute",
+  "started_at": "2026-10-21T20:04:20.548215+00:00"
+}

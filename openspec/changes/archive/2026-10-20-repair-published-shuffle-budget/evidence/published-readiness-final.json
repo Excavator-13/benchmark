@@ -1,0 +1,875 @@
+{
+  "readiness_path": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\readiness.json",
+  "readiness_sha256": "c6041cd46cad9f6e0a40186e654a5e6bf221fe02798852af2f133a084e27602d",
+  "state": "success",
+  "members": [
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\r2-shuffle0-a",
+      "checksums_sha256": "5e67126391ff18b11148856dd738f724b1d10a2b0fad4505d8107cbaaf9252fb",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r2",
+        "--shuffle-seed",
+        "0",
+        "--run-id",
+        "r2-shuffle0-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "r2",
+      "elapsed_seconds": 54.375,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.8518991000000824,
+          "graph_read": 1.6459799999997813,
+          "shuffle": 32.80040079999981,
+          "total": 44.02321260000008
+        },
+        "edges": 321374,
+        "nodes": 121420,
+        "peak_memory": {
+          "bytes": 424226816,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 424226816,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\r2-shuffle0-a.json",
+      "report_sha256": "d3199b939ddec1be20818dda70517c2d4ba1c3731c229b1d9e506291085588a6",
+      "result_sha256": "ad3e9775af9ed369a487f75c3891871f41260d22fc8746c1b4986dbbee173cc0",
+      "shuffle_seed": 0,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\r2-shuffle0-a.json",
+      "post_repair_report_sha256": "11d177d035a2b970564d5465b43828a72bff49d838b286f4e1592d6e657f5e8f",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\r2-shuffle0-b",
+      "checksums_sha256": "9543b2c5a76f3bdafb7961514bbecb7ed8c182b47e929137a438fe94ef512cfa",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r2",
+        "--shuffle-seed",
+        "0",
+        "--run-id",
+        "r2-shuffle0-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "r2",
+      "elapsed_seconds": 53.827999999999975,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.4392758999997568,
+          "graph_read": 1.545524099999966,
+          "shuffle": 39.027129799999784,
+          "total": 47.226424099999804
+        },
+        "edges": 321374,
+        "nodes": 121420,
+        "peak_memory": {
+          "bytes": 549076992,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 549076992,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\r2-shuffle0-b.json",
+      "report_sha256": "724b7509bd6b4ee65e08a86645c77dfcc027e3a3532be6347e86cddd1f4fb2ee",
+      "result_sha256": "ad3e9775af9ed369a487f75c3891871f41260d22fc8746c1b4986dbbee173cc0",
+      "shuffle_seed": 0,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\r2-shuffle0-b.json",
+      "post_repair_report_sha256": "a0d4c23e26e38feade04adbed77e183e8be3e0f4941dbcaf23a7811b31f37bcf",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\r0-shuffle0-a",
+      "checksums_sha256": "f650b773f7358da7636a50fbd0cbf9427522c815f135a0ae88b6132629b6198a",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r0",
+        "--shuffle-seed",
+        "0",
+        "--run-id",
+        "r0-shuffle0-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "r0",
+      "elapsed_seconds": 22.389999999999873,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.0541547000002538,
+          "graph_read": 0.2182583999997405,
+          "shuffle": 11.764377100000274,
+          "total": 17.82753380000031
+        },
+        "edges": 60804,
+        "nodes": 2335,
+        "peak_memory": {
+          "bytes": 301875200,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 301875200,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\r0-shuffle0-a.json",
+      "report_sha256": "21b7b841853fd6c4941ee2c3ed1415d3bb7686efb1cf3d61c2dd57f470c9772b",
+      "result_sha256": "58f493fd11d6b09d63587511a0ad7d23f2d4deadf0eee1da5990e44ff938ab50",
+      "shuffle_seed": 0,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\r0-shuffle0-a.json",
+      "post_repair_report_sha256": "ab424075c7efcc5c7f801a13510aa9d066c4dbc3a5f4d5b2ede17e21f99a63e0",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\r0-shuffle0-b",
+      "checksums_sha256": "e9ff08b8c2f0304ee3d08df3b32be663b5615217afd9fd1469aca3e848a8e14e",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r0",
+        "--shuffle-seed",
+        "0",
+        "--run-id",
+        "r0-shuffle0-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "r0",
+      "elapsed_seconds": 23.141000000000076,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.05769540000028428,
+          "graph_read": 0.21102539999992587,
+          "shuffle": 12.212067799999659,
+          "total": 18.985223099999985
+        },
+        "edges": 60804,
+        "nodes": 2335,
+        "peak_memory": {
+          "bytes": 300765184,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 300765184,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\r0-shuffle0-b.json",
+      "report_sha256": "3f7674822886e2da2b51ae238c3971c2f1c061d58ea766188c3a210c9e780ca4",
+      "result_sha256": "58f493fd11d6b09d63587511a0ad7d23f2d4deadf0eee1da5990e44ff938ab50",
+      "shuffle_seed": 0,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\r0-shuffle0-b.json",
+      "post_repair_report_sha256": "e80edd4d57fe8bcc5df71ffa8b973f5257e47250aaeab89b69dbfee541a09885",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\r0-shuffle1-a",
+      "checksums_sha256": "3d99a7b7ee88b5ed58b8e2ba6adc06b84e10c12316870638d53a7acf21e3ba10",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r0",
+        "--shuffle-seed",
+        "1",
+        "--run-id",
+        "r0-shuffle1-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "r0",
+      "elapsed_seconds": 20.84400000000005,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.048652599999968515,
+          "graph_read": 0.20978759999979957,
+          "shuffle": 10.673846900000171,
+          "total": 16.755076299999928
+        },
+        "edges": 60804,
+        "nodes": 2335,
+        "peak_memory": {
+          "bytes": 302526464,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 302526464,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\r0-shuffle1-a.json",
+      "report_sha256": "d2e2da3ab5ab3bb952461ff2122c3e37c42d462060f74cd1977e8816e32dec67",
+      "result_sha256": "a5144032cc32054e0e79ec9e863b76c3caceb027eff904f59d87d7e71cd9972c",
+      "shuffle_seed": 1,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\r0-shuffle1-a.json",
+      "post_repair_report_sha256": "fbd140525cf1a9be4dca4d1e7265b48f0e462043a3723a8e36673fa5064f8449",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\r0-shuffle1-b",
+      "checksums_sha256": "3134281054c712412ae63a1698dd5eba2cb2d1a3e2bc28d8150e1ecbc2858272",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r0",
+        "--shuffle-seed",
+        "1",
+        "--run-id",
+        "r0-shuffle1-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "r0",
+      "elapsed_seconds": 20.858999999999924,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.056084000000282686,
+          "graph_read": 0.20431749999988824,
+          "shuffle": 11.122111099999984,
+          "total": 17.090158299999985
+        },
+        "edges": 60804,
+        "nodes": 2335,
+        "peak_memory": {
+          "bytes": 300761088,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 300761088,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\r0-shuffle1-b.json",
+      "report_sha256": "247298f171e7760d84c9317de80c6e67505109c6427bbc4aef9c048796c69ec7",
+      "result_sha256": "a5144032cc32054e0e79ec9e863b76c3caceb027eff904f59d87d7e71cd9972c",
+      "shuffle_seed": 1,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\r0-shuffle1-b.json",
+      "post_repair_report_sha256": "63d21f6b67e48970bfb05424049eef446463678aa4a3b07ec60eb0b561442af9",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\r0-shuffle2-a",
+      "checksums_sha256": "1a73f9c6084b57f5423a6c958c507cda2fefc87e618ba3256e46a194f3a41c47",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r0",
+        "--shuffle-seed",
+        "2",
+        "--run-id",
+        "r0-shuffle2-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "r0",
+      "elapsed_seconds": 21.139999999999873,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.05254540000032648,
+          "graph_read": 0.20561940000015966,
+          "shuffle": 10.844883999999638,
+          "total": 16.779623300000367
+        },
+        "edges": 60804,
+        "nodes": 2335,
+        "peak_memory": {
+          "bytes": 301158400,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 301158400,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\r0-shuffle2-a.json",
+      "report_sha256": "c0431d791799033ad9972a9a4d742ac36cc210e30ec9dbbd78c62d2c29a6968f",
+      "result_sha256": "58975be937b47c66d8c6cae4df1f4838ad2ed68486381a8c89d85c1a77b4cbdd",
+      "shuffle_seed": 2,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\r0-shuffle2-a.json",
+      "post_repair_report_sha256": "a9a5e28598919815a12e61ec3fcee12b85c8c95bb5c0f41d85dfc8b4af013eda",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\r0-shuffle2-b",
+      "checksums_sha256": "5dbc16fd41b1d77e7fd5f7ac1908bfccada80d123a8086d5ae484faa36296dc4",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r0",
+        "--shuffle-seed",
+        "2",
+        "--run-id",
+        "r0-shuffle2-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "r0",
+      "elapsed_seconds": 20.09400000000005,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.05900939999992261,
+          "graph_read": 0.2098942999996325,
+          "shuffle": 10.584091100000023,
+          "total": 16.520561199999975
+        },
+        "edges": 60804,
+        "nodes": 2335,
+        "peak_memory": {
+          "bytes": 301907968,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 301907968,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\r0-shuffle2-b.json",
+      "report_sha256": "53aed0e155e396b5e5cd4a76065316144d7b468bb78e4c6fec5e02f6236e581a",
+      "result_sha256": "58975be937b47c66d8c6cae4df1f4838ad2ed68486381a8c89d85c1a77b4cbdd",
+      "shuffle_seed": 2,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\r0-shuffle2-b.json",
+      "post_repair_report_sha256": "be8261ccccca6ea4c40605b7c7dbbb63173f499c0e0b78d5e73b2712b22c7618",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\region-shuffle0-a",
+      "checksums_sha256": "b4595b18630284b8fa18a2a0ffaf7f76214ea218ba5a01bca6f8984d23e894f4",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "region",
+        "--shuffle-seed",
+        "0",
+        "--run-id",
+        "region-shuffle0-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "region",
+      "elapsed_seconds": 28.172000000000025,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.12228259999983493,
+          "graph_read": 0.8570136999996976,
+          "shuffle": 15.984621300000072,
+          "total": 22.958100899999863
+        },
+        "edges": 218840,
+        "nodes": 16345,
+        "peak_memory": {
+          "bytes": 405266432,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 405266432,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\region-shuffle0-a.json",
+      "report_sha256": "f3a703c5567d8f4052c36123fbaa68b1317ea07505d22a4532f5b2d146be9232",
+      "result_sha256": "90e8f2a68391d88d970683e13aa6a686f174dd40d20264f63a76d8e69e4130ee",
+      "shuffle_seed": 0,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\region-shuffle0-a.json",
+      "post_repair_report_sha256": "90f16fa060862df75e0344175da9e9841561f5cbe3ea1e0eef14955a9968a3ed",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\region-shuffle0-b",
+      "checksums_sha256": "6b0c9efb7875e597aacfaa4ce92e1c039375f47125973f747419356d7f0aad89",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "region",
+        "--shuffle-seed",
+        "0",
+        "--run-id",
+        "region-shuffle0-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "region",
+      "elapsed_seconds": 28.15599999999995,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.11759689999962575,
+          "graph_read": 0.8676030000001447,
+          "shuffle": 15.961145300000226,
+          "total": 22.982699499999853
+        },
+        "edges": 218840,
+        "nodes": 16345,
+        "peak_memory": {
+          "bytes": 405377024,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 405377024,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\region-shuffle0-b.json",
+      "report_sha256": "e0099135516474c601f65afc6a6def6c264bbe1332a354927f0445fc705afa74",
+      "result_sha256": "90e8f2a68391d88d970683e13aa6a686f174dd40d20264f63a76d8e69e4130ee",
+      "shuffle_seed": 0,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\region-shuffle0-b.json",
+      "post_repair_report_sha256": "3886a65ff6f3545f5f11de4ab33cc69cc33cad3dad8744d17c74fa11e2b2cd9c",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\region-shuffle1-a",
+      "checksums_sha256": "f7451df567c4dd5b6dfb7700f300c931596b5c510a8fd8949ef943663a01bc4c",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "region",
+        "--shuffle-seed",
+        "1",
+        "--run-id",
+        "region-shuffle1-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "region",
+      "elapsed_seconds": 30.172000000000025,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.12980470000002242,
+          "graph_read": 0.8804236999999375,
+          "shuffle": 17.71459879999975,
+          "total": 25.159501999999975
+        },
+        "edges": 218840,
+        "nodes": 16345,
+        "peak_memory": {
+          "bytes": 404492288,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 404492288,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\region-shuffle1-a.json",
+      "report_sha256": "d34025ed41dfb74b4c8f2e070a7eab83f445e4a85acadd1be127e820659259f5",
+      "result_sha256": "81726979b7e78544b6c8b61d3ea2c98d222d26236412a05d0a5d6655a8804a99",
+      "shuffle_seed": 1,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\region-shuffle1-a.json",
+      "post_repair_report_sha256": "c512cd70e74d554f3579f06f7d22cb3ba3d5aeb7c1d0c69369845c0e8472b2d9",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\region-shuffle1-b",
+      "checksums_sha256": "0bc86a7dd20a9b1489ddfb9fe67e8717db835020a748e9a7082aadfd4c7a08ad",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "region",
+        "--shuffle-seed",
+        "1",
+        "--run-id",
+        "region-shuffle1-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "region",
+      "elapsed_seconds": 27.891000000000076,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.12361340000006749,
+          "graph_read": 0.8304072000000815,
+          "shuffle": 15.959370099999887,
+          "total": 22.833382299999812
+        },
+        "edges": 218840,
+        "nodes": 16345,
+        "peak_memory": {
+          "bytes": 405475328,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 405475328,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\region-shuffle1-b.json",
+      "report_sha256": "5004f12425709a5130346ab5631772e32c138e27af49b608e6c25a9c08110f1c",
+      "result_sha256": "81726979b7e78544b6c8b61d3ea2c98d222d26236412a05d0a5d6655a8804a99",
+      "shuffle_seed": 1,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\region-shuffle1-b.json",
+      "post_repair_report_sha256": "cc2d3e8a81d1628806478d749ec19939e7ee72a2518ada1818482f71bb4e7eb0",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\region-shuffle2-a",
+      "checksums_sha256": "6a19acd633f4aa083d86190a50f64887a5d61aed254157d152dff4cc7a8243fa",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "region",
+        "--shuffle-seed",
+        "2",
+        "--run-id",
+        "region-shuffle2-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "region",
+      "elapsed_seconds": 28.40599999999995,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.12164600000005521,
+          "graph_read": 0.8343673999997918,
+          "shuffle": 15.874771599999804,
+          "total": 23.290233499999886
+        },
+        "edges": 218840,
+        "nodes": 16345,
+        "peak_memory": {
+          "bytes": 405331968,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 405331968,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\region-shuffle2-a.json",
+      "report_sha256": "3c2184ba90b7e3eee71325c33674098ba99776def0d3662823778619a21fc99a",
+      "result_sha256": "ab99ce10892946beb95baf71fbafb1f1411d5ad0b5cca2fc8359e5bd4212a60c",
+      "shuffle_seed": 2,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\region-shuffle2-a.json",
+      "post_repair_report_sha256": "7e4b1f0e50be31a0ef623bc9572188b1adc6b53b6a8239e9a5a00f9781ee9c43",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\region-shuffle2-b",
+      "checksums_sha256": "51dd947f0cbd7ca7ed670ba478d49fb97cff55823da0dd4663655baac20ac50b",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "region",
+        "--shuffle-seed",
+        "2",
+        "--run-id",
+        "region-shuffle2-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "region",
+      "elapsed_seconds": 29.139999999999873,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.13517900000033478,
+          "graph_read": 0.8295192999999017,
+          "shuffle": 16.656417200000305,
+          "total": 23.472905399999945
+        },
+        "edges": 218840,
+        "nodes": 16345,
+        "peak_memory": {
+          "bytes": 405704704,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 405704704,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\region-shuffle2-b.json",
+      "report_sha256": "d37326580efe02d304a7ff57badcfe148cf1f399597a8a3e1a8fedead55fa6c7",
+      "result_sha256": "ab99ce10892946beb95baf71fbafb1f1411d5ad0b5cca2fc8359e5bd4212a60c",
+      "shuffle_seed": 2,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\region-shuffle2-b.json",
+      "post_repair_report_sha256": "1fcab342247ac98cfe02469de0356305a9f077de42b211a61c01e4fc4584f297",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\r2-shuffle1-a",
+      "checksums_sha256": "74edc9fb08d12c471b17deaa0daae1d9df129ac27382b5ee63bd336e32d445b7",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r2",
+        "--shuffle-seed",
+        "1",
+        "--run-id",
+        "r2-shuffle1-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "r2",
+      "elapsed_seconds": 55.09400000000005,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.4310574999999517,
+          "graph_read": 1.8277241999999205,
+          "shuffle": 38.20846729999994,
+          "total": 46.84194400000024
+        },
+        "edges": 321374,
+        "nodes": 121420,
+        "peak_memory": {
+          "bytes": 550133760,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 550133760,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\r2-shuffle1-a.json",
+      "report_sha256": "bface5089bce15bb55015af97927018bbee5ed63f06b4d66af1657aeaf4d3419",
+      "result_sha256": "3aa28dc59eccf6be87d8072227e5d81f150a4e85d556c96768481189d4cff8ac",
+      "shuffle_seed": 1,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\r2-shuffle1-a.json",
+      "post_repair_report_sha256": "c1d68369132575935adc9a38f08eeb59f524bee7369f0703682310c6183bec73",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\r2-shuffle1-b",
+      "checksums_sha256": "d157cace70462fda8512a3e7b7213f10a7e1fd3030990c069c07eae1608af883",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r2",
+        "--shuffle-seed",
+        "1",
+        "--run-id",
+        "r2-shuffle1-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "r2",
+      "elapsed_seconds": 47.79599999999982,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.4341953999996804,
+          "graph_read": 1.7126703999997517,
+          "shuffle": 32.46997730000021,
+          "total": 40.82646539999996
+        },
+        "edges": 321374,
+        "nodes": 121420,
+        "peak_memory": {
+          "bytes": 549605376,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 549605376,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\r2-shuffle1-b.json",
+      "report_sha256": "6c4035631a816a7f7e08ff14d7e1b8ea18fe090a9ce20c81c53621bdb5c0b3d4",
+      "result_sha256": "3aa28dc59eccf6be87d8072227e5d81f150a4e85d556c96768481189d4cff8ac",
+      "shuffle_seed": 1,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\r2-shuffle1-b.json",
+      "post_repair_report_sha256": "c8bd23c91ebbc56ed6c4c946330a229c96bfc75235d1d8e5225c790e3d2598f8",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\r2-shuffle2-a",
+      "checksums_sha256": "c12607977a66bffdb3a8654c8b9b1d5b45f29f1d3da66771c132ddc0556ff54e",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r2",
+        "--shuffle-seed",
+        "2",
+        "--run-id",
+        "r2-shuffle2-a",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "r2",
+      "elapsed_seconds": 48.03099999999995,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.44594240000014906,
+          "graph_read": 1.61062419999962,
+          "shuffle": 33.11100459999989,
+          "total": 41.657567299999755
+        },
+        "edges": 321374,
+        "nodes": 121420,
+        "peak_memory": {
+          "bytes": 549183488,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 549183488,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "a",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\r2-shuffle2-a.json",
+      "report_sha256": "0cb2e0a7d97dfae1389bf1e3d1e77cf82aa66ee42c208452e19c2bf2464642d7",
+      "result_sha256": "0215f7df908200e3c64c7fc26a63c5592f9c176595c29a7ca606176ea8488936",
+      "shuffle_seed": 2,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\r2-shuffle2-a.json",
+      "post_repair_report_sha256": "c6f53e00f457c6e237718e3e556689a718882f60f11372da67c5677d751cade7",
+      "artifact_unchanged": true
+    },
+    {
+      "artifact_dir": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs\\r2-shuffle2-b",
+      "checksums_sha256": "2873de5046bfb72a98795045aa827cbdda9b0758ce652fe4340a028e6ba67bd5",
+      "command": [
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "benchmark.graph_value_skeleton",
+        "prepare-shuffle",
+        "--data-name",
+        "r2",
+        "--shuffle-seed",
+        "2",
+        "--run-id",
+        "r2-shuffle2-b",
+        "--output-root",
+        "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\graphs"
+      ],
+      "dataset": "r2",
+      "elapsed_seconds": 48.516000000000076,
+      "measurements": {
+        "durations_seconds": {
+          "demand_read": 0.5090555999995559,
+          "graph_read": 1.6680787000000237,
+          "shuffle": 33.13614210000014,
+          "total": 41.9155652999998
+        },
+        "edges": 321374,
+        "nodes": 121420,
+        "peak_memory": {
+          "bytes": 549191680,
+          "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+          "native_unit": "bytes",
+          "native_value": 549191680,
+          "scope": "graph worker process lifetime",
+          "status": "ok"
+        },
+        "purpose": "development graph-only"
+      },
+      "repeat": "b",
+      "report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\checks\\r2-shuffle2-b.json",
+      "report_sha256": "17bd7cc37dda744f4bf28afd72551d1be60330dccc811c0bcecab155dcdceffe",
+      "result_sha256": "0215f7df908200e3c64c7fc26a63c5592f9c176595c29a7ca606176ea8488936",
+      "shuffle_seed": 2,
+      "post_repair_report": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-05\\post-repair-checks\\r2-shuffle2-b.json",
+      "post_repair_report_sha256": "5bd3fdffcba6cef27d43e60641c4b399d958039daec415fe268db3446c332159",
+      "artifact_unchanged": true
+    }
+  ],
+  "purpose": "development graph-only",
+  "checker_prepared_sha256": "45ec9fe5eeaefc5c39be41130791c948dca17f8200e0f006a0e9ef5be7aad70b",
+  "matching_regenerations": 9,
+  "artifact_count": 18
+}

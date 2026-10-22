@@ -1,0 +1,6 @@
+{
+  "status": "failed",
+  "mode": "cost",
+  "error": "RuntimeError: p02-t002-20261019-01-cost-r2-shuffled0-s0-cost: exit 1; see C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\graph-value-skeleton\\p02-t002-20261019-01\\logs\\p02-t002-20261019-01-cost-r2-shuffled0-s0-cost.log",
+  "updated_at": "2026-10-19T12:46:56.097760+00:00"
+}

@@ -1,0 +1,2 @@
+{"event": "run_reserved", "run_id": "p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic", "run_type": "run", "time": "2026-10-20T14:15:59+08:00"}
+{"error_type": "PermissionError", "event": "run_failed", "run_id": "p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic", "stage": "training", "time": "2026-10-20T14:17:24+08:00"}

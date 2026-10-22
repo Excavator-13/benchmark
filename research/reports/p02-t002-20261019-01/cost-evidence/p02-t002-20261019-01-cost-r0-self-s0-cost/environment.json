@@ -1,0 +1,65 @@
+{
+  "cpu_count": 24,
+  "gpu_available": false,
+  "graph_extensions": {
+    "dgl": {
+      "available": false,
+      "imported_in_this_process": false,
+      "used_by_this_entry": false
+    },
+    "torch_geometric": {
+      "available": false,
+      "imported_in_this_process": false,
+      "used_by_this_entry": false
+    },
+    "torch_scatter": {
+      "available": false,
+      "imported_in_this_process": false,
+      "used_by_this_entry": false
+    },
+    "torch_sparse": {
+      "available": false,
+      "imported_in_this_process": false,
+      "used_by_this_entry": false
+    }
+  },
+  "machine": "AMD64",
+  "numpy_blas_config": "{\n  \"Compilers\": {\n    \"c\": {\n      \"name\": \"msvc\",\n      \"linker\": \"link\",\n      \"version\": \"19.29.30153\",\n      \"commands\": \"cl\"\n    },\n    \"cython\": {\n      \"name\": \"cython\",\n      \"linker\": \"cython\",\n      \"version\": \"3.0.8\",\n      \"commands\": \"cython\"\n    },\n    \"c++\": {\n      \"name\": \"msvc\",\n      \"linker\": \"link\",\n      \"version\": \"19.29.30153\",\n      \"commands\": \"cl\"\n    }\n  },\n  \"Machine Information\": {\n    \"host\": {\n      \"cpu\": \"x86_64\",\n      \"family\": \"x86_64\",\n      \"endian\": \"little\",\n      \"system\": \"windows\"\n    },\n    \"build\": {\n      \"cpu\": \"x86_64\",\n      \"family\": \"x86_64\",\n      \"endian\": \"little\",\n      \"system\": \"windows\"\n    }\n  },\n  \"Build Dependencies\": {\n    \"blas\": {\n      \"name\": \"openblas64\",\n      \"found\": true,\n      \"version\": \"0.3.23.dev\",\n      \"detection method\": \"pkgconfig\",\n      \"include directory\": \"/c/opt/64/include\",\n      \"lib directory\": \"/c/opt/64/lib\",\n      \"openblas configuration\": \"USE_64BITINT=1 DYNAMIC_ARCH=1 DYNAMIC_OLDER= NO_CBLAS= NO_LAPACK= NO_LAPACKE= NO_AFFINITY=1 USE_OPENMP= SKYLAKEX MAX_THREADS=2\",\n      \"pc file directory\": \"C:/opt/64/lib/pkgconfig\"\n    },\n    \"lapack\": {\n      \"name\": \"dep2270588361616\",\n      \"found\": true,\n      \"version\": \"1.26.4\",\n      \"detection method\": \"internal\",\n      \"include directory\": \"unknown\",\n      \"lib directory\": \"unknown\",\n      \"openblas configuration\": \"unknown\",\n      \"pc file directory\": \"unknown\"\n    }\n  },\n  \"Python Information\": {\n    \"path\": \"C:\\\\Users\\\\runneradmin\\\\AppData\\\\Local\\\\Temp\\\\cibw-run-j442zwj6\\\\cp311-win_amd64\\\\build\\\\venv\\\\Scripts\\\\python.exe\",\n    \"version\": \"3.11\"\n  },\n  \"SIMD Extensions\": {\n    \"baseline\": [\n      \"SSE\",\n      \"SSE2\",\n      \"SSE3\"\n    ],\n    \"found\": [\n      \"SSSE3\",\n      \"SSE41\",\n      \"POPCNT\",\n      \"SSE42\",\n      \"AVX\",\n      \"F16C\",\n      \"FMA3\",\n      \"AVX2\"\n    ],\n    \"not found\": [\n      \"AVX512F\",\n      \"AVX512CD\",\n      \"AVX512_SKX\",\n      \"AVX512_CLX\",\n      \"AVX512_CNL\",\n      \"AVX512_ICL\"\n    ]\n  }\n}\n",
+  "numpy_blas_config_error": null,
+  "packages": {
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "pyarrow": "17.0.0",
+    "torch": "2.14.1+cpu"
+  },
+  "pip_freeze": null,
+  "pip_freeze_error": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe: No module named pip",
+  "platform": "Windows-10-10.0.26300-SP0",
+  "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "python_executable": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+  "python_version": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]",
+  "python_version_info": [
+    3,
+    11,
+    17
+  ],
+  "repo_root": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark",
+  "system": "Windows",
+  "thread_environment": {
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "torch": {
+    "cuda_available": false,
+    "cuda_version": null,
+    "deterministic_algorithms_enabled": true,
+    "deterministic_algorithms_warn_only": false,
+    "device_count": 0,
+    "inter_op_threads": 1,
+    "intra_op_threads": 1,
+    "version": "2.14.1+cpu"
+  }
+}

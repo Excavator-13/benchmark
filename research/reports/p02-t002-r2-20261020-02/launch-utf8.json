@@ -1,0 +1,7 @@
+﻿{
+    "wrapper":  "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\reports\\p02-t002-r2-20261020-02\\launch-utf8.ps1",
+    "push_on_success":  true,
+    "started_at_utc":  "2026-10-20T16:20:37.9327291Z",
+    "reason":  "Explicit UTF-8 console for PowerShell CIM output; runtime source unchanged",
+    "wrapper_pid":  10112
+}

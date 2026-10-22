@@ -1,0 +1,27 @@
+{
+  "child_pid": 36092,
+  "command": [
+    "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+    "-B",
+    "-m",
+    "benchmark.graph_value_skeleton",
+    "run",
+    "--data-name",
+    "r0",
+    "--method",
+    "self",
+    "--model-seed",
+    "1",
+    "--purpose",
+    "formal",
+    "--run-id",
+    "p02-t002-r0-20261022-01-r0-self-s1-a"
+  ],
+  "cwd": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01",
+  "elapsed_seconds": 75.14099999998871,
+  "exit_code": 0,
+  "finished_at": "2026-10-21T20:02:50.168535+00:00",
+  "log": "scratch/graph-value-skeleton/p02-t002-r0-20261022-01/logs/p02-t002-r0-20261022-01-r0-self-s1-a.log",
+  "name": "p02-t002-r0-20261022-01-r0-self-s1-a",
+  "started_at": "2026-10-21T20:01:35.039971+00:00"
+}

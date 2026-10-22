@@ -1,0 +1,84 @@
+{
+  "status": "paused",
+  "date": "2026-10-19 Asia/Shanghai",
+  "implementation_base": "02f7d19b0912decc964510ad8991c3364e7df957",
+  "dirty_worktree": true,
+  "runtime_source_and_tests_sha256": {
+    "benchmark/graph_value_skeleton/artifacts.py": "1b6f1cb88fdc6758fe5f88f9520bdf64db45c507ecfea69e3c1bd55bd999e9b8",
+    "benchmark/graph_value_skeleton/checks.py": "52a7fc6cc96994e616a521ec373e46a26657d85df581541fe646c7d77f84ff1d",
+    "benchmark/graph_value_skeleton/cli.py": "784e8b8182c35bd0cfb7d61a53c2dace0099c59b94e1d45b3e53625395c1871a",
+    "benchmark/graph_value_skeleton/config.py": "85d180e6a49cf0e03d7935c5b55e300479f7619054b5b816c21c4430ac89dec6",
+    "benchmark/graph_value_skeleton/data.py": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0",
+    "benchmark/graph_value_skeleton/graph.py": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf",
+    "benchmark/graph_value_skeleton/model.py": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d",
+    "benchmark/graph_value_skeleton/prepared.py": "e89b315b0baa7f54857b58690b06cfec1a4cdb8dd0baa0301ac4855d529d05ec",
+    "benchmark/graph_value_skeleton/protocol.py": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267",
+    "benchmark/graph_value_skeleton/readiness.py": "8c53552af01cbe4480c825fe85339d48e9495893b18528aa9f69c4801a17f8ee",
+    "benchmark/graph_value_skeleton/runner.py": "d18f24423ebc0371aaa9e4f56951ec9f0bc802e90f7927075753e9d1e665a814",
+    "benchmark/graph_value_skeleton/shuffle.py": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be",
+    "benchmark/graph_value_skeleton/training.py": "d97df65ddb65fc36ea88481e6593f4582bf5eae114f602cbbbdc93ed9d9e37b2",
+    "benchmark/graph_value_skeleton/_worker.py": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8",
+    "benchmark/graph_value_skeleton/__init__.py": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996",
+    "benchmark/graph_value_skeleton/__main__.py": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f",
+    "benchmark/graph_value_skeleton/tests/fixtures.py": "b78236d94e57105fc3f97bae47754c13919749c6bb371348e84fd56697083448",
+    "benchmark/graph_value_skeleton/tests/test_artifacts.py": "57b0680c81ad2116883c3dbdd3ed01c39bb63abb62bf6aa658c520e1b6104bef",
+    "benchmark/graph_value_skeleton/tests/test_checks.py": "34f85f8dc65ef1b37fc159d80b211373be59170fee0ae87901cc8869902876c9",
+    "benchmark/graph_value_skeleton/tests/test_config_cli.py": "7a3035194e47b284b3c93a1c2ea0a89d8be0d52ae9244e94b9c3242411e8da0c",
+    "benchmark/graph_value_skeleton/tests/test_end_to_end.py": "ec2f211c6be49635c9bacfa1f75fc9499517d0cc1a3f0b9afdec972c37c089b9",
+    "benchmark/graph_value_skeleton/tests/test_graph_mapping.py": "87c7a249859f87df5d2542d3764fa5ade1dd7a50c4f736a2f77ed5c3bb3e65db",
+    "benchmark/graph_value_skeleton/tests/test_metrics.py": "99eb1b19a23dca158d6f25d1a823ae76315b372e7a05df273e6164193ec4b9b3",
+    "benchmark/graph_value_skeleton/tests/test_model.py": "faffbac843f149eb1dc0f6e9f8f57c36cc17653bdec8cf1b98d2ba03d3a7ce69",
+    "benchmark/graph_value_skeleton/tests/test_p01_identity.py": "4938f2910005d999e58b4257a2bb71d9139793bf0a61395558bafff8c43b3f7f",
+    "benchmark/graph_value_skeleton/tests/test_prepared.py": "be1f39f77c38f5e3f6b5cbf18cfa33cca32e0a65fca30dca4fb3091d1ba262b6",
+    "benchmark/graph_value_skeleton/tests/test_readiness.py": "417bc07c051996bc18a8ceab9d0dcaf6e8d095c500abf38e4f6c15d2a5bbd512",
+    "benchmark/graph_value_skeleton/tests/test_shuffle.py": "ec5d981d9194f7dbba3d6bd4d891b33d4a011be9bb7721d9bc244f41c7af5ccc",
+    "benchmark/graph_value_skeleton/tests/test_shuffle_v2.py": "c09c5d6e6d423ed7966783f38f3fdce0831a6d09e65c279ef18d7265aa7b93bc",
+    "benchmark/graph_value_skeleton/tests/test_training.py": "17f3c7e7f7a515b2b6e2f4220d8297ab9158c4222669b7979579b92614ecc6ff",
+    "benchmark/graph_value_skeleton/tests/__init__.py": "27b1f062f50cb17d8fbb9ee992ffbbc1ba10a5a233389ce6b659feb82e505e53"
+  },
+  "targeted_tests": {
+    "command": ".venv-pinned/Scripts/python.exe -B -m unittest benchmark.graph_value_skeleton.tests.test_prepared benchmark.graph_value_skeleton.tests.test_shuffle_v2 benchmark.graph_value_skeleton.tests.test_readiness benchmark.graph_value_skeleton.tests.test_model -v",
+    "setup": "PYTHONUTF8=1",
+    "cwd": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark",
+    "result": "28 tests OK, 162.699 seconds; PowerShell stderr redirection recorded a native-command error despite unittest OK",
+    "log": "targeted-tests.log"
+  },
+  "published_probe": {
+    "command": ".venv-pinned/Scripts/python.exe -B -m benchmark.graph_value_skeleton.readiness --run-id repair-shuffle-v2-20261019-01",
+    "setup": "PYTHONUTF8=1",
+    "result": "paused: r2 seed0 worker failed before demand/graph/shuffle; torch c10.dll WinError1114 during environment capture",
+    "members_completed": 0
+  },
+  "full_skeleton": {
+    "command": ".venv-pinned/Scripts/python.exe -B openspec/changes/repair-published-shuffle-budget/run_tests.py skeleton --label skeleton-v2",
+    "setup": "PYTHONUTF8=1",
+    "result": "interrupted after failures observed; no completed suite verdict",
+    "observed_failures": [
+      "test_measurements_are_measured_and_scoped",
+      "test_darwin_linux_and_unsupported_unit_conversion (error)",
+      "test_capture_scope_excludes_unrelated_records_tests_and_caches"
+    ],
+    "log": "skeleton-v2.log"
+  },
+  "baseline": {
+    "command": ".venv-pinned/Scripts/python.exe -B openspec/changes/repair-published-shuffle-budget/run_tests.py baseline --label baseline-regression-02",
+    "setup": "PYTHONUTF8=1",
+    "result": "interrupted after failures observed; no completed suite verdict",
+    "observed_failures": [
+      "test_compare_consumed_inputs_include_fold_metadata_and_mean (fold A and B)",
+      "test_compare_same_fold_same_seed"
+    ],
+    "log": "baseline-regression-02.log"
+  },
+  "earlier_attempts": [
+    "Baseline initial discovery failed because tests directory is not an importable package; harness corrected before second attempt.",
+    "Initial targeted test had wrong history file assertion (KeyError epochs); corrected to training-history.json and rerun passed.",
+    "Initial 30-test subset exposed torch suffix assertion and unavailable symlink privilege; suffix assertion corrected. Symlink branches remain unavailable.",
+    "Initial targeted run without PYTHONUTF8=1 exposed GBK subprocess diagnostic decoding errors; UTF8 rerun passed."
+  ],
+  "termination": {
+    "full_skeleton_root_pid": 39564,
+    "baseline_root_pid": 5552,
+    "result": "taskkill trees via reviewed escalation succeeded for both root/worker Python pairs; subsequent Get-Process found neither these nor reported child PID23688. Tool sessions returned exit1. No retry scheduled."
+  }
+}

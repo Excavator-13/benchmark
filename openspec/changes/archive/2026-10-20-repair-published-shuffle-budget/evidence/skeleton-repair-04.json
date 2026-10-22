@@ -1,0 +1,34 @@
+{
+  "command": [
+    "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+    "openspec/changes/repair-published-shuffle-budget/run_tests.py",
+    "skeleton",
+    "--label",
+    "skeleton-repair-04"
+  ],
+  "cwd": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark",
+  "python": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]",
+  "tests": 127,
+  "failures": 1,
+  "errors": 0,
+  "skips": [
+    [
+      "benchmark.graph_value_skeleton.tests.test_checks.ChecksTest.test_compare_rejects_self_alias_and_copied_execution",
+      "Windows cannot create symlinks (WinError 1314); alias coverage unavailable"
+    ],
+    [
+      "benchmark.graph_value_skeleton.tests.test_checks.ChecksTest.test_report_destination_is_exclusive_and_scoped",
+      "Windows cannot create symlinks (WinError 1314); alias coverage unavailable"
+    ],
+    [
+      "benchmark.graph_value_skeleton.tests.test_config_cli.AxisValidationTest.test_development_destination_whitelist",
+      "Windows cannot create symlinks (WinError 1314); alias coverage unavailable"
+    ],
+    [
+      "benchmark.graph_value_skeleton.tests.test_config_cli.AxisValidationTest.test_implementation_root_override_cannot_rebase_protected_trees",
+      "Windows cannot create symlinks (WinError 1314); alias coverage unavailable"
+    ]
+  ],
+  "elapsed_seconds": 2104.0,
+  "success": false
+}

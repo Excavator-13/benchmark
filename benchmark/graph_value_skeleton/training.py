@@ -208,6 +208,9 @@ def train(
     validation_aggregation: Optional[gvs_model.GraphAggregation],
     epochs: int = protocol.EPOCHS,
     node_count: int,
+    resume_state: Optional[Mapping[str, Any]] = None,
+    checkpoint_callback: Any = None,
+    progress_callback: Any = None,
 ) -> TrainingResult:
     """Run exactly ``epochs`` epochs and select the validation-MSE checkpoint."""
     if int(epochs) != protocol.EPOCHS:
@@ -247,13 +250,34 @@ def train(
     best_state: Dict[str, Any] = {}
     training_seconds = 0.0
     validation_seconds = 0.0
-    for epoch in range(1, int(epochs) + 1):
+    completed_epoch = 0
+    if resume_state is not None:
+        from . import checkpoints
+        checkpoints.validate_state(resume_state, model, optimizer,
+                                   train_elements=total_elements, validation_elements=validation_elements)
+        model.load_state_dict(resume_state['model'])
+        optimizer.load_state_dict(resume_state['optimizer'])
+        history = list(resume_state['history'])
+        best_epoch = resume_state['best_epoch']
+        best_validation_mse = resume_state['best_mse']
+        best_state = resume_state['best_state']
+        training_seconds = resume_state['training_seconds']
+        validation_seconds = resume_state['validation_seconds']
+        completed_epoch = resume_state['epoch']
+        checkpoints.restore_rng(resume_state['rng'])
+    for epoch in range(completed_epoch + 1, int(epochs) + 1):
+        epoch_started = time.perf_counter()
         started = time.perf_counter()
         model.train()
         optimizer.zero_grad(set_to_none=True)
         squared_sum = 0.0
         absolute_sum = 0.0
-        for chunk in chunks:
+        last_progress = 0.0
+        for chunk_index, chunk in enumerate(chunks):
+            if progress_callback and (time.perf_counter() - last_progress >= 10):
+                progress_callback({'stage': 'training', 'epoch_in_progress': epoch,
+                                   'completed_chunks': chunk_index, 'total_chunks': len(chunks)})
+                last_progress = time.perf_counter()
             x = train_x[chunk.window_index].index_select(0, chunk.node_indices)
             y = train_y[chunk.window_index].index_select(0, chunk.node_indices)
             prediction = model(x, chunk.aggregation)
@@ -274,6 +298,9 @@ def train(
                 raise TrainingError(f"epoch {epoch}: non-finite gradient")
         optimizer.step()
         training_seconds += time.perf_counter() - started
+
+        if progress_callback:
+            progress_callback({'stage': 'validation', 'epoch_in_progress': epoch})
 
         started = time.perf_counter()
         model.eval()
@@ -314,6 +341,15 @@ def train(
                 "selected_so_far": epoch == best_epoch,
             }
         )
+        if checkpoint_callback:
+            from . import checkpoints
+            checkpoint_callback({
+                'epoch': epoch, 'model': model.state_dict(),
+                'optimizer': optimizer.state_dict(), 'rng': checkpoints.rng_state(),
+                'history': history, 'best_epoch': best_epoch,
+                'best_mse': best_validation_mse, 'best_state': best_state,
+                'training_seconds': training_seconds, 'validation_seconds': validation_seconds,
+            }, time.perf_counter() - epoch_started)
     if len(history) != protocol.EPOCHS:
         raise TrainingError(
             f"history has {len(history)} epochs, expected {protocol.EPOCHS}"

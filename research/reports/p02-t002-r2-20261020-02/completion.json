@@ -1,0 +1,9 @@
+{
+  "batch": "p02-t002-r2-20261020-02",
+  "completed_at": "2026-10-21T15:36:58.935993+00:00",
+  "formal_fits": 30,
+  "no_T003_or_graph_benefit_verdict": true,
+  "remaining_T002_scope": "r0 and region are not run by this batch",
+  "status": "r2_ready_for_research_acceptance",
+  "successful_checks": 51
+}

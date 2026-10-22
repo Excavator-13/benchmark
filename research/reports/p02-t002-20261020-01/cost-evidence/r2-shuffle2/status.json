@@ -1,0 +1,14 @@
+{
+  "error": {
+    "exception_type": "PermissionError",
+    "message": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\Lenovo\\\\Documents\\\\大创参考论文\\\\JODBSDFres\\\\benchmark\\\\scratch\\\\graph-value-skeleton\\\\p02-t002-20261020-01\\\\cost-runs\\\\p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic\\\\cost-observation.tmp' -> 'C:\\\\Users\\\\Lenovo\\\\Documents\\\\大创参考论文\\\\JODBSDFres\\\\benchmark\\\\scratch\\\\graph-value-skeleton\\\\p02-t002-20261020-01\\\\cost-runs\\\\p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic\\\\cost-observation.json'",
+    "stage": "training",
+    "state": "failed",
+    "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\benchmark\\graph_value_skeleton\\runner.py\", line 249, in execute_run\n    result = training.train(\n             ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\research\\reports\\p02-t002-20261020-01\\diagnose_training_cost.py\", line 70, in wrapped_train\n    return original_train(*positional, **keywords)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\benchmark\\graph_value_skeleton\\training.py\", line 275, in train\n    optimizer.step()\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Lib\\site-packages\\torch\\optim\\optimizer.py\", line 549, in wrapper\n    out = func(*args, **kwargs)\n          ^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\research\\reports\\p02-t002-20261020-01\\diagnose_training_cost.py\", line 96, in wrapped_step\n    save()\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\research\\reports\\p02-t002-20261020-01\\diagnose_training_cost.py\", line 60, in save\n    os.replace(temporary, evidence)\nPermissionError: [WinError 5] 拒绝访问。: 'C:\\\\Users\\\\Lenovo\\\\Documents\\\\大创参考论文\\\\JODBSDFres\\\\benchmark\\\\scratch\\\\graph-value-skeleton\\\\p02-t002-20261020-01\\\\cost-runs\\\\p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic\\\\cost-observation.tmp' -> 'C:\\\\Users\\\\Lenovo\\\\Documents\\\\大创参考论文\\\\JODBSDFres\\\\benchmark\\\\scratch\\\\graph-value-skeleton\\\\p02-t002-20261020-01\\\\cost-runs\\\\p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic\\\\cost-observation.json'\n"
+  },
+  "run_id": "p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic",
+  "run_type": "run",
+  "stage": "training",
+  "state": "failed",
+  "updated": "2026-10-20T14:17:24+08:00"
+}

@@ -106,7 +106,22 @@ def build_parser() -> argparse.ArgumentParser:
     )
     run.add_argument("--demand-path", default=None, help=argparse.SUPPRESS)
     run.add_argument("--graph-path", default=None, help=argparse.SUPPRESS)
+    run.add_argument("--shuffle-artifact", default=None, help="checked prepared graph; shuffled only")
+    run.add_argument("--resume-from", default=None, help="committed checkpoint directory or latest.json; requires a fresh run ID")
     run.set_defaults(handler=_handle_run)
+
+    prepare = subparsers.add_parser('prepare-shuffle', help='prepare one development graph without training')
+    prepare.add_argument('--data-name', required=True, choices=sorted(protocol.PUBLISHED_DEMAND))
+    prepare.add_argument('--shuffle-seed', required=True, type=int, choices=protocol.SHUFFLE_SEEDS)
+    prepare.add_argument('--run-id', required=True)
+    prepare.add_argument('--output-root', default=None)
+    prepare.add_argument('--demand-path', default=None, help=argparse.SUPPRESS)
+    prepare.add_argument('--graph-path', default=None, help=argparse.SUPPRESS)
+    prepare.set_defaults(handler=_handle_prepare)
+    check = subparsers.add_parser('check-shuffle', help='check one prepared graph from saved evidence only')
+    check.add_argument('--artifact-dir', required=True)
+    check.add_argument('--report', required=True)
+    check.set_defaults(handler=_handle_check_shuffle)
 
     recompute = subparsers.add_parser(
         "recompute", help="recompute every saved metric from saved evidence only"
@@ -184,6 +199,8 @@ def _handle_run(args: argparse.Namespace) -> int:
         output_root=_resolve(args.output_root, launcher_cwd),
         demand_path=args.demand_path,
         graph_path=args.graph_path,
+        shuffle_artifact=args.shuffle_artifact,
+        resume_from=args.resume_from,
         command=_canonical_command(args),
         launcher_cwd=launcher_cwd,
     )
@@ -192,6 +209,31 @@ def _handle_run(args: argparse.Namespace) -> int:
         environment[variable] = "1"
     spec = {"config": config.to_dict()}
     return _launch_worker(spec, environment, cwd=repo_root)
+
+
+def _handle_prepare(args):
+    # Windows Arrow/pandas DLLs can prevent a later c10.dll initialization.
+    # Preparation already records torch runtime evidence; load it before the
+    # config/data modules load Arrow. This does not construct or train a model.
+    if _os.name == 'nt':
+        import torch  # noqa: F401
+    from .config import resolve_config
+    from .prepared import prepare
+    config = resolve_config(data_name=args.data_name, method='shuffled', model_seed=0,
+        shuffle_seed=args.shuffle_seed, run_id=args.run_id, repo_root=_repo_root(args),
+        output_root=_resolve(args.output_root, Path.cwd()) if args.output_root else None,
+        demand_path=args.demand_path, graph_path=args.graph_path,
+        command=_canonical_command(args), launcher_cwd=Path.cwd())
+    print(json.dumps(prepare(config), sort_keys=True))
+    return 0
+
+
+def _handle_check_shuffle(args):
+    from .prepared import check
+    result = check(_resolve(args.artifact_dir, Path.cwd()), _resolve(args.report, Path.cwd()),
+                   _repo_root(args), _canonical_command(args))
+    print(json.dumps(result, sort_keys=True))
+    return 0 if result['status'] == 'ok' else 1
 
 
 def _launch_worker(

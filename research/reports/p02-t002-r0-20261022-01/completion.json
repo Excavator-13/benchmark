@@ -1,0 +1,9 @@
+{
+  "batch": "p02-t002-r0-20261022-01",
+  "completed_at": "2026-10-21T20:29:13.435051+00:00",
+  "dataset": "r0",
+  "formal_fits": 30,
+  "no_T003_or_graph_benefit_verdict": true,
+  "status": "r0_ready_for_research_acceptance",
+  "successful_checks": 51
+}

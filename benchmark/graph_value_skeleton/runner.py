@@ -12,6 +12,8 @@ classifies as unfinished instead of inferring success.
 from __future__ import annotations
 
 import json
+import hashlib
+import uuid
 import os
 import sys
 import time
@@ -28,6 +30,7 @@ from benchmark.nograph_baseline import protocol as p01
 
 from . import artifacts, data, graph as gvs_graph, model as gvs_model, shuffle as gvs_shuffle, training
 from . import protocol
+from . import checkpoints
 from .config import RunConfig, resolve_output_root
 
 __all__ = [
@@ -158,12 +161,19 @@ def execute_run(config: RunConfig) -> Dict[str, Any]:
         started = time.perf_counter()
         shuffled: Optional[gvs_shuffle.ShuffledGraph] = None
         if config.method == protocol.METHOD_SHUFFLED:
-            shuffled = gvs_shuffle.shuffle_graph(
-                config.data_name,
-                dataset.key_array,
-                graph.edges,
-                int(config.shuffle_seed),
-            )
+            from . import prepared
+            if config.shuffle_artifact:
+                shuffled, generation = prepared.load(Path(config.shuffle_artifact),
+                    keys=dataset.key_array, source_edges=graph.edges, data_name=config.data_name,
+                    shuffle_seed=config.shuffle_seed, require_current_generator=True)
+            else:
+                shuffled = gvs_shuffle.shuffle_graph(
+                    config.data_name, dataset.key_array, graph.edges, int(config.shuffle_seed),
+                    progress=lambda payload: run.write_json('shuffle-progress.json', payload))
+                generation = {'generator': prepared.generator_identity()}
+            run.write_json('shuffle-preparation.json', {'artifact_path': config.shuffle_artifact,
+                'reused': config.shuffle_artifact is not None, 'generation': generation,
+                'read_or_generate_seconds': time.perf_counter() - started})
             message_edges = shuffled.edges
         elif config.method == protocol.METHOD_GRAPH:
             message_edges = graph.edges
@@ -239,6 +249,76 @@ def execute_run(config: RunConfig) -> Dict[str, Any]:
                 message_edges, dataset.node_count, label=f"{config.method} test"
             )
         )
+        # Recovery identity uses executing bytes, not mutable Git bookkeeping.
+        # Commit changes alone do not change the computation being resumed.
+        layout_hash = hashlib.sha256()
+        for chunk in chunks:
+            layout_hash.update(json.dumps([chunk.window_index, chunk.window_start,
+                chunk.context, chunk.element_count]).encode())
+            for tensor in (chunk.node_indices, chunk.aggregation.source, chunk.aggregation.target):
+                layout_hash.update(tensor.numpy().tobytes())
+        environment_keys = ('python_version', 'python_version_info', 'platform', 'system',
+            'machine', 'processor', 'cpu_count', 'packages', 'torch', 'graph_extensions',
+            'gpu_available', 'numpy_blas_config', 'thread_environment')
+        identity = json.loads(json.dumps({
+            'computation': config.computational_identity(), 'purpose': config.purpose,
+            'source': {key: value.get('sha256') for key, value in source['files'].items()},
+            'protocol': source.get('protocol', {}).get('sha256'),
+            'environment': {key: environment.get(key) for key in environment_keys},
+            'execution': execution_settings, 'dataset': dataset.identity_payload(),
+            'source_edges': gvs_graph.edge_set_sha256(graph.edges),
+            'message_edges': _message_edges_sha256(message_edges),
+            'masks': masks.hashes(), 'chunks': layout_hash.hexdigest(),
+        }, sort_keys=True))
+        lineage = [uuid.uuid4().hex]
+        resume_state = None
+        recovery = {'schema': 1, 'run_id': config.run_id, 'ancestry': lineage,
+                    'parent_checkpoint': None, 'completed_epoch_at_start': 0}
+        if config.resume_from:
+            resume_path = Path(config.resume_from)
+            checkpoint_dir = resume_path if resume_path.is_dir() else resume_path.parent
+            parent_status = checkpoint_dir.parent / 'status.json'
+            if parent_status.exists() and json.loads(parent_status.read_text(encoding='utf-8')).get('state') == 'success':
+                raise RunError('Successful runs are complete; resume requires an unfinished attempt')
+            payload, manifest, raw = checkpoints.load(config.resume_from, identity)
+            resume_state = payload['state']
+            lineage = [*payload['lineage'], *lineage]
+            recovery.update(ancestry=lineage, parent_checkpoint=manifest['sha256'],
+                            completed_epoch_at_start=resume_state['epoch'])
+            # Copy the validated parent input, not a reference to mutable parent files.
+            run.write_bytes('recovery/input.npz', raw)
+            run.write_json('recovery/input-manifest.json', manifest)
+            # A crash during finalization must itself remain recoverable.
+            run.write_bytes('checkpoints/' + manifest['file'], raw)
+            run.write_json('checkpoints/latest.json', {**manifest, 'previous': None})
+        run.write_json('recovery.json', recovery)
+        epoch_durations = []
+        checkpoint_io = 0.0
+        progress = {'completed_epoch': recovery['completed_epoch_at_start'],
+                    'checkpoint': recovery['parent_checkpoint'],
+                    'remaining_seconds_estimate': None, 'estimate_samples': 0}
+
+        def report_progress(detail):
+            run.write_json('training-progress.json', {**progress, **detail,
+                'updated_at': artifacts.now(), 'attempt_wall_seconds': time.perf_counter() - total_started,
+                'checkpoint_io_seconds_this_attempt': checkpoint_io, 'completion': False})
+
+        def commit_epoch(state, epoch_seconds):
+            nonlocal checkpoint_io
+            io_started = time.perf_counter()
+            manifest = checkpoints.publish(run.path / 'checkpoints', state, identity, lineage)
+            checkpoint_io += time.perf_counter() - io_started
+            epoch_durations.append(epoch_seconds + time.perf_counter() - io_started)
+            recent = epoch_durations[-5:]
+            progress.update(completed_epoch=state['epoch'], checkpoint=manifest['sha256'],
+                training_seconds=state['training_seconds'], validation_seconds=state['validation_seconds'],
+                last_epoch_seconds=epoch_durations[-1], estimate_samples=len(recent),
+                remaining_seconds_estimate=(200-state['epoch']) * (sum(recent)/len(recent)),
+                optimizer_steps=state['epoch'])
+            report_progress({'stage': 'epoch_committed'})
+
+        run.set_status('running', stage='training', purpose=config.purpose, method=config.method)
+        report_progress({'stage': 'training_ready'})
         result = training.train(
             model,
             train_inputs=train_inputs,
@@ -248,9 +328,15 @@ def execute_run(config: RunConfig) -> Dict[str, Any]:
             chunks=chunks,
             validation_aggregation=validation_aggregation,
             node_count=dataset.node_count,
+            resume_state=resume_state,
+            checkpoint_callback=commit_epoch,
+            progress_callback=report_progress,
         )
-        durations["training"] = result.training_seconds
-        durations["validation"] = result.validation_seconds
+        durations["training"] = result.training_seconds - (resume_state['training_seconds'] if resume_state else 0.)
+        durations["validation"] = result.validation_seconds - (resume_state['validation_seconds'] if resume_state else 0.)
+        durations['cumulative_training'] = result.training_seconds
+        durations['cumulative_validation'] = result.validation_seconds
+        durations['checkpoint_io_this_attempt'] = checkpoint_io
         durations["training_total"] = time.perf_counter() - started
 
         stage = "selection"
@@ -401,6 +487,7 @@ def execute_run(config: RunConfig) -> Dict[str, Any]:
                 environment=environment,
                 source=source,
                 execution_settings=execution_settings,
+                recovery=recovery,
             ),
         )
 
@@ -470,6 +557,8 @@ def execute_run(config: RunConfig) -> Dict[str, Any]:
         run.append_event("run_interrupted", stage=stage)
         raise
     except BaseException as exc:  # noqa: BLE001 - preserve every failure as evidence
+        if isinstance(exc, gvs_shuffle.ShuffleError):
+            run.write_json('shuffle-failure.json', exc.diagnostics)
         failure = _failure_record(stage, exc, "failed")
         run.set_status("failed", stage=stage, error=failure)
         _write_failure_evidence(run, config, failure, durations)
@@ -805,9 +894,11 @@ def _provenance_payload(
     environment: Mapping[str, Any],
     source: Mapping[str, Any],
     execution_settings: Mapping[str, Any],
+    recovery: Optional[Mapping[str, Any]] = None,
 ) -> Dict[str, Any]:
     return {
         "run_id": config.run_id,
+        "recovery": dict(recovery) if recovery is not None else None,
         "run_type": config.run_type,
         "purpose": config.purpose,
         "task": protocol.TASK_ID,

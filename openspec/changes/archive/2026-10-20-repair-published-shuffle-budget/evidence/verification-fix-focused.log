@@ -1,0 +1,17 @@
+test_missing_or_inconsistent_generation_records_fail_saved_check (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_missing_or_inconsistent_generation_records_fail_saved_check) ... ok
+test_legacy_audit_contract_unchanged_and_unknown_rejected (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_legacy_audit_contract_unchanged_and_unknown_rejected) ... ok
+test_prepare_and_saved_only_check (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_prepare_and_saved_only_check) ... ok
+test_other_errors_are_not_retried (benchmark.graph_value_skeleton.tests.test_atomic_writes.AtomicWriteTest.test_other_errors_are_not_retried) ... ok
+test_permanent_denial_is_bounded_and_preserves_checkpoint (benchmark.graph_value_skeleton.tests.test_atomic_writes.AtomicWriteTest.test_permanent_denial_is_bounded_and_preserves_checkpoint) ... ok
+test_real_windows_reader_lock_recovers_after_release (benchmark.graph_value_skeleton.tests.test_atomic_writes.AtomicWriteTest.test_real_windows_reader_lock_recovers_after_release) ... ok
+test_transient_retries_same_bytes_and_records_recovery (benchmark.graph_value_skeleton.tests.test_atomic_writes.AtomicWriteTest.test_transient_retries_same_bytes_and_records_recovery) ... ok
+test_contracts_and_invalid_arguments (benchmark.graph_value_skeleton.tests.test_shuffle_v2.ShuffleV2Test.test_contracts_and_invalid_arguments) ... ok
+test_empty_and_unchanged (benchmark.graph_value_skeleton.tests.test_shuffle_v2.ShuffleV2Test.test_empty_and_unchanged) ... ok
+test_exact_scalar_stream_decisions_and_backends (benchmark.graph_value_skeleton.tests.test_shuffle_v2.ShuffleV2Test.test_exact_scalar_stream_decisions_and_backends) ... ok
+test_failure_accounting_progress_and_previous_context (benchmark.graph_value_skeleton.tests.test_shuffle_v2.ShuffleV2Test.test_failure_accounting_progress_and_previous_context) ... ok
+test_long_context_checkpoints (benchmark.graph_value_skeleton.tests.test_shuffle_v2.ShuffleV2Test.test_long_context_checkpoints) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 28.608s
+
+OK

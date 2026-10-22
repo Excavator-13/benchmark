@@ -318,6 +318,59 @@ def _prediction_relative(method: str, split: str) -> str:
     return f"predictions/{method}/{split}.npy"
 
 
+def _consumed_relative(run_dir: Path) -> List[str]:
+    return [*_CONSUMED_RELATIVE, *[name for name in (
+        'recovery.json', 'recovery/input.npz', 'recovery/input-manifest.json'
+    ) if (Path(run_dir) / name).exists()]]
+
+
+def _recovery_ancestry(loaded) -> set:
+    path = loaded.run_dir / 'recovery.json'
+    declared = loaded.provenance.get('recovery')
+    if not path.exists():
+        if declared is not None:
+            raise CheckError('Missing declared recovery evidence')
+        return set()
+    value = _read_json(path)
+    if declared != value or set(value) != {'schema', 'run_id', 'ancestry', 'parent_checkpoint', 'completed_epoch_at_start'}:
+        raise CheckError('Recovery evidence disagrees with provenance or schema')
+    ancestry = value['ancestry']
+    if (type(value['schema']) is not int or value['schema'] != 1 or value['run_id'] != loaded.provenance.get('run_id')
+            or not isinstance(ancestry, list) or not ancestry
+            or any(not isinstance(v, str) or not v for v in ancestry)
+            or len(set(ancestry)) != len(ancestry)):
+        raise CheckError('Invalid recovery ancestry')
+    epoch = value['completed_epoch_at_start']
+    parent = value['parent_checkpoint']
+    if type(epoch) is not int or not 0 <= epoch <= 200:
+        raise CheckError('Invalid recovery epoch')
+    if parent is None:
+        if epoch != 0 or len(ancestry) != 1:
+            raise CheckError('Invalid fresh recovery identity')
+    else:
+        manifest = _read_json(loaded.run_dir / 'recovery/input-manifest.json')
+        raw = loaded.run_dir / 'recovery/input.npz'
+        if (not isinstance(parent, str) or len(parent) != 64 or len(ancestry) < 2 or epoch == 0
+                or manifest.get('sha256') != parent or manifest.get('epoch') != epoch
+                or raw.stat().st_size != manifest.get('size') or sha256_file(raw) != parent):
+            raise CheckError('Invalid recovery input integrity')
+        # Read the object-free metadata locally; no external parent or model
+        # inference is needed to bind the ancestry prefix to the copied bytes.
+        from .checkpoints import decode, CheckpointError
+        try:
+            payload = decode(raw.read_bytes())
+            if (set(payload) != {'schema', 'identity', 'lineage', 'state'}
+                    or type(payload['schema']) is not int or payload['schema'] != 1
+                    or type(manifest.get('schema')) is not int or manifest['schema'] != 1
+                    or type(payload['state'].get('epoch')) is not int
+                    or payload['state']['epoch'] != epoch
+                    or payload['lineage'] != ancestry[:-1]):
+                raise CheckError('Recovery ancestry/epoch disagrees with copied parent payload')
+        except (CheckpointError, KeyError, TypeError) as exc:
+            raise CheckError('Invalid copied parent checkpoint metadata') from exc
+    return set(ancestry)
+
+
 @dataclass
 class LoadedRun:
     run_dir: Path
@@ -441,6 +494,7 @@ def _json_equal(left: Any, right: Any) -> bool:
 def _validate_loaded(loaded: LoadedRun) -> Dict[str, Any]:
     """Validate saved identity/schema and return the recomputation inputs."""
     problems: List[str] = []
+    _recovery_ancestry(loaded)
     run_dir = loaded.run_dir
     node_count = int(loaded.nodes.shape[0])
     key_columns = [column for column in loaded.nodes.columns if column != "node_index"]
@@ -950,9 +1004,52 @@ def _validate_saved_audit_evidence(
             problems.append(
                 "graph-audit.json does not record binary unique directed edges"
             )
-    # Saved canonical node/context inventory and edge arrays.
     key_columns = [column for column in loaded.nodes.columns if column != "node_index"]
     key_array = loaded.nodes[key_columns].to_numpy(dtype=np.int64)
+    message_edges = _load_npy(loaded.run_dir / "graph/edges.npy")
+    source_edges = _load_npy(loaded.run_dir / "graph/source-edges.npy")
+    if source_edges.size and not np.array_equal(
+        key_array[source_edges[:, 0], :-1], key_array[source_edges[:, 1], :-1]
+    ):
+        problems.append('saved source graph contains a cross-context edge')
+    if message_edges.size and not np.array_equal(
+        key_array[message_edges[:, 0], :-1], key_array[message_edges[:, 1], :-1]
+    ):
+        problems.append('saved message graph contains a cross-context edge')
+    if loaded.method != protocol.METHOD_SHUFFLED:
+        if "shuffle" in graph_audit:
+            problems.append("non-shuffled run carries a shuffle audit record")
+        return
+    validate_shuffle_audit(key_array, source_edges, message_edges,
+                           graph_audit.get("shuffle"), loaded.shuffle_seed, problems)
+    shuffle_identity = graph_used.get("shuffle_identity", {})
+    if not isinstance(shuffle_identity, Mapping):
+        problems.append("provenance has no shuffled-graph identity")
+    elif (shuffle_identity.get("edges_sha256") != gvs_graph.edge_set_sha256(message_edges)
+          or shuffle_identity.get("source_edges_sha256") != gvs_graph.edge_set_sha256(source_edges)
+          or shuffle_identity.get("edge_count") != len(message_edges)
+          or shuffle_identity.get("shuffle_seed") != loaded.shuffle_seed
+          or shuffle_identity.get("algorithm_version") != graph_audit.get("shuffle", {}).get("algorithm_version")):
+        problems.append("provenance shuffled-graph identity disagrees with saved evidence")
+
+
+def validate_shuffle_audit(key_array, source_edges, message_edges, shuffle_audit, configured_seed, problems):
+    """Shared saved-only audit oracle for prepared graphs and completed runs."""
+    node_count = len(key_array)
+    for label, edges in (('source', source_edges), ('message', message_edges)):
+        if (edges.ndim != 2 or edges.shape[1] != 2 or edges.dtype.kind not in 'iu'
+            or (edges.size and (edges.min() < 0 or edges.max() >= node_count))):
+            problems.append(f'invalid saved {label} edge shape/type/bounds')
+            return
+        if (len(edges) != len(np.unique(edges, axis=0))
+            or (edges[:, 0] == edges[:, 1]).any()):
+            problems.append(f'saved {label} graph has duplicate edges or self-loops')
+    if len(source_edges) != len(message_edges):
+        problems.append('shuffle changed edge count')
+    for column in (0, 1):
+        if not np.array_equal(np.bincount(source_edges[:, column], minlength=node_count),
+                              np.bincount(message_edges[:, column], minlength=node_count)):
+            problems.append('shuffle changed per-node directed degree')
     context_of_node = [
         tuple(int(value) for value in row[:-1]) for row in key_array.tolist()
     ]
@@ -968,8 +1065,6 @@ def _validate_saved_audit_evidence(
         context: np.flatnonzero(context_code == index)
         for context, index in context_ordinal.items()
     }
-    message_edges = _load_npy(loaded.run_dir / "graph/edges.npy")
-    source_edges = _load_npy(loaded.run_dir / "graph/source-edges.npy")
     for label, edges in (
         ("graph/edges.npy", message_edges),
         ("graph/source-edges.npy", source_edges),
@@ -978,19 +1073,32 @@ def _validate_saved_audit_evidence(
             context_code[edges[:, 0]], context_code[edges[:, 1]]
         ):
             problems.append(f"{label} contains a cross-context edge")
-    if loaded.method != protocol.METHOD_SHUFFLED:
-        if "shuffle" in graph_audit:
-            problems.append("non-shuffled run carries a shuffle audit record")
-        return
-    shuffle_audit = graph_audit.get("shuffle")
     if not isinstance(shuffle_audit, Mapping):
         problems.append("graph-audit.json has no shuffle audit for a shuffled run")
         return
     if shuffle_audit.get("algorithm") != protocol.SHUFFLE_ALGORITHM:
         problems.append("shuffle audit algorithm disagrees with the frozen algorithm")
-    if shuffle_audit.get("algorithm_version") != protocol.SHUFFLE_VERSION:
-        problems.append("shuffle audit version disagrees with the frozen version")
-    configured_seed = loaded.shuffle_seed
+    try:
+        contract = protocol.shuffle_contract(shuffle_audit.get("algorithm_version"))
+    except ValueError as exc:
+        problems.append(str(exc))
+        return
+    if contract["proposal_batch_size"] > 1 or "proposal_batch_size" in shuffle_audit:
+        batch = shuffle_audit.get("proposal_batch_size")
+        if not _exact_int(batch) or batch != contract["proposal_batch_size"]:
+            problems.append("shuffle audit proposal batch size disagrees with version")
+    if shuffle_audit.get('seed_derivation') != 'PCG64(SeedSequence([shuffle_seed, context_id...]))':
+        problems.append('shuffle seed derivation disagrees with contract')
+    expected_rule = (f"accept {contract['accept_target_factor']}*E_ctx swaps, attempt at most "
+                     f"{contract['attempt_limit_factor']}*E_ctx")
+    if shuffle_audit.get('target_rule') != expected_rule:
+        problems.append('shuffle target rule disagrees with version')
+    for field, expected in (('model_rng_consumed', False), ('process_hash_iteration_used', False),
+                            ('uniform_sampling_claimed', False), ('symmetry_is_not_a_shuffle_constraint', True)):
+        if shuffle_audit.get(field) is not expected:
+            problems.append(f'shuffle {field} disagrees with contract')
+    if shuffle_audit.get('degree_summary') != gvs_shuffle._degree_summary(key_array, source_edges, message_edges):
+        problems.append('shuffle degree summary disagrees with saved edges')
     audit_seed = _exact_nonnegative_count(
         shuffle_audit.get("shuffle_seed"), "shuffle audit shuffle_seed", problems
     )
@@ -998,27 +1106,11 @@ def _validate_saved_audit_evidence(
         configured_seed
     ):
         problems.append("shuffle audit seed disagrees with the configured seed")
-    if shuffle_audit.get("source_edges_sha256") != graph_identity.get(
-        "edges_sha256"
-    ):
-        problems.append("shuffle audit source-edge hash disagrees with provenance")
-    shuffle_identity = graph_used.get("shuffle_identity")
-    if not isinstance(shuffle_identity, Mapping):
-        problems.append("provenance has no shuffled-graph identity for a shuffled run")
         return
-    if shuffle_audit.get("result_edges_sha256") != shuffle_identity.get(
-        "edges_sha256"
-    ):
-        problems.append("shuffle audit result-edge hash disagrees with provenance")
-    if shuffle_identity.get("shuffle_seed") != shuffle_audit.get("shuffle_seed"):
-        problems.append("shuffle audit seed disagrees with the graph identity")
-    identity_edges = _exact_nonnegative_count(
-        shuffle_identity.get("edge_count"),
-        "provenance shuffled edge_count",
-        problems,
-    )
-    if identity_edges is not None and identity_edges != int(message_edges.shape[0]):
-        problems.append("shuffled graph identity edge count disagrees with saved edges")
+    if shuffle_audit.get("source_edges_sha256") != gvs_graph.edge_set_sha256(source_edges):
+        problems.append("shuffle audit source-edge hash disagrees with saved edges")
+    if shuffle_audit.get("result_edges_sha256") != gvs_graph.edge_set_sha256(message_edges):
+        problems.append("shuffle audit result-edge hash disagrees with saved edges")
     accept_factor = _exact_nonnegative_count(
         shuffle_audit.get("accept_target_factor"),
         "shuffle audit accept_target_factor",
@@ -1031,19 +1123,19 @@ def _validate_saved_audit_evidence(
     )
     if (
         accept_factor is not None
-        and accept_factor != protocol.SHUFFLE_ACCEPT_FACTOR
+        and accept_factor != contract["accept_target_factor"]
     ):
         problems.append(
             "shuffle audit accept_target_factor is not the frozen "
-            f"{protocol.SHUFFLE_ACCEPT_FACTOR}*E budget"
+            f"{contract['accept_target_factor']}*E budget"
         )
     if (
         attempt_factor is not None
-        and attempt_factor != protocol.SHUFFLE_ATTEMPT_LIMIT_FACTOR
+        and attempt_factor != contract["attempt_limit_factor"]
     ):
         problems.append(
             "shuffle audit attempt_limit_factor is not the frozen "
-            f"{protocol.SHUFFLE_ATTEMPT_LIMIT_FACTOR}*E limit"
+            f"{contract['attempt_limit_factor']}*E limit"
         )
     contexts = shuffle_audit.get("contexts")
     if not isinstance(contexts, list) or not contexts:
@@ -1319,9 +1411,7 @@ def _validate_saved_audit_evidence(
             "shuffle audit changed_edges "
             f"{top_changed} != per-context changed sum {total_changed}"
         )
-    if shuffle_audit.get("node_keys_sha256") != demand_identity.get(
-        "node_keys_sha256"
-    ):
+    if shuffle_audit.get("node_keys_sha256") != gvs_graph.node_keys_sha256(key_array):
         problems.append("shuffle audit node-key hash disagrees with provenance")
     totals = shuffle_audit.get("totals")
     if not isinstance(totals, Mapping):
@@ -1584,7 +1674,7 @@ def command_recompute(
     inputs: Dict[str, Any] = {"input_run_dir": str(run_dir)}
     before: Dict[str, str] = {}
     try:
-        before = _hash_files(_CONSUMED_RELATIVE, run_dir)
+        before = _hash_files(_consumed_relative(run_dir), run_dir)
         loaded = load_run(run_dir)
         before.update(
             {
@@ -1816,8 +1906,10 @@ def command_compare(
                 f"(run_id={left_execution!r}); a copied or aliased run cannot "
                 "establish an independent repeat"
             )
+        if _recovery_ancestry(left) & _recovery_ancestry(right):
+            raise CheckError('Shared training ancestry cannot establish an independent repeat')
         consumed_a = [
-            *_CONSUMED_RELATIVE,
+            *_consumed_relative(run_a),
             *(
                 _prediction_relative(name, split)
                 for split in left.splits
@@ -1825,7 +1917,7 @@ def command_compare(
             ),
         ]
         consumed_b = [
-            *_CONSUMED_RELATIVE,
+            *_consumed_relative(run_b),
             *(
                 _prediction_relative(name, split)
                 for split in right.splits
@@ -1979,7 +2071,7 @@ def command_summarize_shuffled(
                 )
         consumed_by_member = {
             str(member.run_dir): [
-                *_CONSUMED_RELATIVE,
+                *_consumed_relative(member.run_dir),
                 *(
                     _prediction_relative(member.method, split)
                     for split in member.splits

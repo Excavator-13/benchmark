@@ -1,0 +1,9 @@
+{
+  "elapsed_seconds": 26.10358890000009,
+  "reason": "PermissionError: [WinError 5] 拒绝访问。: 'C:\\\\Users\\\\Lenovo\\\\Documents\\\\大创参考论文\\\\JODBSDFres\\\\benchmark\\\\scratch\\\\graph-value-skeleton\\\\repair-shuffle-v2-20261020-04\\\\graphs\\\\r2-shuffle0-a\\\\.tmp-yz4gi6dr' -> 'C:\\\\Users\\\\Lenovo\\\\Documents\\\\大创参考论文\\\\JODBSDFres\\\\benchmark\\\\scratch\\\\graph-value-skeleton\\\\repair-shuffle-v2-20261020-04\\\\graphs\\\\r2-shuffle0-a\\\\progress.json'",
+  "run_id": "r2-shuffle0-a",
+  "run_type": "prepare-shuffle",
+  "stage": "shuffle",
+  "state": "failed",
+  "updated": "2026-10-20T12:46:13+08:00"
+}

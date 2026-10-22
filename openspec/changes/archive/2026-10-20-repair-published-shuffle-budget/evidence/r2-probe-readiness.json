@@ -1,0 +1,23 @@
+{
+  "generator": {
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "pyarrow": "17.0.0",
+    "python": [
+      3,
+      11,
+      17
+    ],
+    "source_sha256": {
+      "graph.py": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf",
+      "protocol.py": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267",
+      "shuffle.py": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be"
+    }
+  },
+  "idle_seconds": 60,
+  "max_seconds": 600,
+  "members": [],
+  "purpose": "development graph-only",
+  "reason": "RuntimeError: graph worker exited 1",
+  "state": "paused"
+}

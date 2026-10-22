@@ -1,0 +1,244 @@
+{
+  "checker": {
+    "protocol_version": "P1-count-L6-H3-v3",
+    "skeleton_version": "P02-skeleton-v1",
+    "source": {
+      "commit": "2ca56dd68fb72ff632f9612dc1dbbc6eee66b723",
+      "errors": {},
+      "files": {
+        "benchmark/graph_value_skeleton/__init__.py": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996",
+        "benchmark/graph_value_skeleton/__main__.py": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f",
+        "benchmark/graph_value_skeleton/_worker.py": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8",
+        "benchmark/graph_value_skeleton/artifacts.py": "a05b58786d6c4ac5fe22dc618ba7b425aeee5110a454977f4afd12418613bc53",
+        "benchmark/graph_value_skeleton/checkpoints.py": "1d8fd80660224d38af8084618f2495fa8e66bbf9f9cac3415edea328f10796c0",
+        "benchmark/graph_value_skeleton/checks.py": "7ef80c6bca83c0b612310748f4d713fc44483a8981bfedf882c573975cc95c47",
+        "benchmark/graph_value_skeleton/cli.py": "eb6fc8260983af939a10a0a391a8755a005ca4528e81bd129d55bca24e9285e5",
+        "benchmark/graph_value_skeleton/config.py": "8ff24265bdc6d419260531373084431023ff5025dad6561150e19c38b77c00e1",
+        "benchmark/graph_value_skeleton/data.py": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0",
+        "benchmark/graph_value_skeleton/graph.py": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf",
+        "benchmark/graph_value_skeleton/model.py": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d",
+        "benchmark/graph_value_skeleton/prepared.py": "277cb86e54c49a7bd55710955690c5401207ef356b8f64b6e86552ce1e8d4372",
+        "benchmark/graph_value_skeleton/protocol.py": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267",
+        "benchmark/graph_value_skeleton/readiness.py": "327d1ef9b023bc093630e90d10166ca37b85ddf87313c8ea8516e4a032eb6783",
+        "benchmark/graph_value_skeleton/runner.py": "21b5b6ab36fbab581f6d999acd4aaf6b1d70400f2a39acd339ddbdf2ed812fb8",
+        "benchmark/graph_value_skeleton/shuffle.py": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be",
+        "benchmark/graph_value_skeleton/training.py": "62692dabd5cfbb5eb52fded6e2e98c20f156a34666cde38e97e5b2afefacb36b",
+        "benchmark/nograph_baseline/__init__.py": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee",
+        "benchmark/nograph_baseline/artifacts.py": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86",
+        "benchmark/nograph_baseline/baselines.py": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9",
+        "benchmark/nograph_baseline/checks.py": "385d84b7c023aa9c9faf0c3627ad657e09a992a10dab0a0654d00e2a356ebaaa",
+        "benchmark/nograph_baseline/coverage.py": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467",
+        "benchmark/nograph_baseline/data.py": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4",
+        "benchmark/nograph_baseline/metrics.py": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c",
+        "benchmark/nograph_baseline/protocol.py": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4",
+        "benchmark/nograph_baseline/ridge.py": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704"
+      },
+      "identity_available": true,
+      "patch_bytes": 18995,
+      "patch_eligible_files": [
+        "benchmark/graph_value_skeleton/checks.py",
+        "benchmark/graph_value_skeleton/cli.py",
+        "benchmark/graph_value_skeleton/config.py",
+        "benchmark/graph_value_skeleton/runner.py",
+        "benchmark/graph_value_skeleton/training.py"
+      ],
+      "patch_included": true,
+      "patch_omitted_reason": null,
+      "policy": "P01-records-v2",
+      "scoped_dirty": true,
+      "scoped_files": [
+        "benchmark/graph_value_skeleton/checkpoints.py",
+        "benchmark/graph_value_skeleton/checks.py",
+        "benchmark/graph_value_skeleton/cli.py",
+        "benchmark/graph_value_skeleton/config.py",
+        "benchmark/graph_value_skeleton/runner.py",
+        "benchmark/graph_value_skeleton/training.py"
+      ],
+      "scoped_state_available": true,
+      "source_patch": "diff --git a/benchmark/graph_value_skeleton/checks.py b/benchmark/graph_value_skeleton/checks.py\nindex 5984fb2..07460f9 100644\n--- a/benchmark/graph_value_skeleton/checks.py\n+++ b/benchmark/graph_value_skeleton/checks.py\n@@ -318,6 +318,59 @@ def _prediction_relative(method: str, split: str) -> str:\n     return f\"predictions/{method}/{split}.npy\"\n \n \n+def _consumed_relative(run_dir: Path) -> List[str]:\n+    return [*_CONSUMED_RELATIVE, *[name for name in (\n+        'recovery.json', 'recovery/input.npz', 'recovery/input-manifest.json'\n+    ) if (Path(run_dir) / name).exists()]]\n+\n+\n+def _recovery_ancestry(loaded) -> set:\n+    path = loaded.run_dir / 'recovery.json'\n+    declared = loaded.provenance.get('recovery')\n+    if not path.exists():\n+        if declared is not None:\n+            raise CheckError('Missing declared recovery evidence')\n+        return set()\n+    value = _read_json(path)\n+    if declared != value or set(value) != {'schema', 'run_id', 'ancestry', 'parent_checkpoint', 'completed_epoch_at_start'}:\n+        raise CheckError('Recovery evidence disagrees with provenance or schema')\n+    ancestry = value['ancestry']\n+    if (type(value['schema']) is not int or value['schema'] != 1 or value['run_id'] != loaded.provenance.get('run_id')\n+            or not isinstance(ancestry, list) or not ancestry\n+            or any(not isinstance(v, str) or not v for v in ancestry)\n+            or len(set(ancestry)) != len(ancestry)):\n+        raise CheckError('Invalid recovery ancestry')\n+    epoch = value['completed_epoch_at_start']\n+    parent = value['parent_checkpoint']\n+    if type(epoch) is not int or not 0 <= epoch <= 200:\n+        raise CheckError('Invalid recovery epoch')\n+    if parent is None:\n+        if epoch != 0 or len(ancestry) != 1:\n+            raise CheckError('Invalid fresh recovery identity')\n+    else:\n+        manifest = _read_json(loaded.run_dir / 'recovery/input-manifest.json')\n+        raw = loaded.run_dir / 'recovery/input.npz'\n+        if (not isinstance(parent, str) or len(parent) != 64 or len(ancestry) < 2 or epoch == 0\n+                or manifest.get('sha256') != parent or manifest.get('epoch') != epoch\n+                or raw.stat().st_size != manifest.get('size') or sha256_file(raw) != parent):\n+            raise CheckError('Invalid recovery input integrity')\n+        # Read the object-free metadata locally; no external parent or model\n+        # inference is needed to bind the ancestry prefix to the copied bytes.\n+        from .checkpoints import decode, CheckpointError\n+        try:\n+            payload = decode(raw.read_bytes())\n+            if (set(payload) != {'schema', 'identity', 'lineage', 'state'}\n+                    or type(payload['schema']) is not int or payload['schema'] != 1\n+                    or type(manifest.get('schema')) is not int or manifest['schema'] != 1\n+                    or type(payload['state'].get('epoch')) is not int\n+                    or payload['state']['epoch'] != epoch\n+                    or payload['lineage'] != ancestry[:-1]):\n+                raise CheckError('Recovery ancestry/epoch disagrees with copied parent payload')\n+        except (CheckpointError, KeyError, TypeError) as exc:\n+            raise CheckError('Invalid copied parent checkpoint metadata') from exc\n+    return set(ancestry)\n+\n+\n @dataclass\n class LoadedRun:\n     run_dir: Path\n@@ -441,6 +494,7 @@ def _json_equal(left: Any, right: Any) -> bool:\n def _validate_loaded(loaded: LoadedRun) -> Dict[str, Any]:\n     \"\"\"Validate saved identity/schema and return the recomputation inputs.\"\"\"\n     problems: List[str] = []\n+    _recovery_ancestry(loaded)\n     run_dir = loaded.run_dir\n     node_count = int(loaded.nodes.shape[0])\n     key_columns = [column for column in loaded.nodes.columns if column != \"node_index\"]\n@@ -1620,7 +1674,7 @@ def command_recompute(\n     inputs: Dict[str, Any] = {\"input_run_dir\": str(run_dir)}\n     before: Dict[str, str] = {}\n     try:\n-        before = _hash_files(_CONSUMED_RELATIVE, run_dir)\n+        before = _hash_files(_consumed_relative(run_dir), run_dir)\n         loaded = load_run(run_dir)\n         before.update(\n             {\n@@ -1852,8 +1906,10 @@ def command_compare(\n                 f\"(run_id={left_execution!r}); a copied or aliased run cannot \"\n                 \"establish an independent repeat\"\n             )\n+        if _recovery_ancestry(left) & _recovery_ancestry(right):\n+            raise CheckError('Shared training ancestry cannot establish an independent repeat')\n         consumed_a = [\n-            *_CONSUMED_RELATIVE,\n+            *_consumed_relative(run_a),\n             *(\n                 _prediction_relative(name, split)\n                 for split in left.splits\n@@ -1861,7 +1917,7 @@ def command_compare(\n             ),\n         ]\n         consumed_b = [\n-            *_CONSUMED_RELATIVE,\n+            *_consumed_relative(run_b),\n             *(\n                 _prediction_relative(name, split)\n                 for split in right.splits\n@@ -2015,7 +2071,7 @@ def command_summarize_shuffled(\n                 )\n         consumed_by_member = {\n             str(member.run_dir): [\n-                *_CONSUMED_RELATIVE,\n+                *_consumed_relative(member.run_dir),\n                 *(\n                     _prediction_relative(member.method, split)\n                     for split in member.splits\ndiff --git a/benchmark/graph_value_skeleton/cli.py b/benchmark/graph_value_skeleton/cli.py\nindex e1905d2..82613ce 100644\n--- a/benchmark/graph_value_skeleton/cli.py\n+++ b/benchmark/graph_value_skeleton/cli.py\n@@ -107,6 +107,7 @@ def build_parser() -> argparse.ArgumentParser:\n     run.add_argument(\"--demand-path\", default=None, help=argparse.SUPPRESS)\n     run.add_argument(\"--graph-path\", default=None, help=argparse.SUPPRESS)\n     run.add_argument(\"--shuffle-artifact\", default=None, help=\"checked prepared graph; shuffled only\")\n+    run.add_argument(\"--resume-from\", default=None, help=\"committed checkpoint directory or latest.json; requires a fresh run ID\")\n     run.set_defaults(handler=_handle_run)\n \n     prepare = subparsers.add_parser('prepare-shuffle', help='prepare one development graph without training')\n@@ -199,6 +200,7 @@ def _handle_run(args: argparse.Namespace) -> int:\n         demand_path=args.demand_path,\n         graph_path=args.graph_path,\n         shuffle_artifact=args.shuffle_artifact,\n+        resume_from=args.resume_from,\n         command=_canonical_command(args),\n         launcher_cwd=launcher_cwd,\n     )\ndiff --git a/benchmark/graph_value_skeleton/config.py b/benchmark/graph_value_skeleton/config.py\nindex 9612686..5527c0f 100644\n--- a/benchmark/graph_value_skeleton/config.py\n+++ b/benchmark/graph_value_skeleton/config.py\n@@ -182,6 +182,7 @@ class RunConfig:\n     demand_path: Optional[str] = None\n     graph_path: Optional[str] = None\n     shuffle_artifact: Optional[str] = None\n+    resume_from: Optional[str] = None\n     published: bool = True\n     command: Sequence[str] = field(default_factory=tuple)\n     launcher_cwd: Optional[str] = None\n@@ -326,6 +327,7 @@ def resolve_config(\n     demand_path: Optional[str] = None,\n     graph_path: Optional[str] = None,\n     shuffle_artifact: Optional[str] = None,\n+    resume_from: Optional[str] = None,\n     command: Sequence[str] = (),\n     launcher_cwd: Optional[Path] = None,\n ) -> RunConfig:\n@@ -359,6 +361,7 @@ def resolve_config(\n         ),\n         graph_path=resolved_graph.as_posix() if resolved_graph is not None else None,\n         shuffle_artifact=resolved_artifact.as_posix() if resolved_artifact is not None else None,\n+        resume_from=_resolve_input_path(resume_from, base).resolve().as_posix() if resume_from else None,\n         published=bool(published),\n         command=tuple(command),\n         launcher_cwd=(Path(launcher_cwd).as_posix() if launcher_cwd is not None else None),\ndiff --git a/benchmark/graph_value_skeleton/runner.py b/benchmark/graph_value_skeleton/runner.py\nindex ce74bbf..dc233ae 100644\n--- a/benchmark/graph_value_skeleton/runner.py\n+++ b/benchmark/graph_value_skeleton/runner.py\n@@ -12,6 +12,8 @@ classifies as unfinished instead of inferring success.\n from __future__ import annotations\n \n import json\n+import hashlib\n+import uuid\n import os\n import sys\n import time\n@@ -28,6 +30,7 @@ from benchmark.nograph_baseline import protocol as p01\n \n from . import artifacts, data, graph as gvs_graph, model as gvs_model, shuffle as gvs_shuffle, training\n from . import protocol\n+from . import checkpoints\n from .config import RunConfig, resolve_output_root\n \n __all__ = [\n@@ -246,6 +249,76 @@ def execute_run(config: RunConfig) -> Dict[str, Any]:\n                 message_edges, dataset.node_count, label=f\"{config.method} test\"\n             )\n         )\n+        # Recovery identity uses executing bytes, not mutable Git bookkeeping.\n+        # Commit changes alone do not change the computation being resumed.\n+        layout_hash = hashlib.sha256()\n+        for chunk in chunks:\n+            layout_hash.update(json.dumps([chunk.window_index, chunk.window_start,\n+                chunk.context, chunk.element_count]).encode())\n+            for tensor in (chunk.node_indices, chunk.aggregation.source, chunk.aggregation.target):\n+                layout_hash.update(tensor.numpy().tobytes())\n+        environment_keys = ('python_version', 'python_version_info', 'platform', 'system',\n+            'machine', 'processor', 'cpu_count', 'packages', 'torch', 'graph_extensions',\n+            'gpu_available', 'numpy_blas_config', 'thread_environment')\n+        identity = json.loads(json.dumps({\n+            'computation': config.computational_identity(), 'purpose': config.purpose,\n+            'source': {key: value.get('sha256') for key, value in source['files'].items()},\n+            'protocol': source.get('protocol', {}).get('sha256'),\n+            'environment': {key: environment.get(key) for key in environment_keys},\n+            'execution': execution_settings, 'dataset': dataset.identity_payload(),\n+            'source_edges': gvs_graph.edge_set_sha256(graph.edges),\n+            'message_edges': _message_edges_sha256(message_edges),\n+            'masks': masks.hashes(), 'chunks': layout_hash.hexdigest(),\n+        }, sort_keys=True))\n+        lineage = [uuid.uuid4().hex]\n+        resume_state = None\n+        recovery = {'schema': 1, 'run_id': config.run_id, 'ancestry': lineage,\n+                    'parent_checkpoint': None, 'completed_epoch_at_start': 0}\n+        if config.resume_from:\n+            resume_path = Path(config.resume_from)\n+            checkpoint_dir = resume_path if resume_path.is_dir() else resume_path.parent\n+            parent_status = checkpoint_dir.parent / 'status.json'\n+            if parent_status.exists() and json.loads(parent_status.read_text(encoding='utf-8')).get('state') == 'success':\n+                raise RunError('Successful runs are complete; resume requires an unfinished attempt')\n+            payload, manifest, raw = checkpoints.load(config.resume_from, identity)\n+            resume_state = payload['state']\n+            lineage = [*payload['lineage'], *lineage]\n+            recovery.update(ancestry=lineage, parent_checkpoint=manifest['sha256'],\n+                            completed_epoch_at_start=resume_state['epoch'])\n+            # Copy the validated parent input, not a reference to mutable parent files.\n+            run.write_bytes('recovery/input.npz', raw)\n+            run.write_json('recovery/input-manifest.json', manifest)\n+            # A crash during finalization must itself remain recoverable.\n+            run.write_bytes('checkpoints/' + manifest['file'], raw)\n+            run.write_json('checkpoints/latest.json', {**manifest, 'previous': None})\n+        run.write_json('recovery.json', recovery)\n+        epoch_durations = []\n+        checkpoint_io = 0.0\n+        progress = {'completed_epoch': recovery['completed_epoch_at_start'],\n+                    'checkpoint': recovery['parent_checkpoint'],\n+                    'remaining_seconds_estimate': None, 'estimate_samples': 0}\n+\n+        def report_progress(detail):\n+            run.write_json('training-progress.json', {**progress, **detail,\n+                'updated_at': artifacts.now(), 'attempt_wall_seconds': time.perf_counter() - total_started,\n+                'checkpoint_io_seconds_this_attempt': checkpoint_io, 'completion': False})\n+\n+        def commit_epoch(state, epoch_seconds):\n+            nonlocal checkpoint_io\n+            io_started = time.perf_counter()\n+            manifest = checkpoints.publish(run.path / 'checkpoints', state, identity, lineage)\n+            checkpoint_io += time.perf_counter() - io_started\n+            epoch_durations.append(epoch_seconds + time.perf_counter() - io_started)\n+            recent = epoch_durations[-5:]\n+            progress.update(completed_epoch=state['epoch'], checkpoint=manifest['sha256'],\n+                training_seconds=state['training_seconds'], validation_seconds=state['validation_seconds'],\n+                last_epoch_seconds=epoch_durations[-1], estimate_samples=len(recent),\n+                remaining_seconds_estimate=(200-state['epoch']) * (sum(recent)/len(recent)),\n+                optimizer_steps=state['epoch'])\n+            report_progress({'stage': 'epoch_committed'})\n+\n+        run.set_status('running', stage='training', purpose=config.purpose, method=config.method)\n+        report_progress({'stage': 'training_ready'})\n         result = training.train(\n             model,\n             train_inputs=train_inputs,\n@@ -255,9 +328,15 @@ def execute_run(config: RunConfig) -> Dict[str, Any]:\n             chunks=chunks,\n             validation_aggregation=validation_aggregation,\n             node_count=dataset.node_count,\n+            resume_state=resume_state,\n+            checkpoint_callback=commit_epoch,\n+            progress_callback=report_progress,\n         )\n-        durations[\"training\"] = result.training_seconds\n-        durations[\"validation\"] = result.validation_seconds\n+        durations[\"training\"] = result.training_seconds - (resume_state['training_seconds'] if resume_state else 0.)\n+        durations[\"validation\"] = result.validation_seconds - (resume_state['validation_seconds'] if resume_state else 0.)\n+        durations['cumulative_training'] = result.training_seconds\n+        durations['cumulative_validation'] = result.validation_seconds\n+        durations['checkpoint_io_this_attempt'] = checkpoint_io\n         durations[\"training_total\"] = time.perf_counter() - started\n \n         stage = \"selection\"\n@@ -408,6 +487,7 @@ def execute_run(config: RunConfig) -> Dict[str, Any]:\n                 environment=environment,\n                 source=source,\n                 execution_settings=execution_settings,\n+                recovery=recovery,\n             ),\n         )\n \n@@ -814,9 +894,11 @@ def _provenance_payload(\n     environment: Mapping[str, Any],\n     source: Mapping[str, Any],\n     execution_settings: Mapping[str, Any],\n+    recovery: Optional[Mapping[str, Any]] = None,\n ) -> Dict[str, Any]:\n     return {\n         \"run_id\": config.run_id,\n+        \"recovery\": dict(recovery) if recovery is not None else None,\n         \"run_type\": config.run_type,\n         \"purpose\": config.purpose,\n         \"task\": protocol.TASK_ID,\ndiff --git a/benchmark/graph_value_skeleton/training.py b/benchmark/graph_value_skeleton/training.py\nindex 44acfed..0511246 100644\n--- a/benchmark/graph_value_skeleton/training.py\n+++ b/benchmark/graph_value_skeleton/training.py\n@@ -208,6 +208,9 @@ def train(\n     validation_aggregation: Optional[gvs_model.GraphAggregation],\n     epochs: int = protocol.EPOCHS,\n     node_count: int,\n+    resume_state: Optional[Mapping[str, Any]] = None,\n+    checkpoint_callback: Any = None,\n+    progress_callback: Any = None,\n ) -> TrainingResult:\n     \"\"\"Run exactly ``epochs`` epochs and select the validation-MSE checkpoint.\"\"\"\n     if int(epochs) != protocol.EPOCHS:\n@@ -247,13 +250,34 @@ def train(\n     best_state: Dict[str, Any] = {}\n     training_seconds = 0.0\n     validation_seconds = 0.0\n-    for epoch in range(1, int(epochs) + 1):\n+    completed_epoch = 0\n+    if resume_state is not None:\n+        from . import checkpoints\n+        checkpoints.validate_state(resume_state, model, optimizer,\n+                                   train_elements=total_elements, validation_elements=validation_elements)\n+        model.load_state_dict(resume_state['model'])\n+        optimizer.load_state_dict(resume_state['optimizer'])\n+        history = list(resume_state['history'])\n+        best_epoch = resume_state['best_epoch']\n+        best_validation_mse = resume_state['best_mse']\n+        best_state = resume_state['best_state']\n+        training_seconds = resume_state['training_seconds']\n+        validation_seconds = resume_state['validation_seconds']\n+        completed_epoch = resume_state['epoch']\n+        checkpoints.restore_rng(resume_state['rng'])\n+    for epoch in range(completed_epoch + 1, int(epochs) + 1):\n+        epoch_started = time.perf_counter()\n         started = time.perf_counter()\n         model.train()\n         optimizer.zero_grad(set_to_none=True)\n         squared_sum = 0.0\n         absolute_sum = 0.0\n-        for chunk in chunks:\n+        last_progress = 0.0\n+        for chunk_index, chunk in enumerate(chunks):\n+            if progress_callback and (time.perf_counter() - last_progress >= 10):\n+                progress_callback({'stage': 'training', 'epoch_in_progress': epoch,\n+                                   'completed_chunks': chunk_index, 'total_chunks': len(chunks)})\n+                last_progress = time.perf_counter()\n             x = train_x[chunk.window_index].index_select(0, chunk.node_indices)\n             y = train_y[chunk.window_index].index_select(0, chunk.node_indices)\n             prediction = model(x, chunk.aggregation)\n@@ -275,6 +299,9 @@ def train(\n         optimizer.step()\n         training_seconds += time.perf_counter() - started\n \n+        if progress_callback:\n+            progress_callback({'stage': 'validation', 'epoch_in_progress': epoch})\n+\n         started = time.perf_counter()\n         model.eval()\n         with torch.no_grad():\n@@ -314,6 +341,15 @@ def train(\n                 \"selected_so_far\": epoch == best_epoch,\n             }\n         )\n+        if checkpoint_callback:\n+            from . import checkpoints\n+            checkpoint_callback({\n+                'epoch': epoch, 'model': model.state_dict(),\n+                'optimizer': optimizer.state_dict(), 'rng': checkpoints.rng_state(),\n+                'history': history, 'best_epoch': best_epoch,\n+                'best_mse': best_validation_mse, 'best_state': best_state,\n+                'training_seconds': training_seconds, 'validation_seconds': validation_seconds,\n+            }, time.perf_counter() - epoch_started)\n     if len(history) != protocol.EPOCHS:\n         raise TrainingError(\n             f\"history has {len(history)} epochs, expected {protocol.EPOCHS}\"\n",
+      "untracked_files": [
+        "benchmark/graph_value_skeleton/checkpoints.py"
+      ],
+      "whole_repository_dirty": true
+    }
+  },
+  "command": {
+    "argv": [
+      "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+      "-m",
+      "benchmark.graph_value_skeleton",
+      "summarize-shuffled",
+      "--run-dirs",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled0-s2-b",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled1-s2-b",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled2-s2-b",
+      "--report",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\scratch\\graph-value-skeleton\\p02-t002-r2-20261020-02\\checks\\p02-t002-r2-20261020-02-r2-s2-b-shuffled-summary.json"
+    ],
+    "cwd": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01"
+  },
+  "created": "2026-10-21T23:36:56+08:00",
+  "errors": [],
+  "inputs": {
+    "members": [
+      {
+        "consumed_sha256": {
+          "audit.json": "5e99e4eaaabe03f5190a6724ab6b421ae0b97a531ee551cef40a7be365b53adb",
+          "config.json": "f1e6d2387304a287b2e4022bbed324adb15ccea3255e380b3983018433cc5f98",
+          "environment.json": "54acf86f692bf71a800d895ec65a56cdab8fce6bb57079f4a81d55747445de6e",
+          "gold/test.npy": "e1912f904961f3610f20186b18c252f0db569d707d90c48e4721b086b212b2c5",
+          "gold/validation.npy": "2cbad14d843764430fc9a261d2a3f9763c00350fecc53fd9a8397ef632aae761",
+          "graph-audit.json": "72650ac7ddbb67b99029e89cc20178359af664a61a259a2c1f51bec6f1eaf86d",
+          "masks.npz": "0171eba21364adaa342b604e17fc411c5538b61ca28726c14330235681bf361a",
+          "metrics.json": "a659e7aa152b0bda3965b06c41ecdcacee84bc59fee91dadb5dad2c98b4b13c3",
+          "models/selected.npz": "9a4dd0a8b37a8da8a5aa7bbdc5ab9b7b6a137d7b4ec21e8a5899ac7d8f7c4660",
+          "nodes.parquet": "1fc97922692dc8dd5a9ef30a17ce255585f8d5980147b1be4b8694d9d748f238",
+          "predictions/shuffled/test.npy": "7ac59c5c79cb62a7e79958d690a36a85bc1748ac323d13cb13f3dcac34e007eb",
+          "predictions/shuffled/validation.npy": "86152631a24d20fc57f50097a7b601d6d06d7b0a128e696bfe546c2ed90afbea",
+          "provenance.json": "927d77d1e97dd64794d92685415f5a1ded351abb3136463b709bdb0c5a136256",
+          "recovery.json": "381da3c35f06888312712fa492a5d074e50e303c973647a3f4bf34b6ebb1ec0b",
+          "selection.json": "253438df9213697c305bdfe3ca024569619702f26187cb1e6f96b8fe5d698747",
+          "source.json": "df29a052457aec8a572591231de95553fd8826e268f226d341b1896adc523f19",
+          "training-history.json": "d3b4f5be15e1985af857424577cf16f1e742daf9cefb03039e385c5fcfb38dc8",
+          "windows.json": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf"
+        },
+        "run_dir": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled0-s2-b",
+        "run_id": "p02-t002-r2-20261020-02-r2-shuffled0-s2-b",
+        "shuffle_seed": 0
+      },
+      {
+        "consumed_sha256": {
+          "audit.json": "5e99e4eaaabe03f5190a6724ab6b421ae0b97a531ee551cef40a7be365b53adb",
+          "config.json": "731f73d8f3ef2e7b13e62fe0bf1305adb4ca56329f9e344061c884b86c30f9d7",
+          "environment.json": "54acf86f692bf71a800d895ec65a56cdab8fce6bb57079f4a81d55747445de6e",
+          "gold/test.npy": "e1912f904961f3610f20186b18c252f0db569d707d90c48e4721b086b212b2c5",
+          "gold/validation.npy": "2cbad14d843764430fc9a261d2a3f9763c00350fecc53fd9a8397ef632aae761",
+          "graph-audit.json": "3a37584cf34e56f336ffb8faf399101b375b1babf4ff5347b03e46b28601a059",
+          "masks.npz": "0171eba21364adaa342b604e17fc411c5538b61ca28726c14330235681bf361a",
+          "metrics.json": "2a98f78537b215a5295f03c76e3d7c59a41a51b20255309e4534e3c8313512bd",
+          "models/selected.npz": "b1bde178d1328ccd9f0fdc9f81c59c497a93171e32583dbe8be4a8d9b702d630",
+          "nodes.parquet": "1fc97922692dc8dd5a9ef30a17ce255585f8d5980147b1be4b8694d9d748f238",
+          "predictions/shuffled/test.npy": "bd6e70fb5f4968fffb642e3ef857f8224cabe8c252728924f8d85496d40f4f19",
+          "predictions/shuffled/validation.npy": "c1aa2147890570d321797565e88f0fe18d281547f397f9b30178eeffdee5cfd7",
+          "provenance.json": "056ac0b0744d092eba2bc92409028a8d02ccfcc8a68d9fb6da1e927c0daba9fa",
+          "recovery.json": "37d2f5f2549e72d4729c71c35322077672cc49a4a453be599473fe9dab4ab5d1",
+          "selection.json": "aff98780d7d2a1f74b3b0074437f34fd63401feede7bbd91d4d5ac86cdcef2f3",
+          "source.json": "5e7d1ce4f3c6353ecd26c7bb2d1a2018015cae85bbc1818a439823d77dd7e96a",
+          "training-history.json": "bd25949e6cc03961f928933080e8aec9bb0ace7911b734a4ed182e13992420ab",
+          "windows.json": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf"
+        },
+        "run_dir": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled1-s2-b",
+        "run_id": "p02-t002-r2-20261020-02-r2-shuffled1-s2-b",
+        "shuffle_seed": 1
+      },
+      {
+        "consumed_sha256": {
+          "audit.json": "5e99e4eaaabe03f5190a6724ab6b421ae0b97a531ee551cef40a7be365b53adb",
+          "config.json": "c219323de0ca96c0e4551a687405cb13ac7f56797df4c9d097cdc3e3614f719c",
+          "environment.json": "54acf86f692bf71a800d895ec65a56cdab8fce6bb57079f4a81d55747445de6e",
+          "gold/test.npy": "e1912f904961f3610f20186b18c252f0db569d707d90c48e4721b086b212b2c5",
+          "gold/validation.npy": "2cbad14d843764430fc9a261d2a3f9763c00350fecc53fd9a8397ef632aae761",
+          "graph-audit.json": "e75e5ddd7b83fbdcb34f59fdbbd7518eacf42882105f34428ebcb3d8f2a6353b",
+          "masks.npz": "0171eba21364adaa342b604e17fc411c5538b61ca28726c14330235681bf361a",
+          "metrics.json": "463d755c6672af12359edd5d91731f9318c5432939d2b58f96ca354a4820b333",
+          "models/selected.npz": "70eaa57d88b60fefb10b2f711dcfa8d27580b9e63cb0213a031615646f474f1d",
+          "nodes.parquet": "1fc97922692dc8dd5a9ef30a17ce255585f8d5980147b1be4b8694d9d748f238",
+          "predictions/shuffled/test.npy": "44698ffd26eff98658ec0e63066f2ee0c17a95f0c3458c29ed6902940229ccda",
+          "predictions/shuffled/validation.npy": "e8e2d59cacddf1d8494676de1bcd76e1e979494cc1c2e3f8d2c5eb28f03390bf",
+          "provenance.json": "6567c13b6410ba1daf8b6e6c52825143088655b42a44f117620f2b17bf6c8508",
+          "recovery.json": "dd853bfd35a634acc2b172f4fcaa9b14355518478a6ea5809c6bddce1478afca",
+          "selection.json": "8e992dbce848771037ee37ec4c43b2a848587a63ff5f17ed9ece195e826e9b4f",
+          "source.json": "3f54b029784529f6f22d950899a9935f30b0659f814cba222bf42ee7132eada5",
+          "training-history.json": "91bed9a371e2418d632eb30612d6f047ec7dbb6e2cdcbcc7e51398675e932d6e",
+          "windows.json": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf"
+        },
+        "run_dir": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled2-s2-b",
+        "run_id": "p02-t002-r2-20261020-02-r2-shuffled2-s2-b",
+        "shuffle_seed": 2
+      }
+    ],
+    "run_dirs": [
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled0-s2-b",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled1-s2-b",
+      "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled2-s2-b"
+    ]
+  },
+  "kind": "summarize-shuffled",
+  "result": {
+    "condition_differences": [],
+    "control_definition": "(MAE_shuffle0 + MAE_shuffle1 + MAE_shuffle2) / 3 over the three independently trained shuffled graphs at the same model seed",
+    "control_test_MAE": 21.650035065634,
+    "control_validation_MAE": 19.263298976649576,
+    "dataset": "r2",
+    "failed_checks": [],
+    "individual_test_MAEs": {
+      "0": 21.650562956461744,
+      "1": 21.647757201768275,
+      "2": 21.65178503867198
+    },
+    "individual_validation_MAEs": {
+      "0": 19.264279492470354,
+      "1": 19.26106726810991,
+      "2": 19.264550169368462
+    },
+    "inputs_bytewise_unchanged": true,
+    "mae_of_averaged_predictions": 21.647387400559534,
+    "mae_of_averaged_predictions_is_not_the_control": true,
+    "member_identity_retained": true,
+    "member_order": [
+      "0",
+      "1",
+      "2"
+    ],
+    "members": {
+      "0": {
+        "model_seed": 2,
+        "recompute_status": "ok",
+        "run_dir": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled0-s2-b",
+        "run_id": "p02-t002-r2-20261020-02-r2-shuffled0-s2-b",
+        "shuffle_seed": 0,
+        "shuffled_graph_edges_sha256": "ad3e9775af9ed369a487f75c3891871f41260d22fc8746c1b4986dbbee173cc0",
+        "source_graph_edges_sha256": "148e276b3def4e92fb9511229fcee8f0d276be1edb76bde80c2368d6e118f14e",
+        "test_MAE": 21.650562956461744,
+        "validation_MAE": 19.264279492470354
+      },
+      "1": {
+        "model_seed": 2,
+        "recompute_status": "ok",
+        "run_dir": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled1-s2-b",
+        "run_id": "p02-t002-r2-20261020-02-r2-shuffled1-s2-b",
+        "shuffle_seed": 1,
+        "shuffled_graph_edges_sha256": "3aa28dc59eccf6be87d8072227e5d81f150a4e85d556c96768481189d4cff8ac",
+        "source_graph_edges_sha256": "148e276b3def4e92fb9511229fcee8f0d276be1edb76bde80c2368d6e118f14e",
+        "test_MAE": 21.647757201768275,
+        "validation_MAE": 19.26106726810991
+      },
+      "2": {
+        "model_seed": 2,
+        "recompute_status": "ok",
+        "run_dir": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled2-s2-b",
+        "run_id": "p02-t002-r2-20261020-02-r2-shuffled2-s2-b",
+        "shuffle_seed": 2,
+        "shuffled_graph_edges_sha256": "0215f7df908200e3c64c7fc26a63c5592f9c176595c29a7ca606176ea8488936",
+        "source_graph_edges_sha256": "148e276b3def4e92fb9511229fcee8f0d276be1edb76bde80c2368d6e118f14e",
+        "test_MAE": 21.65178503867198,
+        "validation_MAE": 19.264550169368462
+      }
+    },
+    "method": "shuffled",
+    "model_forward_called": false,
+    "model_seed": 2,
+    "model_trained": false,
+    "ranking_used": false,
+    "source_data_read": false,
+    "status": "ok",
+    "weakest_graph_selected": false
+  },
+  "status": "ok",
+  "tolerances": {
+    "formula": "abs(a-b)/max(1,abs(a),abs(b))",
+    "non_numeric": "exact (keys, schema, dtype, shape, masks, null status, counts)",
+    "numeric": 1e-12
+  },
+  "version": 1
+}

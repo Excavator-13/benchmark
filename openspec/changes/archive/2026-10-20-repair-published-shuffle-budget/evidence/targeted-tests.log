@@ -1,0 +1,80 @@
+.venv-pinned/Scripts/python.exe : test_cached_and_fresh_fit_independently_and_recompute_without_artifact (benchmark.gra
+ph_value_skeleton.tests.test_prepared.PreparedTest.test_cached_and_fresh_fit_independently_and_recompute_without_artifa
+ct) ... ok
+所在位置 行:3 字符: 1
++ .venv-pinned/Scripts/python.exe -B -m unittest benchmark.graph_value_ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_cached_and...rtifact) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_corruption_with_recomputed_checksums (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_corrupt
+ion_with_recomputed_checksums) ... ok
+test_failure_and_interruption_retain_evidence (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_fai
+lure_and_interruption_retain_evidence) ... ok
+test_legacy_audit_contract_unchanged_and_unknown_rejected (benchmark.graph_value_skeleton.tests.test_prepared.PreparedT
+est.test_legacy_audit_contract_unchanged_and_unknown_rejected) ... ok
+test_mismatch_fails_before_training_without_fallback (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.t
+est_mismatch_fails_before_training_without_fallback) ... ok
+test_prepare_and_saved_only_check (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_prepare_and_sav
+ed_only_check) ... ok
+test_prepare_cli_and_unsafe_destination (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_prepare_c
+li_and_unsafe_destination) ... error: RunExistsError: run directory already exists and will not be overwritten: C:\User
+s\Lenovo\AppData\Local\Temp\gvs-prepared-797y5pob\cli\cli-graph
+error: ConfigError: development output must resolve inside the ignored scratch tree (C:\Users\Lenovo\Documents\大创参考论文\J
+ODBSDFres\benchmark\scratch) or the system temporary directory (C:\Users\Lenovo\AppData\Local\Temp); got C:\Users\Lenov
+o\Documents\大创参考论文\JODBSDFres\benchmark\research -> C:\Users\Lenovo\Documents\大创参考论文\JODBSDFres\benchmark\research
+ok
+test_contracts_and_invalid_arguments (benchmark.graph_value_skeleton.tests.test_shuffle_v2.ShuffleV2Test.test_contracts
+_and_invalid_arguments) ... ok
+test_empty_and_unchanged (benchmark.graph_value_skeleton.tests.test_shuffle_v2.ShuffleV2Test.test_empty_and_unchanged) 
+... ok
+test_exact_scalar_stream_decisions_and_backends (benchmark.graph_value_skeleton.tests.test_shuffle_v2.ShuffleV2Test.tes
+t_exact_scalar_stream_decisions_and_backends) ... ok
+test_failure_accounting_progress_and_previous_context (benchmark.graph_value_skeleton.tests.test_shuffle_v2.ShuffleV2Te
+st.test_failure_accounting_progress_and_previous_context) ... ok
+test_long_context_checkpoints (benchmark.graph_value_skeleton.tests.test_shuffle_v2.ShuffleV2Test.test_long_context_che
+ckpoints) ... ok
+test_elapsed_and_idle_watchdogs (benchmark.graph_value_skeleton.tests.test_readiness.ReadinessTest.test_elapsed_and_idl
+e_watchdogs) ... ok
+{"artifact_dir": "C:\\Users\\Lenovo\\AppData\\Local\\Temp\\gvs-prepared-797y5pob\\cli\\cli-graph", "durations_seconds": {"demand_read": 0.010953800001516356, "graph_read": 0.005530299999009003, "shuffle": 0.024962400000731577, "total": 10.324619699998948}, "result_sha256": "bfeee4454b65414b7baf6cd7980c3b3329016030064e364b1f93d59cf7d6a4fc", "status": "success"}
+START r2-shuffle0-a
+test_failed_worker_and_matrix_pause (benchmark.graph_value_skeleton.tests.test_readiness.ReadinessTest.test_failed_work
+er_and_matrix_pause) ... ok
+test_determinism_settings (benchmark.graph_value_skeleton.tests.test_model.CpuRuntimeTest.test_determinism_settings) ..
+. ok
+test_real_cpu_forward_backward_without_graph_extensions (benchmark.graph_value_skeleton.tests.test_model.CpuRuntimeTest
+.test_real_cpu_forward_backward_without_graph_extensions) ... ok
+test_batched_graph_predictions_match_per_window_oracle (benchmark.graph_value_skeleton.tests.test_model.EncoderTest.tes
+t_batched_graph_predictions_match_per_window_oracle) ... ok
+test_node_inputs_are_isolated (benchmark.graph_value_skeleton.tests.test_model.EncoderTest.test_node_inputs_are_isolate
+d) ... ok
+test_three_methods_share_initial_parameters (benchmark.graph_value_skeleton.tests.test_model.EncoderTest.test_three_met
+hods_share_initial_parameters) ... ok
+test_vectorization_equals_per_node_loop (benchmark.graph_value_skeleton.tests.test_model.EncoderTest.test_vectorization
+_equals_per_node_loop) ... C:\Users\Lenovo\Documents\大创参考论文\JODBSDFres\benchmark\benchmark\graph_value_skeleton\tests\t
+est_model.py:29: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autog
+rad\generated\python_variable_methods.cpp:821.)
+  return float((difference / scale).max())
+ok
+test_window_and_split_state_reset (benchmark.graph_value_skeleton.tests.test_model.EncoderTest.test_window_and_split_st
+ate_reset) ... ok
+test_asymmetric_direction_oracle (benchmark.graph_value_skeleton.tests.test_model.PropagationTest.test_asymmetric_direc
+tion_oracle) ... ok
+test_duplicate_rows_do_not_weight_a_neighbour (benchmark.graph_value_skeleton.tests.test_model.PropagationTest.test_dup
+licate_rows_do_not_weight_a_neighbour) ... ok
+test_isolated_and_empty_graph_exact_equality (benchmark.graph_value_skeleton.tests.test_model.PropagationTest.test_isol
+ated_and_empty_graph_exact_equality) ... ok
+test_no_graph_parameter_capacity (benchmark.graph_value_skeleton.tests.test_model.PropagationTest.test_no_graph_paramet
+er_capacity) ... ok
+test_self_loops_rejected (benchmark.graph_value_skeleton.tests.test_model.PropagationTest.test_self_loops_rejected) ...
+ ok
+test_shuffle_does_not_consume_model_rng (benchmark.graph_value_skeleton.tests.test_model.PropagationTest.test_shuffle_d
+oes_not_consume_model_rng) ... ok
+test_training_state_is_independent_per_model (benchmark.graph_value_skeleton.tests.test_model.PropagationTest.test_trai
+ning_state_is_independent_per_model) ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 162.699s
+
+OK

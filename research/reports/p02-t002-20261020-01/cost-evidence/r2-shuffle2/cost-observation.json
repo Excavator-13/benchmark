@@ -1,0 +1,51 @@
+{
+  "purpose": "incomplete operational cost diagnostic",
+  "formal_run": false,
+  "requested_epochs": 200,
+  "steps_observed": 3,
+  "validated_completed_epochs_at_least": 2,
+  "dataset": "r2",
+  "method": "shuffled",
+  "shuffle_seed": 2,
+  "deadline_utc": "2026-10-20T10:23:51+00:00",
+  "command": [
+    "C:\\Users\\Lenovo\\Documents\\\u5927\u521b\u53c2\u8003\u8bba\u6587\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+    "research/reports/p02-t002-20261020-01/diagnose_training_cost.py",
+    "--run-id",
+    "p02-t002-20261020-01-cost-r2-shuffled2-s0-diagnostic",
+    "--output-root",
+    "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs",
+    "--deadline-utc",
+    "2026-10-20T10:23:51+00:00",
+    "--dataset",
+    "r2",
+    "--method",
+    "shuffled",
+    "--shuffle-seed",
+    "2",
+    "--shuffle-artifact",
+    "scratch/graph-value-skeleton/repair-shuffle-v2-20261020-06/graphs/r2-shuffle2-a"
+  ],
+  "script_sha256": "21b8db252b8552b2e94ef082f4ee637d0e04462db20ba676bf1715c483186489",
+  "intervals_seconds": [
+    14.544373300000188,
+    13.990717099999529
+  ],
+  "forecast_fit_count": 6,
+  "forecast_scope": "only this dataset/method/shuffle-seed; other fits and checks omitted",
+  "limitation": "short serial sample, extrapolation assumes stable epoch cost; not a completed fit",
+  "chunks_per_epoch": 988,
+  "nodes": 121420,
+  "seconds_until_deadline": 14786.922392,
+  "process_peak_memory": {
+    "bytes": 1164279808,
+    "native_value": 1164279808,
+    "native_unit": "bytes",
+    "method": "GetProcessMemoryInfo.PeakWorkingSetSize",
+    "scope": "worker process lifetime",
+    "status": "ok"
+  },
+  "fastest_interval_seconds": 13.990717099999529,
+  "projected_seconds_six_fits": 16788.860519999434,
+  "projected_seconds_six_fits_at_twice_speed": 8394.430259999717
+}

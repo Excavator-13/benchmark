@@ -1,0 +1,25 @@
+{
+  "files": {
+    "benchmark/graph_value_skeleton/__init__.py": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996",
+    "benchmark/graph_value_skeleton/__main__.py": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f",
+    "benchmark/graph_value_skeleton/_worker.py": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8",
+    "benchmark/graph_value_skeleton/checks.py": "16e071b5e4384e7ec9f77ca9c4fcdc387632794ea665b4be0a01ad1e9969e8bc",
+    "benchmark/graph_value_skeleton/cli.py": "e42c6d4a0c1c742ac5f9b660c1fc4089c35b168235a25dd50182055efbb61c84",
+    "benchmark/graph_value_skeleton/config.py": "85d180e6a49cf0e03d7935c5b55e300479f7619054b5b816c21c4430ac89dec6",
+    "benchmark/graph_value_skeleton/data.py": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0",
+    "benchmark/graph_value_skeleton/graph.py": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf",
+    "benchmark/graph_value_skeleton/model.py": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d",
+    "benchmark/graph_value_skeleton/protocol.py": "fa9e113e84593ed55c9e0a19082ba1984c523beae13015a36ae7e89de3b17267",
+    "benchmark/graph_value_skeleton/runner.py": "d18f24423ebc0371aaa9e4f56951ec9f0bc802e90f7927075753e9d1e665a814",
+    "benchmark/graph_value_skeleton/shuffle.py": "c0f3a2beb1b0a43b3130864cae8027cf5c409cdeeb19ed04f3ed779ddf5c22be",
+    "benchmark/graph_value_skeleton/training.py": "d97df65ddb65fc36ea88481e6593f4582bf5eae114f602cbbbdc93ed9d9e37b2",
+    "benchmark/nograph_baseline/__init__.py": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee",
+    "benchmark/nograph_baseline/baselines.py": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9",
+    "benchmark/nograph_baseline/coverage.py": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467",
+    "benchmark/nograph_baseline/data.py": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4",
+    "benchmark/nograph_baseline/metrics.py": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c",
+    "benchmark/nograph_baseline/protocol.py": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4",
+    "benchmark/nograph_baseline/ridge.py": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704"
+  },
+  "tracked_by_git": false
+}

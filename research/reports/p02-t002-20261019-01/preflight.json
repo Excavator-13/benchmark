@@ -1,0 +1,63 @@
+{
+  "task": "P02-T002",
+  "batch": "p02-t002-20261019-01",
+  "created_at": "2026-10-19T12:36:37.600387+00:00",
+  "python": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+  "status": "ok",
+  "versions": {
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "pyarrow": "17.0.0",
+    "torch": "2.14.1"
+  },
+  "source": {
+    "benchmark/graph_value_skeleton/__init__.py": "d3d0f19ad2195bb8a35542e6b06c596649f60b043ccd47acd44625977db4b996",
+    "benchmark/graph_value_skeleton/__main__.py": "7653fa96fd36e656ed801f751ad8e2f332d07c33c8d51ac485c5d7cf2498f62f",
+    "benchmark/graph_value_skeleton/_worker.py": "9248c4a35d9af22d5622a5921de7d39d4510ce77c6e1acfd31168089fc4932b8",
+    "benchmark/graph_value_skeleton/artifacts.py": "1b6f1cb88fdc6758fe5f88f9520bdf64db45c507ecfea69e3c1bd55bd999e9b8",
+    "benchmark/graph_value_skeleton/checks.py": "44deb79fe46e24722c7070a43e6ebc2497c03a5ac75841440228f5cd19affd59",
+    "benchmark/graph_value_skeleton/cli.py": "89c6e60695745cda0c2ac5206547341692dd2a8f365fd7ca16c1b89f102f7603",
+    "benchmark/graph_value_skeleton/config.py": "76a02b676c63f98400eae7fb4fc97b63e95c98e49def4ae60ac383669c19d8ec",
+    "benchmark/graph_value_skeleton/data.py": "f6446ddea52f602f3690ab29a7340f15d2f0b8a7d91b56887da849689793f5b0",
+    "benchmark/graph_value_skeleton/graph.py": "0e37fcdc503438c74ecad16d7be2832af0b180c30931261ca8dc448715bd4abf",
+    "benchmark/graph_value_skeleton/model.py": "7167b866dfda91ad36ad66c215f01b83a62edcff51f4e076eb7f5578a8464c2d",
+    "benchmark/graph_value_skeleton/protocol.py": "bcf047157a8b9552cefd39124b9e7661bda1c713f2d93693eab6c93ee8ab5226",
+    "benchmark/graph_value_skeleton/runner.py": "b1ad2b2d99accec0f2c2fbce506a670902d72907211f51f0d9d08c426a8c5b3b",
+    "benchmark/graph_value_skeleton/shuffle.py": "a61df1d0f6f4916f1f38581859b0e2b78702094cca62ff80c3b267dabde7da25",
+    "benchmark/graph_value_skeleton/training.py": "d97df65ddb65fc36ea88481e6593f4582bf5eae114f602cbbbdc93ed9d9e37b2",
+    "benchmark/nograph_baseline/__init__.py": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee",
+    "benchmark/nograph_baseline/__main__.py": "72db178365f943df31e992dbc551c3b7acb1f993158a7c90f29f1de2ef8bc230",
+    "benchmark/nograph_baseline/_worker.py": "0e07b3ce8e55c0e3034604d960d1f3d3e05bf22a5712d95d9c02b4fde273756e",
+    "benchmark/nograph_baseline/artifacts.py": "092c6e23e670be4f02f323bd5e752f449be884a17df4ec18fd56f3c474fd68b8",
+    "benchmark/nograph_baseline/baselines.py": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9",
+    "benchmark/nograph_baseline/checks.py": "385d84b7c023aa9c9faf0c3627ad657e09a992a10dab0a0654d00e2a356ebaaa",
+    "benchmark/nograph_baseline/cli.py": "113f8ac025e551bb51f08d96ed12449094fa56dfdec70fa1afbdbe0216116f97",
+    "benchmark/nograph_baseline/coverage.py": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467",
+    "benchmark/nograph_baseline/data.py": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4",
+    "benchmark/nograph_baseline/metrics.py": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c",
+    "benchmark/nograph_baseline/protocol.py": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4",
+    "benchmark/nograph_baseline/ridge.py": "de39b94636bded57b43f203caaefb0167ed5615f850628244ee3a55def509704",
+    "benchmark/nograph_baseline/runner.py": "b03b20fd19ec89e8c7b4dfae864959275546b40a099a1edd531b090687ff0f1e",
+    "research/phases/P01/protocol.md": "2dcf0af81bb76dd35a1c1add4738e9e8e3c8474f9fc143101e9d59c0d8e8921c"
+  },
+  "git_head": "02f7d19b0912decc964510ad8991c3364e7df957",
+  "data": {
+    "r0": {
+      "nodes": 2335,
+      "demand_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+      "graph_sha256": "c49bc2ecfddd24ddc7a6c6654fdc7bf2e908820139a987f99a115c11b583aa5b"
+    },
+    "region": {
+      "nodes": 16345,
+      "demand_sha256": "27a946c787efcd5f1d2b25ca35bebd1392320d9b10920e771405a664db5e4a3f",
+      "graph_sha256": "c0bed3290be3691fbb07c4834c96e8d567e1f54cdfb2120d8a0846a86b64d87c"
+    },
+    "r2": {
+      "nodes": 121420,
+      "demand_sha256": "4ada154773b8678ae7d25b42e36a8309a51490bbe9fe059f015bb61724ed4c3c",
+      "graph_sha256": "4cc1f399dd9061920179ade34d018fcbd58c3e00bb40f303b91e9aba99f9e12c"
+    }
+  },
+  "disk_free_bytes": 7363792896
+}

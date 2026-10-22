@@ -1,0 +1,19 @@
+{
+  "active": null,
+  "batch": "p02-t002-r2-20261020-02",
+  "completed": [],
+  "completed_fit_worker_wall_seconds": 0,
+  "completed_verified_fits": 0,
+  "error": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb4 in position 67: invalid start byte",
+  "estimated_finish_utc": null,
+  "forecast_limitations": "Unavailable until every remaining method is observed; epoch extrapolation excludes checks/startup and is provisional.",
+  "measured_fit_seconds_by_method": {},
+  "pid": 23640,
+  "remaining_training_seconds_estimate": null,
+  "root": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01",
+  "status": "paused",
+  "task": "P02-T002",
+  "total_fits": 30,
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\phases\\P02\\t002_r2_batch.py\", line 560, in main\n    assert_no_live_workers()\n  File \"D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\phases\\P02\\t002_r2_batch.py\", line 188, in assert_no_live_workers\n    output = subprocess.check_output(['powershell', '-NoProfile', '-Command', script], text=True)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.uv-python\\manual-cpython-3.11.17\\python\\Lib\\subprocess.py\", line 466, in check_output\n    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.uv-python\\manual-cpython-3.11.17\\python\\Lib\\subprocess.py\", line 550, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.uv-python\\manual-cpython-3.11.17\\python\\Lib\\subprocess.py\", line 1196, in communicate\n    stdout = self.stdout.read()\n             ^^^^^^^^^^^^^^^^^^\n  File \"<frozen codecs>\", line 322, in decode\nUnicodeDecodeError: 'utf-8' codec can't decode byte 0xb4 in position 67: invalid start byte\n",
+  "updated_at": "2026-10-20T15:50:48.504493+00:00"
+}

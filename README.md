@@ -375,6 +375,73 @@ python -m unittest discover -s benchmark/nograph_baseline/tests
 
 ### 4.6 Graph-value skeleton (`benchmark.graph_value_skeleton`)
 
+#### Epoch checkpoints and explicit recovery
+
+Every fully trained and validated epoch publishes an object-free numeric NPZ
+generation under `<run>/checkpoints/`, then atomically publishes `latest.json`
+with schema, filename, SHA256, size, completed epoch and previous generation.
+The latest two committed generations are retained. The payload contains current
+and selected parameters, Adam slots and counters, Python/NumPy/CPU torch RNG,
+history, selection and cumulative training/validation time. No pickle is loaded.
+Flushed writes and bounded Windows sharing retries preserve the previous pointer
+on publication failure; arbitrary hardware power-loss durability is not promised.
+
+Resume an unfinished run explicitly into a **fresh** run ID, repeating its original
+data/method/model/shuffle/purpose options and adding:
+
+```bash
+python -m benchmark.graph_value_skeleton run --data-name r0 --method graph \
+    --model-seed 0 --run-id gvs-r0-graph-s0-recovered \
+    --resume-from scratch/graph-value-skeleton/gvs-r0-graph-s0-a/checkpoints
+```
+
+Source bytes, runtime, protocol, input identities, graph, masks and ordered chunks
+must agree. Invalid or absent checkpoints fail explicitly. Parent evidence stays
+unchanged; the recovery input and ancestry are copied into the new run. The next
+epoch follows the committed epoch; total training remains 200 epochs. An epoch-200
+checkpoint resumes finalization without another update. Successful runs cannot
+be resumed. Branches sharing training ancestry cannot count as independent repeats.
+Old successful runs without recovery metadata remain readable by saved-only checks.
+
+`training-progress.json` reports `completed_epoch`, checkpoint digest, cumulative
+work, `last_epoch_seconds`, rolling `estimate_samples` and
+`remaining_seconds_estimate` (null before a full epoch). Its `completion` is always
+false; only terminal success artifacts establish completion. Chunk/stage updates
+help diagnose a slow first epoch but cannot recover partial epoch gradients.
+Downtime is excluded from cumulative work; attempt wall time and checkpoint I/O
+are separate. ETA is provisional and excludes final checks and startup.
+
+For an authorized r2 batch, inspect a recovery plan without training:
+
+```bash
+python -B research/phases/P02/t002_r2_batch.py plan --batch p02-t002-r2-recovered \
+    --recover-from research/reports/p02-t002-r2-20261020-01
+```
+
+Use the same `--recover-from` with `prepare`, then `run --batch <new-batch>`.
+Preparation fixes the recovery ledger; execution recomputes reused completed fits,
+resumes eligible checkpoints or starts fresh replacements. OS ownership locking
+and live-worker inspection prevent duplicate controllers; stale reboot records
+alone do not block a fresh batch. Defaults pause after 24 hours per fit or 30
+minutes without stage progress; override explicitly with `--fit-timeout-seconds`
+and `--stall-timeout-seconds`. Failures pause further scheduling and preserve logs
+and committed checkpoints. Only 30 completed fits and all 51 original checks permit
+completion and optional `--push-on-success`; unmeasured methods have no batch ETA.
+
+The bounded subprocess example used for recovery verification is:
+
+```bash
+python -B -m benchmark.graph_value_skeleton.tests.checkpoint_worker \
+    scratch/graph-value-skeleton/checkpoint-demo graph interrupted --cut 37
+python -B -m benchmark.graph_value_skeleton.tests.checkpoint_worker \
+    scratch/graph-value-skeleton/checkpoint-demo graph recovered \
+    --resume scratch/graph-value-skeleton/checkpoint-demo/runs/interrupted/checkpoints
+```
+
+The first command deliberately exits 73 after publishing epoch 37; the second
+completes epoch 38 through 200. These commands use tiny synthetic Parquet fixtures
+and never execute a formal research run.
+
 `benchmark/graph_value_skeleton/` is an independent CPU entry that implements
 the frozen P02-T001 temporal skeleton on the unchanged `P1-count-L6-H3-v3`
 protocol and `P01-records-v2` policy. It reuses the P01 demand identity, main
@@ -493,6 +560,99 @@ conda run -n job-sdf-baseline python -m unittest discover -s benchmark/graph_val
 # the existing graph-free entry keeps its own no-torch-compatible suite
 conda run -n job-sdf-baseline python -m unittest discover -s benchmark/nograph_baseline/tests -v
 ```
+
+### Prepared shuffled controls (P02 execution repair)
+
+`dds-v2` retains exactly `10*E_ctx` accepted directed swaps and tests a finite
+`500*E_ctx` proposal ceiling. Buffers of 4096 uniform ordered edge-index pairs are
+consumed sequentially against the current graph; unused prefetched pairs are not
+attempts. Accept this candidate only after all nine published conditions and
+independent regenerations pass. A larger ceiling does not guarantee completion
+or uniform mixing. Checkers retain the `dds-v1` `10E/100E` contract and reject
+unknown versions or inconsistent saved budgets.
+
+Preparation does not initialize, fit or evaluate a model. In the local pinned
+environment use `.venv-pinned/Scripts/python.exe` in place of `python`. On Windows
+set `PYTHONUTF8=1` for subprocess diagnostic text in paths containing Chinese.
+Environment evidence requires `python -m pip freeze` to succeed. If a minimal
+virtual environment lacks pip, bootstrap its bundled copy with
+`python -m ensurepip --upgrade` before running checks. Windows peak memory uses
+`GetProcessMemoryInfo.PeakWorkingSetSize` in bytes; Linux/macOS retain their
+native `resource.getrusage` measurements. Both cover the worker process lifetime.
+On Windows, `prepare-shuffle` imports the recorded PyTorch runtime before the
+pandas/Arrow data modules to avoid a reproduced `c10.dll` initialization failure
+in this pinned environment. It still creates no model and performs no training.
+
+```bash
+# Always use fresh IDs and report paths.
+python -m benchmark.graph_value_skeleton prepare-shuffle \
+    --data-name r2 --shuffle-seed 0 --run-id r2-shuffle0-prepared
+python -m benchmark.graph_value_skeleton check-shuffle \
+    --artifact-dir scratch/graph-value-skeleton/r2-shuffle0-prepared \
+    --report scratch/graph-value-skeleton/reports/r2-shuffle0-checked.json
+
+# Reuse the graph; this model invocation still independently trains 200 epochs.
+python -m benchmark.graph_value_skeleton run \
+    --data-name r2 --method shuffled --shuffle-seed 0 --model-seed 0 \
+    --shuffle-artifact scratch/graph-value-skeleton/r2-shuffle0-prepared \
+    --purpose development --run-id r2-shuffle0-s0-prepared-run
+
+# Graph-only readiness: r2/seed0 first, all nine conditions independently
+# regenerated. This command never schedules a model or formal experiment.
+python -m benchmark.graph_value_skeleton.readiness --run-id shuffled-readiness-v2
+
+# Small fixture alternative to the published preparation command:
+python -c "from pathlib import Path; from benchmark.graph_value_skeleton.tests.fixtures import build_fixture; build_fixture(Path('scratch/graph-value-skeleton/example-fixture'), 'r0')"
+python -m benchmark.graph_value_skeleton prepare-shuffle \
+    --data-name r0 --shuffle-seed 0 --run-id fixture-prepared \
+    --demand-path scratch/graph-value-skeleton/example-fixture/r0-demand.parquet \
+    --graph-path scratch/graph-value-skeleton/example-fixture/r0-graph.parquet
+```
+
+Prepared directories contain canonical int64 node/source/result arrays, complete
+shuffle audits, generator source/runtime provenance, measurements, checksums and
+terminal status. Saved-only `check-shuffle` leaves inputs unchanged and writes
+one fresh external report. It checks canonical identity, all directed degrees,
+no duplicate/self/cross-context edge, changed edges, context counters and hashes.
+It cannot prove the provenance of a forged artifact; independent regeneration
+provides separate reproducibility evidence.
+
+`--shuffle-artifact` is shuffled-only. A mismatched source/node/seed/generator
+source/runtime/version, damaged file or non-success status fails before training
+without fallback generation. Paths, reuse flags and read timing are execution
+metadata. Model runs retain complete graph arrays and audits for recomputation
+without the external preparation directory. Nine prepared graphs can serve 54
+independently trained shuffled runs; three separate MAEs are still averaged for
+each model seed and repetition.
+
+`progress.json` (`shuffle-progress.json` in a model run) records context boundaries
+and snapshots at most 100,000 consumed proposals apart. Exhaustion retains
+`shuffle-failure.json` with prior-context audits and the failing context's target,
+limit, accepted/attempted/rejection counts, identities, reason and elapsed time.
+Interrupted/unfinished artifacts cannot be reused. Partial chains are diagnostic
+recovery points and are not automatically resumed.
+
+On Windows, JSON/text publication retries only sharing/access-denied replacement
+errors (WinError 5/32/33), using the same flushed temporary file for at most eight
+attempts and 1.05 seconds of backoff. Recovery is recorded as
+`atomic_replace_recovered`; persistent denial raises and preserves the previous
+checkpoint and temporary bytes. This does not retry graph computation.
+
+The readiness driver pauses at the first failed check or regeneration mismatch,
+after 10 minutes per graph or 60 seconds without observable progress, preserving
+logs and a paused manifest. These are operational watchdogs, not scientific/RNG
+settings. The bounded r2/context12 membership comparison found the tuple/set
+backend faster than compact boolean adjacency, so the default stays tuple/set.
+The comparison script and measurements accompany the change. Generation and
+reuse-read costs are recorded separately; graph costs do not establish training
+speed or predictive quality. Formal execution follows independent verification,
+archive and research-side acceptance/cost confirmation.
+
+Prepared `measurements.json` retains one `context_timings` record per context
+from swap progress elapsed time (zero swap work for empty contexts). These wall
+clock measurements stay outside deterministic graph identity. Saved checks also
+require consistent generator source hashes and recorded Python/package metadata;
+they validate those saved records without reading the original sources.
 
 ## 5 Directory Structure
 

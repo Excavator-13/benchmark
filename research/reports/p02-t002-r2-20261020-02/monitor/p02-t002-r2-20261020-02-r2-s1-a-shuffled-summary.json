@@ -1,0 +1,23 @@
+{
+  "child_pid": 33620,
+  "command": [
+    "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+    "-B",
+    "-m",
+    "benchmark.graph_value_skeleton",
+    "summarize-shuffled",
+    "--run-dirs",
+    "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled0-s1-a",
+    "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled1-s1-a",
+    "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\runs\\p02-t002-r2-20261020-02-r2-shuffled2-s1-a",
+    "--report",
+    "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\scratch\\graph-value-skeleton\\p02-t002-r2-20261020-02\\checks\\p02-t002-r2-20261020-02-r2-s1-a-shuffled-summary.json"
+  ],
+  "cwd": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01",
+  "elapsed_seconds": 15.031000000002678,
+  "exit_code": 0,
+  "finished_at": "2026-10-21T15:36:13.244994+00:00",
+  "log": "scratch/graph-value-skeleton/p02-t002-r2-20261020-02/logs/p02-t002-r2-20261020-02-r2-s1-a-shuffled-summary.log",
+  "name": "p02-t002-r2-20261020-02-r2-s1-a-shuffled-summary",
+  "started_at": "2026-10-21T15:35:58.205386+00:00"
+}

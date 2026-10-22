@@ -1,0 +1,2 @@
+{"event": "run_reserved", "run_id": "p02-t002-20261019-01-cost-r2-shuffled0-s0-cost", "run_type": "run", "time": "2026-10-19T20:43:27+08:00"}
+{"error_type": "ShuffleError", "event": "run_failed", "run_id": "p02-t002-20261019-01-cost-r2-shuffled0-s0-cost", "stage": "shuffle", "time": "2026-10-19T20:46:54+08:00"}

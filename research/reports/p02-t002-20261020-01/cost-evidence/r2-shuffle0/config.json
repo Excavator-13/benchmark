@@ -1,0 +1,142 @@
+{
+  "change": "add-graph-value-skeleton",
+  "computational": {
+    "adam": {
+      "amsgrad": false,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "lr": 0.001,
+      "weight_decay": 0.0
+    },
+    "batch_rule": "one epoch covers the 19 training windows and all nodes/horizons with equal element weighting; chunks follow ascending window then ascending context with complete per-context adjacency; one optimizer step per epoch after global mean-loss gradient accumulation",
+    "data_name": "r2",
+    "early_stopping": false,
+    "epochs": 200,
+    "gradient_clipping": null,
+    "hidden_dim": 32,
+    "horizon": 3,
+    "input_length": 6,
+    "loss": "mean_squared_error_on_raw_counts",
+    "masks_scope": "train27 activity/constant; published-graph nonself coverage",
+    "method": "shuffled",
+    "mode": "count",
+    "model": "single-layer unidirectional bias-enabled GRU(1,32) shared across nodes; zero hidden state per node per window; shared Linear(32,3) head; graph and shuffled branches add the unweighted mean of distinct incoming neighbour hidden states before the head; no graph-specific trainable tensor",
+    "model_seed": 0,
+    "n_windows": 28,
+    "naive_methods": [
+      "Zero",
+      "LastValue",
+      "WindowMean6",
+      "TrainMean27",
+      "SeasonalNaive12"
+    ],
+    "parameter_counts": {
+      "gru": 3360,
+      "head": 99,
+      "total": 3459
+    },
+    "preprocessing": "none: raw counts feed the encoder and the loss",
+    "records_policy": "P01-records-v2",
+    "scheduler": null,
+    "scientific_protocol_version": "P1-count-L6-H3-v3",
+    "selection_metric": "validation MSE (original units)",
+    "shuffle": {
+      "accept_target_factor": 10,
+      "algorithm": "context-local-directed-double-edge-swap",
+      "attempt_limit_factor": 500,
+      "proposal_batch_size": 4096,
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "version": "dds-v2"
+    },
+    "shuffle_seed": 0,
+    "skeleton_version": "P02-skeleton-v1",
+    "splits": {
+      "test": [
+        24,
+        25,
+        26,
+        27
+      ],
+      "train": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "validation": [
+        21
+      ]
+    },
+    "tie_break": "earliest epoch"
+  },
+  "design_decision": "D023",
+  "evidence_role": "development (not scientific acceptance)",
+  "model_definition": "single-layer unidirectional bias-enabled GRU(1,32) shared across nodes; zero hidden state per node per window; shared Linear(32,3) head; graph and shuffled branches add the unweighted mean of distinct incoming neighbour hidden states before the head; no graph-specific trainable tensor",
+  "parameter_counts_expected": {
+    "gru": 3360,
+    "head": 99,
+    "total": 3459
+  },
+  "protocol_version": "P1-count-L6-H3-v3",
+  "records_policy": "P01-records-v2",
+  "seed_profile": {
+    "development": true,
+    "final": true
+  },
+  "skeleton_version": "P02-skeleton-v1",
+  "spec": {
+    "command": [
+      "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+      "research/reports/p02-t002-20261020-01/diagnose_training_cost.py",
+      "--run-id",
+      "p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic",
+      "--output-root",
+      "scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs",
+      "--deadline-utc",
+      "2026-10-20T10:23:51+00:00",
+      "--dataset",
+      "r2",
+      "--method",
+      "shuffled",
+      "--shuffle-artifact",
+      "scratch/graph-value-skeleton/repair-shuffle-v2-20261020-06/graphs/r2-shuffle0-a"
+    ],
+    "data_name": "r2",
+    "demand_path": null,
+    "graph_path": null,
+    "launcher_cwd": "C:/Users/Lenovo/Documents/大创参考论文/JODBSDFres/benchmark",
+    "method": "shuffled",
+    "model_seed": 0,
+    "output_root": "C:/Users/Lenovo/Documents/大创参考论文/JODBSDFres/benchmark/scratch/graph-value-skeleton/p02-t002-20261020-01/cost-runs",
+    "published": true,
+    "purpose": "development",
+    "repo_root": "C:/Users/Lenovo/Documents/大创参考论文/JODBSDFres/benchmark",
+    "run_id": "p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic",
+    "run_type": "run",
+    "shuffle_artifact": "C:/Users/Lenovo/Documents/大创参考论文/JODBSDFres/benchmark/scratch/graph-value-skeleton/repair-shuffle-v2-20261020-06/graphs/r2-shuffle0-a",
+    "shuffle_seed": 0
+  },
+  "task": "P02-T001"
+}

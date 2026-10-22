@@ -181,6 +181,8 @@ class RunConfig:
     repo_root: str
     demand_path: Optional[str] = None
     graph_path: Optional[str] = None
+    shuffle_artifact: Optional[str] = None
+    resume_from: Optional[str] = None
     published: bool = True
     command: Sequence[str] = field(default_factory=tuple)
     launcher_cwd: Optional[str] = None
@@ -191,6 +193,8 @@ class RunConfig:
         protocol.validate_method(self.method)
         protocol.validate_model_seed(self.model_seed)
         protocol.validate_shuffle_seed(self.method, self.shuffle_seed)
+        if self.shuffle_artifact is not None and self.method != protocol.METHOD_SHUFFLED:
+            raise ConfigError('shuffle artifact is permitted only for shuffled')
         protocol.validate_purpose(self.purpose)
         validate_run_destination(Path(self.output_root), self.run_id)
 
@@ -284,6 +288,7 @@ def computational_identity(
             "version": protocol.SHUFFLE_VERSION,
             "accept_target_factor": protocol.SHUFFLE_ACCEPT_FACTOR,
             "attempt_limit_factor": protocol.SHUFFLE_ATTEMPT_LIMIT_FACTOR,
+            "proposal_batch_size": protocol.SHUFFLE_PROPOSAL_BATCH,
             "seeds": list(protocol.SHUFFLE_SEEDS),
         },
         "parameter_counts": dict(protocol.PARAMETER_COUNTS),
@@ -321,6 +326,8 @@ def resolve_config(
     output_root: Optional[Path] = None,
     demand_path: Optional[str] = None,
     graph_path: Optional[str] = None,
+    shuffle_artifact: Optional[str] = None,
+    resume_from: Optional[str] = None,
     command: Sequence[str] = (),
     launcher_cwd: Optional[Path] = None,
 ) -> RunConfig:
@@ -334,6 +341,7 @@ def resolve_config(
     base = Path(launcher_cwd) if launcher_cwd is not None else Path.cwd()
     resolved_demand = _resolve_input_path(demand_path, base)
     resolved_graph = _resolve_input_path(graph_path, base)
+    resolved_artifact = _resolve_input_path(shuffle_artifact, base)
     published = resolved_demand is None or (
         resolved_demand.resolve() == p01.demand_path(data_name).resolve()
     )
@@ -352,6 +360,8 @@ def resolve_config(
             resolved_demand.as_posix() if resolved_demand is not None else None
         ),
         graph_path=resolved_graph.as_posix() if resolved_graph is not None else None,
+        shuffle_artifact=resolved_artifact.as_posix() if resolved_artifact is not None else None,
+        resume_from=_resolve_input_path(resume_from, base).resolve().as_posix() if resume_from else None,
         published=bool(published),
         command=tuple(command),
         launcher_cwd=(Path(launcher_cwd).as_posix() if launcher_cwd is not None else None),

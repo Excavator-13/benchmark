@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+    "-m",
+    "benchmark.graph_value_skeleton",
+    "run",
+    "--data-name",
+    "region",
+    "--method",
+    "shuffled",
+    "--model-seed",
+    "1",
+    "--purpose",
+    "formal",
+    "--run-id",
+    "p02-t002-region-20261022-01-region-shuffled2-s1-a",
+    "--shuffle-seed",
+    "2",
+    "--shuffle-artifact",
+    "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\scratch\\graph-value-skeleton\\repair-shuffle-v2-20261020-06\\graphs\\region-shuffle2-a"
+  ],
+  "cwd": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01",
+  "launcher_cwd": "D:/research-runs/JODBSDFres/benchmark-r2-20261020-01",
+  "module": "benchmark.graph_value_skeleton",
+  "python": "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+  "replayable": true
+}

@@ -1,0 +1,11 @@
+{
+  "basis": "User requested region and r0 after reviewing region 3-5h rough projection from completed r2.",
+  "created_at": "2026-10-21T16:14:38.547531+00:00",
+  "deadline_utc": null,
+  "epochs": 200,
+  "estimate_kind": "Unmeasured dataset; calibrate from actual epochs",
+  "estimated_seconds": null,
+  "scientific_configuration_changed": false,
+  "scope": "r0: 30 fits x 200 epochs and 51 checks; sequential CPU, unchanged science",
+  "status": "accepted"
+}

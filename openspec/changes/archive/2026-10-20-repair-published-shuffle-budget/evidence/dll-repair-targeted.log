@@ -1,0 +1,49 @@
+test_cached_and_fresh_fit_independently_and_recompute_without_artifact (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_cached_and_fresh_fit_independently_and_recompute_without_artifact) ... ok
+test_corruption_with_recomputed_checksums (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_corruption_with_recomputed_checksums) ... ok
+test_failure_and_interruption_retain_evidence (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_failure_and_interruption_retain_evidence) ... ok
+test_legacy_audit_contract_unchanged_and_unknown_rejected (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_legacy_audit_contract_unchanged_and_unknown_rejected) ... ok
+test_legacy_saved_run_recomputes_under_current_defaults (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_legacy_saved_run_recomputes_under_current_defaults) ... ok
+test_mismatch_fails_before_training_without_fallback (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_mismatch_fails_before_training_without_fallback) ... ok
+test_prepare_and_saved_only_check (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_prepare_and_saved_only_check) ... ok
+test_prepare_cli_and_unsafe_destination (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_prepare_cli_and_unsafe_destination) ... ok
+test_prepare_in_fresh_cli_process (benchmark.graph_value_skeleton.tests.test_prepared.PreparedTest.test_prepare_in_fresh_cli_process) ... ok
+test_cleanup_failure_preserves_original_error_and_pause (benchmark.graph_value_skeleton.tests.test_readiness.ReadinessTest.test_cleanup_failure_preserves_original_error_and_pause) ... ok
+test_elapsed_and_idle_watchdogs (benchmark.graph_value_skeleton.tests.test_readiness.ReadinessTest.test_elapsed_and_idle_watchdogs) ... ok
+test_failed_worker_and_matrix_pause (benchmark.graph_value_skeleton.tests.test_readiness.ReadinessTest.test_failed_worker_and_matrix_pause) ... ok
+test_watchdog_retains_timeout_when_termination_fails (benchmark.graph_value_skeleton.tests.test_readiness.ReadinessTest.test_watchdog_retains_timeout_when_termination_fails) ... ok
+test_development_destination_whitelist (benchmark.graph_value_skeleton.tests.test_config_cli.AxisValidationTest.test_development_destination_whitelist) ... ERROR
+test_formal_resolution_is_path_only (benchmark.graph_value_skeleton.tests.test_config_cli.AxisValidationTest.test_formal_resolution_is_path_only) ... ok
+test_implementation_root_override_cannot_rebase_protected_trees (benchmark.graph_value_skeleton.tests.test_config_cli.AxisValidationTest.test_implementation_root_override_cannot_rebase_protected_trees) ... ERROR
+test_interleaved_methods_do_not_mutate_module_globals (benchmark.graph_value_skeleton.tests.test_config_cli.AxisValidationTest.test_interleaved_methods_do_not_mutate_module_globals) ... ok
+test_method_and_seed_axes (benchmark.graph_value_skeleton.tests.test_config_cli.AxisValidationTest.test_method_and_seed_axes) ... ok
+test_purpose_does_not_change_computation (benchmark.graph_value_skeleton.tests.test_config_cli.AxisValidationTest.test_purpose_does_not_change_computation) ... ok
+test_run_id_cannot_escape (benchmark.graph_value_skeleton.tests.test_config_cli.AxisValidationTest.test_run_id_cannot_escape) ... ok
+test_cli_passes_every_axis_to_the_worker (benchmark.graph_value_skeleton.tests.test_config_cli.CliSurfaceTest.test_cli_passes_every_axis_to_the_worker) ... ok
+test_help_surface (benchmark.graph_value_skeleton.tests.test_config_cli.CliSurfaceTest.test_help_surface) ... ok
+test_invalid_axes_return_nonzero_before_training (benchmark.graph_value_skeleton.tests.test_config_cli.CliSurfaceTest.test_invalid_axes_return_nonzero_before_training) ... ok
+test_worker_spec_round_trips_through_launch (benchmark.graph_value_skeleton.tests.test_config_cli.CliSurfaceTest.test_worker_spec_round_trips_through_launch) ... ok
+
+======================================================================
+ERROR: test_development_destination_whitelist (benchmark.graph_value_skeleton.tests.test_config_cli.AxisValidationTest.test_development_destination_whitelist)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\大创参考论文\JODBSDFres\benchmark\benchmark\graph_value_skeleton\tests\test_config_cli.py", line 104, in test_development_destination_whitelist
+    link.symlink_to(protocol.REPO_ROOT / "research", target_is_directory=True)
+  File "C:\Users\Lenovo\Documents\大创参考论文\JODBSDFres\benchmark\.uv-python\manual-cpython-3.11.17\python\Lib\pathlib.py", line 1198, in symlink_to
+    os.symlink(target, self, target_is_directory)
+OSError: [WinError 1314] 客户端没有所需的特权。: 'C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\research' -> 'C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\scratch\\gvs-link-19052'
+
+======================================================================
+ERROR: test_implementation_root_override_cannot_rebase_protected_trees (benchmark.graph_value_skeleton.tests.test_config_cli.AxisValidationTest.test_implementation_root_override_cannot_rebase_protected_trees)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\Documents\大创参考论文\JODBSDFres\benchmark\benchmark\graph_value_skeleton\tests\test_config_cli.py", line 166, in test_implementation_root_override_cannot_rebase_protected_trees
+    link.symlink_to(protocol.REPO_ROOT / "research", target_is_directory=True)
+  File "C:\Users\Lenovo\Documents\大创参考论文\JODBSDFres\benchmark\.uv-python\manual-cpython-3.11.17\python\Lib\pathlib.py", line 1198, in symlink_to
+    os.symlink(target, self, target_is_directory)
+OSError: [WinError 1314] 客户端没有所需的特权。: 'C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\research' -> 'C:\\Users\\Lenovo\\AppData\\Local\\Temp\\gvs-root-link-i0253ao6\\research-link'
+
+----------------------------------------------------------------------
+Ran 24 tests in 77.129s
+
+FAILED (errors=2)

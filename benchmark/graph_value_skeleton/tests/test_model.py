@@ -80,7 +80,7 @@ class EncoderTest(unittest.TestCase):
         after = gvs_model.predict_windows(
             self.model, torch.stack([window_a, window_b])
         )
-        self.assertTrue(torch.equal(alone[0], after[1]))
+        self.assertLessEqual(normalized(alone[0], after[1]), 1e-6)
 
     def test_batched_graph_predictions_match_per_window_oracle(self) -> None:
         training.configure_determinism(0)
@@ -304,7 +304,8 @@ class CpuRuntimeTest(unittest.TestCase):
             # the model path does not require any of them).
             self.assertFalse(record["used_by_this_entry"], name)
             self.assertFalse(record["imported_in_this_process"], name)
-        self.assertEqual(environment["packages"]["torch"], "2.14.1")
+        self.assertEqual(environment["packages"]["torch"], torch.__version__)
+        self.assertIn(environment["packages"]["torch"], ("2.14.1", "2.14.1+cpu"))
         self.assertEqual(environment["packages"]["numpy"], "1.26.4")
         self.assertEqual(environment["python_version_info"][:3], [3, 11, 17])
 

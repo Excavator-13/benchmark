@@ -1,0 +1,18 @@
+{
+  "torch": "2.14.1+cpu",
+  "cuda": null,
+  "same_shape_state_reset_exact": true,
+  "same_shape_repeat_exact": true,
+  "cross_batch_max_absolute_difference": 2.9802322387695312e-08,
+  "cross_batch_max_normalized_difference": 2.9802322387695312e-08,
+  "tolerance": 1e-06,
+  "status": "ok",
+  "original_tests": {
+    "total": 57,
+    "passed": 55,
+    "failed": [
+      "CPU version suffix assertion",
+      "cross-batch bitwise equality assertion"
+    ]
+  }
+}

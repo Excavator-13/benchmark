@@ -1,0 +1,5 @@
+# Preserve recorded evidence bytes and their content hashes across platforms.
+openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/** -text whitespace=cr-at-eol
+research/reports/p02-t002-20261020-01/** -text whitespace=cr-at-eol
+research/reports/p02-t002-20261020-01/cost-evidence/** -whitespace
+research/reports/p02-t002-r2-20261020-01/** -text whitespace=cr-at-eol

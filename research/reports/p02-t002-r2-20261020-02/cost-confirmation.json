@@ -1,0 +1,13 @@
+{
+  "basis": "User authorized r2 after reviewing 11.90h shuffled/rough 20h all-r2 forecast and removed the old deadline.",
+  "created_at": "2026-10-20T15:49:37.508783+00:00",
+  "deadline_utc": null,
+  "epochs": 200,
+  "estimate_kind": "short-sample extrapolation; self/graph unmeasured",
+  "estimated_seconds": 72000,
+  "historical_cost": "research/reports/p02-t002-20261020-01/cost-decision.json",
+  "historical_cost_sha256": "89276299b8ae3e5e57d4a1a83748b3fec9dd315181ffad255430cc94b665fe54",
+  "scientific_configuration_changed": false,
+  "scope": "r2 only, 30 complete fits and 51 saved-result checks",
+  "status": "accepted"
+}

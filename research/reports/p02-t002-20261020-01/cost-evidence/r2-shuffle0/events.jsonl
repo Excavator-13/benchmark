@@ -1,0 +1,2 @@
+{"event": "run_reserved", "run_id": "p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic", "run_type": "run", "time": "2026-10-20T14:10:23+08:00"}
+{"event": "run_interrupted", "run_id": "p02-t002-20261020-01-cost-r2-shuffled0-s0-diagnostic", "stage": "training", "time": "2026-10-20T14:11:40+08:00"}
