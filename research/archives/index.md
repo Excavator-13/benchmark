@@ -294,6 +294,8 @@ region/r0 产物：[组合报告](../reports/p02-t002-remaining-20261022-01/repo
 
 对象：T003 的 §6.2 门槛判定、失败诊断及可复核脚本/输出。判定与诊断内容、材料限制只在其[报告](../reports/p02-t003-20261022-01/report.md)叙述；研究接受见 [D032](../decisions.md#d032-p02-t003-门槛未通过与诊断验收)，任务状态见 [P02 计划](../phases/P02/plan.md)。
 
+2026-10-22 后续：90 份正式 run 权重与训练历史入库后，T003 的诊断由[正式 run 材料核验](../analyses/p02-t003-formal-artifacts-20261022-01/report.md)复核（输出上限、MAE 地板与训练历史）。
+
 存储：报告、`gate.py`/`gate.json` 与 `diagnose.py`/`diagnose.json` 随 2026-10-22 文档提交入库，并于同日推送至 `origin/xzs`，提交身份从 Git 历史追溯；输入为已在 Git 中的 153 份 T002 checks 与 90 个 run summary。完整预测、模型权重与逐 epoch 训练历史仍按原执行报告留在 Windows D 根，本机未核验。未封存、未做异地备份或恢复核验；本页不记录该提交自身哈希，也不追加仅重述该提交的后续提交。
 
 ## P02-T003 上游论文数值核查（2026-10-22）
@@ -301,3 +303,11 @@ region/r0 产物：[组合报告](../reports/p02-t002-remaining-20261022-01/repo
 对象：缓存的 Job-SDF 论文表格解析与 GNN 附录表核查。内容、数字与边界只在[分析报告](../analyses/p02-t003-upstream-paper-tables-20261022-01/report.md)叙述；同目录含 [extract_tables.py](../analyses/p02-t003-upstream-paper-tables-20261022-01/extract_tables.py) 与 [tables.json](../analyses/p02-t003-upstream-paper-tables-20261022-01/tables.json)。
 
 存储：论文 PDF 位于 `references/literature/Job-SDF-NeurIPS2024.pdf`，ignored、不随 Git 同步，本记录只以 PDF SHA256（`80db643…`，见 report 与 tables.json）定位。分析报告、脚本与解析结果随 2026-10-22 文档提交入库并推送至 `origin/xzs`，提交身份从 Git 历史追溯。未封存、未做备份或恢复核验。
+
+## P02-T002 模型与训练历史补充材料（2026-10-22）
+
+对象：分支 `upload-t002-models-history-20261022`（commit `cbcff4061e8d4b18c32edb631089846d9188681e`）上传的 T002 补充材料。入库决定见 [D034](../decisions.md#d034-t002-模型与训练历史入库)，逐文件核验见[正式 run 材料核验](../analyses/p02-t003-formal-artifacts-20261022-01/report.md)。
+
+已核对：90 个正式 run 的 `models/selected.npz` 与 `training-history.json` 共 180 文件，SHA256 与三组 checks 的 `input_sha256_after` 全部一致（90/90 run）；上传范围的来源哈希见 [upload-scope.json](../reports/t002-upload-20261022-01/upload-scope.json)。同批导入旧中断批次 `p02-t002-r2-20261020-01`（9 文件，含 report 与 prepare 失败记录）和 7 个最终回执：`publication.json` 由 `publishing` 变为 `pushed`（r2 `815f1cc`、r0 `3060af1`），`queue.json` 变为 `complete_and_pushed`，controller/queue 日志补全。收尾报告描述的当时快照不改写，这是后续补充。与 `upload-scope.json` 的 `source_paths` 对比：4 个回执逐字节一致；`queue.json` 仅差 CRLF→LF 归一化；两个 stdout 日志是比 scope 计算时更完整的版本（scope 在日志仍写入时生成），所以字节不同。未导入 106 个仅 CRLF/LF 差异的文件（其中含 `.gitattributes` 保护的归档证据），归档字节保持不变。
+
+存储：180 个 artifacts 与上述补充材料随 2026-10-22 文档提交入库并推送至 `origin/xzs`；`.gitignore` 只增加匹配 `p02-t002-*` 的一次性例外。完整预测、checkpoint、源码捕获仍在 Windows D 根，未核验异地备份；未封存。

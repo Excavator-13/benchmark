@@ -1,0 +1,15 @@
+{
+  "command": [
+    "C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.venv-pinned\\Scripts\\python.exe",
+    "research/phases/P02/t002_r2_batch.py",
+    "run",
+    "--batch",
+    "p02-t002-r2-20261020-01",
+    "--push-on-success"
+  ],
+  "controller_sha256": "43d30774d0d2520838a8b9652f63d3e4b0228802c43ca9fd94afae7bfae0f1f2",
+  "pid": 4076,
+  "push_on_success": true,
+  "root": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01",
+  "started_at": "2026-10-20T11:08:54.515129+00:00"
+}

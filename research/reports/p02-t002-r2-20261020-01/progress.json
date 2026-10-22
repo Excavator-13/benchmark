@@ -1,0 +1,18 @@
+{
+  "active": null,
+  "batch": "p02-t002-r2-20261020-01",
+  "completed": [],
+  "completed_fit_worker_wall_seconds": 0,
+  "completed_verified_fits": 0,
+  "error": "AssertionError: p02-t002-r2-20261020-01-r2-shuffled0-s0-a: exit 4294967295, see D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\scratch\\graph-value-skeleton\\p02-t002-r2-20261020-01\\logs\\p02-t002-r2-20261020-01-r2-shuffled0-s0-a.log",
+  "estimated_finish_utc": "2026-10-21T09:06:17.980248+00:00",
+  "forecast_limitations": "Excludes remaining checks/startup; unmeasured methods use shuffled estimate or 2400s/fit.",
+  "pid": 4076,
+  "remaining_training_seconds_estimate": 72000.0,
+  "root": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01",
+  "status": "paused",
+  "task": "P02-T002",
+  "total_fits": 30,
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\phases\\P02\\t002_r2_batch.py\", line 359, in main\n    controller.run()\n  File \"D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\phases\\P02\\t002_r2_batch.py\", line 262, in run\n    monitor = self.invoke(args, rid, training=True)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\phases\\P02\\t002_r2_batch.py\", line 227, in invoke\n    assert child.returncode == 0, f'{name}: exit {child.returncode}, see {log}'\n           ^^^^^^^^^^^^^^^^^^^^^\nAssertionError: p02-t002-r2-20261020-01-r2-shuffled0-s0-a: exit 4294967295, see D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\scratch\\graph-value-skeleton\\p02-t002-r2-20261020-01\\logs\\p02-t002-r2-20261020-01-r2-shuffled0-s0-a.log\n",
+  "updated_at": "2026-10-20T13:06:17.980248+00:00"
+}

@@ -1,0 +1,3 @@
+832f52a1eecd2deea3757fceb72d1b7121d7bfa0370960bca0954e88fb68883d  research/analyses/p02-t003-formal-artifacts-20261022-01/verify_artifacts.py
+# Inputs: 180 artifacts (90 runs) + 90 recompute checks; artifact SHA256 values are
+# recorded in the checks and re-verified by this script (verification.json).
