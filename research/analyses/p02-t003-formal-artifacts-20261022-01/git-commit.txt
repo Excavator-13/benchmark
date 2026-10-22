@@ -1,2 +1,2 @@
-7fc10b10bbcc7acd85dce612fcd831c9acf30b60
-2026-10-22 execution base for the formal-artifact verification; analysis files uncommitted at run time
+cfa2158e349b59f839e38abde28299d5b96f9529
+2026-10-22 post-import verification run (artifacts committed in the previous commit); analysis files uncommitted at run time

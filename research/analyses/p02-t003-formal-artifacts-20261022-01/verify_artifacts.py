@@ -153,6 +153,16 @@ def main() -> int:
 
         history = json.loads(history_path.read_text(encoding="utf-8"))
         arrays = load_npz(weights_path)
+        bound_rows = arrays["head.weight"]
+        row_count, column_count = bound_rows[0]
+        head_l1 = [
+            sum(abs(value) for value in bound_rows[1][row * column_count : (row + 1) * column_count])
+            for row in range(row_count)
+        ]
+        summary_match = re.search(
+            r"Total: ([0-9.]+) s", (run_dir / "summary.md").read_text(encoding="utf-8")
+        )
+        total_seconds = float(summary_match.group(1)) if summary_match else None
         method = history["method"]
         factor = 2.0 if method in ("graph", "shuffled") else 1.0
         bound_self = head_bound(arrays)
@@ -211,6 +221,8 @@ def main() -> int:
                 "selected_epoch": history["selected_epoch"],
                 "selected_validation_mse": selected_mse,
                 "check_validation_mse": validation_mse,
+                "head_l1": head_l1,
+                "total_seconds": total_seconds,
             }
         )
 
@@ -250,6 +262,42 @@ def main() -> int:
                 ),
             }
 
+    head_l1_values = [value for item in per_run for value in item["head_l1"]]
+    init_l1 = 2.9  # expectation for nn.Linear(U(-1/sqrt(32), 1/sqrt(32))): 32*0.0884 + 0.0884
+    mean_l1 = mean(head_l1_values)
+    movement_per_element_step = (mean_l1 - init_l1) / 200 / 32
+    step_budget: dict[str, Any] = {
+        "init_l1_expected": init_l1,
+        "observed_l1_min": min(head_l1_values),
+        "observed_l1_mean": mean_l1,
+        "observed_l1_max": max(head_l1_values),
+        "movement_per_element_step": movement_per_element_step,
+        "movement_fraction_of_lr_1e3": movement_per_element_step / 1e-3,
+        "note": "initial L1 is the expectation of PyTorch default Linear init; observed growth approximates Adam's step-size ceiling",
+        "datasets": {},
+    }
+    for dataset in BATCHES:
+        subset = [item for item in per_run if item["dataset"] == dataset and item["method"] == "self"]
+        if not subset:
+            continue
+        target = subset[0]["zero_test_mae"]
+        required_l1 = target
+        required_steps_1e3 = (required_l1 - init_l1) / 32 / movement_per_element_step
+        seconds_per_step = mean(
+            item["total_seconds"] for item in subset if item["total_seconds"]
+        ) / 200
+        step_budget["datasets"][dataset] = {
+            "target_mean": target,
+            "required_l1": required_l1,
+            "required_steps_lr_1e-3": required_steps_1e3,
+            "required_steps_lr_1e-2": required_steps_1e3 / 10,
+            "seconds_per_step": seconds_per_step,
+            "hours_for_30_runs_lr_1e-3": required_steps_1e3
+            * seconds_per_step
+            * 30
+            / 3600,
+        }
+
     payload = {
         "generated": datetime.now(timezone.utc).isoformat(),
         "script": "verify_artifacts.py",
@@ -275,6 +323,7 @@ def main() -> int:
             "problems": history_problems,
         },
         "aggregates": groups,
+        "step_budget": step_budget,
         "runs": per_run,
         "method": {
             "bound": "max_h(sum_i |head.weight[h,i]| + |head.bias[h]|), doubled for graph/shuffled (|h|<=1, |h+mean(h_u)|<=2)",
@@ -300,6 +349,22 @@ def main() -> int:
             f"obs {values['test_mae_min']:.2f}-{values['test_mae_max']:.2f} "
             f"maxgain {100 * values['max_gain_over_zero']:.2f}% "
             f"val {values['validation_mae_first_min']:.1f}->{values['validation_mae_last_max']:.1f}"
+        )
+    sb = payload["step_budget"]
+    print(
+        "head L1 init %.2f -> observed %.2f (mean), movement/element/step %.2e (%.0f%% of lr 1e-3)"
+        % (
+            sb["init_l1_expected"],
+            sb["observed_l1_mean"],
+            sb["movement_per_element_step"],
+            100 * sb["movement_fraction_of_lr_1e3"],
+        )
+    )
+    for dataset, values in sb["datasets"].items():
+        print(
+            f"{dataset:7s} target {values['target_mean']:.1f} steps(lr1e-3) {values['required_steps_lr_1e-3']:.0f} "
+            f"steps(lr1e-2) {values['required_steps_lr_1e-2']:.0f} "
+            f"30-run hours {values['hours_for_30_runs_lr_1e-3']:.1f}"
         )
     return 0
 
