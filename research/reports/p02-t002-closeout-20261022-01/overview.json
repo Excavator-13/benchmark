@@ -1,0 +1,300 @@
+{
+  "scope": "descriptive overview requested after T002 acceptance; not a complete T003 diagnosis",
+  "aggregation": "seeds 0/1/2, repeat a; b retained separately, not treated as extra seeds; shuffled is mean of three graph MAEs",
+  "datasets": {
+    "r2": {
+      "rows": [
+        {
+          "seed": 0,
+          "repeat": "a",
+          "self_MAE": 21.485703945100543,
+          "self_RMSE": 262.17909423642374,
+          "LastValue_MAE": 6.140082633283918,
+          "LastValue_RMSE": 85.59747458932326,
+          "graph_MAE": 21.69175866111,
+          "graph_RMSE": 262.16810679915284,
+          "shuffled_MAE": 21.7157408395544,
+          "graph_gain_vs_self": -0.009590317195841528,
+          "graph_gain_vs_shuffled": 0.001104368422039572
+        },
+        {
+          "seed": 0,
+          "repeat": "b",
+          "self_MAE": 21.485703945100543,
+          "self_RMSE": 262.17909423642374,
+          "LastValue_MAE": 6.140082633283918,
+          "LastValue_RMSE": 85.59747458932326,
+          "graph_MAE": 21.69175866111,
+          "graph_RMSE": 262.16810679915284,
+          "shuffled_MAE": 21.7157408395544,
+          "graph_gain_vs_self": -0.009590317195841528,
+          "graph_gain_vs_shuffled": 0.001104368422039572
+        },
+        {
+          "seed": 1,
+          "repeat": "a",
+          "self_MAE": 21.438323193344015,
+          "self_RMSE": 262.1311416763614,
+          "LastValue_MAE": 6.140082633283918,
+          "LastValue_RMSE": 85.59747458932326,
+          "graph_MAE": 21.655893772742424,
+          "graph_RMSE": 262.1214326416597,
+          "shuffled_MAE": 21.68113887105899,
+          "graph_gain_vs_self": -0.01014867522222811,
+          "graph_gain_vs_shuffled": 0.0011643806382452375
+        },
+        {
+          "seed": 1,
+          "repeat": "b",
+          "self_MAE": 21.438323193344015,
+          "self_RMSE": 262.1311416763614,
+          "LastValue_MAE": 6.140082633283918,
+          "LastValue_RMSE": 85.59747458932326,
+          "graph_MAE": 21.655893772742424,
+          "graph_RMSE": 262.1214326416597,
+          "shuffled_MAE": 21.68113887105899,
+          "graph_gain_vs_self": -0.01014867522222811,
+          "graph_gain_vs_shuffled": 0.0011643806382452375
+        },
+        {
+          "seed": 2,
+          "repeat": "a",
+          "self_MAE": 21.41908443460122,
+          "self_RMSE": 262.1346942293501,
+          "LastValue_MAE": 6.140082633283918,
+          "LastValue_RMSE": 85.59747458932326,
+          "graph_MAE": 21.624986402486638,
+          "graph_RMSE": 262.1224704444224,
+          "shuffled_MAE": 21.650035065634,
+          "graph_gain_vs_self": -0.009613014436452521,
+          "graph_gain_vs_shuffled": 0.0011569802576035335
+        },
+        {
+          "seed": 2,
+          "repeat": "b",
+          "self_MAE": 21.41908443460122,
+          "self_RMSE": 262.1346942293501,
+          "LastValue_MAE": 6.140082633283918,
+          "LastValue_RMSE": 85.59747458932326,
+          "graph_MAE": 21.624986402486638,
+          "graph_RMSE": 262.1224704444224,
+          "shuffled_MAE": 21.650035065634,
+          "graph_gain_vs_self": -0.009613014436452521,
+          "graph_gain_vs_shuffled": 0.0011569802576035335
+        }
+      ],
+      "mean_over_seeds_repeat_a": {
+        "self_MAE": 21.447703857681926,
+        "self_RMSE": 262.1483100473784,
+        "LastValue_MAE": 6.140082633283918,
+        "LastValue_RMSE": 85.59747458932326,
+        "graph_MAE": 21.657546278779687,
+        "graph_RMSE": 262.1373366284116,
+        "shuffled_MAE": 21.682304925415796
+      },
+      "median_paired_gain_repeat_a": {
+        "self": -0.009613014436452521,
+        "shuffled": 0.0011569802576035335
+      },
+      "selected_epoch_counts_all_30_fits": {
+        "200": 30
+      }
+    },
+    "region": {
+      "rows": [
+        {
+          "seed": 0,
+          "repeat": "a",
+          "self_MAE": 162.74114001327592,
+          "self_RMSE": 888.1624579380657,
+          "LastValue_MAE": 35.30985010706638,
+          "LastValue_RMSE": 193.84685312799166,
+          "graph_MAE": 163.16358617266297,
+          "graph_RMSE": 888.1030745284445,
+          "shuffled_MAE": 163.20475693948157,
+          "graph_gain_vs_self": -0.00259581664078664,
+          "graph_gain_vs_shuffled": 0.0002522645025222034
+        },
+        {
+          "seed": 0,
+          "repeat": "b",
+          "self_MAE": 162.74114001327592,
+          "self_RMSE": 888.1624579380657,
+          "LastValue_MAE": 35.30985010706638,
+          "LastValue_RMSE": 193.84685312799166,
+          "graph_MAE": 163.16358617266297,
+          "graph_RMSE": 888.1030745284445,
+          "shuffled_MAE": 163.20475693948157,
+          "graph_gain_vs_self": -0.00259581664078664,
+          "graph_gain_vs_shuffled": 0.0002522645025222034
+        },
+        {
+          "seed": 1,
+          "repeat": "a",
+          "self_MAE": 162.50075505830543,
+          "self_RMSE": 888.0515208275441,
+          "LastValue_MAE": 35.30985010706638,
+          "LastValue_RMSE": 193.84685312799166,
+          "graph_MAE": 162.88727737761113,
+          "graph_RMSE": 887.968467256225,
+          "shuffled_MAE": 162.92898501401305,
+          "graph_gain_vs_self": -0.002378587835896597,
+          "graph_gain_vs_shuffled": 0.00025598659684976626
+        },
+        {
+          "seed": 1,
+          "repeat": "b",
+          "self_MAE": 162.50075505830543,
+          "self_RMSE": 888.0515208275441,
+          "LastValue_MAE": 35.30985010706638,
+          "LastValue_RMSE": 193.84685312799166,
+          "graph_MAE": 162.88727737761113,
+          "graph_RMSE": 887.968467256225,
+          "shuffled_MAE": 162.92898501401305,
+          "graph_gain_vs_self": -0.002378587835896597,
+          "graph_gain_vs_shuffled": 0.00025598659684976626
+        },
+        {
+          "seed": 2,
+          "repeat": "a",
+          "self_MAE": 162.5158538789232,
+          "self_RMSE": 888.0630280549625,
+          "LastValue_MAE": 35.30985010706638,
+          "LastValue_RMSE": 193.84685312799166,
+          "graph_MAE": 162.92799974653934,
+          "graph_RMSE": 887.9943287836666,
+          "shuffled_MAE": 162.9682348236752,
+          "graph_gain_vs_self": -0.002536034840780529,
+          "graph_gain_vs_shuffled": 0.00024688907736770873
+        },
+        {
+          "seed": 2,
+          "repeat": "b",
+          "self_MAE": 162.5158538789232,
+          "self_RMSE": 888.0630280549625,
+          "LastValue_MAE": 35.30985010706638,
+          "LastValue_RMSE": 193.84685312799166,
+          "graph_MAE": 162.92799974653934,
+          "graph_RMSE": 887.9943287836666,
+          "shuffled_MAE": 162.9682348236752,
+          "graph_gain_vs_self": -0.002536034840780529,
+          "graph_gain_vs_shuffled": 0.00024688907736770873
+        }
+      ],
+      "mean_over_seeds_repeat_a": {
+        "self_MAE": 162.58591631683484,
+        "self_RMSE": 888.0923356068574,
+        "LastValue_MAE": 35.30985010706638,
+        "LastValue_RMSE": 193.84685312799166,
+        "graph_MAE": 162.99295443227115,
+        "graph_RMSE": 888.0219568561121,
+        "shuffled_MAE": 163.03399225905662
+      },
+      "median_paired_gain_repeat_a": {
+        "self": -0.002536034840780529,
+        "shuffled": 0.0002522645025222034
+      },
+      "selected_epoch_counts_all_30_fits": {
+        "200": 30
+      }
+    },
+    "r0": {
+      "rows": [
+        {
+          "seed": 0,
+          "repeat": "a",
+          "self_MAE": 1159.0853959510275,
+          "self_RMSE": 4769.353916397535,
+          "LastValue_MAE": 189.8750892219843,
+          "LastValue_RMSE": 925.2619140354782,
+          "graph_MAE": 1159.1088244239404,
+          "graph_RMSE": 4769.246986657672,
+          "shuffled_MAE": 1159.1081982089372,
+          "graph_gain_vs_self": -2.0212896301449868e-05,
+          "graph_gain_vs_shuffled": -5.402558658130509e-07
+        },
+        {
+          "seed": 0,
+          "repeat": "b",
+          "self_MAE": 1159.0853959510275,
+          "self_RMSE": 4769.353916397535,
+          "LastValue_MAE": 189.8750892219843,
+          "LastValue_RMSE": 925.2619140354782,
+          "graph_MAE": 1159.1088244239404,
+          "graph_RMSE": 4769.246986657672,
+          "shuffled_MAE": 1159.1081982089372,
+          "graph_gain_vs_self": -2.0212896301449868e-05,
+          "graph_gain_vs_shuffled": -5.402558658130509e-07
+        },
+        {
+          "seed": 1,
+          "repeat": "a",
+          "self_MAE": 1158.6140704198765,
+          "self_RMSE": 4769.206578647102,
+          "LastValue_MAE": 189.8750892219843,
+          "LastValue_RMSE": 925.2619140354782,
+          "graph_MAE": 1158.6659604721967,
+          "graph_RMSE": 4769.068952205268,
+          "shuffled_MAE": 1158.6655692320394,
+          "graph_gain_vs_self": -4.478631292767504e-05,
+          "graph_gain_vs_shuffled": -3.3766443720331837e-07
+        },
+        {
+          "seed": 1,
+          "repeat": "b",
+          "self_MAE": 1158.6140704198765,
+          "self_RMSE": 4769.206578647102,
+          "LastValue_MAE": 189.8750892219843,
+          "LastValue_RMSE": 925.2619140354782,
+          "graph_MAE": 1158.6659604721967,
+          "graph_RMSE": 4769.068952205268,
+          "shuffled_MAE": 1158.6655692320394,
+          "graph_gain_vs_self": -4.478631292767504e-05,
+          "graph_gain_vs_shuffled": -3.3766443720331837e-07
+        },
+        {
+          "seed": 2,
+          "repeat": "a",
+          "self_MAE": 1158.7427340760848,
+          "self_RMSE": 4769.239640178363,
+          "LastValue_MAE": 189.8750892219843,
+          "LastValue_RMSE": 925.2619140354782,
+          "graph_MAE": 1158.7291547835853,
+          "graph_RMSE": 4769.094644061948,
+          "shuffled_MAE": 1158.7287580880613,
+          "graph_gain_vs_self": 1.1718988262220768e-05,
+          "graph_gain_vs_shuffled": -3.4235408516711615e-07
+        },
+        {
+          "seed": 2,
+          "repeat": "b",
+          "self_MAE": 1158.7427340760848,
+          "self_RMSE": 4769.239640178363,
+          "LastValue_MAE": 189.8750892219843,
+          "LastValue_RMSE": 925.2619140354782,
+          "graph_MAE": 1158.7291547835853,
+          "graph_RMSE": 4769.094644061948,
+          "shuffled_MAE": 1158.7287580880613,
+          "graph_gain_vs_self": 1.1718988262220768e-05,
+          "graph_gain_vs_shuffled": -3.4235408516711615e-07
+        }
+      ],
+      "mean_over_seeds_repeat_a": {
+        "self_MAE": 1158.814066815663,
+        "self_RMSE": 4769.266711741,
+        "LastValue_MAE": 189.8750892219843,
+        "LastValue_RMSE": 925.2619140354782,
+        "graph_MAE": 1158.8346465599075,
+        "graph_RMSE": 4769.1368609749625,
+        "shuffled_MAE": 1158.834175176346
+      },
+      "median_paired_gain_repeat_a": {
+        "self": -2.0212896301449868e-05,
+        "shuffled": -3.4235408516711615e-07
+      },
+      "selected_epoch_counts_all_30_fits": {
+        "200": 30
+      }
+    }
+  }
+}
