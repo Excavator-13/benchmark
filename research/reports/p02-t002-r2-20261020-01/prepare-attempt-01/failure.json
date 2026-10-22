@@ -1,0 +1,18 @@
+{
+  "active": null,
+  "batch": "p02-t002-r2-20261020-01",
+  "completed": [],
+  "completed_fit_worker_wall_seconds": 0,
+  "completed_verified_fits": 0,
+  "error": "FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\research-runs\\\\JODBSDFres\\\\benchmark-r2-20261020-01\\\\benchmark\\\\__init__.py'",
+  "estimated_finish_utc": "2026-10-21T07:06:51.671264+00:00",
+  "forecast_limitations": "Excludes remaining checks/startup; unmeasured methods use shuffled estimate or 2400s/fit.",
+  "pid": 11584,
+  "remaining_training_seconds_estimate": 72000.0,
+  "root": "D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01",
+  "status": "paused",
+  "task": "P02-T002",
+  "total_fits": 30,
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\phases\\P02\\t002_r2_batch.py\", line 356, in main\n    prepare(saved, args.batch)\n  File \"D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\phases\\P02\\t002_r2_batch.py\", line 126, in prepare\n    'versions': versions, 'source': identities(), 'controller_sha256': digest(__file__),\n                                    ^^^^^^^^^^^^\n  File \"D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\phases\\P02\\t002_r2_batch.py\", line 61, in identities\n    return {p.relative_to(ROOT).as_posix(): digest(p) for p in sorted(files)}\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\phases\\P02\\t002_r2_batch.py\", line 61, in <dictcomp>\n    return {p.relative_to(ROOT).as_posix(): digest(p) for p in sorted(files)}\n                                            ^^^^^^^^^\n  File \"D:\\research-runs\\JODBSDFres\\benchmark-r2-20261020-01\\research\\phases\\P02\\t002_r2_batch.py\", line 45, in digest\n    return hashlib.sha256(Path(path).read_bytes()).hexdigest()\n                          ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.uv-python\\manual-cpython-3.11.17\\python\\Lib\\pathlib.py\", line 1050, in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\Documents\\大创参考论文\\JODBSDFres\\benchmark\\.uv-python\\manual-cpython-3.11.17\\python\\Lib\\pathlib.py\", line 1044, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\research-runs\\\\JODBSDFres\\\\benchmark-r2-20261020-01\\\\benchmark\\\\__init__.py'\n",
+  "updated_at": "2026-10-20T11:06:51.671264+00:00"
+}
