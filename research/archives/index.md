@@ -294,4 +294,10 @@ region/r0 产物：[组合报告](../reports/p02-t002-remaining-20261022-01/repo
 
 对象：T003 的 §6.2 门槛判定、失败诊断及可复核脚本/输出。判定与诊断内容、材料限制只在其[报告](../reports/p02-t003-20261022-01/report.md)叙述；研究接受见 [D032](../decisions.md#d032-p02-t003-门槛未通过与诊断验收)，任务状态见 [P02 计划](../phases/P02/plan.md)。
 
-存储：报告、`gate.py`/`gate.json` 与 `diagnose.py`/`diagnose.json` 随本次授权的文档提交入库，提交身份从 Git 历史追溯；输入为已在 Git 中的 153 份 T002 checks 与 90 个 run summary。完整预测、模型权重与逐 epoch 训练历史仍按原执行报告留在 Windows D 根，本机未核验。未 push、未封存、未做异地备份或恢复核验；本页不记录本提交自身哈希，也不追加仅重述该提交的后续提交。
+存储：报告、`gate.py`/`gate.json` 与 `diagnose.py`/`diagnose.json` 随 2026-10-22 文档提交入库，并于同日推送至 `origin/xzs`，提交身份从 Git 历史追溯；输入为已在 Git 中的 153 份 T002 checks 与 90 个 run summary。完整预测、模型权重与逐 epoch 训练历史仍按原执行报告留在 Windows D 根，本机未核验。未封存、未做异地备份或恢复核验；本页不记录该提交自身哈希，也不追加仅重述该提交的后续提交。
+
+## P02-T003 上游论文数值核查（2026-10-22）
+
+对象：缓存的 Job-SDF 论文表格解析与 GNN 附录表核查。内容、数字与边界只在[分析报告](../analyses/p02-t003-upstream-paper-tables-20261022-01/report.md)叙述；同目录含 [extract_tables.py](../analyses/p02-t003-upstream-paper-tables-20261022-01/extract_tables.py) 与 [tables.json](../analyses/p02-t003-upstream-paper-tables-20261022-01/tables.json)。
+
+存储：论文 PDF 位于 `references/literature/Job-SDF-NeurIPS2024.pdf`，ignored、不随 Git 同步，本记录只以 PDF SHA256（`80db643…`，见 report 与 tables.json）定位。分析报告、脚本与解析结果随 2026-10-22 文档提交入库并推送至 `origin/xzs`，提交身份从 Git 历史追溯。未封存、未做备份或恢复核验。

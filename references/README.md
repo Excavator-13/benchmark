@@ -5,5 +5,6 @@
 - [EvolveGCN-H](upstream/evolvegcn/evolvegcnh.py) / [EvolveGCN-O](upstream/evolvegcn/evolvegcno.py)：原根目录中的 PyG Temporal 参考副本，内容原样保留。当前模型使用安装的 `torch_geometric_temporal`，不导入此副本。
 - [上游结果汇总 notebook](upstream/metrics/multi_result.ipynb)：原样保留，包含旧 NeurIPS24 绝对路径及旧指标口径，不能直接作为当前协议评测工具。
 - `literature/Job-SDF-NeurIPS2024.pdf`：本机已有论文，从旧 `not_in_origin/` 移入，仍为 ignored；不随 Git 同步，其他机器可能没有此文件。
+- [上游论文数值核查](../research/analyses/p02-t003-upstream-paper-tables-20261022-01/report.md)：缓存 PDF 的表 1、6–12 解析结果与 GNN 附录表核查（std/mean 固定比例、`K=1` 与低频子集观察）。引用论文表格时先用该记录；限制见报告。
 
 旧路径与迁移范围见[整理记录](../research/archives/migrations/20261008-legacy-cleanup.md)。
