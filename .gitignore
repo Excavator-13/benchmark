@@ -33,3 +33,8 @@ __pycache__/
 #   evidence (D022).
 !/research/runs/phase1-*/**
 !/research/runs/p01-region-evolvegcnh-seed1-repeat-20261018T004254Z/**
+# - the T002 formal-comparison runs keep selected weights and per-epoch
+#   histories as verification artifacts (D034); full arrays stay external.
+!/research/runs/p02-t002-*/models/
+!/research/runs/p02-t002-*/models/selected.npz
+!/research/runs/p02-t002-*/training-history.json

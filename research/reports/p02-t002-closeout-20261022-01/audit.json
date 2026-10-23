@@ -1,0 +1,62 @@
+{
+  "scope": "delivered records; no independent metric recomputation or retraining",
+  "datasets": {
+    "r2": {
+      "batch": "p02-t002-r2-20261020-02",
+      "status": "accepted_delivery_evidence",
+      "formal_fits": 30,
+      "checks": {
+        "recompute": 30,
+        "compare": 15,
+        "summarize-shuffled": 6
+      },
+      "completed_at": "2026-10-21T15:36:58.935993+00:00",
+      "fresh_independent_runs": 30,
+      "copy_receipt_bytes": {
+        "LF_checkout_matches_recorded_CRLF": 51
+      },
+      "checker_source_bytes_vs_checkout": {
+        "LF_checkout_matches_recorded_CRLF": 21,
+        "exact": 5
+      }
+    },
+    "region": {
+      "batch": "p02-t002-region-20261022-01",
+      "status": "accepted_delivery_evidence",
+      "formal_fits": 30,
+      "checks": {
+        "recompute": 30,
+        "compare": 15,
+        "summarize-shuffled": 6
+      },
+      "completed_at": "2026-10-21T19:30:38.818737+00:00",
+      "fresh_independent_runs": 30,
+      "copy_receipt_bytes": {
+        "LF_checkout_matches_recorded_CRLF": 51
+      },
+      "checker_source_bytes_vs_checkout": {
+        "LF_checkout_matches_recorded_CRLF": 21,
+        "exact": 5
+      }
+    },
+    "r0": {
+      "batch": "p02-t002-r0-20261022-01",
+      "status": "accepted_delivery_evidence",
+      "formal_fits": 30,
+      "checks": {
+        "recompute": 30,
+        "compare": 15,
+        "summarize-shuffled": 6
+      },
+      "completed_at": "2026-10-21T20:29:13.435051+00:00",
+      "fresh_independent_runs": 30,
+      "copy_receipt_bytes": {
+        "LF_checkout_matches_recorded_CRLF": 51
+      },
+      "checker_source_bytes_vs_checkout": {
+        "LF_checkout_matches_recorded_CRLF": 21,
+        "exact": 5
+      }
+    }
+  }
+}

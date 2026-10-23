@@ -1,0 +1,748 @@
+{
+ "generated": "2026-10-22T04:21:46.147696+00:00",
+ "script": "diagnose.py",
+ "script_sha256": "6d88119d604c96c61ab4369bed52e8ae9e31a04c1aaf1dae11cdb03a46da77ae",
+ "protocol": "P1-count-L6-H3-v3",
+ "contract": {
+  "hidden_dim": "32",
+  "epochs": "200",
+  "learning_rate": "1e-3",
+  "loss": "mean_squared_error_on_raw_counts",
+  "preprocessing": "none: raw counts feed the encoder and the loss",
+  "no_early_stopping": "True",
+  "input_length": 6,
+  "horizon": 3,
+  "epochs_source": "benchmark/graph_value_skeleton/protocol.py",
+  "optimizer_steps_per_epoch": "one full-batch Adam step per epoch (see training.py loop)",
+  "parameter_count_expected": 3459,
+  "parameter_count_breakdown": {
+   "gru": 3360,
+   "head": 99
+  }
+ },
+ "implementation_identity": {
+  "r0": {
+   "recorded_source_commit": "815f1cc6a546ef81a4deb005dc12b5f70a8c5501",
+   "check_file": "research/reports/p02-t002-r0-20261022-01/checks/p02-t002-r0-20261022-01-r0-graph-s0-a-recompute.json",
+   "file_count": 26,
+   "raw_match_count": 5,
+   "normalized_match_count": 26,
+   "mismatches": [],
+   "raw_matches": [
+    "benchmark/graph_value_skeleton/artifacts.py",
+    "benchmark/graph_value_skeleton/checkpoints.py",
+    "benchmark/graph_value_skeleton/prepared.py",
+    "benchmark/graph_value_skeleton/readiness.py",
+    "benchmark/nograph_baseline/artifacts.py"
+   ],
+   "normalized_only_matches": [
+    "benchmark/graph_value_skeleton/__init__.py",
+    "benchmark/graph_value_skeleton/__main__.py",
+    "benchmark/graph_value_skeleton/_worker.py",
+    "benchmark/graph_value_skeleton/checks.py",
+    "benchmark/graph_value_skeleton/cli.py",
+    "benchmark/graph_value_skeleton/config.py",
+    "benchmark/graph_value_skeleton/data.py",
+    "benchmark/graph_value_skeleton/graph.py",
+    "benchmark/graph_value_skeleton/model.py",
+    "benchmark/graph_value_skeleton/protocol.py",
+    "benchmark/graph_value_skeleton/runner.py",
+    "benchmark/graph_value_skeleton/shuffle.py",
+    "benchmark/graph_value_skeleton/training.py",
+    "benchmark/nograph_baseline/__init__.py",
+    "benchmark/nograph_baseline/baselines.py",
+    "benchmark/nograph_baseline/checks.py",
+    "benchmark/nograph_baseline/coverage.py",
+    "benchmark/nograph_baseline/data.py",
+    "benchmark/nograph_baseline/metrics.py",
+    "benchmark/nograph_baseline/protocol.py",
+    "benchmark/nograph_baseline/ridge.py"
+   ]
+  },
+  "region": {
+   "recorded_source_commit": "815f1cc6a546ef81a4deb005dc12b5f70a8c5501",
+   "check_file": "research/reports/p02-t002-region-20261022-01/checks/p02-t002-region-20261022-01-region-graph-s0-a-recompute.json",
+   "file_count": 26,
+   "raw_match_count": 5,
+   "normalized_match_count": 26,
+   "mismatches": [],
+   "raw_matches": [
+    "benchmark/graph_value_skeleton/artifacts.py",
+    "benchmark/graph_value_skeleton/checkpoints.py",
+    "benchmark/graph_value_skeleton/prepared.py",
+    "benchmark/graph_value_skeleton/readiness.py",
+    "benchmark/nograph_baseline/artifacts.py"
+   ],
+   "normalized_only_matches": [
+    "benchmark/graph_value_skeleton/__init__.py",
+    "benchmark/graph_value_skeleton/__main__.py",
+    "benchmark/graph_value_skeleton/_worker.py",
+    "benchmark/graph_value_skeleton/checks.py",
+    "benchmark/graph_value_skeleton/cli.py",
+    "benchmark/graph_value_skeleton/config.py",
+    "benchmark/graph_value_skeleton/data.py",
+    "benchmark/graph_value_skeleton/graph.py",
+    "benchmark/graph_value_skeleton/model.py",
+    "benchmark/graph_value_skeleton/protocol.py",
+    "benchmark/graph_value_skeleton/runner.py",
+    "benchmark/graph_value_skeleton/shuffle.py",
+    "benchmark/graph_value_skeleton/training.py",
+    "benchmark/nograph_baseline/__init__.py",
+    "benchmark/nograph_baseline/baselines.py",
+    "benchmark/nograph_baseline/checks.py",
+    "benchmark/nograph_baseline/coverage.py",
+    "benchmark/nograph_baseline/data.py",
+    "benchmark/nograph_baseline/metrics.py",
+    "benchmark/nograph_baseline/protocol.py",
+    "benchmark/nograph_baseline/ridge.py"
+   ]
+  },
+  "r2": {
+   "recorded_source_commit": "2ca56dd68fb72ff632f9612dc1dbbc6eee66b723",
+   "check_file": "research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-graph-s0-a-recompute.json",
+   "file_count": 26,
+   "raw_match_count": 5,
+   "normalized_match_count": 26,
+   "mismatches": [],
+   "raw_matches": [
+    "benchmark/graph_value_skeleton/artifacts.py",
+    "benchmark/graph_value_skeleton/checkpoints.py",
+    "benchmark/graph_value_skeleton/prepared.py",
+    "benchmark/graph_value_skeleton/readiness.py",
+    "benchmark/nograph_baseline/artifacts.py"
+   ],
+   "normalized_only_matches": [
+    "benchmark/graph_value_skeleton/__init__.py",
+    "benchmark/graph_value_skeleton/__main__.py",
+    "benchmark/graph_value_skeleton/_worker.py",
+    "benchmark/graph_value_skeleton/checks.py",
+    "benchmark/graph_value_skeleton/cli.py",
+    "benchmark/graph_value_skeleton/config.py",
+    "benchmark/graph_value_skeleton/data.py",
+    "benchmark/graph_value_skeleton/graph.py",
+    "benchmark/graph_value_skeleton/model.py",
+    "benchmark/graph_value_skeleton/protocol.py",
+    "benchmark/graph_value_skeleton/runner.py",
+    "benchmark/graph_value_skeleton/shuffle.py",
+    "benchmark/graph_value_skeleton/training.py",
+    "benchmark/nograph_baseline/__init__.py",
+    "benchmark/nograph_baseline/baselines.py",
+    "benchmark/nograph_baseline/checks.py",
+    "benchmark/nograph_baseline/coverage.py",
+    "benchmark/nograph_baseline/data.py",
+    "benchmark/nograph_baseline/metrics.py",
+    "benchmark/nograph_baseline/protocol.py",
+    "benchmark/nograph_baseline/ridge.py"
+   ]
+  }
+ },
+ "convergence": {
+  "run_count": 90,
+  "budget_epochs": 200,
+  "selected_epoch_counts": {
+   "200": 90
+  },
+  "at_budget_end": 90,
+  "per_dataset": {
+   "r0": {
+    "run_count": 30,
+    "selected_epochs": [
+     200
+    ],
+    "at_budget_end": 30,
+    "selected_validation_mse_by_method": {
+     "self": [
+      15975064.585,
+      15975064.585,
+      15975356.258,
+      15975356.258,
+      15976315.572,
+      15976315.572
+     ],
+     "graph": [
+      15973941.706,
+      15973941.706,
+      15974158.614,
+      15974158.614,
+      15975438.2,
+      15975438.2
+     ],
+     "shuffled": [
+      15973938.924,
+      15973938.924,
+      15973940.79,
+      15973940.79,
+      15973940.895,
+      15973940.895,
+      15974155.114,
+      15974155.114,
+      15974156.79,
+      15974156.79,
+      15974157.086,
+      15974157.086,
+      15975434.456,
+      15975434.456,
+      15975435.742,
+      15975435.742,
+      15975436.063,
+      15975436.063
+     ]
+    }
+   },
+   "region": {
+    "run_count": 30,
+    "selected_epochs": [
+     200
+    ],
+    "at_budget_end": 30,
+    "selected_validation_mse_by_method": {
+     "self": [
+      558519.79,
+      558519.79,
+      558538.159,
+      558538.159,
+      558693.391,
+      558693.391
+     ],
+     "graph": [
+      558394.623,
+      558394.623,
+      558435.252,
+      558435.252,
+      558604.726,
+      558604.726
+     ],
+     "shuffled": [
+      558394.905,
+      558394.905,
+      558394.955,
+      558394.955,
+      558395.275,
+      558395.275,
+      558435.446,
+      558435.446,
+      558435.599,
+      558435.599,
+      558435.739,
+      558435.739,
+      558604.983,
+      558604.983,
+      558605.036,
+      558605.036,
+      558605.285,
+      558605.285
+     ]
+    }
+   },
+   "r2": {
+    "run_count": 30,
+    "selected_epochs": [
+     200
+    ],
+    "at_budget_end": 30,
+    "selected_validation_mse_by_method": {
+     "self": [
+      34723.727,
+      34723.727,
+      34725.388,
+      34725.388,
+      34745.737,
+      34745.737
+     ],
+     "graph": [
+      34719.2,
+      34719.2,
+      34719.828,
+      34719.828,
+      34740.729,
+      34740.729
+     ],
+     "shuffled": [
+      34719.646,
+      34719.646,
+      34719.898,
+      34719.898,
+      34719.939,
+      34719.939,
+      34720.313,
+      34720.313,
+      34720.441,
+      34720.441,
+      34720.504,
+      34720.504,
+      34741.168,
+      34741.168,
+      34741.28,
+      34741.28,
+      34741.333,
+      34741.333
+     ]
+    }
+   }
+  }
+ },
+ "scale_and_signal": {
+  "r0": {
+   "seed_mean": {
+    "graph_MAE": 1158.8346465599075,
+    "graph_RMSE": 4769.1368609749625,
+    "self_MAE": 1158.814066815663,
+    "self_RMSE": 4769.266711740999,
+    "control_MAE": 1158.834175176346,
+    "LastValue_MAE": 189.87508922198427,
+    "LastValue_RMSE": 925.2619140354782,
+    "WindowMean6_MAE": 195.23165092554572,
+    "Zero_MAE": 1165.3715917201998,
+    "Zero_RMSE": 4771.307777530486,
+    "graph_over_Zero_MAE": 0.9943906774399373,
+    "graph_over_Zero_RMSE": 0.9995450059696951,
+    "graph_over_LastValue_MAE": 6.10314207781678,
+    "graph_over_LastValue_RMSE": 5.154364173679903,
+    "graph_minus_self_relative": 1.7759315177340082e-05,
+    "graph_minus_control_relative": 4.067739557453196e-07,
+    "graph_minus_Zero_relative": -0.005609322560062757
+   },
+   "negative_prediction_ratio_seed0": {
+    "graph": 0.0,
+    "LastValue": 0.0,
+    "Zero": 0.0
+   },
+   "group_rows": {
+    "inactive": {
+     "Zero": 0.15432098765432098,
+     "graph": 8.269399526187913,
+     "self": 0.5986238137853367,
+     "LastValue": 0.2716049382716049,
+     "WindowMean6": 0.31481481187137555,
+     "graph_over_zero": 53.58570892969768,
+     "graph_over_lastvalue": 30.446425528237317,
+     "graph_error_contribution_fraction": 8.25148563408327e-05,
+     "nodes": 27
+    },
+    "low": {
+     "Zero": 1.542042042042042,
+     "graph": 9.384901809501457,
+     "self": 1.9506246099263445,
+     "LastValue": 2.6073573573573574,
+     "WindowMean6": 1.9662162094480464,
+     "graph_over_zero": 6.086022010835414,
+     "graph_over_lastvalue": 3.5993922286944833,
+     "graph_error_contribution_fraction": 0.00038498772154036483,
+     "nodes": 111
+    },
+    "medium": {
+     "Zero": 2.340439276485788,
+     "graph": 8.270425322341262,
+     "self": 3.041766980310788,
+     "LastValue": 2.8430232558139537,
+     "WindowMean6": 2.514211888826941,
+     "graph_over_zero": 3.5337064308540644,
+     "graph_over_lastvalue": 2.9090248577560267,
+     "graph_error_contribution_fraction": 0.0003942864583629482,
+     "nodes": 129
+    },
+    "high": {
+     "Zero": 1315.6022324306898,
+     "graph": 1307.324476287592,
+     "self": 1308.1265840906378,
+     "LastValue": 214.0690683430045,
+     "WindowMean6": 220.17157716553257,
+     "graph_over_zero": 0.993708009959968,
+     "graph_over_lastvalue": 6.10702184302898,
+     "graph_error_contribution_fraction": 0.9991382109637558,
+     "nodes": 2068
+    }
+   },
+   "neighbor_rows": {
+    "no_nonself_neighbor": {
+     "nodes": 2021,
+     "graph": 1266.6773538353275,
+     "self": 1265.8927878243046,
+     "LastValue": 203.9527873989774,
+     "Zero": 1272.3603001814283
+    },
+    "has_nonself_neighbor": {
+     "nodes": 314,
+     "graph": 464.72601151651975,
+     "self": 469.6226809606799,
+     "LastValue": 99.26671974522293,
+     "Zero": 476.75955414012736
+    },
+    "coverage_fraction": 0.13447537473233404
+   },
+   "horizon_rows": {
+    "h1": {
+     "Zero": 1153.2184154175588,
+     "graph": 1146.8308831638305,
+     "self": 1146.8202810330693,
+     "LastValue": 170.75802997858673
+    },
+    "h2": {
+     "Zero": 1191.0493576017132,
+     "graph": 1184.5691040816434,
+     "self": 1184.5594444164972,
+     "LastValue": 250.64614561027838
+    },
+    "h3": {
+     "Zero": 1151.8470021413277,
+     "graph": 1145.1039524342484,
+     "self": 1145.0624749974222,
+     "LastValue": 148.2210920770878
+    }
+   },
+   "window_MAE_seed0": [
+    {
+     "start": 24,
+     "forecast_origin": "2023-06",
+     "graph": 1175.3865460597303,
+     "elements": 7005
+    },
+    {
+     "start": 25,
+     "forecast_origin": "2023-07",
+     "graph": 1140.9041863679035,
+     "elements": 7005
+    },
+    {
+     "start": 26,
+     "forecast_origin": "2023-08",
+     "graph": 1141.8255031133021,
+     "elements": 7005
+    },
+    {
+     "start": 27,
+     "forecast_origin": "2023-09",
+     "graph": 1178.3190621548258,
+     "elements": 7005
+    }
+   ],
+   "seed_spread": {
+    "graph_MAE": {
+     "0": 1159.1088244239404,
+     "1": 1158.6659604721967,
+     "2": 1158.7291547835853
+    },
+    "self_MAE": {
+     "0": 1159.0853959510275,
+     "1": 1158.6140704198765,
+     "2": 1158.7427340760848
+    },
+    "control_MAE": {
+     "0": 1159.1081982089372,
+     "1": 1158.6655692320394,
+     "2": 1158.7287580880613
+    }
+   }
+  },
+  "region": {
+   "seed_mean": {
+    "graph_MAE": 162.99295443227115,
+    "graph_RMSE": 888.0219568561121,
+    "self_MAE": 162.58591631683484,
+    "self_RMSE": 888.0923356068574,
+    "control_MAE": 163.03399225905662,
+    "LastValue_MAE": 35.30985010706638,
+    "LastValue_RMSE": 193.8468531279917,
+    "WindowMean6_MAE": 34.56717060093185,
+    "Zero_MAE": 166.48165596002855,
+    "Zero_RMSE": 889.6334918329939,
+    "graph_over_Zero_MAE": 0.9790445289143747,
+    "graph_over_Zero_RMSE": 0.9981885405712847,
+    "graph_over_LastValue_MAE": 4.61607607899905,
+    "graph_over_LastValue_RMSE": 4.5810491247426945,
+    "graph_minus_self_relative": 0.0025035262872529704,
+    "graph_minus_control_relative": -0.0002517133158357653,
+    "graph_minus_Zero_relative": -0.020955471085625312
+   },
+   "negative_prediction_ratio_seed0": {
+    "graph": 0.0,
+    "LastValue": 0.0,
+    "Zero": 0.0
+   },
+   "group_rows": {
+    "inactive": {
+     "Zero": 0.114529280948851,
+     "graph": 1.2735866172824166,
+     "self": 0.29414215787494064,
+     "LastValue": 0.23610081541882877,
+     "WindowMean6": 0.16798451585473764,
+     "graph_over_zero": 11.120183473876894,
+     "graph_over_lastvalue": 5.394249126260534,
+     "graph_error_contribution_fraction": 0.0006448853690695358,
+     "nodes": 1349
+    },
+    "low": {
+     "Zero": 0.6500577700751011,
+     "graph": 2.512647422042835,
+     "self": 1.0037250775056548,
+     "LastValue": 0.8860196418255345,
+     "WindowMean6": 0.8270749091081954,
+     "graph_over_zero": 3.865267884964361,
+     "graph_over_lastvalue": 2.8358823026381605,
+     "graph_error_contribution_fraction": 0.002720950708281849,
+     "nodes": 2885
+    },
+    "medium": {
+     "Zero": 2.9554668868097598,
+     "graph": 5.059222348953345,
+     "self": 3.1996770336677165,
+     "LastValue": 3.2453219592735274,
+     "WindowMean6": 2.933406714722446,
+     "graph_over_zero": 1.7118183159258662,
+     "graph_over_lastvalue": 1.5589277157838182,
+     "graph_error_contribution_fraction": 0.0034505324532317382,
+     "nodes": 1817
+    },
+    "high": {
+     "Zero": 263.6237290330937,
+     "graph": 257.0390690720921,
+     "self": 257.27224056818676,
+     "LastValue": 55.213530535587076,
+     "WindowMean6": 54.11479320447982,
+     "graph_over_zero": 0.9750225065658827,
+     "graph_over_lastvalue": 4.655363759186189,
+     "graph_error_contribution_fraction": 0.9931836314694169,
+     "nodes": 10294
+    }
+   },
+   "neighbor_rows": {
+    "no_nonself_neighbor": {
+     "nodes": 14160,
+     "graph": 178.143810493306,
+     "self": 177.73371935878902,
+     "LastValue": 37.53123822975518,
+     "Zero": 181.59962335216574
+    },
+    "has_nonself_neighbor": {
+     "nodes": 2185,
+     "graph": 64.80708632048474,
+     "self": 64.41983344540644,
+     "LastValue": 20.9140350877193,
+     "Zero": 68.50892448512586
+    },
+    "coverage_fraction": 0.1336800244723157
+   },
+   "horizon_rows": {
+    "h1": {
+     "Zero": 164.74548791679413,
+     "graph": 161.28074766667666,
+     "self": 160.8714959681906,
+     "LastValue": 31.353869684918937
+    },
+    "h2": {
+     "Zero": 170.14990822881614,
+     "graph": 166.63834090176962,
+     "self": 166.2733725911562,
+     "LastValue": 42.40010706638115
+    },
+    "h3": {
+     "Zero": 164.54957173447536,
+     "graph": 161.0597747283672,
+     "self": 160.61288039115774,
+     "LastValue": 32.17557356989905
+    }
+   },
+   "window_MAE_seed0": [
+    {
+     "start": 24,
+     "forecast_origin": "2023-06",
+     "graph": 165.37977686367523,
+     "elements": 49035
+    },
+    {
+     "start": 25,
+     "forecast_origin": "2023-07",
+     "graph": 160.54280548345255,
+     "elements": 49035
+    },
+    {
+     "start": 26,
+     "forecast_origin": "2023-08",
+     "graph": 160.7426893550078,
+     "elements": 49035
+    },
+    {
+     "start": 27,
+     "forecast_origin": "2023-09",
+     "graph": 165.98907298851637,
+     "elements": 49035
+    }
+   ],
+   "seed_spread": {
+    "graph_MAE": {
+     "0": 163.16358617266297,
+     "1": 162.88727737761113,
+     "2": 162.92799974653934
+    },
+    "self_MAE": {
+     "0": 162.74114001327592,
+     "1": 162.50075505830543,
+     "2": 162.5158538789232
+    },
+    "control_MAE": {
+     "0": 163.20475693948157,
+     "1": 162.92898501401305,
+     "2": 162.9682348236752
+    }
+   }
+  },
+  "r2": {
+   "seed_mean": {
+    "graph_MAE": 21.657546278779687,
+    "graph_RMSE": 262.1373366284117,
+    "self_MAE": 21.447703857681926,
+    "self_RMSE": 262.1483100473784,
+    "control_MAE": 21.682304925415796,
+    "LastValue_MAE": 6.140082633283918,
+    "LastValue_RMSE": 85.59747458932326,
+    "WindowMean6_MAE": 6.135035984391212,
+    "Zero_MAE": 22.410992148465382,
+    "Zero_RMSE": 262.8224644799934,
+    "graph_over_Zero_MAE": 0.9663805214559728,
+    "graph_over_Zero_RMSE": 0.9973931914346161,
+    "graph_over_LastValue_MAE": 3.527240197286485,
+    "graph_over_LastValue_RMSE": 3.0624424130044203,
+    "graph_minus_self_relative": 0.00978391078551758,
+    "graph_minus_control_relative": -0.0011418825960281852,
+    "graph_minus_Zero_relative": -0.033619478544027255
+   },
+   "negative_prediction_ratio_seed0": {
+    "graph": 0.36577032888596056,
+    "LastValue": 0.0,
+    "Zero": 0.0
+   },
+   "group_rows": {
+    "inactive": {
+     "Zero": 0.028695555924511593,
+     "graph": 0.23812685803722514,
+     "self": 0.0860209221984981,
+     "LastValue": 0.04359676794509934,
+     "WindowMean6": 0.038019638860170187,
+     "graph_over_zero": 8.298388038330996,
+     "graph_over_lastvalue": 5.462030082989046,
+     "graph_error_contribution_fraction": 0.004908445734459158,
+     "nodes": 54207
+    },
+    "low": {
+     "Zero": 0.4326536793776304,
+     "graph": 1.0189139600957249,
+     "self": 0.6350516481389005,
+     "LastValue": 0.5848504655018493,
+     "WindowMean6": 0.5606046930830545,
+     "graph_over_zero": 2.3550336184854044,
+     "graph_over_lastvalue": 1.7421785912770265,
+     "graph_error_contribution_fraction": 0.012152562825272594,
+     "nodes": 31364
+    },
+    "medium": {
+     "Zero": 2.2067032932335575,
+     "graph": 2.856934501985894,
+     "self": 2.35359343527631,
+     "LastValue": 2.3625240756528054,
+     "WindowMean6": 2.144330249282457,
+     "graph_over_zero": 1.2946618200761963,
+     "graph_over_lastvalue": 1.2092721218921227,
+     "graph_error_contribution_fraction": 0.01146943832212867,
+     "nodes": 10557
+    },
+    "high": {
+     "Zero": 106.06995294954926,
+     "graph": 101.00558483290757,
+     "self": 101.01030446313796,
+     "LastValue": 27.672037271337445,
+     "WindowMean6": 27.780904579533296,
+     "graph_over_zero": 0.9522544511823203,
+     "graph_over_lastvalue": 3.650095720907714,
+     "graph_error_contribution_fraction": 0.9714695531181397,
+     "nodes": 25292
+    }
+   },
+   "neighbor_rows": {
+    "no_nonself_neighbor": {
+     "nodes": 111227,
+     "graph": 22.232672964705888,
+     "self": 22.189301179878655,
+     "LastValue": 6.212654451407182,
+     "Zero": 23.137608973840283
+    },
+    "has_nonself_neighbor": {
+     "nodes": 10193,
+     "graph": 15.381708361040666,
+     "self": 13.355322286409937,
+     "LastValue": 5.348171948068935,
+     "Zero": 14.482079204682952
+    },
+    "coverage_fraction": 0.08394827870202602
+   },
+   "horizon_rows": {
+    "h1": {
+     "Zero": 22.177277219568442,
+     "graph": 21.398642720423638,
+     "self": 21.19929199464205,
+     "LastValue": 5.439923406358095
+    },
+    "h2": {
+     "Zero": 22.90479533849448,
+     "graph": 22.147677217911905,
+     "self": 21.94295853181138,
+     "LastValue": 6.935803409652446
+    },
+    "h3": {
+     "Zero": 22.150903887333225,
+     "graph": 21.42631889800352,
+     "self": 21.200861046592347,
+     "LastValue": 6.044521083841214
+    }
+   },
+   "window_MAE_seed0": [
+    {
+     "start": 24,
+     "forecast_origin": "2023-06",
+     "graph": 21.967781930540905,
+     "elements": 364260
+    },
+    {
+     "start": 25,
+     "forecast_origin": "2023-07",
+     "graph": 21.3379705469562,
+     "elements": 364260
+    },
+    {
+     "start": 26,
+     "forecast_origin": "2023-08",
+     "graph": 21.381794735226006,
+     "elements": 364260
+    },
+    {
+     "start": 27,
+     "forecast_origin": "2023-09",
+     "graph": 22.079487431716895,
+     "elements": 364260
+    }
+   ],
+   "seed_spread": {
+    "graph_MAE": {
+     "0": 21.69175866111,
+     "1": 21.655893772742424,
+     "2": 21.624986402486638
+    },
+    "self_MAE": {
+     "0": 21.485703945100543,
+     "1": 21.438323193344015,
+     "2": 21.41908443460122
+    },
+    "control_MAE": {
+     "0": 21.7157408395544,
+     "1": 21.68113887105899,
+     "2": 21.650035065634
+    }
+   }
+  }
+ },
+ "inputs": {
+  "r0": "research/reports/p02-t002-r0-20261022-01",
+  "region": "research/reports/p02-t002-region-20261022-01",
+  "r2": "research/reports/p02-t002-r2-20261020-02"
+ },
+ "scope_note": "只读已交付 checks 与 run summary；预测数组、模型权重与训练历史仍在 Windows D 执行根，未在本机核验，故不对预测分布作直接统计。"
+}

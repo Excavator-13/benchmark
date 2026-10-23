@@ -1,1 +1,475 @@
 2026-10-20T16:22:51.996653+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s0-a
+2026-10-20T17:00:39.299986+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s0-a (2269.4s)
+2026-10-20T17:00:39.406434+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s0-a-recompute
+2026-10-20T17:00:54.458697+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s0-a-recompute (15.0s)
+2026-10-20T17:00:54.592754+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s0-b
+2026-10-20T17:34:58.448148+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s0-b (2043.8s)
+2026-10-20T17:34:58.549139+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s0-b-recompute
+2026-10-20T17:35:13.584380+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s0-b-recompute (15.0s)
+2026-10-20T17:35:13.706609+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s0-repeat
+2026-10-20T17:35:28.749883+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s0-repeat (15.0s)
+2026-10-20T17:35:28.879891+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s0-a
+2026-10-20T18:09:32.713415+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s0-a (2043.8s)
+2026-10-20T18:09:32.815548+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s0-a-recompute
+2026-10-20T18:09:47.861723+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s0-a-recompute (15.0s)
+2026-10-20T18:09:47.992837+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s0-b
+2026-10-20T18:43:52.010166+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s0-b (2044.0s)
+2026-10-20T18:43:52.107169+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s0-b-recompute
+2026-10-20T18:44:07.141035+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s0-b-recompute (15.0s)
+2026-10-20T18:44:07.266553+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s0-repeat
+2026-10-20T18:44:22.300281+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s0-repeat (15.0s)
+2026-10-20T18:44:22.430721+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s0-a
+2026-10-20T19:18:26.315539+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s0-a (2043.9s)
+2026-10-20T19:18:26.408522+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s0-a-recompute
+2026-10-20T19:18:41.438087+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s0-a-recompute (15.0s)
+2026-10-20T19:18:41.584084+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s0-b
+2026-10-20T19:52:45.310520+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s0-b (2043.7s)
+2026-10-20T19:52:45.411373+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s0-b-recompute
+2026-10-20T19:53:00.454624+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s0-b-recompute (15.0s)
+2026-10-20T19:53:00.576475+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s0-repeat
+2026-10-20T19:53:15.604344+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s0-repeat (15.0s)
+2026-10-20T19:53:15.753345+00:00 START p02-t002-r2-20261020-02-r2-self-s0-a
+2026-10-20T20:23:04.093379+00:00 DONE p02-t002-r2-20261020-02-r2-self-s0-a (1788.3s)
+2026-10-20T20:23:04.197393+00:00 START p02-t002-r2-20261020-02-r2-self-s0-a-recompute
+2026-10-20T20:23:19.229470+00:00 DONE p02-t002-r2-20261020-02-r2-self-s0-a-recompute (15.0s)
+2026-10-20T20:23:19.376255+00:00 START p02-t002-r2-20261020-02-r2-self-s0-b
+2026-10-20T20:53:07.852179+00:00 DONE p02-t002-r2-20261020-02-r2-self-s0-b (1788.5s)
+2026-10-20T20:53:07.952920+00:00 START p02-t002-r2-20261020-02-r2-self-s0-b-recompute
+2026-10-20T20:53:22.979165+00:00 DONE p02-t002-r2-20261020-02-r2-self-s0-b-recompute (15.0s)
+2026-10-20T20:53:23.104557+00:00 START p02-t002-r2-20261020-02-r2-self-s0-repeat
+2026-10-20T20:53:38.140914+00:00 DONE p02-t002-r2-20261020-02-r2-self-s0-repeat (15.0s)
+2026-10-20T20:53:38.269856+00:00 START p02-t002-r2-20261020-02-r2-graph-s0-a
+2026-10-20T21:27:42.328952+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s0-a (2044.0s)
+2026-10-20T21:27:42.390934+00:00 START p02-t002-r2-20261020-02-r2-graph-s0-a-recompute
+2026-10-20T21:27:57.427195+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s0-a-recompute (15.0s)
+2026-10-20T21:27:57.586746+00:00 START p02-t002-r2-20261020-02-r2-graph-s0-b
+2026-10-20T22:02:02.932401+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s0-b (2045.3s)
+2026-10-20T22:02:03.000344+00:00 START p02-t002-r2-20261020-02-r2-graph-s0-b-recompute
+2026-10-20T22:02:18.041561+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s0-b-recompute (15.0s)
+2026-10-20T22:02:18.167311+00:00 START p02-t002-r2-20261020-02-r2-graph-s0-repeat
+2026-10-20T22:02:33.210191+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s0-repeat (15.0s)
+2026-10-20T22:02:33.347043+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s1-a
+2026-10-20T22:36:38.008489+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s1-a (2044.6s)
+2026-10-20T22:36:38.073483+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s1-a-recompute
+2026-10-20T22:36:53.111865+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s1-a-recompute (15.0s)
+2026-10-20T22:36:53.259687+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s1-b
+2026-10-20T23:10:57.361106+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s1-b (2044.1s)
+2026-10-20T23:10:57.425970+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s1-b-recompute
+2026-10-20T23:11:12.456590+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s1-b-recompute (15.0s)
+2026-10-20T23:11:12.575280+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s1-repeat
+2026-10-20T23:11:27.616764+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s1-repeat (15.0s)
+2026-10-20T23:11:27.741116+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s1-a
+2026-10-20T23:45:31.890378+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s1-a (2044.1s)
+2026-10-20T23:45:31.954528+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s1-a-recompute
+2026-10-20T23:45:46.989200+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s1-a-recompute (15.0s)
+2026-10-20T23:45:47.115748+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s1-b
+2026-10-21T00:20:10.087514+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s1-b (2063.0s)
+2026-10-21T00:20:10.150524+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s1-b-recompute
+2026-10-21T00:20:25.196304+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s1-b-recompute (15.0s)
+2026-10-21T00:20:25.333654+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s1-repeat
+2026-10-21T00:20:40.363463+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s1-repeat (15.0s)
+2026-10-21T00:20:40.502272+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s1-a
+2026-10-21T00:54:44.366209+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s1-a (2043.9s)
+2026-10-21T00:54:44.425056+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s1-a-recompute
+2026-10-21T00:54:59.452883+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s1-a-recompute (15.0s)
+2026-10-21T00:54:59.573953+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s1-b
+2026-10-21T01:29:03.585385+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s1-b (2044.0s)
+2026-10-21T01:29:03.657232+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s1-b-recompute
+2026-10-21T01:29:18.700241+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s1-b-recompute (15.0s)
+2026-10-21T01:29:18.839239+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s1-repeat
+2026-10-21T01:29:33.888357+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s1-repeat (15.0s)
+2026-10-21T01:29:33.996860+00:00 START p02-t002-r2-20261020-02-r2-self-s1-a
+2026-10-21T01:59:22.614973+00:00 DONE p02-t002-r2-20261020-02-r2-self-s1-a (1788.6s)
+2026-10-21T01:59:22.679434+00:00 START p02-t002-r2-20261020-02-r2-self-s1-a-recompute
+2026-10-21T01:59:37.715610+00:00 DONE p02-t002-r2-20261020-02-r2-self-s1-a-recompute (15.0s)
+2026-10-21T01:59:37.854680+00:00 START p02-t002-r2-20261020-02-r2-self-s1-b
+2026-10-21T02:29:26.135553+00:00 DONE p02-t002-r2-20261020-02-r2-self-s1-b (1788.3s)
+2026-10-21T02:29:26.204705+00:00 START p02-t002-r2-20261020-02-r2-self-s1-b-recompute
+2026-10-21T02:29:41.266992+00:00 DONE p02-t002-r2-20261020-02-r2-self-s1-b-recompute (15.0s)
+2026-10-21T02:29:41.368382+00:00 START p02-t002-r2-20261020-02-r2-self-s1-repeat
+2026-10-21T02:29:56.410850+00:00 DONE p02-t002-r2-20261020-02-r2-self-s1-repeat (15.0s)
+2026-10-21T02:29:56.536656+00:00 START p02-t002-r2-20261020-02-r2-graph-s1-a
+2026-10-21T03:04:00.379705+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s1-a (2043.8s)
+2026-10-21T03:04:00.447790+00:00 START p02-t002-r2-20261020-02-r2-graph-s1-a-recompute
+2026-10-21T03:04:15.493362+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s1-a-recompute (15.0s)
+2026-10-21T03:04:15.622930+00:00 START p02-t002-r2-20261020-02-r2-graph-s1-b
+2026-10-21T03:38:20.196894+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s1-b (2044.6s)
+2026-10-21T03:38:20.260984+00:00 START p02-t002-r2-20261020-02-r2-graph-s1-b-recompute
+2026-10-21T03:38:35.304233+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s1-b-recompute (15.0s)
+2026-10-21T03:38:35.438296+00:00 START p02-t002-r2-20261020-02-r2-graph-s1-repeat
+2026-10-21T03:38:50.477472+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s1-repeat (15.0s)
+2026-10-21T03:38:50.614362+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s2-a
+2026-10-21T04:12:39.550717+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s2-a (2028.9s)
+2026-10-21T04:12:39.615057+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s2-a-recompute
+2026-10-21T04:12:54.663582+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s2-a-recompute (15.0s)
+2026-10-21T04:12:54.788769+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s2-b
+2026-10-21T05:15:48.312550+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s2-b (3773.5s)
+2026-10-21T05:15:48.456542+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s2-b-recompute
+2026-10-21T05:16:03.689677+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s2-b-recompute (15.2s)
+2026-10-21T05:16:03.905609+00:00 START p02-t002-r2-20261020-02-r2-shuffled0-s2-repeat
+2026-10-21T05:16:33.969630+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled0-s2-repeat (30.0s)
+2026-10-21T05:16:34.152894+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s2-a
+2026-10-21T07:17:21.495697+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s2-a (7247.3s)
+2026-10-21T07:17:21.694137+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s2-a-recompute
+2026-10-21T07:17:36.875309+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s2-a-recompute (15.2s)
+2026-10-21T07:17:37.159858+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s2-b
+2026-10-21T09:23:25.852826+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s2-b (7548.7s)
+2026-10-21T09:23:27.233035+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s2-b-recompute
+2026-10-21T09:23:57.401491+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s2-b-recompute (30.1s)
+2026-10-21T09:23:57.644659+00:00 START p02-t002-r2-20261020-02-r2-shuffled1-s2-repeat
+2026-10-21T09:24:27.726474+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled1-s2-repeat (30.1s)
+2026-10-21T09:24:27.935602+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s2-a
+2026-10-21T11:10:30.218477+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s2-a (6362.3s)
+2026-10-21T11:10:30.346226+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s2-a-recompute
+2026-10-21T11:10:45.582922+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s2-a-recompute (15.2s)
+2026-10-21T11:10:45.720370+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s2-b
+2026-10-21T12:09:23.604601+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s2-b (3517.7s)
+2026-10-21T12:09:23.708364+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s2-b-recompute
+2026-10-21T12:09:39.023622+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s2-b-recompute (15.0s)
+2026-10-21T12:09:39.141581+00:00 START p02-t002-r2-20261020-02-r2-shuffled2-s2-repeat
+2026-10-21T12:09:54.194180+00:00 DONE p02-t002-r2-20261020-02-r2-shuffled2-s2-repeat (15.0s)
+2026-10-21T12:09:54.327125+00:00 START p02-t002-r2-20261020-02-r2-self-s2-a
+2026-10-21T12:44:01.577343+00:00 DONE p02-t002-r2-20261020-02-r2-self-s2-a (2047.2s)
+2026-10-21T12:44:01.646763+00:00 START p02-t002-r2-20261020-02-r2-self-s2-a-recompute
+2026-10-21T12:44:16.692813+00:00 DONE p02-t002-r2-20261020-02-r2-self-s2-a-recompute (15.0s)
+2026-10-21T12:44:16.873654+00:00 START p02-t002-r2-20261020-02-r2-self-s2-b
+2026-10-21T13:18:51.074471+00:00 DONE p02-t002-r2-20261020-02-r2-self-s2-b (2074.2s)
+2026-10-21T13:18:51.142063+00:00 START p02-t002-r2-20261020-02-r2-self-s2-b-recompute
+2026-10-21T13:19:06.390651+00:00 DONE p02-t002-r2-20261020-02-r2-self-s2-b-recompute (15.0s)
+2026-10-21T13:19:06.505969+00:00 START p02-t002-r2-20261020-02-r2-self-s2-repeat
+2026-10-21T13:19:21.744684+00:00 DONE p02-t002-r2-20261020-02-r2-self-s2-repeat (15.0s)
+2026-10-21T13:19:21.859537+00:00 START p02-t002-r2-20261020-02-r2-graph-s2-a
+2026-10-21T14:26:46.195430+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s2-a (4044.3s)
+2026-10-21T14:26:47.231477+00:00 START p02-t002-r2-20261020-02-r2-graph-s2-a-recompute
+2026-10-21T14:27:02.500936+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s2-a-recompute (15.2s)
+2026-10-21T14:27:02.632540+00:00 START p02-t002-r2-20261020-02-r2-graph-s2-b
+2026-10-21T15:34:57.281439+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s2-b (4074.6s)
+2026-10-21T15:34:57.389780+00:00 START p02-t002-r2-20261020-02-r2-graph-s2-b-recompute
+2026-10-21T15:35:12.602386+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s2-b-recompute (15.2s)
+2026-10-21T15:35:12.737374+00:00 START p02-t002-r2-20261020-02-r2-graph-s2-repeat
+2026-10-21T15:35:27.783911+00:00 DONE p02-t002-r2-20261020-02-r2-graph-s2-repeat (15.0s)
+2026-10-21T15:35:27.920682+00:00 START p02-t002-r2-20261020-02-r2-s0-a-shuffled-summary
+2026-10-21T15:35:42.950188+00:00 DONE p02-t002-r2-20261020-02-r2-s0-a-shuffled-summary (15.0s)
+2026-10-21T15:35:43.063668+00:00 START p02-t002-r2-20261020-02-r2-s0-b-shuffled-summary
+2026-10-21T15:35:58.094824+00:00 DONE p02-t002-r2-20261020-02-r2-s0-b-shuffled-summary (15.0s)
+2026-10-21T15:35:58.205386+00:00 START p02-t002-r2-20261020-02-r2-s1-a-shuffled-summary
+2026-10-21T15:36:13.249313+00:00 DONE p02-t002-r2-20261020-02-r2-s1-a-shuffled-summary (15.0s)
+2026-10-21T15:36:13.347394+00:00 START p02-t002-r2-20261020-02-r2-s1-b-shuffled-summary
+2026-10-21T15:36:28.376627+00:00 DONE p02-t002-r2-20261020-02-r2-s1-b-shuffled-summary (15.0s)
+2026-10-21T15:36:28.500345+00:00 START p02-t002-r2-20261020-02-r2-s2-a-shuffled-summary
+2026-10-21T15:36:43.535238+00:00 DONE p02-t002-r2-20261020-02-r2-s2-a-shuffled-summary (15.0s)
+2026-10-21T15:36:43.651266+00:00 START p02-t002-r2-20261020-02-r2-s2-b-shuffled-summary
+2026-10-21T15:36:58.696690+00:00 DONE p02-t002-r2-20261020-02-r2-s2-b-shuffled-summary (15.0s)
+[FJWP2T002 815f1cc] Complete verified r2 batch p02-t002-r2-20261020-02
+ 325 files changed, 389321 insertions(+), 26 deletions(-)
+ create mode 100644 benchmark/graph_value_skeleton/checkpoints.py
+ create mode 100644 benchmark/graph_value_skeleton/tests/checkpoint_worker.py
+ create mode 100644 benchmark/graph_value_skeleton/tests/test_batch_recovery.py
+ create mode 100644 benchmark/graph_value_skeleton/tests/test_checkpoint_repairs.py
+ create mode 100644 benchmark/graph_value_skeleton/tests/test_checkpoints.py
+ create mode 100644 openspec/changes/archive/2026-10-20-add-resumable-training-checkpoints/.openspec.yaml
+ create mode 100644 openspec/changes/archive/2026-10-20-add-resumable-training-checkpoints/design.md
+ create mode 100644 openspec/changes/archive/2026-10-20-add-resumable-training-checkpoints/implementation-notes.md
+ create mode 100644 openspec/changes/archive/2026-10-20-add-resumable-training-checkpoints/proposal.md
+ create mode 100644 openspec/changes/archive/2026-10-20-add-resumable-training-checkpoints/specs/graph-value-skeleton/spec.md
+ create mode 100644 openspec/changes/archive/2026-10-20-add-resumable-training-checkpoints/tasks.md
+ create mode 100644 openspec/changes/archive/2026-10-20-add-resumable-training-checkpoints/verification.md
+ create mode 100644 research/phases/P02/t002_r2_batch.py
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-graph-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-graph-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-graph-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-graph-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-graph-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-graph-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-graph-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-graph-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-graph-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-s0-a-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-s0-b-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-s1-a-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-s1-b-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-s2-a-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-s2-b-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-self-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-self-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-self-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-self-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-self-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-self-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-self-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-self-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-self-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled0-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled0-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled0-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled0-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled0-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled0-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled0-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled0-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled0-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled1-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled1-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled1-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled1-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled1-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled1-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled1-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled1-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled1-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled2-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled2-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled2-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled2-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled2-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled2-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled2-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled2-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/check-copies/p02-t002-r2-20261020-02-r2-shuffled2-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-graph-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-graph-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-graph-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-graph-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-graph-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-graph-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-graph-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-graph-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-graph-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-s0-a-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-s0-b-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-s1-a-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-s1-b-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-s2-a-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-s2-b-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-self-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-self-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-self-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-self-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-self-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-self-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-self-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-self-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-self-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled0-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled0-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled0-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled0-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled0-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled0-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled0-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled0-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled0-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled1-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled1-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled1-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled1-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled1-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled1-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled1-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled1-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled1-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled2-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled2-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled2-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled2-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled2-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled2-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled2-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled2-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/checks/p02-t002-r2-20261020-02-r2-shuffled2-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/completion.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/controller-utf8-bom.stderr.log
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/controller-utf8-bom.stdout.log
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/controller-utf8.stderr.log
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/controller-utf8.stdout.log
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/controller.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/controller.stderr.log
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/controller.stdout.log
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/cost-confirmation.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/effective-runs.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/launch-utf8-bom.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/launch-utf8-bom.ps1
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/launch-utf8.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/launch-utf8.ps1
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/launch.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/manifest.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s0-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s0-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s1-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s1-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s2-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s2-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-graph-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-s0-a-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-s0-b-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-s1-a-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-s1-b-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-s2-a-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-s2-b-shuffled-summary.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s0-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s0-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s1-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s1-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s2-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s2-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-self-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s0-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s0-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s1-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s1-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s2-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s2-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled0-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s0-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s0-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s1-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s1-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s2-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s2-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled1-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s0-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s0-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s0-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s0-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s0-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s1-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s1-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s1-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s1-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s1-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s2-a-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s2-a.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s2-b-recompute.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s2-b.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/monitor/p02-t002-r2-20261020-02-r2-shuffled2-s2-repeat.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/preflight.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/progress.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/publication.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/recovery-plan.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/report.md
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/result.md
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/rollout.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/startup-encoding-failure.json
+ create mode 100644 research/reports/p02-t002-r2-20261020-02/timings.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s0-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s0-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s0-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s0-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s0-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s0-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s1-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s1-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s1-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s1-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s1-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s1-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s2-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s2-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s2-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s2-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s2-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-graph-s2-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s0-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s0-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s0-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s0-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s0-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s0-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s1-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s1-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s1-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s1-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s1-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s1-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s2-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s2-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s2-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s2-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s2-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-self-s2-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s0-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s0-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s0-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s0-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s0-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s0-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s1-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s1-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s1-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s1-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s1-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s1-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s2-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s2-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s2-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s2-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s2-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s2-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s0-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s0-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s0-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s0-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s0-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s0-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s1-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s1-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s1-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s1-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s1-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s1-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s2-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s2-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s2-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s2-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s2-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s2-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s0-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s0-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s0-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s0-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s0-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s0-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s1-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s1-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s1-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s1-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s1-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s1-b/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s2-a/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s2-a/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s2-a/summary.md
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s2-b/command.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s2-b/provenance.json
+ create mode 100644 research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s2-b/summary.md

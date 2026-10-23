@@ -1,5 +1,6 @@
 ﻿{
-    "status":  "running_r0",
+    "finished_at_utc":  "2026-10-21T20:29:24.4925918Z",
+    "status":  "complete_and_pushed",
     "started_at_utc":  "2026-10-21T16:15:31.3271702Z",
     "wrapper_pid":  14504
 }

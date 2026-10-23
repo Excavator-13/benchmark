@@ -1,0 +1,278 @@
+文件（相对 ~/da_chuang/）	文件标题／文件名	筛选与使用方式
+documents/A Hierarchical Career-Path-Aware Neural Network for Job Mobility Prediction.pdf	A Hierarchical Career-Path-Aware Neural Network for Job Mobility Prediction.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/Cost-effective and Interpretable Job Skill Recommendation with Deep Reinforcement Learning.pdf	Cost-effective and Interpretable Job Skill Recommendation with Deep Reinforcement Learning.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/ESCO.pdf	ESCO.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/LLM4Jobs.pdf	LLM4Jobs.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/Large-scale online job search behaviors reveal labor market shifts amid COVID-19.pdf	Large-scale online job search behaviors reveal labor market shifts amid COVID-19.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/Market-aware Long-term Job Skill Recommendation with Explainable Deep Reinforcement Learning.pdf	Market-aware Long-term Job Skill Recommendation with Explainable Deep Reinforcement Learning.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/Market-oriented Job Skill Valuation with Cooperative Composition Neural Network.pdf	Market-oriented Job Skill Valuation with Cooperative Composition Neural Network.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/Measuring the Popularity of Job Skills in Recruitment Market.pdf	Measuring the Popularity of Job Skills in Recruitment Market.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/NeurIPS-2024-job-sdf-a-multi-granularity-dataset-for-job-skill-demand-forecasting-and-benchmarking-Paper-Datasets_and_Benchmarks_Track.pdf	NeurIPS-2024-job-sdf-a-multi-granularity-dataset-for-job-skill-demand-forecasting-and-benchmarking-Paper-Datasets_and_Benchmarks_Track.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/Personalized Employee Training Course Recommendation with Career Development Awareness.pdf	Personalized Employee Training Course Recommendation with Career Development Awareness.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/Recruitment Market Trend Analysis with Sequential Latent Variable Models.pdf	Recruitment Market Trend Analysis with Sequential Latent Variable Models.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/SKORE.pdf	SKORE.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/（2）Wang 等 - 2024 - Distributed Cascaded Manifold Hashing Network for Compact Image Set Representation.pdf	（2）Wang 等 - 2024 - Distributed Cascaded Manifold Hashing Network for Compact Image Set Representation.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/（3）Chao 等 - 2024 - A Cross-View Hierarchical Graph Learning Hypernetwork for Skill Demand-Supply Joint Prediction.pdf	（3）Chao 等 - 2024 - A Cross-View Hierarchical Graph Learning Hypernetwork for Skill Demand-Supply Joint Prediction.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/（6）Pareja 等 - 2020 - EvolveGCN Evolving Graph Convolutional Networks for Dynamic Graphs.pdf	（6）Pareja 等 - 2020 - EvolveGCN Evolving Graph Convolutional Networks for Dynamic Graphs.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/（7）Wu 等 - 2020 - Connecting the Dots Multivariate Time Series Forecasting with Graph Neural Networks.pdf	（7）Wu 等 - 2020 - Connecting the Dots Multivariate Time Series Forecasting with Graph Neural Networks.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+documents/（9）Chen 等 - 2023 - Multi-Scale Adaptive Graph Neural Network for Multivariate Time Series Forecasting.pdf	（9）Chen 等 - 2023 - Multi-Scale Adaptive Graph Neural Network for Multivariate Time Series Forecasting.pdf	逐篇标题筛选；未重新通读，正文引用已有核查材料
+repos/benchmark/experiments_archive/1st_try_in_phase_fix_origin/what_we_did_this_time.md	# 第一次租 GPU 云服务器运行 EvolveGCN	首次GPU实验；已读执行记录和结果段落
+repos/benchmark/experiments_archive/README.md	# 历史实验归档	首次GPU实验；已读执行记录和结果段落
+repos/benchmark/openspec/changes/archive/2026-09-16-repair-graph-forecasting-pipeline/design.md	## Context	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-09-16-repair-graph-forecasting-pipeline/proposal.md	## Why	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-09-16-repair-graph-forecasting-pipeline/specs/evolvegcn-h-recurrence/spec.md	## Purpose	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-09-16-repair-graph-forecasting-pipeline/specs/graph-forecast-data-pipeline/spec.md	## Purpose	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-09-16-repair-graph-forecasting-pipeline/specs/graph-forecast-experiments/spec.md	## Purpose	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-09-16-repair-graph-forecasting-pipeline/tasks.md	## 1. Data Preparation and Loading	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-09-16-repair-graph-forecasting-pipeline/verification.md	# Implementation Verification	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/design.md	## Context	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/implementation-notes.md	# Implementation Notes	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/implementation.md	# Implementation: add-nograph-baseline-ridge	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/proposal.md	## Why	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/specs/nograph-baseline-entry/spec.md	## Purpose	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/tasks.md	## 1. Implementation	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-07-add-nograph-baseline-ridge/verification.md	# Implementation Verification	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/design.md	## Context	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/implementation-notes.md	# Implementation Notes	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/proposal.md	## Why	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/specs/nograph-baseline-entry/spec.md	## MODIFIED Requirements	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/tasks.md	## 1. Archive index compatibility	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-08-reduce-baseline-evidence-overhead/verification.md	# Implementation Verification	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-11-add-r2-count-baseline/design.md	## Context	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-11-add-r2-count-baseline/implementation-notes.md	# Implementation Notes	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-11-add-r2-count-baseline/proposal.md	## Why	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-11-add-r2-count-baseline/specs/nograph-baseline-entry/spec.md	## RENAMED Requirements	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-11-add-r2-count-baseline/tasks.md	## 1. 入口与身份映射	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-11-add-r2-count-baseline/verification.md	# Implementation Verification	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-17-add-nograph-backtest-folds/design.md	## Context	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-17-add-nograph-backtest-folds/implementation-notes.md	# Implementation Notes	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-17-add-nograph-backtest-folds/proposal.md	## Why	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-17-add-nograph-backtest-folds/specs/nograph-baseline-entry/spec.md	## MODIFIED Requirements	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-17-add-nograph-backtest-folds/tasks.md	## 1. 固定默认主切分回归依据	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-17-add-nograph-backtest-folds/verification.md	# Implementation Verification	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-19-add-graph-value-skeleton/design.md	## Context	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-19-add-graph-value-skeleton/implementation-notes.md	# Implementation Notes	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-19-add-graph-value-skeleton/proposal.md	## Why	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-19-add-graph-value-skeleton/specs/graph-value-skeleton/spec.md	## Purpose	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-19-add-graph-value-skeleton/tasks.md	## 1. 先固定 P01 数值契约与数据身份依据	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-19-add-graph-value-skeleton/verification.md	# Implementation Verification	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-add-resumable-training-checkpoints/design.md	# Design	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-add-resumable-training-checkpoints/implementation-notes.md	# Implementation Notes	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-add-resumable-training-checkpoints/proposal.md	## Why	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-add-resumable-training-checkpoints/specs/graph-value-skeleton/spec.md	# Spec Delta	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-add-resumable-training-checkpoints/tasks.md	# Tasks	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-add-resumable-training-checkpoints/verification.md	# Implementation Verification	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/design.md	# Design	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/evidence/atomic-write-repair.md	# Windows atomic publication repair	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/evidence/diagnosis-20261019.md	# Read-only diagnostic follow-up	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/evidence/dll-resolution-20261020.md	# DLL resolution and subsequent readiness pause	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/evidence/historical-implementation-notes-20261020.md	# Implementation Notes	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/evidence/repair-followup.md	# Windows/environment repair follow-up	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/implementation-notes.md	# Implementation Notes	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/proposal.md	# Proposal	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/specs/graph-value-skeleton/spec.md	# Spec Delta	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/tasks.md	# Tasks	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/changes/archive/2026-10-20-repair-published-shuffle-budget/verification.md	# Implementation Verification	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/specs/evolvegcn-h-recurrence/spec.md	# evolvegcn-h-recurrence Specification	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/specs/graph-forecast-data-pipeline/spec.md	# graph-forecast-data-pipeline Specification	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/specs/graph-forecast-experiments/spec.md	# graph-forecast-experiments Specification	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/specs/graph-value-skeleton/spec.md	# graph-value-skeleton Specification	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/openspec/specs/nograph-baseline-entry/spec.md	# nograph-baseline-entry Specification	实现变更记录；逐份标题筛选，proposal与历史结论已核对
+repos/benchmark/references/README.md	# 参考资料	研究入口或背景；按相关性采用
+repos/benchmark/research/analyses/p01-t002-adjacency-probe-20261011-01/report.md	# T002 邻接敏感性检查：GConvGRU / GConvLSTM / EvolveGCN-H	阶段研究证据；核心报告已读正文
+repos/benchmark/research/analyses/p01-t002-big-demand-cross-20261011-01/report.md	# T002 大需求 × 活跃度 × 邻居覆盖交叉分析	阶段研究证据；核心报告已读正文
+repos/benchmark/research/analyses/p01-t002-graph-semantics-20261011-01/report.md	# T002 图结构审计：上下文内度分布、方向性与覆盖	阶段研究证据；核心报告已读正文
+repos/benchmark/research/analyses/p01-t002-graph-time-source-20261011-01/report.md	# T002 图构建时间来源：可证明来源与未决限制	阶段研究证据；核心报告已读正文
+repos/benchmark/research/analyses/p01-t006-r2-audit-20261012-01/report.md	# T006 r2/count 数据与图审计、baseline 与成本	阶段研究证据；核心报告已读正文
+repos/benchmark/research/analyses/p01-t007-backtest-20261017-01/report.md	# P01-T007 训练期内部两折无图回测	阶段研究证据；核心报告已读正文
+repos/benchmark/research/analyses/p01-t008-stage-summary-20261018-01/report.md	# P01 阶段汇总：底座、可重复性与图收益问题	阶段研究证据；核心报告已读正文
+repos/benchmark/research/analyses/p02-t003-formal-artifacts-20261022-01/report.md	# P02-T003 正式 run 材料核验：权重上限与训练历史	阶段研究证据；核心报告已读正文
+repos/benchmark/research/analyses/p02-t003-upstream-paper-tables-20261022-01/report.md	# P02-T003 上游论文数值核查：GNN 附录表与图输入	阶段研究证据；核心报告已读正文
+repos/benchmark/research/archives/index.md	# 实验与归档索引	研究入口或背景；按相关性采用
+repos/benchmark/research/archives/legacy-development/GPU_SERVER_EVOLVEGCN_NEXT_STEPS_GUIDE.md	# EvolveGCN-H `region/count` 结果诊断与下一轮实验	前期修复与核验；已读报告，指南作历史来源
+repos/benchmark/research/archives/legacy-development/README.md	# 早期开发与核验历史	前期修复与核验；已读报告，指南作历史来源
+repos/benchmark/research/archives/legacy-development/bug.md	# EvolveGCN 路径已核实的问题	前期修复与核验；已读报告，指南作历史来源
+repos/benchmark/research/archives/legacy-development/fix_verification_20260921/REPORT.md	# 修复后的验证结果	前期修复与核验；已读报告，指南作历史来源
+repos/benchmark/research/archives/legacy-development/verification_20260921/REPORT.md	# Job-SDF 修复独立核验报告	前期修复与核验；已读报告，指南作历史来源
+repos/benchmark/research/archives/legacy-exploration/README.md	# 早期探索材料	前期探索；正文使用时附后续口径修正
+repos/benchmark/research/archives/legacy-exploration/四象限分析.md	# 四象限分布分析报告 — r2 粒度	前期探索；正文使用时附后续口径修正
+repos/benchmark/research/archives/legacy-exploration/多粒度共现图统计分析.md	# 多粒度共现图统计分析结果（全7个粒度）	前期探索；正文使用时附后续口径修正
+repos/benchmark/research/archives/migrations/20261006-standardize-research.md	# 2026-10-06 科研记录规范化	历史组织与路径解释；不计方法效果
+repos/benchmark/research/archives/migrations/20261008-evidence-maintenance.md	# 2026-10-08 记录减负与第一轮净化	历史组织与路径解释；不计方法效果
+repos/benchmark/research/archives/migrations/20261008-legacy-cleanup.md	# 剩余历史与参考材料整理	历史组织与路径解释；不计方法效果
+repos/benchmark/research/decisions.md	# 建议与决定	研究入口或背景；按相关性采用
+repos/benchmark/research/phases/P01/execution-guide.md	# 第一阶段执行指导：诊断与 baseline 操作	研究入口或背景；按相关性采用
+repos/benchmark/research/phases/P01/plan.md	# P01：建立可信研究底座	研究入口或背景；按相关性采用
+repos/benchmark/research/phases/P01/protocol.md	# 第一阶段实验协议：可信数据与 baseline	研究入口或背景；按相关性采用
+repos/benchmark/research/phases/P01/t005-evolvegcnh-guide.md	# T005：在保留的原 GPU 服务器上受控复跑 EvolveGCN-H	研究入口或背景；按相关性采用
+repos/benchmark/research/phases/P01/t007-backtest-guide.md	# T007：训练期内部两折无图回测	研究入口或背景；按相关性采用
+repos/benchmark/research/phases/P02/plan.md	# 第二阶段计划：图是否带来额外预测价值	研究入口或背景；按相关性采用
+repos/benchmark/research/phases/P02/t002-execution.md	# P02-T002 执行记录与恢复入口	研究入口或背景；按相关性采用
+repos/benchmark/research/phases/P02/t002-repair-handoff.md	# T002 发布图打乱预算修复交接	研究入口或背景；按相关性采用
+repos/benchmark/research/reports/p02-t002-20261019-01/cost-evidence/p02-t002-20261019-01-cost-r0-self-s0-cost/summary.md	# Run p02-t002-20261019-01-cost-r0-self-s0-cost	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reports/p02-t002-20261019-01/report.md	# P02-T002 批次 p02-t002-20261019-01	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reports/p02-t002-20261020-01/cost-evidence/r2-shuffle0/protocol.md	# 第一阶段实验协议：可信数据与 baseline	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reports/p02-t002-20261020-01/cost-evidence/r2-shuffle1/protocol.md	# 第一阶段实验协议：可信数据与 baseline	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reports/p02-t002-20261020-01/cost-evidence/r2-shuffle2/protocol.md	# 第一阶段实验协议：可信数据与 baseline	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reports/p02-t002-20261020-01/report.md	# P02-T002 修复验收与成本诊断	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reports/p02-t002-closeout-20261022-01/report.md	# P02-T002 研究侧验收与清理判断	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reports/p02-t002-r0-20261022-01/result.md	# r0 execution result	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reports/p02-t002-r2-20261020-01/report.md	# P02-T002：r2正式执行批次	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reports/p02-t002-r2-20261020-02/report.md	# P02-T002：检查点验收与 r2 重启批次	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reports/p02-t002-r2-20261020-02/result.md	# r2 execution result	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reports/p02-t002-region-20261022-01/result.md	# region execution result	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reports/p02-t002-remaining-20261022-01/report.md	# P02-T002：region 与 r0 执行交接	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reports/p02-t003-20261022-01/report.md	# P02-T003 门槛判定与诊断	逐份标题筛选；选读交付和门槛报告，试跑不计正式效果
+repos/benchmark/research/reviews/20261008-cleanup-candidates.md	# 仓库清理候选清单	历史组织与路径解释；不计方法效果
+repos/benchmark/research/reviews/20261008-maintenance-and-protocol.md	# 科研记录与实验协议减负方案	历史组织与路径解释；不计方法效果
+repos/benchmark/research/reviews/20261008-research-maintainer-redesign.md	# research-maintainer 为什么要改、怎么改	历史组织与路径解释；不计方法效果
+repos/benchmark/research/roadmap.md	# 科研项目路线图：多粒度技能需求预测中的图信息选择	研究入口或背景；按相关性采用
+repos/benchmark/research/runs/p01-r0-alignment-001/summary.md	# align-v2 check p01-r0-alignment-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-alignment-002/summary.md	# align-v2 check p01-r0-alignment-002	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-backtest-a-001/summary.md	# Run p01-r0-backtest-a-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-backtest-a-repeat-001/summary.md	# Run p01-r0-backtest-a-repeat-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-backtest-b-001/summary.md	# Run p01-r0-backtest-b-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-backtest-b-repeat-001/summary.md	# Run p01-r0-backtest-b-repeat-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-recompute-primary-001/summary.md	# Recompute check p01-r0-recompute-primary-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-recompute-primary-002/summary.md	# Recompute check p01-r0-recompute-primary-002	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-recompute-repeat-001/summary.md	# Recompute check p01-r0-recompute-repeat-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-recompute-repeat-002/summary.md	# Recompute check p01-r0-recompute-repeat-002	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-repeat-check-001/summary.md	# Compare check p01-r0-repeat-check-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-repeat-check-002/summary.md	# Compare check p01-r0-repeat-check-002	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-sharedridge-001/summary.md	# Run p01-r0-sharedridge-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-sharedridge-002/summary.md	# Run p01-r0-sharedridge-002	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-sharedridge-repeat-001/summary.md	# Run p01-r0-sharedridge-repeat-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r0-sharedridge-repeat-002/summary.md	# Run p01-r0-sharedridge-repeat-002	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r2-backtest-a-001/summary.md	# Run p01-r2-backtest-a-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r2-backtest-a-repeat-001/summary.md	# Run p01-r2-backtest-a-repeat-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r2-backtest-b-001/summary.md	# Run p01-r2-backtest-b-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r2-backtest-b-repeat-001/summary.md	# Run p01-r2-backtest-b-repeat-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r2-sharedridge-001/summary.md	# Run p01-r2-sharedridge-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-r2-sharedridge-repeat-001/summary.md	# Run p01-r2-sharedridge-repeat-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-alignment-001/summary.md	# align-v2 check p01-region-alignment-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-alignment-002/summary.md	# align-v2 check p01-region-alignment-002	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-backtest-a-001/summary.md	# Run p01-region-backtest-a-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-backtest-a-repeat-001/summary.md	# Run p01-region-backtest-a-repeat-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-backtest-b-001/summary.md	# Run p01-region-backtest-b-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-backtest-b-repeat-001/summary.md	# Run p01-region-backtest-b-repeat-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-evolvegcnh-seed1-repeat-20261018T004254Z/condition-review.md	# 条件核对	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-evolvegcnh-seed1-repeat-20261018T004254Z/execution-notes.md	# 实际执行命令	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-evolvegcnh-seed1-repeat-20261018T004254Z/guide.md	# T005：在保留的原 GPU 服务器上受控复跑 EvolveGCN-H	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-evolvegcnh-seed1-repeat-20261018T004254Z/protocol.md	# 第一阶段实验协议：可信数据与 baseline	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-evolvegcnh-seed1-repeat-20261018T004254Z/summary.md	# Run: p01-region-evolvegcnh-seed1-repeat-20261018T004254Z	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-recompute-primary-001/summary.md	# Recompute check p01-region-recompute-primary-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-recompute-primary-002/summary.md	# Recompute check p01-region-recompute-primary-002	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-recompute-repeat-001/summary.md	# Recompute check p01-region-recompute-repeat-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-recompute-repeat-002/summary.md	# Recompute check p01-region-recompute-repeat-002	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-repeat-check-001/summary.md	# Compare check p01-region-repeat-check-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-repeat-check-002/summary.md	# Compare check p01-region-repeat-check-002	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-sharedridge-001/summary.md	# Run p01-region-sharedridge-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-sharedridge-002/summary.md	# Run p01-region-sharedridge-002	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-sharedridge-repeat-001/summary.md	# Run p01-region-sharedridge-repeat-001	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p01-region-sharedridge-repeat-002/summary.md	# Run p01-region-sharedridge-repeat-002	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-graph-s0-a/summary.md	# Run p02-t002-r0-20261022-01-r0-graph-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-graph-s0-b/summary.md	# Run p02-t002-r0-20261022-01-r0-graph-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-graph-s1-a/summary.md	# Run p02-t002-r0-20261022-01-r0-graph-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-graph-s1-b/summary.md	# Run p02-t002-r0-20261022-01-r0-graph-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-graph-s2-a/summary.md	# Run p02-t002-r0-20261022-01-r0-graph-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-graph-s2-b/summary.md	# Run p02-t002-r0-20261022-01-r0-graph-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-self-s0-a/summary.md	# Run p02-t002-r0-20261022-01-r0-self-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-self-s0-b/summary.md	# Run p02-t002-r0-20261022-01-r0-self-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-self-s1-a/summary.md	# Run p02-t002-r0-20261022-01-r0-self-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-self-s1-b/summary.md	# Run p02-t002-r0-20261022-01-r0-self-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-self-s2-a/summary.md	# Run p02-t002-r0-20261022-01-r0-self-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-self-s2-b/summary.md	# Run p02-t002-r0-20261022-01-r0-self-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled0-s0-a/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled0-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled0-s0-b/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled0-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled0-s1-a/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled0-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled0-s1-b/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled0-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled0-s2-a/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled0-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled0-s2-b/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled0-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled1-s0-a/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled1-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled1-s0-b/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled1-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled1-s1-a/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled1-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled1-s1-b/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled1-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled1-s2-a/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled1-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled1-s2-b/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled1-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled2-s0-a/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled2-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled2-s0-b/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled2-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled2-s1-a/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled2-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled2-s1-b/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled2-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled2-s2-a/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled2-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r0-20261022-01-r0-shuffled2-s2-b/summary.md	# Run p02-t002-r0-20261022-01-r0-shuffled2-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-graph-s0-a/summary.md	# Run p02-t002-r2-20261020-02-r2-graph-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-graph-s0-b/summary.md	# Run p02-t002-r2-20261020-02-r2-graph-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-graph-s1-a/summary.md	# Run p02-t002-r2-20261020-02-r2-graph-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-graph-s1-b/summary.md	# Run p02-t002-r2-20261020-02-r2-graph-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-graph-s2-a/summary.md	# Run p02-t002-r2-20261020-02-r2-graph-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-graph-s2-b/summary.md	# Run p02-t002-r2-20261020-02-r2-graph-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-self-s0-a/summary.md	# Run p02-t002-r2-20261020-02-r2-self-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-self-s0-b/summary.md	# Run p02-t002-r2-20261020-02-r2-self-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-self-s1-a/summary.md	# Run p02-t002-r2-20261020-02-r2-self-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-self-s1-b/summary.md	# Run p02-t002-r2-20261020-02-r2-self-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-self-s2-a/summary.md	# Run p02-t002-r2-20261020-02-r2-self-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-self-s2-b/summary.md	# Run p02-t002-r2-20261020-02-r2-self-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s0-a/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled0-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s0-b/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled0-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s1-a/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled0-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s1-b/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled0-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s2-a/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled0-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled0-s2-b/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled0-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s0-a/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled1-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s0-b/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled1-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s1-a/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled1-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s1-b/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled1-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s2-a/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled1-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled1-s2-b/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled1-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s0-a/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled2-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s0-b/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled2-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s1-a/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled2-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s1-b/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled2-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s2-a/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled2-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-r2-20261020-02-r2-shuffled2-s2-b/summary.md	# Run p02-t002-r2-20261020-02-r2-shuffled2-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-graph-s0-a/summary.md	# Run p02-t002-region-20261022-01-region-graph-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-graph-s0-b/summary.md	# Run p02-t002-region-20261022-01-region-graph-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-graph-s1-a/summary.md	# Run p02-t002-region-20261022-01-region-graph-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-graph-s1-b/summary.md	# Run p02-t002-region-20261022-01-region-graph-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-graph-s2-a/summary.md	# Run p02-t002-region-20261022-01-region-graph-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-graph-s2-b/summary.md	# Run p02-t002-region-20261022-01-region-graph-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-self-s0-a/summary.md	# Run p02-t002-region-20261022-01-region-self-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-self-s0-b/summary.md	# Run p02-t002-region-20261022-01-region-self-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-self-s1-a/summary.md	# Run p02-t002-region-20261022-01-region-self-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-self-s1-b/summary.md	# Run p02-t002-region-20261022-01-region-self-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-self-s2-a/summary.md	# Run p02-t002-region-20261022-01-region-self-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-self-s2-b/summary.md	# Run p02-t002-region-20261022-01-region-self-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled0-s0-a/summary.md	# Run p02-t002-region-20261022-01-region-shuffled0-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled0-s0-b/summary.md	# Run p02-t002-region-20261022-01-region-shuffled0-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled0-s1-a/summary.md	# Run p02-t002-region-20261022-01-region-shuffled0-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled0-s1-b/summary.md	# Run p02-t002-region-20261022-01-region-shuffled0-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled0-s2-a/summary.md	# Run p02-t002-region-20261022-01-region-shuffled0-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled0-s2-b/summary.md	# Run p02-t002-region-20261022-01-region-shuffled0-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled1-s0-a/summary.md	# Run p02-t002-region-20261022-01-region-shuffled1-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled1-s0-b/summary.md	# Run p02-t002-region-20261022-01-region-shuffled1-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled1-s1-a/summary.md	# Run p02-t002-region-20261022-01-region-shuffled1-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled1-s1-b/summary.md	# Run p02-t002-region-20261022-01-region-shuffled1-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled1-s2-a/summary.md	# Run p02-t002-region-20261022-01-region-shuffled1-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled1-s2-b/summary.md	# Run p02-t002-region-20261022-01-region-shuffled1-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled2-s0-a/summary.md	# Run p02-t002-region-20261022-01-region-shuffled2-s0-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled2-s0-b/summary.md	# Run p02-t002-region-20261022-01-region-shuffled2-s0-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled2-s1-a/summary.md	# Run p02-t002-region-20261022-01-region-shuffled2-s1-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled2-s1-b/summary.md	# Run p02-t002-region-20261022-01-region-shuffled2-s1-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled2-s2-a/summary.md	# Run p02-t002-region-20261022-01-region-shuffled2-s2-a	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/p02-t002-region-20261022-01-region-shuffled2-s2-b/summary.md	# Run p02-t002-region-20261022-01-region-shuffled2-s2-b	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/phase1-20261006-v2-01/execution-guide.md	# 当前下一步操作指导：先取得可核对的基础证据	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/phase1-20261006-v2-01/protocol.md	# 第一阶段详细规划：厘清问题，建立可信数据与 baseline	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/runs/phase1-20261006-v2-01/summary.md	# 第一阶段诊断运行小结	逐份标题筛选；选读关键run，结果解释引用所属分析
+repos/benchmark/research/state.md	# 当前状态	研究入口或背景；按相关性采用
+北京交通大学大创项目立项报告.docx	项目名称 / 项目管理单位： 软件学院               / 项目类型：☑ 创新训练项目 / □ 创业训练项目	立项目标、原计划与基本信息；已读正文
+大创立项答辩PPT.pptx	SLIDE ppt/slides/slide1.xml / 北京交通大学 / 大学生创新创业训练项目 / 粒度自适应图学习的稀疏感知技能需求预测研究	立项目标、原计划与基本信息；已读正文
+开题报告_粒度自适应图学习技能需求预测.docx	北京交通大学软件学院 / 大学生创新创业训练计划项目 / 开题报告 / 粒度自适应图学习的稀疏感知技能需求预测研究	立项目标、原计划与基本信息；已读正文
+文献阅读记录2.xlsx	SHEET xl/worksheets/sheet1.xml / 序号 | 标题 | 年份 | 期刊/会议 | 研究问题 | 主要结论 | 核心方法/模型 | 创新点 | 可复现点 | 我的疑惑/不足之处 | 我的复现记录 | 关键词/标签 | 待复现 | 相关链接 | 出现的领域专有名词 / 01 | Job-SDF: A Multi-Granularity Dataset for Job Skill / Demand Forecasting and Benchmarking | 2024 | NeurIPS | 公开、可复用、多粒度工作技能需求数据集的缺乏，妨碍了趋势预测模型能力的评测。 | 1. 构建了多粒度、月度的Job-SDF数据集，设计用于训练和评测工作技能需求预测模型。	前期文献调研；已读单元格内容
+附件2-北京交通大学大学生创新创业训练计划项目中期进展报告模板.docx	项目名称 / 项目管理单位：                        / 项目类型：□ 创新训练项目 / □ 创业训练项目	结构与字数要求；已读正文
+需要关注的配置项.yaml	需要关注的配置项.yaml	研究入口或背景；按相关性采用
+repos/benchmark/AGENTS.md	# Research Handoff	研究入口或背景；按相关性采用
+repos/benchmark/DELEGATION.md	# 委托指针（科研记录 ↔ OpenSpec 变更）	研究入口或背景；按相关性采用
+repos/benchmark/README.md	## 1. Overview	研究入口或背景；按相关性采用
+repos/benchmark/RESEARCH.md	# 科研记录入口	研究入口或背景；按相关性采用
+repos/benchmark/references/literature/Job-SDF-NeurIPS2024.pdf	Job-SDF-NeurIPS2024.pdf	本机ignored论文副本；标题筛选，正文引用已有论文核查
+repos/benchmark/references/upstream/metrics/multi_result.ipynb	multi_result.ipynb	上游指标notebook；查看文件及Markdown标题，不计团队实验成果

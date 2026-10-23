@@ -1,0 +1,2 @@
+cfa2158e349b59f839e38abde28299d5b96f9529
+2026-10-22 post-import verification run (artifacts committed in the previous commit); analysis files uncommitted at run time

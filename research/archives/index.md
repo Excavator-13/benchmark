@@ -235,7 +235,7 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 
 ## P02-T002 r2独立执行批次（2026-10-20）
 
-产物为`p02-t002-r2-20261020-01`的独立执行副本、正式r2拟合及检查；[报告](../reports/p02-t002-r2-20261020-01/report.md)为恢复入口，授权与范围见D028。执行根为`D:/research-runs/JODBSDFres/benchmark-r2-20261020-01`，C盘原仓库和旧证据保留；这是经用户选择建立的运行副本，不是备份恢复核验。
+产物为`p02-t002-r2-20261020-01`的独立执行副本及原拟合尝试；授权与范围见D028。2026-10-22 收尾核对：旧独立报告未随当前 Git 交付，原中断事实见后续 [r2 重启报告](../reports/p02-t002-r2-20261020-02/report.md)，旧路径不再作为恢复入口。执行根为`D:/research-runs/JODBSDFres/benchmark-r2-20261020-01`，原记录说明 C 仓库和 D 旧现场保留，本机未实机核验；这是经用户选择建立的运行副本，不是备份恢复核验。
 
 保存状态（启动时）：新产物已在本机D盘写入，批次`research/reports/p02-t002-r2-20261020-01/`保存预检/清单/心跳/核验报告；完整正式数组在副本`research/runs/<run-id>/`，按既有政策留本地。C盘仅保存启动入口、控制器与研究记录。运行中尚未入库，成功分支才提交并push到`origin/FJWP2T002`；实际回执看D盘`publication.json`，没有回执不得称为已推送。不强推；未封存，异地备份及远端恢复未核验。
 
@@ -266,12 +266,48 @@ tar -xzf research/archives/p01-r0-sharedridge-002.tar.gz -C "$P01_RESTORE_DIR"
 
 ## P02-T002 检查点验收及 r2 重启（2026-10-20）
 
-产物：已独立PASS的检查点实现/测试、归档变更`2026-10-20-add-resumable-training-checkpoints`及r2新批次`p02-t002-r2-20261020-02`。[报告](../reports/p02-t002-r2-20261020-02/report.md)为当前执行入口；D029接受软件就绪，实验完成仍待实际30次和51项检查。
+产物：已独立PASS的检查点实现/测试、归档变更`2026-10-20-add-resumable-training-checkpoints`及r2新批次`p02-t002-r2-20261020-02`。[报告](../reports/p02-t002-r2-20261020-02/report.md)保留当时的执行入口；D029 接受软件就绪。最新保存事实见下方“T002 收尾交付与 PR 合入”条目。
 
-保存：实现/验收记录当前在C本地工作区，已按授权清单同步D执行根；原20-01现场保留。正式数组及运行期JSON在D，新批次全成功才提交推送到origin/FJWP2T002，实际回执由publication.json及Git历史定位；尚未提交推送，不记录未来commit哈希。不封存，异地备份和远端恢复未核验。
+启动时保存事实：实现/验收记录在 C 工作区并已同步 D，原20-01现场保留；正式数组及运行期 JSON 留 D。此为历史启动状态，后续入库已由下方收尾条目更新；不封存，异地备份和远端恢复未核验。
 
 ## P02-T002 r2交付与region/r0新执行（2026-10-22）
 
-r2产物：D执行批次p02-t002-r2-20261020-02于2026-10-21 23:36:58完成30拟合/51检查；publication.json记录23:37:08成功推送origin/FJWP2T002，提交815f1cc6a546ef81a4deb005dc12b5f70a8c5501。可读记录/检查及验收实现已入库，完整数组仍在D，未封存或独立核验远端恢复。
+r2 交付入库身份与三组最新保存事实统一见下方收尾条目；启动过程及当时本地推送回执的观测保留在[组合执行报告](../reports/p02-t002-remaining-20261022-01/report.md)。当前 Git 内的 publication.json 是发布前快照，不能代替 Windows 最终本地回执。
 
-新产物：[region/r0组合报告](../reports/p02-t002-remaining-20261022-01/report.md)、调度适配器和两组执行批次（region/r0-20261022-01）。目前准备预检/启动，C记录及D运行位置仍沿用原独立副本，成功分支才提交推送；新产物尚未提交推送，不记未来commit。无封存或备份恢复操作。
+region/r0 产物：[组合报告](../reports/p02-t002-remaining-20261022-01/report.md)、调度适配器、两组执行批次及可读 run；已入库，具体身份与限制见下方收尾条目，不再将本条启动时的“准备预检/启动”作为当前保存状态。
+
+## P02-T002 收尾交付与 PR 合入（2026-10-22）
+
+对象：三组正式开发对照执行交付及本轮研究侧验收报告。执行结果、条件可比性、清理选择和访问限制只在[收尾报告](../reports/p02-t002-closeout-20261022-01/report.md)叙述；研究接受决定见 D031，任务状态见 P02 计划。
+
+已核对的本地 Git 入库事实：
+
+- r2 可读 run、检查、控制器与检查点验收交付由 `815f1cc6a546ef81a4deb005dc12b5f70a8c5501` 保存。
+- region/r0 可读 run、检查及组合调度交付由 `3060af19c7e6c27508edc24c35f1ef599ea533fa` 保存；两项交付均在当前分支祖先历史中。
+- 当前 `xzs` 的接手提交 `4e5e04466a7ee88238374f52ca20c57a3d08fe33` 是 PR #13（`Excavator-13/FJWP2T002`）的合并提交；本轮核对父提交为 `02f7d19b0912decc964510ad8991c3364e7df957` 与上述 region/r0 交付提交，合并后的树与后者相同。用户已说明 PR 完成，本轮未联网核验 PR 页面或远端最新引用。
+
+存储：Git 保存可读 run/原始检查和执行材料；完整数组、模型、训练历史、检查点及源码捕获按原执行报告仍留 Windows D 独立执行根，本机未实机核验。检查回执中的历史 SHA256 对应 Windows CRLF 字节，当前检出报告为 LF，转换关系在收尾报告明示，未改写原回执。未封存，异地备份及远端恢复未核验。
+
+本轮验收、清理判断及用户随后要求的结果概览产物随本次授权的文档提交入库，提交身份从 Git 历史追溯；未 push、封存、备份或执行恢复操作。此状态描述交付产物，不另给索引/state 等记录文件维护提交回执，也不追加仅记录本提交自身哈希的提交。
+
+## P02-T003 门槛判定与诊断（2026-10-22）
+
+对象：T003 的 §6.2 门槛判定、失败诊断及可复核脚本/输出。判定与诊断内容、材料限制只在其[报告](../reports/p02-t003-20261022-01/report.md)叙述；研究接受见 [D032](../decisions.md#d032-p02-t003-门槛未通过与诊断验收)，任务状态见 [P02 计划](../phases/P02/plan.md)。
+
+2026-10-22 后续：90 份正式 run 权重与训练历史入库后，T003 的诊断由[正式 run 材料核验](../analyses/p02-t003-formal-artifacts-20261022-01/report.md)复核（输出上限、MAE 地板、训练历史与步数估算）；报告补充见 [T003 报告 §2026-10-22 补充](../reports/p02-t003-20261022-01/report.md#2026-10-22-补充)。
+
+存储：报告、`gate.py`/`gate.json` 与 `diagnose.py`/`diagnose.json` 随 2026-10-22 文档提交入库，并于同日推送至 `origin/xzs`，提交身份从 Git 历史追溯；输入为已在 Git 中的 153 份 T002 checks 与 90 个 run summary。完整预测、模型权重与逐 epoch 训练历史仍按原执行报告留在 Windows D 根，本机未核验。未封存、未做异地备份或恢复核验；本页不记录该提交自身哈希，也不追加仅重述该提交的后续提交。
+
+## P02-T003 上游论文数值核查（2026-10-22）
+
+对象：缓存的 Job-SDF 论文表格解析与 GNN 附录表核查。内容、数字与边界只在[分析报告](../analyses/p02-t003-upstream-paper-tables-20261022-01/report.md)叙述；同目录含 [extract_tables.py](../analyses/p02-t003-upstream-paper-tables-20261022-01/extract_tables.py) 与 [tables.json](../analyses/p02-t003-upstream-paper-tables-20261022-01/tables.json)。
+
+存储：论文 PDF 位于 `references/literature/Job-SDF-NeurIPS2024.pdf`，ignored、不随 Git 同步，本记录只以 PDF SHA256（`80db643…`，见 report 与 tables.json）定位。分析报告、脚本与解析结果随 2026-10-22 文档提交入库并推送至 `origin/xzs`，提交身份从 Git 历史追溯。未封存、未做备份或恢复核验。
+
+## P02-T002 模型与训练历史补充材料（2026-10-22）
+
+对象：分支 `upload-t002-models-history-20261022`（commit `cbcff4061e8d4b18c32edb631089846d9188681e`）上传的 T002 补充材料。入库决定见 [D034](../decisions.md#d034-t002-模型与训练历史入库)，逐文件核验见[正式 run 材料核验](../analyses/p02-t003-formal-artifacts-20261022-01/report.md)。
+
+已核对：90 个正式 run 的 `models/selected.npz` 与 `training-history.json` 共 180 文件，SHA256 与三组 checks 的 `input_sha256_after` 全部一致（90/90 run）；上传范围的来源哈希见 [upload-scope.json](../reports/t002-upload-20261022-01/upload-scope.json)。同批导入旧中断批次 `p02-t002-r2-20261020-01`（9 文件，含 report 与 prepare 失败记录）和 7 个最终回执：`publication.json` 由 `publishing` 变为 `pushed`（r2 `815f1cc`、r0 `3060af1`），`queue.json` 变为 `complete_and_pushed`，controller/queue 日志补全。收尾报告描述的当时快照不改写，补充见 [T002 收尾报告 §2026-10-22 补充](../reports/p02-t002-closeout-20261022-01/report.md#2026-10-22-补充)。与 `upload-scope.json` 的 `source_paths` 对比：4 个回执逐字节一致；`queue.json` 仅差 CRLF→LF 归一化；两个 stdout 日志是比 scope 计算时更完整的版本（scope 在日志仍写入时生成），所以字节不同。未导入 106 个仅 CRLF/LF 差异的文件（其中含 `.gitattributes` 保护的归档证据），归档字节保持不变。
+
+存储：180 个 artifacts 与上述补充材料随 2026-10-22 文档提交入库并推送至 `origin/xzs`；`.gitignore` 只增加匹配 `p02-t002-*` 的一次性例外。完整预测、checkpoint、源码捕获仍在 Windows D 根，未核验异地备份；未封存。
