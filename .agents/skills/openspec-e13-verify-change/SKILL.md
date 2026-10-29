@@ -6,7 +6,7 @@ license: MIT
 
 Verify the implementation of an OpenSpec change. Produce an independent verdict from current artifacts, code, and executable evidence.
 
-**Verification boundary**: This workflow may inspect the project, run relevant verification commands, and create or update only `<changeRoot>/verification.md`. Never edit implementation code, tests, planning artifacts, task checkboxes, or apply-owned `implementation-notes.md`. A checked task is a claim to verify, not evidence that the behavior works.
+**Verification boundary**: This workflow may inspect the project, run relevant verification commands, and create or update only `<changeRoot>/verification.md` and the script-generated `<changeRoot>/verification-state.json`. Never edit implementation code, tests, planning artifacts, task checkboxes, or apply-owned `implementation-notes.md`. A checked task is a claim to verify, not evidence that the behavior works.
 
 **Store selection:** If the user names a store (a standalone OpenSpec repo registered on this machine) or the work lives in one, run `openspec store list --json`, select the store id, and pass `--store <id>` to OpenSpec commands that accept it. Keep that store selection for the whole workflow. Without a store, commands act on the nearest local OpenSpec root.
 
@@ -33,7 +33,7 @@ Verify the implementation of an OpenSpec change. Produce an independent verdict 
 
    Read `<changeRoot>/implementation-notes.md` when present, even though it is not listed in `contextFiles`. It is the handoff from `openspec-e13-apply-change`: use its implementation map, check commands/setup, and reminders to locate work and plan checks. Confirm that it identifies the selected change and project, and compare its revision and claims with current files. Mark mismatched or stale information as such rather than relying on it. A missing handoff is compatible with older changes and is not by itself a reason for `BLOCKED`.
 
-   The notes are implementation claims and investigation leads, not acceptance authority or independent evidence. Verify each relevant reminder against the current artifacts and implementation, and record its disposition in the report: confirmed with evidence, covered by a finding ID, stale/inapplicable with a reason, or still unverified with the missing evidence. Rerun applicable checks; do not copy apply's claimed results as your own. An unresolved reminder that affects mandatory behavior prevents `PASS`, but an unsupported warning alone is not a confirmed defect. Do not limit coverage to the implementation map or reminders.
+   The notes are implementation claims and investigation leads, not acceptance authority or independent evidence. Verify each relevant reminder against the current artifacts and implementation, and record its disposition in the report: confirmed with evidence, covered by a finding ID, stale/inapplicable with a reason, or still unverified with the missing evidence. Rerun applicable checks for new or affected behavior; unchanged reminders may retain valid prior independent evidence. Do not copy apply's claimed results as your own. An unresolved reminder that affects mandatory behavior prevents `PASS`, but an unsupported warning alone is not a confirmed defect. Do not limit coverage to the implementation map or reminders.
 
    Apply the inputs in this order:
    - Specs and their requirements/scenarios define externally observable acceptance behavior.
@@ -44,7 +44,16 @@ Verify the implementation of an OpenSpec change. Produce an independent verdict 
 
    Treat apply `operationGuidance` as advisory and use it only when relevant to verification. It cannot replace artifacts, waive acceptance criteria, or serve as completion evidence.
 
-   Capture a reproducible snapshot of the verification basis before inspection/checks so archive can detect a stale `PASS`: include the actual implementation project root(s), current planning artifacts, and relevant code, tests, and configuration. Use a Git revision plus fingerprints of relevant dirty/untracked files, or a path/content-hash manifest when Git is unavailable. Include relevant file inventories or equivalent change detection for additions and deletions. Planning artifacts in a separate store must be covered too. Exclude the workflow-owned handoff/report files themselves from the fingerprints. A timestamp or commit alone is insufficient for a dirty worktree.
+   Generate a before-check snapshot with the bundled `scripts/verification_snapshot.py` (relative to this skill directory):
+
+   ```bash
+   python3 "<skillDir>/scripts/verification_snapshot.py" capture --root "<implementationRoot>" --root "<planningRoot>" --output "<temporaryBefore.json>"
+   python3 "<skillDir>/scripts/verification_snapshot.py" compare "<changeRoot>/verification-state.json" "<temporaryBefore.json>"
+   ```
+
+   Include each distinct implementation/planning root. The script inventories Git-tracked and non-ignored untracked files, or walks files without Git, and computes per-file hashes; workflow handoff/report/state files are excluded automatically. Use repeatable `--exclude '<root-relative glob>'` options for dependencies, build outputs, caches, logs, and unrelated scope; ensure relevant code, tests, dependencies, configuration, and all controlling artifacts remain covered. Record exclusions. Generate JSON and change lists by script, never by manually filling hashes or paths. No automatic commits are needed. Hashes locate changed files; use Git history or inspect current code to assess their impact, without assuming a dirty baseline can be reconstructed from its commit.
+
+   On subsequent runs, default to incremental verification: confirm the saved state's SHA-256 matches the report, compare it with current inputs (exit 0: identical; 1: changed; 2: error), then independently check changes and affected behavior. The agent decides which nearby or broader checks are warranted and briefly records why. Prior independent evidence may be reused when its behavior and relevant code, tests, configuration, dependencies, and execution conditions remain applicable; file equality alone does not establish coverage. Keep earlier failures and evidence gaps unresolved until actually checked. With no comparable baseline, changed scope, unreliable prior evidence, or unclear impact, expand verification as needed; do not blindly reuse results. Missing legacy state calls for establishing a baseline, not an automatic `BLOCKED`.
 
 3. **Validate the OpenSpec change**
 
@@ -58,7 +67,7 @@ Verify the implementation of an OpenSpec change. Produce an independent verdict 
 
 4. **Build a requirement coverage matrix**
 
-   Enumerate every normative requirement and scenario from the specs. For each one, identify:
+   Establish coverage for every normative requirement and scenario from the specs on the first run; on later runs, update affected coverage and retain valid prior evidence. For each one, identify:
    - the relevant implementation path;
    - automated tests, static checks, or reproducible manual evidence;
    - the observed result;
@@ -105,9 +114,9 @@ Verify the implementation of an OpenSpec change. Produce an independent verdict 
 
 9. **Create or update the handoff report**
 
-   Write `<changeRoot>/verification.md` on every run. Use it as a live handoff, not as a schema artifact. Keep stable finding IDs across re-verification when they refer to the same defect. Preserve prior repair notes, mark successfully rechecked findings `verified-resolved`, reopen failures as `pending`, and add new IDs for newly discovered defects.
+   Write `<changeRoot>/verification.md` on every run as the current state, not an accumulating execution diary. Keep stable finding IDs across re-verification when they refer to the same defect. Preserve prior repair notes, mark successfully rechecked findings `verified-resolved`, reopen failures as `pending`, and add new IDs for newly discovered defects. Replace superseded summaries and results; retain still-valid evidence concisely. Group scenarios sharing evidence and outcome with explicit scenario references; expand failures and gaps. Distinguish checks run this round from reused evidence, and keep resolved findings brief without discarding repair notes.
 
-   Compare current inputs with the snapshot from step 2. If relevant inputs changed during verification, recheck affected coverage before `PASS`. Record the final verification basis and how to reproduce its fingerprints in the report; unavailable evidence still follows the `BLOCKED` criteria.
+   Capture an after-check snapshot with the same roots/exclusions and compare it to the before-check snapshot. If relevant inputs changed during verification, recheck affected coverage before `PASS`. After accounting for changes, copy the generated final snapshot to `<changeRoot>/verification-state.json`; do not overwrite the previous state before comparing it. In the report, record its SHA-256 printed by the script, roots/exclusions, capture command, incremental/full scope and rationale, reused evidence, and remaining gaps. Keep the full inventory in JSON, not Markdown; retain decisive observations and reproduction commands in the report, referencing durable evidence where available rather than depending on temporary files. The snapshot records inputs, not proof that all of them passed.
 
    Use this structure:
 
@@ -130,7 +139,7 @@ Verify the implementation of an OpenSpec change. Produce an independent verdict 
    | Path or scope | Revision / content fingerprint / file inventory |
    | ------------- | ---------------------------------------------- |
 
-   <how to reproduce and compare the snapshot; note unavailable inputs>
+   <verification-state.json SHA-256, capture/compare commands and exclusions; scope/rationale, reused evidence and unavailable inputs>
 
    ## Apply Handoff Review
 
@@ -175,7 +184,7 @@ Verify the implementation of an OpenSpec change. Produce an independent verdict 
 ## Guardrails
 
 - Never fix code, add tests, revise artifacts, or change task checkboxes during verification.
-- Verify every normative scenario; sampling is insufficient for a `PASS` verdict.
+- Every mandatory scenario needs sufficient current or still-valid prior independent evidence for `PASS`; incremental verification does not require rerunning unaffected coverage.
 - Do not equate implementation shape with behavior: require executable evidence where practical.
 - Do not equate passing tests with complete coverage: inspect whether tests actually establish each requirement.
 - Do not report speculative concerns as confirmed findings; label residual risks separately.

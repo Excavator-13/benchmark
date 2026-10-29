@@ -74,6 +74,7 @@ Archive a completed change in the experimental workflow.
    **Require current independent verification before proceeding:**
    - Read `<changeRoot>/verification.md` using the resolved path. Require that it identifies this change, records `Verdict: PASS`, and has no unresolved findings (`pending`, `addressed-awaiting-verification`, or `blocked`).
    - Compare its `Verification Basis` with the current planning artifacts and implementation project(s), including relevant dirty/untracked changes and additions/deletions. Use the report's recorded roots and snapshot method; do not assume the planning store contains the implementation. Unrelated work outside the verified scope does not invalidate a report.
+   - For a script-generated `verification-state.json`, require that its SHA-256 matches the report, capture current inputs using the verify skill's `scripts/verification_snapshot.py` with the recorded roots/exclusions into a temporary file, then `compare` the saved and current snapshots (exit 0: identical; 1: changed; 2: error). Do not overwrite the saved state. Incremental verification may supply the required `PASS` when all mandatory coverage has current or still-valid prior independent evidence.
    - If the report is missing, belongs to another change/project, is not `PASS`, lacks a reproducible basis, or relevant inputs changed or cannot be compared, stop before any main-spec writes or archive move. Explain what is missing and direct the user to `$openspec-e13-verify-change <name>` (Codex) or `/openspec-e13-verify-change <name>` (other agents). Pending implementation findings can first go through `openspec-e13-fix-change`.
    - Never rewrite the report, infer `PASS` from task completion, or treat confirmation of an incomplete-artifact/task warning as satisfying this gate.
 
@@ -138,7 +139,7 @@ Archive a completed change in the experimental workflow.
 
 5. **Perform the archive**
 
-   Confirm the verification gate still holds immediately before the move. The main-spec sync performed by step 4 is expected; if it also changed inputs covered by the verification basis, or any other relevant input changed, stop and request re-verification. Preserve both `implementation-notes.md` (if present) and `verification.md` by moving the entire change directory.
+   Confirm the verification gate still holds immediately before the move. The main-spec sync performed by step 4 is expected; if it also changed inputs covered by the verification basis, or any other relevant input changed, stop and request re-verification. Preserve `implementation-notes.md`, `verification.md`, and `verification-state.json` when present by moving the entire change directory.
 
    Create an `archive` directory under `planningHome.changesDir` if it doesn't exist:
    ```bash
