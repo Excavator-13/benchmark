@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "run_id": "p02-t006-gru-lstm-20261107",
+  "kind": "experiment",
+  "task_id": "P02-T006",
+  "started_at": "2026-11-07",
+  "source": {
+    "repository": "E:\\大创\\repo\\benchmark-my-change",
+    "base_commit": null,
+    "worktree_status_path": null,
+    "relevant_diff_path": null
+  },
+  "protocol": {
+    "version": "P02-T006-reconstructed-r0-count-L6-H3-v1",
+    "snapshot_path": "summary.md"
+  },
+  "config_path": "summary.md",
+  "environment_path": "environment.txt",
+  "commands_path": "commands.log",
+  "output_manifest_path": "metrics.json",
+  "limitations": [
+    "P02 plan was reconstructed from the user request because remote P02 files were unavailable.",
+    "Only r0/count was evaluated on CPU."
+  ]
+}

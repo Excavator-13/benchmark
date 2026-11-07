@@ -1,0 +1,7 @@
+Working directory: E:\大创\repo\benchmark-my-change\benchmark\multivariate_time_series
+
+C:\Users\zhuzhenyu\anaconda3\python.exe run.py --task_name long_term_forecast --is_training 1 --data job_demand_r0 --root_path ../../../benchmark/dataset/demand/ --data_path r0.parquet --features M --seq_len 6 --label_len 1 --pred_len 3 --rnn_hidden_size 256 --rnn_layers 2 --train_epochs 20 --batch_size 1 --num_workers 0 --use_gpu 0 --seed 2 --task_mode '' --des p02_t006_gru_lstm --itr 3 --patience 3 --checkpoints ../../scratch/p02_t006_checkpoints_repeat --model_id p02_t006_gru --model GRU
+C:\Users\zhuzhenyu\anaconda3\python.exe run.py --task_name long_term_forecast --is_training 1 --data job_demand_r0 --root_path ../../../benchmark/dataset/demand/ --data_path r0.parquet --features M --seq_len 6 --label_len 1 --pred_len 3 --rnn_hidden_size 256 --rnn_layers 2 --train_epochs 20 --batch_size 1 --num_workers 0 --use_gpu 0 --seed 2 --task_mode '' --des p02_t006_gru_lstm --itr 3 --patience 3 --checkpoints ../../scratch/p02_t006_checkpoints_repeat --model_id p02_t006_lstm --model LSTM
+
+OpenSpec validation: openspec validate p02-t006-e13-gru-lstm --type change --strict --json --no-interactive (PASS, valid=true, issues=[])
+Independent verification: Python compilation, run.py --help, GRU/LSTM shape smoke test, one-epoch GRU/LSTM smoke runs, three-seed log/metric inspection (PASS)

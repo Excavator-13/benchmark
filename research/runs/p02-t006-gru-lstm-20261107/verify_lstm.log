@@ -1,0 +1,81 @@
+False
+Args in experiment:
+[1mBasic Config[0m
+  Task Name:          long_term_forecast  Is Training:        1                   
+  Model ID:           p02_t006_verify_lstmModel:              LSTM                
+
+[1mData Loader[0m
+  Data:               job_demand_r0       Root Path:          ../../../benchmark/dataset/demand/
+  Data Path:          r0.parquet          Features:           M                   
+  Target:             OT                  Freq:               h                   
+  Checkpoints:        ../../scratch/p02_t006_verify_checkpoints
+
+[1mForecasting Task[0m
+  Seq Len:            6                   Label Len:          1                   
+  Pred Len:           3                   Seasonal Patterns:  Monthly             
+  Inverse:            1                   
+
+[1mModel Parameters[0m
+  Top k:              5                   Num Kernels:        6                   
+  Enc In:             2335                Dec In:             2335                
+
+  C Out:              2335                d model:            512                 
+  n heads:            8                   e layers:           2                   
+  d layers:           2                   d FF:               2048                
+  Moving Avg:         25                  Factor:             1                   
+  Distil:             1                   Dropout:            0.1                 
+  Embed:              learned             Activation:         gelu                
+  Output Attention:   0                   
+
+[1mRun Parameters[0m
+  Num Workers:        0                   Itr:                1                   
+  Train Epochs:       1                   Batch Size:         1                   
+  Patience:           1                   Learning Rate:      0.0001              
+  Des:                p02_t006_verify     Loss:               MSE                 
+  Lradj:              type1               Use Amp:            0                   
+
+[1mGPU[0m
+  Use GPU:            0                   GPU:                0                   
+  Use Multi GPU:      0                   Devices:            0,1                 
+
+[1mDe-stationary Projector Params[0m
+  P Hidden Dims:      128, 128            P Hidden Layers:    2                   
+
+Use CPU
+>>>>>>>start training : long_term_forecast_p02_t006_verify_lstm_LSTM_job_demand_r0_ftM_sl6_ll1_pl3_dm512_nh8_el2_dl2_df2048_expand2_dc4_fc1_eblearned_dtTrue_p02_t006_verify_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 19
+val 1
+  0%|          | 0/19 [00:00<?, ?it/s]
+loss:0.8717339038848877:   0%|          | 0/19 [00:00<?, ?it/s]
+loss:1.0407096147537231:   0%|          | 0/19 [00:00<?, ?it/s]
+loss:0.8042104840278625:   0%|          | 0/19 [00:00<?, ?it/s]
+loss:0.8498060703277588:   0%|          | 0/19 [00:00<?, ?it/s]
+loss:0.8498060703277588:  21%|����        | 4/19 [00:00<00:00, 33.98it/s]
+loss:1.1372871398925781:  21%|����        | 4/19 [00:00<00:00, 33.98it/s]
+loss:0.7534096837043762:  21%|����        | 4/19 [00:00<00:00, 33.98it/s]
+loss:0.626198947429657:  21%|����        | 4/19 [00:00<00:00, 33.98it/s] 
+loss:0.9240700006484985:  21%|����        | 4/19 [00:00<00:00, 33.98it/s]
+loss:0.953178882598877:  21%|����        | 4/19 [00:00<00:00, 33.98it/s] 
+loss:0.855427086353302:  21%|����        | 4/19 [00:00<00:00, 33.98it/s]
+loss:0.855427086353302:  53%|������������    | 10/19 [00:00<00:00, 43.38it/s]
+loss:1.1665942668914795:  53%|������������    | 10/19 [00:00<00:00, 43.38it/s]
+loss:0.8854041695594788:  53%|������������    | 10/19 [00:00<00:00, 43.38it/s]
+loss:0.7814226746559143:  53%|������������    | 10/19 [00:00<00:00, 43.38it/s]
+loss:0.9057642221450806:  53%|������������    | 10/19 [00:00<00:00, 43.38it/s]
+loss:0.7360414266586304:  53%|������������    | 10/19 [00:00<00:00, 43.38it/s]
+loss:0.7360414266586304:  79%|����������������  | 15/19 [00:00<00:00, 45.62it/s]
+loss:1.433972954750061:  79%|����������������  | 15/19 [00:00<00:00, 45.62it/s] 
+loss:0.6415496468544006:  79%|����������������  | 15/19 [00:00<00:00, 45.62it/s]
+loss:0.9866030812263489:  79%|����������������  | 15/19 [00:00<00:00, 45.62it/s]
+loss:0.8312757611274719:  79%|����������������  | 15/19 [00:00<00:00, 45.62it/s]
+loss:0.8312757611274719: 100%|��������������������| 19/19 [00:00<00:00, 45.30it/s]
+Epoch: 1 cost time: 0.42049098014831543
+Epoch: 1, Steps: 19 | Train Loss: 0.9044558 Vali Loss: 2.7598150
+Validation loss decreased (inf --> 2.759815).  Saving model ...
+Updating learning rate to 0.0001
+>>>>>>>testing : long_term_forecast_p02_t006_verify_lstm_LSTM_job_demand_r0_ftM_sl6_ll1_pl3_dm512_nh8_el2_dl2_df2048_expand2_dc4_fc1_eblearned_dtTrue_p02_t006_verify_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 4
+loading model
+test shape: (4, 1, 3, 2335) (4, 1, 3, 2335)
+test shape: (4, 3, 2335) (4, 3, 2335)
+mse:3281595.0, mae:318.5888366699219, dtw:-999

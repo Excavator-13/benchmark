@@ -1,14 +1,6 @@
 import argparse
 import os
 import torch
-from exp.exp_long_term_forecasting import Exp_Long_Term_Forecast
-from exp.exp_long_term_forecasting_fair import Exp_long_term_forecasting_fair
-from exp.exp_long_term_forecasting_break import Exp_long_term_forecasting_break
-from exp.exp_long_term_forecasting_low import Exp_long_term_forecasting_low
-from exp.exp_imputation import Exp_Imputation
-from exp.exp_short_term_forecasting import Exp_Short_Term_Forecast
-from exp.exp_anomaly_detection import Exp_Anomaly_Detection
-from exp.exp_classification import Exp_Classification
 from utils.print_args import print_args
 import random
 import numpy as np
@@ -32,7 +24,7 @@ if __name__ == '__main__':
     parser.add_argument('--is_training', type=int, default=1, help='status')
     parser.add_argument('--model_id', type=str, default='0', help='model id')
     parser.add_argument('--model', type=str, default='PatchTST',
-                        help="model name, options: ['LSTM' ,'CHGH', 'Autoformer', 'Crossformer', 'DLinear', 'ETSformer', 'FEDformer', 'FiLM', 'FreTS', 'Informer', 'iTransformer', 'Koopa', 'LightTS', 'MICN', 'Nonstationary_Transformer', 'PatchTST', 'Pyraformer', 'Reformer', 'SegRNN', 'TemporalFusionTransformer', 'TiDE', 'TimeMixer', 'TimesNet', 'Transformer', 'TSMixer']")
+                        help="model name, options: ['GRU', 'LSTM', 'CHGH', 'Autoformer', 'Crossformer', 'DLinear', 'ETSformer', 'FEDformer', 'FiLM', 'FreTS', 'Informer', 'iTransformer', 'Koopa', 'LightTS', 'MICN', 'Nonstationary_Transformer', 'PatchTST', 'Pyraformer', 'Reformer', 'SegRNN', 'TemporalFusionTransformer', 'TiDE', 'TimeMixer', 'TimesNet', 'Transformer', 'TSMixer']")
 
     # data loader
     parser.add_argument('--data', type=str, default='job_demand_region', help='dataset type')
@@ -56,7 +48,7 @@ if __name__ == '__main__':
     parser.add_argument('--mask_rate', type=float, default=0.25, help='mask ratio')
 
     # anomaly detection task
-    parser.add_argument('--anomaly_ratio', type=float, default=0.25, help='prior anomaly ratio (%)')
+    parser.add_argument('--anomaly_ratio', type=float, default=0.25, help='prior anomaly ratio (percent)')
 
     # model define
     parser.add_argument('--expand', type=int, default=2, help='expansion factor for Mamba')
@@ -92,6 +84,10 @@ if __name__ == '__main__':
                         help='down sampling method, only support avg, max, conv')
     parser.add_argument('--seg_len', type=int, default=3,
                         help='the length of segmen-wise iteration of SegRNN')
+    parser.add_argument('--rnn_hidden_size', type=int, default=256,
+                        help='hidden size for GRU/LSTM')
+    parser.add_argument('--rnn_layers', type=int, default=2,
+                        help='number of recurrent layers for GRU/LSTM')
 
     # optimization
     parser.add_argument('--num_workers', type=int, default=32, help='data loader num workers')
@@ -160,29 +156,41 @@ if __name__ == '__main__':
     print_args(args)
 
     if args.task_name == 'long_term_forecast':
+        from exp.exp_long_term_forecasting import Exp_Long_Term_Forecast
         if args.task_mode == '_fair':
+            from exp.exp_long_term_forecasting_fair import Exp_long_term_forecasting_fair
             Exp = Exp_long_term_forecasting_fair
         elif args.task_mode == '_break':
+            from exp.exp_long_term_forecasting_break import Exp_long_term_forecasting_break
             Exp = Exp_long_term_forecasting_break
             args.task_mode += f'_{args.break_mode}'
         elif args.task_mode == '_low':
+            from exp.exp_long_term_forecasting_low import Exp_long_term_forecasting_low
             Exp = Exp_long_term_forecasting_low
         else:
             Exp = Exp_Long_Term_Forecast
     elif args.task_name == 'short_term_forecast':
+        from exp.exp_short_term_forecasting import Exp_Short_Term_Forecast
         Exp = Exp_Short_Term_Forecast
     elif args.task_name == 'imputation':
+        from exp.exp_imputation import Exp_Imputation
         Exp = Exp_Imputation
     elif args.task_name == 'anomaly_detection':
+        from exp.exp_anomaly_detection import Exp_Anomaly_Detection
         Exp = Exp_Anomaly_Detection
     elif args.task_name == 'classification':
+        from exp.exp_classification import Exp_Classification
         Exp = Exp_Classification
     
     if args.is_training:
         for ii in range(args.itr):
-            random.seed(ii)
-            torch.manual_seed(ii)
-            np.random.seed(ii)
+            # Keep the seed explicit and reproducible across repeated runs.
+            run_seed = args.seed + ii
+            random.seed(run_seed)
+            torch.manual_seed(run_seed)
+            np.random.seed(run_seed)
+            if torch.cuda.is_available():
+                torch.cuda.manual_seed_all(run_seed)
             # setting record of experiments
             exp = Exp(args)  # set experiments
             setting = '{}_{}_{}_{}_ft{}_sl{}_ll{}_pl{}_dm{}_nh{}_el{}_dl{}_df{}_expand{}_dc{}_fc{}_eb{}_dt{}_{}_{}'.format(
@@ -211,7 +219,9 @@ if __name__ == '__main__':
             print('>>>>>>>start training : {}>>>>>>>>>>>>>>>>>>>>>>>>>>'.format(setting))
             exp.train(setting)
             print('>>>>>>>testing : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
-            exp.test(setting)
+            # Evaluate the checkpoint selected by validation loss, not the
+            # final in-memory epoch, so model comparisons use the same rule.
+            exp.test(setting, test=1)
             torch.cuda.empty_cache()
     else:
         ii = 0

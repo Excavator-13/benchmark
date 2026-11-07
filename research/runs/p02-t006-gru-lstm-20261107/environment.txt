@@ -1,0 +1,6 @@
+Python: 3.13.5 (Anaconda)
+PyTorch: 2.10.0+cpu
+pandas: 2.2.3
+pyarrow: 19.0.0
+Device: CPU
+OpenSpec: 1.16.1 (`@fission-ai/openspec`)
