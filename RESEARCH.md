@@ -8,6 +8,8 @@
 - [T005 原服务器受控复跑指导](research/phases/P01/t005-evolvegcnh-guide.md)
 - [T007 训练期内部两折无图回测指导](research/phases/P01/t007-backtest-guide.md)
 - [第二阶段计划](research/phases/P02/plan.md)
+- [P02 后续训练协议](research/phases/P02/protocol.md)
+- [P02-T005 训练条件与成本方案](research/reports/p02-t005-20261107-01/report.md)
 - [P01 阶段汇总](research/analyses/p01-t008-stage-summary-20261018-01/report.md)
 - [委托指针](DELEGATION.md)
 - [建议与决定](research/decisions.md)
