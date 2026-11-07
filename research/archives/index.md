@@ -317,3 +317,17 @@ region/r0 产物：[组合报告](../reports/p02-t002-remaining-20261022-01/repo
 对象：[T005 方案报告](../reports/p02-t005-20261107-01/report.md)、同目录的只读成本汇总脚本与 [historical-cost.json](../reports/p02-t005-20261107-01/historical-cost.json)。依据为既有正式自身 run 的可读 summary；本轮没有新训练产物。科学条件由 [P02 新协议](../phases/P02/protocol.md) 维护，研究侧采用见 D038。
 
 存储：上述交付已在本机仓库工作区生成；本轮未 commit、push 或封存，异地备份未核验。旧模型、预测与 checkpoint 的存储事实仍见对应历史条目，本次方案交付不代表它们已迁移或补做核验。
+
+## P02-T009 构图审计软件交付与研究侧回收（2026-11-07）
+
+对象：新增 `benchmark/occupation_skill_graph/`、README 使用说明、[归档变更与独立验证](../../openspec/changes/archive/2026-11-07-add-occupation-skill-graph-audit/verification.md)及[研究侧回收核对](../reports/p02-t009-software-acceptance-20261107-01/report.md)。软件接受决定见 D040；真实图与预测产物尚未产生。
+
+已核对本地保存：实现提交 `67c25073460a7e90bae2e9b8de3dd73de602196b`、修复提交 `3039f9c1176ccfcfb156b6aafdf7a92456530a6d` 和归档提交 `4bacc5e621d8ff16240d2021a55cac064cd24f2d` 在当前历史中；归档提交保存独立 PASS、验证清单及主规格。软件验证开发产物据其报告使用 scratch／临时 fixture，不能作为真实图实验保存。远端备份未核验。
+
+回收报告随本次用户授权的文档提交入库，提交身份从 Git 历史追溯；未封存／推送。OpenSpec 的归档是软件流程归档，不等于研究实验封存包；本次无实验封存或恢复核验。记录文件自身提交身份从 Git 历史追溯，不追加自指提交回执。
+
+## P02-T009 真实构图与审计（2026-11-07）
+
+对象：[真实 run](../runs/p02-t009-occupation-20261107-01/summary.md)、同 run 的 report／command／provenance、完整 `artifacts/` 数值与身份材料、[研究侧审计](../reports/p02-t009-20261107-01/report.md)及其预检／检查／分析脚本与 JSON。接受及冻结决定见 D041，不能以冻结身份代替实验封存或预测结论。
+
+存储：run 的 summary／report／command／provenance 以及研究审计报告、预检／检查／分析脚本与 JSON 随本次用户授权的文档提交入库，提交身份从 Git 历史追溯。run manifest 和 saved-only check 记录文件校验；完整数值产物、protocol 快照、environment、manifest、status／supervisor 等仍在本地 run 目录，受通用规则忽略，未修改忽略规则或强制入库。本次未 push 或制作研究封存包，完整图数组尚无已提交或异地副本的依据；备份及恢复未核验。后续跨机器使用须显式携带完整产物或按冻结来源重现，不能假设仅同步 Git 即可取得数组。

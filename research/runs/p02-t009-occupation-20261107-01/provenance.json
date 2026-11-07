@@ -1,0 +1,775 @@
+{
+  "code_source": {
+    "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+    "errors": {},
+    "files": {
+      "benchmark/nograph_baseline/artifacts.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/nograph_baseline/artifacts.py",
+          "sha256": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/artifacts.py",
+        "sha256": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/data.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/nograph_baseline/data.py",
+          "sha256": "790dd78339e6b7f5476a34a9d272e4fbef1be21075a5b57691e7dff22871cc63"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/data.py",
+        "sha256": "790dd78339e6b7f5476a34a9d272e4fbef1be21075a5b57691e7dff22871cc63",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/protocol.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/nograph_baseline/protocol.py",
+          "sha256": "7b941e0f097ccd3b3f1a02337fab497dbbdadae3d478cce74011ea5f8591d73b"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/protocol.py",
+        "sha256": "7b941e0f097ccd3b3f1a02337fab497dbbdadae3d478cce74011ea5f8591d73b",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/__init__.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/__init__.py",
+          "sha256": "c6c7837a96ee3c5c70e026d7017edf5783e43678819765ff4f269950fb492604"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/__init__.py",
+        "sha256": "c6c7837a96ee3c5c70e026d7017edf5783e43678819765ff4f269950fb492604",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/__main__.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/__main__.py",
+          "sha256": "39d774ca1793baabe4fd5dbe01929118c9058c6d89759acf5dce60976df63fab"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/__main__.py",
+        "sha256": "39d774ca1793baabe4fd5dbe01929118c9058c6d89759acf5dce60976df63fab",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/_worker.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/_worker.py",
+          "sha256": "f89eb9767d5a40fd681619a818c4f8019728a082d755cf10706817db5c7abfce"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/_worker.py",
+        "sha256": "f89eb9767d5a40fd681619a818c4f8019728a082d755cf10706817db5c7abfce",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/artifacts.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/artifacts.py",
+          "sha256": "644e9942571f9e0cf358797dba29aa45d740425bd21c24a11c9823595bc85994"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/artifacts.py",
+        "sha256": "644e9942571f9e0cf358797dba29aa45d740425bd21c24a11c9823595bc85994",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/checks.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/checks.py",
+          "sha256": "7e7ce6db4f119c84976df77f7f534760ffa4c700f6c5369d73c7327f8a4034a9"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/checks.py",
+        "sha256": "7e7ce6db4f119c84976df77f7f534760ffa4c700f6c5369d73c7327f8a4034a9",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/cli.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/cli.py",
+          "sha256": "50b9edb29c9cb9bd0bc8600bdc9eb38fdb4ef1add2a67f6e368c1a543c8106a7"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/cli.py",
+        "sha256": "50b9edb29c9cb9bd0bc8600bdc9eb38fdb4ef1add2a67f6e368c1a543c8106a7",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/data.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/data.py",
+          "sha256": "2032b9a8d8fd7078674a52479912b63aed09ca3320cb9b713ed0899c618b2cd1"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/data.py",
+        "sha256": "2032b9a8d8fd7078674a52479912b63aed09ca3320cb9b713ed0899c618b2cd1",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/layout.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/layout.py",
+          "sha256": "79fb0986bcb6e0f8fa494ac200bf4774dd256c2da60321453503c4e1d3fcece8"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/layout.py",
+        "sha256": "79fb0986bcb6e0f8fa494ac200bf4774dd256c2da60321453503c4e1d3fcece8",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/mapping.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/mapping.py",
+          "sha256": "3852ff5ff1d578e4b6c423645989649b709d98875259de82d2818652f8b8e1da"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/mapping.py",
+        "sha256": "3852ff5ff1d578e4b6c423645989649b709d98875259de82d2818652f8b8e1da",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/protocol.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/protocol.py",
+          "sha256": "eeea4bd715a3327a5ae514bdc95d1385aca4342c348dbcef18bdde818e27f41c"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/protocol.py",
+        "sha256": "eeea4bd715a3327a5ae514bdc95d1385aca4342c348dbcef18bdde818e27f41c",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/runner.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/runner.py",
+          "sha256": "41d3087e9d6ed70c67fdcd10aad5314d9a75eff0b6cf3aa142952ab0d8fe7ad9"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/runner.py",
+        "sha256": "41d3087e9d6ed70c67fdcd10aad5314d9a75eff0b6cf3aa142952ab0d8fe7ad9",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/scores.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/scores.py",
+          "sha256": "24e31085c22ab61c9ed3d12ecf41cfcfd3832875784255976929607c1b72a3ff"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/scores.py",
+        "sha256": "24e31085c22ab61c9ed3d12ecf41cfcfd3832875784255976929607c1b72a3ff",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/structure.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/structure.py",
+          "sha256": "d5e0c38561be5ff9af0db2f0f4862679ff836151effa9ec129fc14f94eb23017"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/structure.py",
+        "sha256": "d5e0c38561be5ff9af0db2f0f4862679ff836151effa9ec129fc14f94eb23017",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/supervisor.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/supervisor.py",
+          "sha256": "3309d229e668c7a5b7ac7e56b0fadeb122a442b00b0c00f09230601d0b0131b6"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/supervisor.py",
+        "sha256": "3309d229e668c7a5b7ac7e56b0fadeb122a442b00b0c00f09230601d0b0131b6",
+        "unavailable_reason": null
+      },
+      "benchmark/occupation_skill_graph/trends.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "benchmark/occupation_skill_graph/trends.py",
+          "sha256": "e945666916a39ef31fa2671fb3a8db2e89dedad96bed2724ac8acee068c6c22c"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/occupation_skill_graph/trends.py",
+        "sha256": "e945666916a39ef31fa2671fb3a8db2e89dedad96bed2724ac8acee068c6c22c",
+        "unavailable_reason": null
+      },
+      "research/phases/P02/t009-graph-protocol.md": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+          "path": "research/phases/P02/t009-graph-protocol.md",
+          "sha256": "da5fd31211511e3cb91cad25f57885a6b916b14869bca7ad1df968246ab04344"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "research/phases/P02/t009-graph-protocol.md",
+        "sha256": "da5fd31211511e3cb91cad25f57885a6b916b14869bca7ad1df968246ab04344",
+        "unavailable_reason": null
+      }
+    },
+    "generated": "2026-11-07T20:45:30+08:00",
+    "identity_available": true,
+    "patch_bytes": 0,
+    "patch_errors": {},
+    "patch_path": "git-diff.patch",
+    "patch_unusable_paths": [],
+    "policy": "P01-records-v2",
+    "protocol": {
+      "content_saved": null,
+      "git_reference": {
+        "commit": "4bacc5e621d8ff16240d2021a55cac064cd24f2d",
+        "path": "research/phases/P02/t009-graph-protocol.md",
+        "sha256": "da5fd31211511e3cb91cad25f57885a6b916b14869bca7ad1df968246ab04344"
+      },
+      "git_status": "committed_clean",
+      "outside_repository": false,
+      "patch_path": null,
+      "path": "research/phases/P02/t009-graph-protocol.md",
+      "sha256": "da5fd31211511e3cb91cad25f57885a6b916b14869bca7ad1df968246ab04344",
+      "unavailable_reason": null
+    },
+    "runtime_scope": [
+      "benchmark/nograph_baseline/artifacts.py",
+      "benchmark/nograph_baseline/data.py",
+      "benchmark/nograph_baseline/protocol.py",
+      "benchmark/occupation_skill_graph/__init__.py",
+      "benchmark/occupation_skill_graph/__main__.py",
+      "benchmark/occupation_skill_graph/_worker.py",
+      "benchmark/occupation_skill_graph/artifacts.py",
+      "benchmark/occupation_skill_graph/checks.py",
+      "benchmark/occupation_skill_graph/cli.py",
+      "benchmark/occupation_skill_graph/data.py",
+      "benchmark/occupation_skill_graph/layout.py",
+      "benchmark/occupation_skill_graph/mapping.py",
+      "benchmark/occupation_skill_graph/protocol.py",
+      "benchmark/occupation_skill_graph/runner.py",
+      "benchmark/occupation_skill_graph/scores.py",
+      "benchmark/occupation_skill_graph/structure.py",
+      "benchmark/occupation_skill_graph/supervisor.py",
+      "benchmark/occupation_skill_graph/trends.py",
+      "research/phases/P02/t009-graph-protocol.md"
+    ],
+    "scoped_dirty": false,
+    "unrecoverable_paths": [],
+    "whole_repository_dirty": true
+  },
+  "command": {
+    "argv": [
+      "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python",
+      "-m",
+      "benchmark.occupation_skill_graph",
+      "build",
+      "--purpose",
+      "research",
+      "--run-id",
+      "p02-t009-occupation-20261107-01"
+    ],
+    "created": "2026-11-07T20:45:29+08:00",
+    "cwd": "/Users/watuji/da_chuang/repos/benchmark",
+    "demand_path": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r2.parquet",
+    "fixture": false,
+    "limits": {
+      "build_stage_timeout_seconds": 1800.0,
+      "monitor_interval_seconds": 0.25,
+      "process_rss_limit_bytes": 2147483648,
+      "rss_scope": "worker process lifetime, sampled; not an OS hard cap",
+      "timeout_scope": "separate construction and trend stage wall clocks",
+      "trend_stage_timeout_seconds": 1800.0
+    },
+    "output_root": "/Users/watuji/da_chuang/repos/benchmark/research/runs",
+    "purpose": "research",
+    "run_id": "p02-t009-occupation-20261107-01",
+    "schema": "occupation-skill-graph-command-v1",
+    "target_paths": {
+      "r0": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r0.parquet",
+      "r2": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r2.parquet",
+      "region": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/region.parquet"
+    }
+  },
+  "created": "2026-11-07T20:45:32+08:00",
+  "environment": {
+    "cpu_count": 10,
+    "machine": "arm64",
+    "numpy_blas_config": "{\n  \"Compilers\": {\n    \"c\": {\n      \"name\": \"clang\",\n      \"linker\": \"ld64\",\n      \"version\": \"14.0.0\",\n      \"commands\": \"cc\",\n      \"args\": \"-fno-strict-aliasing, -DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\",\n      \"linker args\": \"-fno-strict-aliasing, -DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\"\n    },\n    \"cython\": {\n      \"name\": \"cython\",\n      \"linker\": \"cython\",\n      \"version\": \"3.0.8\",\n      \"commands\": \"cython\"\n    },\n    \"c++\": {\n      \"name\": \"clang\",\n      \"linker\": \"ld64\",\n      \"version\": \"14.0.0\",\n      \"commands\": \"c++\",\n      \"args\": \"-DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\",\n      \"linker args\": \"-DBLAS_SYMBOL_SUFFIX=64_, -DHAVE_BLAS_ILP64\"\n    }\n  },\n  \"Machine Information\": {\n    \"host\": {\n      \"cpu\": \"aarch64\",\n      \"family\": \"aarch64\",\n      \"endian\": \"little\",\n      \"system\": \"darwin\"\n    },\n    \"build\": {\n      \"cpu\": \"aarch64\",\n      \"family\": \"aarch64\",\n      \"endian\": \"little\",\n      \"system\": \"darwin\"\n    }\n  },\n  \"Build Dependencies\": {\n    \"blas\": {\n      \"name\": \"openblas64\",\n      \"found\": true,\n      \"version\": \"0.3.23.dev\",\n      \"detection method\": \"pkgconfig\",\n      \"include directory\": \"/opt/arm64-builds/include\",\n      \"lib directory\": \"/opt/arm64-builds/lib\",\n      \"openblas configuration\": \"USE_64BITINT=1 DYNAMIC_ARCH=1 DYNAMIC_OLDER= NO_CBLAS= NO_LAPACK= NO_LAPACKE= NO_AFFINITY=1 USE_OPENMP= SANDYBRIDGE MAX_THREADS=3\",\n      \"pc file directory\": \"/usr/local/lib/pkgconfig\"\n    },\n    \"lapack\": {\n      \"name\": \"dep4350285776\",\n      \"found\": true,\n      \"version\": \"1.26.4\",\n      \"detection method\": \"internal\",\n      \"include directory\": \"unknown\",\n      \"lib directory\": \"unknown\",\n      \"openblas configuration\": \"unknown\",\n      \"pc file directory\": \"unknown\"\n    }\n  },\n  \"Python Information\": {\n    \"path\": \"/private/var/folders/76/zy5ktkns50v6gt5g8r0sf6sc0000gn/T/cibw-run-iyy0yn4s/cp311-macosx_arm64/build/venv/bin/python\",\n    \"version\": \"3.11\"\n  },\n  \"SIMD Extensions\": {\n    \"baseline\": [\n      \"NEON\",\n      \"NEON_FP16\",\n      \"NEON_VFPV4\",\n      \"ASIMD\"\n    ],\n    \"found\": [\n      \"ASIMDHP\"\n    ],\n    \"not found\": [\n      \"ASIMDFHM\"\n    ]\n  }\n}\n",
+    "numpy_blas_config_error": null,
+    "occupation_skill_graph": {
+      "min_positive_months": 12,
+      "protocol_version": "P2-occupation-skill-graph-v1",
+      "score_block_size": 256,
+      "task_id": "P02-T009",
+      "top_k": 10,
+      "trend_block_size": 512
+    },
+    "optional_packages": {
+      "sklearn": null
+    },
+    "packages": {
+      "numpy": "1.26.4",
+      "pandas": "2.2.3",
+      "pyarrow": "17.0.0"
+    },
+    "pip_freeze": "aiohappyeyeballs==2.7.1\naiohttp==3.14.5\naiosignal==1.4.0\nattrs==26.1.0\ncertifi==2026.7.22\ncharset-normalizer==3.5.2\ndecorator==4.4.2\nfilelock==4.1.0\nfrozenlist==1.8.0\nfsspec==2026.9.0\nidna==3.20\nJinja2==3.1.6\nMarkupSafe==3.0.4\nmpmath==1.3.0\nmultidict==7.1.0\nnetworkx==3.6.1\nnumpy==1.26.4\npackaging==26.3\npandas==2.2.3\npropcache==0.5.4\npsutil==7.2.2\npyarrow==17.0.0\npyparsing==3.3.3\npython-dateutil==2.9.0.post0\npytz==2026.5\nrequests==2.34.2\nscipy==1.17.1\nsix==1.17.0\nsympy==1.14.0\ntorch==2.14.1\ntorch-geometric==2.8.0.post1\ntorch_geometric_temporal==0.56.2\ntorch_scatter==2.1.2\ntorch_sparse==0.6.18\ntqdm==4.70.1\ntyping_extensions==4.16.0\ntzdata==2026.5\nurllib3==2.8.0\nxxhash==4.0.1\nyarl==1.25.1\n",
+    "pip_freeze_error": null,
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "processor": "arm",
+    "python_executable": "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python",
+    "python_version": "3.11.17 (main, Oct  1 2026, 20:09:52) [Clang 20.1.8 ]",
+    "python_version_info": [
+      3,
+      11,
+      17
+    ],
+    "repo_root": "/Users/watuji/da_chuang/repos/benchmark",
+    "system": "Darwin",
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "thread_settings": {
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    }
+  },
+  "fixture": false,
+  "limits": {
+    "build_stage_timeout_seconds": 1800.0,
+    "monitor_interval_seconds": 0.25,
+    "process_rss_limit_bytes": 2147483648,
+    "rss_scope": "worker process lifetime, sampled; not an OS hard cap",
+    "timeout_scope": "separate construction and trend stage wall clocks",
+    "trend_stage_timeout_seconds": 1800.0
+  },
+  "protocol": {
+    "min_positive_months": 12,
+    "path": "/Users/watuji/da_chuang/repos/benchmark/research/phases/P02/t009-graph-protocol.md",
+    "sha256": "da5fd31211511e3cb91cad25f57885a6b916b14869bca7ad1df968246ab04344",
+    "task_id": "P02-T009",
+    "top_k": 10,
+    "train_months": [
+      "2021-01",
+      "2021-02",
+      "2021-03",
+      "2021-04",
+      "2021-05",
+      "2021-06",
+      "2021-07",
+      "2021-08",
+      "2021-09",
+      "2021-10",
+      "2021-11",
+      "2021-12",
+      "2022-01",
+      "2022-02",
+      "2022-03",
+      "2022-04",
+      "2022-05",
+      "2022-06",
+      "2022-07",
+      "2022-08",
+      "2022-09",
+      "2022-10",
+      "2022-11",
+      "2022-12",
+      "2023-01",
+      "2023-02",
+      "2023-03"
+    ],
+    "version": "P2-occupation-skill-graph-v1"
+  },
+  "purpose": "research",
+  "run_id": "p02-t009-occupation-20261107-01",
+  "schema": "occupation-skill-graph-provenance-v1",
+  "software_scope": "P02-T009 software evidence only; no research acceptance, graph freeze, dataset change or prediction training",
+  "source": {
+    "dimensions": {
+      "occupations": 52,
+      "skills": 2335,
+      "training_months": 27
+    },
+    "file_identity": {
+      "held_out_values_read": false,
+      "native_dtypes": {
+        "2021-01": "float64",
+        "2021-02": "float64",
+        "2021-03": "float64",
+        "2021-04": "float64",
+        "2021-05": "float64",
+        "2021-06": "float64",
+        "2021-07": "float64",
+        "2021-08": "float64",
+        "2021-09": "float64",
+        "2021-10": "float64",
+        "2021-11": "float64",
+        "2021-12": "float64",
+        "2022-01": "float64",
+        "2022-02": "float64",
+        "2022-03": "float64",
+        "2022-04": "float64",
+        "2022-05": "float64",
+        "2022-06": "float64",
+        "2022-07": "float64",
+        "2022-08": "float64",
+        "2022-09": "float64",
+        "2022-10": "float64",
+        "2022-11": "float64",
+        "2022-12": "float64",
+        "2023-01": "float64",
+        "2023-02": "float64",
+        "2023-03": "float64",
+        "r2_id": "int64",
+        "skill_id": "int64"
+      },
+      "path": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r2.parquet",
+      "read_columns": [
+        "r2_id",
+        "skill_id",
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2021-05",
+        "2021-06",
+        "2021-07",
+        "2021-08",
+        "2021-09",
+        "2021-10",
+        "2021-11",
+        "2021-12",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2022-05",
+        "2022-06",
+        "2022-07",
+        "2022-08",
+        "2022-09",
+        "2022-10",
+        "2022-11",
+        "2022-12",
+        "2023-01",
+        "2023-02",
+        "2023-03"
+      ],
+      "schema": {
+        "column_names": [
+          "r2_id",
+          "skill_id",
+          "2021-01",
+          "2021-02",
+          "2021-03",
+          "2021-04",
+          "2021-05",
+          "2021-06",
+          "2021-07",
+          "2021-08",
+          "2021-09",
+          "2021-10",
+          "2021-11",
+          "2021-12",
+          "2022-01",
+          "2022-02",
+          "2022-03",
+          "2022-04",
+          "2022-05",
+          "2022-06",
+          "2022-07",
+          "2022-08",
+          "2022-09",
+          "2022-10",
+          "2022-11",
+          "2022-12",
+          "2023-01",
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "held_out_month_columns": [
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "month_columns": [
+          "2021-01",
+          "2021-02",
+          "2021-03",
+          "2021-04",
+          "2021-05",
+          "2021-06",
+          "2021-07",
+          "2021-08",
+          "2021-09",
+          "2021-10",
+          "2021-11",
+          "2021-12",
+          "2022-01",
+          "2022-02",
+          "2022-03",
+          "2022-04",
+          "2022-05",
+          "2022-06",
+          "2022-07",
+          "2022-08",
+          "2022-09",
+          "2022-10",
+          "2022-11",
+          "2022-12",
+          "2023-01",
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "path": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r2.parquet",
+        "row_count": 121420,
+        "row_groups": 1,
+        "training_month_columns": [
+          "2021-01",
+          "2021-02",
+          "2021-03",
+          "2021-04",
+          "2021-05",
+          "2021-06",
+          "2021-07",
+          "2021-08",
+          "2021-09",
+          "2021-10",
+          "2021-11",
+          "2021-12",
+          "2022-01",
+          "2022-02",
+          "2022-03",
+          "2022-04",
+          "2022-05",
+          "2022-06",
+          "2022-07",
+          "2022-08",
+          "2022-09",
+          "2022-10",
+          "2022-11",
+          "2022-12",
+          "2023-01",
+          "2023-02",
+          "2023-03"
+        ]
+      },
+      "sha256": "4ada154773b8678ae7d25b42e36a8309a51490bbe9fe059f015bb61724ed4c3c",
+      "size_bytes": 2909686
+    },
+    "fixture": false,
+    "key_columns": [
+      "r2_id",
+      "skill_id"
+    ],
+    "mode": "count",
+    "node_keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+    "published_assertions": {
+      "occupation_ids": [
+        0,
+        51
+      ],
+      "published": true,
+      "rows": 121420,
+      "skill_ids": [
+        0,
+        2334
+      ]
+    },
+    "source_data_name": "r2",
+    "training_content_identity": {
+      "algorithm": "sha256",
+      "includes_held_out_months": false,
+      "includes_protocol_version": true,
+      "includes_training_months": true,
+      "months": [
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2021-05",
+        "2021-06",
+        "2021-07",
+        "2021-08",
+        "2021-09",
+        "2021-10",
+        "2021-11",
+        "2021-12",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2022-05",
+        "2022-06",
+        "2022-07",
+        "2022-08",
+        "2022-09",
+        "2022-10",
+        "2022-11",
+        "2022-12",
+        "2023-01",
+        "2023-02",
+        "2023-03"
+      ],
+      "scope": "protocol version + 27 training month labels + canonical context ids + canonical skill ids + float64 training observations",
+      "sha256": "c3bcb3c5cd2bdf1329fb2524bb0e8118c599715b4c430f656dcd76f5a54fedea"
+    }
+  },
+  "targets": {
+    "r0": {
+      "contexts": 1,
+      "data_name": "r0",
+      "fixture": false,
+      "identity": {
+        "algorithm": "sha256",
+        "contexts": 1,
+        "keys": 2335,
+        "scope": "canonical target context ids + canonical target skill ids",
+        "sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+        "skills": 2335,
+        "value_columns_read": false
+      },
+      "key_columns": [
+        "r0_id",
+        "skill_id"
+      ],
+      "keys": 2335,
+      "keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+      "passed_skills_sha256": "e91f0ca7bd5fd8e54c4ee1385f754f61930c9ab15c1aa7b5e86fec388b3bf591",
+      "skills": 2335
+    },
+    "r2": {
+      "contexts": 52,
+      "data_name": "r2",
+      "fixture": false,
+      "identity": {
+        "algorithm": "sha256",
+        "contexts": 52,
+        "keys": 121420,
+        "scope": "canonical target context ids + canonical target skill ids",
+        "sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+        "skills": 2335,
+        "value_columns_read": false
+      },
+      "key_columns": [
+        "r2_id",
+        "skill_id"
+      ],
+      "keys": 121420,
+      "keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+      "passed_skills_sha256": "e91f0ca7bd5fd8e54c4ee1385f754f61930c9ab15c1aa7b5e86fec388b3bf591",
+      "skills": 2335
+    },
+    "region": {
+      "contexts": 7,
+      "data_name": "region",
+      "fixture": false,
+      "identity": {
+        "algorithm": "sha256",
+        "contexts": 7,
+        "keys": 16345,
+        "scope": "canonical target context ids + canonical target skill ids",
+        "sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+        "skills": 2335,
+        "value_columns_read": false
+      },
+      "key_columns": [
+        "region_id",
+        "skill_id"
+      ],
+      "keys": 16345,
+      "keys_sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+      "passed_skills_sha256": "e91f0ca7bd5fd8e54c4ee1385f754f61930c9ab15c1aa7b5e86fec388b3bf591",
+      "skills": 2335
+    }
+  }
+}

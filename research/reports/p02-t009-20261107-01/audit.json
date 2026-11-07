@@ -1,0 +1,87 @@
+{
+  "run_id": "p02-t009-occupation-20261107-01",
+  "preflight_run_identity_match": true,
+  "check_status": "ok",
+  "manifest_sha256": "6ada13a59b76ac0452481141be8126ce8fa308129eb33a12c31941a995de7f88",
+  "active_skills": 2308,
+  "all_occupations_support_skills": 74,
+  "unique_nonzero_support_patterns": 2046,
+  "identical_support_group_sizes_descending": [
+    74,
+    65,
+    34,
+    12,
+    7,
+    6,
+    5,
+    4,
+    4,
+    4
+  ],
+  "candidate_overlap": {
+    "a_edges": 19649,
+    "a_only_edges": 18735,
+    "b_edges": 17629,
+    "b_only_edges": 16715,
+    "candidate_a": "jaccard",
+    "candidate_b": "cosine",
+    "comparison": "canonical undirected skill pairs; scores differ by candidate",
+    "interpretation": "structural overlap only; not predictive benefit",
+    "jaccard": 0.025134748652513476,
+    "jaccard_reason": null,
+    "shared_edges": 914,
+    "union_edges": 36364
+  },
+  "candidates": {
+    "jaccard": {
+      "edges": 19649,
+      "boundary_tie_active_fraction": 0.6178509532062392,
+      "tie_dependent_directed_slots": 5262,
+      "tie_dependent_union_edges": 4756,
+      "tie_dependent_union_edge_fraction": 0.24204794137106214,
+      "cutoff_score_one_skills": 185,
+      "edges_with_both_positive_and_negative_contexts": 13093,
+      "both_sign_fraction_among_eligible_edges": 0.8268392800757814,
+      "unknown_edge_fraction": 0.19410657030892156,
+      "eligible_edge_context_fraction": 0.23270219271288028,
+      "negative_fraction_of_eligible_contexts": 0.2842242064576911,
+      "graph_hashes": {
+        "boundary_tie": "4f0c1db03eb03d866888cfbfa6c4a867c3783d4daffcd664f29ab833e2ea2b49",
+        "cutoff_score": "6cbdf7108b296132c1f479c43cca334bbd49e804123be12aa3691de5f0121a86",
+        "cutoff_tied_candidates": "e47578bbac4a53baff553f7731ae82065eb2bec5f71bce624f0662bdfcd06a3a",
+        "degree": "ee3e941ddf114414a3a73fd12cc49c68605c25b4bdc914b4057e14a126cf84b6",
+        "edge_direction": "adc5c2af81ef0bf9f97f1a6d02f7c660748035ffedef20398ca21bea81fb9d70",
+        "edge_index": "dc5d61add2652f523780026c8c4d42ccafefd035e959cb43855a6b24b2f27eba",
+        "edge_score": "b42c2ee92a2696193d1b4c3907cc057f2e68eed8af2e4ba4144b70fdebfa9358",
+        "selection_index": "0e0597e5d9f177147210cd0e993253bfbddff09971036c93e994fb0b3843f63b",
+        "selection_score": "234bd38937ff05867ad7c198a62aae98e3177691f06e19d347c05f798aeeddd4"
+      }
+    },
+    "cosine": {
+      "edges": 17629,
+      "boundary_tie_active_fraction": 0.004766031195840554,
+      "tie_dependent_directed_slots": 15,
+      "tie_dependent_union_edges": 15,
+      "tie_dependent_union_edge_fraction": 0.00085087072437461,
+      "cutoff_score_one_skills": 0,
+      "edges_with_both_positive_and_negative_contexts": 10767,
+      "both_sign_fraction_among_eligible_edges": 0.7302631578947368,
+      "unknown_edge_fraction": 0.16365080265471665,
+      "eligible_edge_context_fraction": 0.17326346012034366,
+      "negative_fraction_of_eligible_contexts": 0.2725143547899668,
+      "graph_hashes": {
+        "boundary_tie": "a38044516e8f0db5b1dc6fd61feb74e1525aca2fb9aaf956572536f4de9c25ea",
+        "cutoff_score": "12077b48862814e1e330646d492b953f712def61a0a69922801f7b551fc19325",
+        "cutoff_tied_candidates": "86208e1a535ad5612d82807284c92c3ca4e111515352b65ecf4cba5ff30eddb2",
+        "degree": "44127d5b4a8a64db3b6187cd2baec67aa3f9cbe7c91082d10a4ce807b28c722e",
+        "edge_direction": "3067520ce82df74d1e3b8c23d82a09e611dc8998d2987a29c4b7fc8fa26dd074",
+        "edge_index": "66e602bd11f70a841b7be8707fd50e5496610c634762555360b7069e04cf436c",
+        "edge_score": "c9256d0ec3634a90ce1119900490bd0b7bdc11dc7059a495b792d146801e27c9",
+        "selection_index": "fe8b49651ea72dd1be6d70096ee505168b90a6a885dfe83f07f367730578b0ed",
+        "selection_score": "cebf9d01c0708d25f10912f92291f2e087ce47c3a46df8358a01aa6a25734778"
+      }
+    }
+  },
+  "physical_run_bytes": 39177139,
+  "interpretation": "Descriptive counts only; signs are not significance tests. Tie-dependent means every selecting direction lies in a cut tie group, not that every alternate tie order changes the edge."
+}

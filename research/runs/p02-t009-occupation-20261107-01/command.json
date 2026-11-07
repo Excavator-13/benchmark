@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python",
+    "-m",
+    "benchmark.occupation_skill_graph",
+    "build",
+    "--purpose",
+    "research",
+    "--run-id",
+    "p02-t009-occupation-20261107-01"
+  ],
+  "created": "2026-11-07T20:45:29+08:00",
+  "cwd": "/Users/watuji/da_chuang/repos/benchmark",
+  "demand_path": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r2.parquet",
+  "fixture": false,
+  "limits": {
+    "build_stage_timeout_seconds": 1800.0,
+    "monitor_interval_seconds": 0.25,
+    "process_rss_limit_bytes": 2147483648,
+    "rss_scope": "worker process lifetime, sampled; not an OS hard cap",
+    "timeout_scope": "separate construction and trend stage wall clocks",
+    "trend_stage_timeout_seconds": 1800.0
+  },
+  "output_root": "/Users/watuji/da_chuang/repos/benchmark/research/runs",
+  "purpose": "research",
+  "run_id": "p02-t009-occupation-20261107-01",
+  "schema": "occupation-skill-graph-command-v1",
+  "target_paths": {
+    "r0": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r0.parquet",
+    "r2": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r2.parquet",
+    "region": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/region.parquet"
+  }
+}

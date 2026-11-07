@@ -1,0 +1,622 @@
+{
+  "status": "ok",
+  "utc": "2026-11-07T12:45:15.194942+00:00",
+  "source": {
+    "source_data_name": "r2",
+    "mode": "count",
+    "key_columns": [
+      "r2_id",
+      "skill_id"
+    ],
+    "dimensions": {
+      "occupations": 52,
+      "skills": 2335,
+      "training_months": 27
+    },
+    "fixture": false,
+    "published_assertions": {
+      "published": true,
+      "occupation_ids": [
+        0,
+        51
+      ],
+      "skill_ids": [
+        0,
+        2334
+      ],
+      "rows": 121420
+    },
+    "file_identity": {
+      "path": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r2.parquet",
+      "sha256": "4ada154773b8678ae7d25b42e36a8309a51490bbe9fe059f015bb61724ed4c3c",
+      "size_bytes": 2909686,
+      "schema": {
+        "path": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r2.parquet",
+        "column_names": [
+          "r2_id",
+          "skill_id",
+          "2021-01",
+          "2021-02",
+          "2021-03",
+          "2021-04",
+          "2021-05",
+          "2021-06",
+          "2021-07",
+          "2021-08",
+          "2021-09",
+          "2021-10",
+          "2021-11",
+          "2021-12",
+          "2022-01",
+          "2022-02",
+          "2022-03",
+          "2022-04",
+          "2022-05",
+          "2022-06",
+          "2022-07",
+          "2022-08",
+          "2022-09",
+          "2022-10",
+          "2022-11",
+          "2022-12",
+          "2023-01",
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "month_columns": [
+          "2021-01",
+          "2021-02",
+          "2021-03",
+          "2021-04",
+          "2021-05",
+          "2021-06",
+          "2021-07",
+          "2021-08",
+          "2021-09",
+          "2021-10",
+          "2021-11",
+          "2021-12",
+          "2022-01",
+          "2022-02",
+          "2022-03",
+          "2022-04",
+          "2022-05",
+          "2022-06",
+          "2022-07",
+          "2022-08",
+          "2022-09",
+          "2022-10",
+          "2022-11",
+          "2022-12",
+          "2023-01",
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "training_month_columns": [
+          "2021-01",
+          "2021-02",
+          "2021-03",
+          "2021-04",
+          "2021-05",
+          "2021-06",
+          "2021-07",
+          "2021-08",
+          "2021-09",
+          "2021-10",
+          "2021-11",
+          "2021-12",
+          "2022-01",
+          "2022-02",
+          "2022-03",
+          "2022-04",
+          "2022-05",
+          "2022-06",
+          "2022-07",
+          "2022-08",
+          "2022-09",
+          "2022-10",
+          "2022-11",
+          "2022-12",
+          "2023-01",
+          "2023-02",
+          "2023-03"
+        ],
+        "held_out_month_columns": [
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "row_count": 121420,
+        "row_groups": 1
+      },
+      "native_dtypes": {
+        "r2_id": "int64",
+        "skill_id": "int64",
+        "2021-01": "float64",
+        "2021-02": "float64",
+        "2021-03": "float64",
+        "2021-04": "float64",
+        "2021-05": "float64",
+        "2021-06": "float64",
+        "2021-07": "float64",
+        "2021-08": "float64",
+        "2021-09": "float64",
+        "2021-10": "float64",
+        "2021-11": "float64",
+        "2021-12": "float64",
+        "2022-01": "float64",
+        "2022-02": "float64",
+        "2022-03": "float64",
+        "2022-04": "float64",
+        "2022-05": "float64",
+        "2022-06": "float64",
+        "2022-07": "float64",
+        "2022-08": "float64",
+        "2022-09": "float64",
+        "2022-10": "float64",
+        "2022-11": "float64",
+        "2022-12": "float64",
+        "2023-01": "float64",
+        "2023-02": "float64",
+        "2023-03": "float64"
+      },
+      "read_columns": [
+        "r2_id",
+        "skill_id",
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2021-05",
+        "2021-06",
+        "2021-07",
+        "2021-08",
+        "2021-09",
+        "2021-10",
+        "2021-11",
+        "2021-12",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2022-05",
+        "2022-06",
+        "2022-07",
+        "2022-08",
+        "2022-09",
+        "2022-10",
+        "2022-11",
+        "2022-12",
+        "2023-01",
+        "2023-02",
+        "2023-03"
+      ],
+      "held_out_values_read": false
+    },
+    "training_content_identity": {
+      "algorithm": "sha256",
+      "scope": "protocol version + 27 training month labels + canonical context ids + canonical skill ids + float64 training observations",
+      "sha256": "c3bcb3c5cd2bdf1329fb2524bb0e8118c599715b4c430f656dcd76f5a54fedea",
+      "includes_protocol_version": true,
+      "includes_training_months": true,
+      "includes_held_out_months": false,
+      "months": [
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2021-05",
+        "2021-06",
+        "2021-07",
+        "2021-08",
+        "2021-09",
+        "2021-10",
+        "2021-11",
+        "2021-12",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2022-05",
+        "2022-06",
+        "2022-07",
+        "2022-08",
+        "2022-09",
+        "2022-10",
+        "2022-11",
+        "2022-12",
+        "2023-01",
+        "2023-02",
+        "2023-03"
+      ]
+    },
+    "node_keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58"
+  },
+  "targets": {
+    "r0": {
+      "identity": {
+        "data_name": "r0",
+        "key_columns": [
+          "r0_id",
+          "skill_id"
+        ],
+        "contexts": 1,
+        "skills": 2335,
+        "keys": 2335,
+        "keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+        "identity": {
+          "algorithm": "sha256",
+          "scope": "canonical target context ids + canonical target skill ids",
+          "sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+          "contexts": 1,
+          "skills": 2335,
+          "keys": 2335,
+          "value_columns_read": false
+        },
+        "fixture": false,
+        "passed_skills_sha256": "e91f0ca7bd5fd8e54c4ee1385f754f61930c9ab15c1aa7b5e86fec388b3bf591"
+      },
+      "population": {
+        "status": "ok",
+        "data_name": "r0",
+        "contexts": 1,
+        "skills": 2335,
+        "source_skills_sha256": "fad2a9c9ca561c05498e6cd76c4fe6c7d10108792c9187234ac21f9ba10ee59f",
+        "target_skills_sha256": "fad2a9c9ca561c05498e6cd76c4fe6c7d10108792c9187234ac21f9ba10ee59f",
+        "per_context": {
+          "0": {
+            "skills": 2335,
+            "keys": 2335
+          }
+        },
+        "checked": "exact source skill set in every target context"
+      }
+    },
+    "region": {
+      "identity": {
+        "data_name": "region",
+        "key_columns": [
+          "region_id",
+          "skill_id"
+        ],
+        "contexts": 7,
+        "skills": 2335,
+        "keys": 16345,
+        "keys_sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+        "identity": {
+          "algorithm": "sha256",
+          "scope": "canonical target context ids + canonical target skill ids",
+          "sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+          "contexts": 7,
+          "skills": 2335,
+          "keys": 16345,
+          "value_columns_read": false
+        },
+        "fixture": false,
+        "passed_skills_sha256": "e91f0ca7bd5fd8e54c4ee1385f754f61930c9ab15c1aa7b5e86fec388b3bf591"
+      },
+      "population": {
+        "status": "ok",
+        "data_name": "region",
+        "contexts": 7,
+        "skills": 2335,
+        "source_skills_sha256": "fad2a9c9ca561c05498e6cd76c4fe6c7d10108792c9187234ac21f9ba10ee59f",
+        "target_skills_sha256": "fad2a9c9ca561c05498e6cd76c4fe6c7d10108792c9187234ac21f9ba10ee59f",
+        "per_context": {
+          "0": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "1": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "2": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "3": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "4": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "5": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "6": {
+            "skills": 2335,
+            "keys": 2335
+          }
+        },
+        "checked": "exact source skill set in every target context"
+      }
+    },
+    "r2": {
+      "identity": {
+        "data_name": "r2",
+        "key_columns": [
+          "r2_id",
+          "skill_id"
+        ],
+        "contexts": 52,
+        "skills": 2335,
+        "keys": 121420,
+        "keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+        "identity": {
+          "algorithm": "sha256",
+          "scope": "canonical target context ids + canonical target skill ids",
+          "sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+          "contexts": 52,
+          "skills": 2335,
+          "keys": 121420,
+          "value_columns_read": false
+        },
+        "fixture": false,
+        "passed_skills_sha256": "e91f0ca7bd5fd8e54c4ee1385f754f61930c9ab15c1aa7b5e86fec388b3bf591"
+      },
+      "population": {
+        "status": "ok",
+        "data_name": "r2",
+        "contexts": 52,
+        "skills": 2335,
+        "source_skills_sha256": "fad2a9c9ca561c05498e6cd76c4fe6c7d10108792c9187234ac21f9ba10ee59f",
+        "target_skills_sha256": "fad2a9c9ca561c05498e6cd76c4fe6c7d10108792c9187234ac21f9ba10ee59f",
+        "per_context": {
+          "0": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "1": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "2": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "3": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "4": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "5": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "6": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "7": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "8": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "9": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "10": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "11": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "12": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "13": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "14": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "15": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "16": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "17": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "18": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "19": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "20": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "21": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "22": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "23": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "24": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "25": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "26": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "27": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "28": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "29": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "30": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "31": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "32": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "33": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "34": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "35": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "36": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "37": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "38": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "39": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "40": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "41": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "42": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "43": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "44": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "45": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "46": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "47": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "48": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "49": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "50": {
+            "skills": 2335,
+            "keys": 2335
+          },
+          "51": {
+            "skills": 2335,
+            "keys": 2335
+          }
+        },
+        "checked": "exact source skill set in every target context"
+      }
+    }
+  },
+  "resource": {
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "cpu_count": 10,
+    "disk_free_bytes": 347750400000,
+    "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                    17157.\nPages active:                                 379728.\nPages inactive:                               361138.\nPages speculative:                             12995.\nPages throttled:                                   0.\nPages wired down:                             130565.\nPages purgeable:                                9955.\n\"Translation faults\":                       75251312.\nPages copy-on-write:                         5665041.\nPages zero filled:                          27707005.\nPages reactivated:                            942728.\nPages purged:                                 302614.\nFile-backed pages:                            374437.\nAnonymous pages:                              379424.\nPages stored in compressor:                   237773.\nPages occupied by compressor:                 107419.\nDecompressions:                               246085.\nCompressions:                                 637381.\nPageins:                                     1856754.\nPageouts:                                        513.\nSwapins:                                           0.\nSwapouts:                                          0.\nPages tagged:                                 101558.\nPages tagged resident:                         83048.\nPages tagged compressed:                       18510.\nPages tag-storage:                             32768.\nPages tag-storage holding tags:                 4581.\nPages tag-storage free:                           96.\nPages tag-storage non-tag pageable:            27811.\nPages tag-storage non-tag wired:                  76.\nBytes of compressed tags:                    2691648.\nTagged compressions:                           48862.\nTagged decompressions:                         26071.\n",
+    "rss_probe": {
+      "status": "ok",
+      "bytes": 336232448,
+      "native_value": 336232448,
+      "native_unit": "bytes",
+      "method": "proc_pidinfo(PROC_PIDTASKINFO).pti_resident_size",
+      "scope": "worker process resident set size, sampled"
+    }
+  },
+  "seconds": 0.2940206670009502,
+  "scope": "Source training columns only; target identity columns only; no training"
+}

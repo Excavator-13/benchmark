@@ -1,0 +1,2027 @@
+{
+  "candidate_overlap": {
+    "a_edges": 19649,
+    "a_only_edges": 18735,
+    "b_edges": 17629,
+    "b_only_edges": 16715,
+    "candidate_a": "jaccard",
+    "candidate_b": "cosine",
+    "comparison": "canonical undirected skill pairs; scores differ by candidate",
+    "interpretation": "structural overlap only; not predictive benefit",
+    "jaccard": 0.025134748652513476,
+    "jaccard_reason": null,
+    "shared_edges": 914,
+    "union_edges": 36364
+  },
+  "candidates": {
+    "cosine": {
+      "associations": {
+        "degree_vs_occupational_breadth_all_skills": {
+          "n": 2335,
+          "r": 0.3121137896118994,
+          "reason": null,
+          "status": "ok"
+        },
+        "degree_vs_occupational_breadth_training_active": {
+          "n": 2308,
+          "r": 0.2674415453696599,
+          "reason": null,
+          "status": "ok"
+        },
+        "degree_vs_total_demand_all_skills": {
+          "n": 2335,
+          "r": 0.16708925784775683,
+          "reason": null,
+          "status": "ok"
+        },
+        "degree_vs_total_demand_training_active": {
+          "n": 2308,
+          "r": 0.16610026560410793,
+          "reason": null,
+          "status": "ok"
+        },
+        "interpretation": "descriptive associations only; not predictive benefit"
+      },
+      "candidate": "cosine",
+      "components": {
+        "algorithm": "union-find including isolate skills as size-1 components",
+        "component_size_distribution": {
+          "count": 28,
+          "max": 2308,
+          "mean": 83.39285714285714,
+          "min": 1,
+          "sizes_descending": [
+            2308,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "components": 28,
+        "isolated_nodes": 27,
+        "largest_component": 2308,
+        "largest_component_fraction": 0.9884368308351178
+      },
+      "coverage": {
+        "all_source_skills": {
+          "coverage_fraction": 0.9884368308351178,
+          "covered_nodes": 2308,
+          "denominator": "every skill in the source node table",
+          "isolated_nodes": 27,
+          "label": "all source skills",
+          "nodes": 2335,
+          "reason": null
+        },
+        "interpretation": "structural coverage only; not predictive benefit",
+        "training_active_skills": {
+          "coverage_fraction": 1.0,
+          "covered_nodes": 2308,
+          "denominator": "skills with x > 0 in at least one occupation",
+          "isolated_nodes": 0,
+          "label": "skills with positive training demand",
+          "nodes": 2308,
+          "reason": null
+        }
+      },
+      "cutoff_rule": "descending score, ascending numeric skill id for exact ties",
+      "cutoff_ties": {
+        "affected_by_exact_tie_at_cutoff": 11,
+        "boundary_tie_node_fraction": 0.004710920770877944,
+        "boundary_tie_nodes": 11,
+        "max_cutoff_tied_candidates": 4,
+        "max_degree": 37,
+        "min_degree": 0,
+        "nodes_with_multiple_cutoff_candidates": 16,
+        "tie_break_rule": "descending score, then ascending numeric skill id",
+        "top_k": 10,
+        "union_degree_bound": null,
+        "union_degree_bound_reason": "union of one-sided top-k selections can exceed k at a node"
+      },
+      "empty_graph": false,
+      "graph_payload_sha256": {
+        "boundary_tie": "a38044516e8f0db5b1dc6fd61feb74e1525aca2fb9aaf956572536f4de9c25ea",
+        "cutoff_score": "12077b48862814e1e330646d492b953f712def61a0a69922801f7b551fc19325",
+        "cutoff_tied_candidates": "86208e1a535ad5612d82807284c92c3ca4e111515352b65ecf4cba5ff30eddb2",
+        "degree": "44127d5b4a8a64db3b6187cd2baec67aa3f9cbe7c91082d10a4ce807b28c722e",
+        "edge_direction": "3067520ce82df74d1e3b8c23d82a09e611dc8998d2987a29c4b7fc8fa26dd074",
+        "edge_index": "66e602bd11f70a841b7be8707fd50e5496610c634762555360b7069e04cf436c",
+        "edge_score": "c9256d0ec3634a90ce1119900490bd0b7bdc11dc7059a495b792d146801e27c9",
+        "selection_index": "fe8b49651ea72dd1be6d70096ee505168b90a6a885dfe83f07f367730578b0ed",
+        "selection_score": "cebf9d01c0708d25f10912f92291f2e087ce47c3a46df8358a01aa6a25734778"
+      },
+      "nodes": 2335,
+      "null_reasons": {},
+      "occupational_support_counts": {
+        "denominator": "occupation count in the source grid",
+        "distribution": {
+          "count": 2335,
+          "max": 52.0,
+          "mean": 28.785010706638115,
+          "median": 30.0,
+          "min": 0.0,
+          "quantiles": {
+            "0": 0.0,
+            "100": 52.0,
+            "25": 16.0,
+            "50": 30.0,
+            "75": 43.0,
+            "90": 50.0,
+            "99": 52.0
+          },
+          "status": "ok",
+          "std": 15.38839178970782
+        },
+        "zero_support_skills": 27
+      },
+      "post_sparsification": {
+        "degree_distribution": {
+          "count": 2335,
+          "max": 37.0,
+          "mean": 15.099785867237687,
+          "median": 14.0,
+          "min": 0.0,
+          "quantiles": {
+            "0": 0.0,
+            "100": 37.0,
+            "25": 11.0,
+            "50": 14.0,
+            "75": 18.0,
+            "90": 22.0,
+            "99": 31.0
+          },
+          "status": "ok",
+          "std": 5.212476791415213
+        },
+        "edge_density": 0.006469488374994724,
+        "edges": 17629,
+        "max_degree": 37,
+        "min_degree": 0,
+        "pair_slots": 2724945,
+        "union_degree_bound_reason": "the undirected union keeps a pair selected by either endpoint",
+        "union_degree_not_bounded_by_top_k": true,
+        "weight_distribution": {
+          "count": 17629,
+          "max": 1.0,
+          "mean": 0.8954345089549685,
+          "median": 0.9150599319752006,
+          "min": 0.23033289259383055,
+          "quantiles": {
+            "0": 0.23033289259383055,
+            "100": 1.0,
+            "25": 0.849836910360627,
+            "50": 0.9150599319752006,
+            "75": 0.9669447921918102,
+            "90": 0.9894382835793842,
+            "99": 0.9994272761339476
+          },
+          "status": "ok",
+          "std": 0.09016162004281031
+        }
+      },
+      "pre_sparsification": {
+        "density": 0.9536390642746918,
+        "density_denominator": "unordered distinct skill pairs N*(N-1)/2",
+        "full_score_fraction_of_positive": 3.848205235560187e-06,
+        "full_score_pairs": 10,
+        "max_score_fraction_of_positive": 3.848205235560187e-06,
+        "max_score_pair_count": 10,
+        "null_reasons": {},
+        "pair_slots": 2724945,
+        "positive_pairs": 2598614,
+        "score_histogram": {
+          "bins": [
+            0.0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6000000000000001,
+            0.7000000000000001,
+            0.8,
+            0.9,
+            1.0
+          ],
+          "counts": [
+            1223231,
+            451737,
+            288551,
+            199207,
+            145118,
+            102783,
+            74669,
+            53430,
+            36069,
+            23819
+          ]
+        },
+        "score_max": 1.0,
+        "score_mean": 0.19678226260737314,
+        "score_median": 0.11327163866337203,
+        "score_min": 6.648004533160362e-08,
+        "score_quantiles": {
+          "0": 6.648004533160362e-08,
+          "100": 1.0,
+          "25": 0.0309264007802449,
+          "50": 0.11327163866337203,
+          "75": 0.29392977965721084,
+          "90": 0.5266803272145613,
+          "99": 0.8927536797264628
+        },
+        "score_std": 0.21697699440139517,
+        "status": "ok",
+        "zero_score_pairs": 126331
+      },
+      "source_data_name": "r2",
+      "source_file_sha256": "4ada154773b8678ae7d25b42e36a8309a51490bbe9fe059f015bb61724ed4c3c",
+      "source_protocol_version": "P2-occupation-skill-graph-v1",
+      "source_training_content_sha256": "c3bcb3c5cd2bdf1329fb2524bb0e8118c599715b4c430f656dcd76f5a54fedea",
+      "top_k": 10,
+      "training_months": 27,
+      "zero_demand_skills": {
+        "count": 27,
+        "denominator": "all source skills in the node table",
+        "fraction": 0.011563169164882228,
+        "skill_ids": [
+          202,
+          306,
+          309,
+          326,
+          360,
+          410,
+          422,
+          464,
+          527,
+          695,
+          920,
+          975,
+          979,
+          986,
+          1285,
+          1403,
+          1430,
+          1547,
+          1577,
+          1835,
+          2039,
+          2094,
+          2171,
+          2191,
+          2232,
+          2233,
+          2321
+        ]
+      }
+    },
+    "jaccard": {
+      "associations": {
+        "degree_vs_occupational_breadth_all_skills": {
+          "n": 2335,
+          "r": 0.2718228086320087,
+          "reason": null,
+          "status": "ok"
+        },
+        "degree_vs_occupational_breadth_training_active": {
+          "n": 2308,
+          "r": 0.24396316206924076,
+          "reason": null,
+          "status": "ok"
+        },
+        "degree_vs_total_demand_all_skills": {
+          "n": 2335,
+          "r": 0.1641187131847852,
+          "reason": null,
+          "status": "ok"
+        },
+        "degree_vs_total_demand_training_active": {
+          "n": 2308,
+          "r": 0.16141211679882916,
+          "reason": null,
+          "status": "ok"
+        },
+        "interpretation": "descriptive associations only; not predictive benefit"
+      },
+      "candidate": "jaccard",
+      "components": {
+        "algorithm": "union-find including isolate skills as size-1 components",
+        "component_size_distribution": {
+          "count": 28,
+          "max": 2308,
+          "mean": 83.39285714285714,
+          "min": 1,
+          "sizes_descending": [
+            2308,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "components": 28,
+        "isolated_nodes": 27,
+        "largest_component": 2308,
+        "largest_component_fraction": 0.9884368308351178
+      },
+      "coverage": {
+        "all_source_skills": {
+          "coverage_fraction": 0.9884368308351178,
+          "covered_nodes": 2308,
+          "denominator": "every skill in the source node table",
+          "isolated_nodes": 27,
+          "label": "all source skills",
+          "nodes": 2335,
+          "reason": null
+        },
+        "interpretation": "structural coverage only; not predictive benefit",
+        "training_active_skills": {
+          "coverage_fraction": 1.0,
+          "covered_nodes": 2308,
+          "denominator": "skills with x > 0 in at least one occupation",
+          "isolated_nodes": 0,
+          "label": "skills with positive training demand",
+          "nodes": 2308,
+          "reason": null
+        }
+      },
+      "cutoff_rule": "descending score, ascending numeric skill id for exact ties",
+      "cutoff_ties": {
+        "affected_by_exact_tie_at_cutoff": 1426,
+        "boundary_tie_node_fraction": 0.6107066381156316,
+        "boundary_tie_nodes": 1426,
+        "max_cutoff_tied_candidates": 74,
+        "max_degree": 117,
+        "min_degree": 0,
+        "nodes_with_multiple_cutoff_candidates": 1902,
+        "tie_break_rule": "descending score, then ascending numeric skill id",
+        "top_k": 10,
+        "union_degree_bound": null,
+        "union_degree_bound_reason": "union of one-sided top-k selections can exceed k at a node"
+      },
+      "empty_graph": false,
+      "graph_payload_sha256": {
+        "boundary_tie": "4f0c1db03eb03d866888cfbfa6c4a867c3783d4daffcd664f29ab833e2ea2b49",
+        "cutoff_score": "6cbdf7108b296132c1f479c43cca334bbd49e804123be12aa3691de5f0121a86",
+        "cutoff_tied_candidates": "e47578bbac4a53baff553f7731ae82065eb2bec5f71bce624f0662bdfcd06a3a",
+        "degree": "ee3e941ddf114414a3a73fd12cc49c68605c25b4bdc914b4057e14a126cf84b6",
+        "edge_direction": "adc5c2af81ef0bf9f97f1a6d02f7c660748035ffedef20398ca21bea81fb9d70",
+        "edge_index": "dc5d61add2652f523780026c8c4d42ccafefd035e959cb43855a6b24b2f27eba",
+        "edge_score": "b42c2ee92a2696193d1b4c3907cc057f2e68eed8af2e4ba4144b70fdebfa9358",
+        "selection_index": "0e0597e5d9f177147210cd0e993253bfbddff09971036c93e994fb0b3843f63b",
+        "selection_score": "234bd38937ff05867ad7c198a62aae98e3177691f06e19d347c05f798aeeddd4"
+      },
+      "nodes": 2335,
+      "null_reasons": {},
+      "occupational_support_counts": {
+        "denominator": "occupation count in the source grid",
+        "distribution": {
+          "count": 2335,
+          "max": 52.0,
+          "mean": 28.785010706638115,
+          "median": 30.0,
+          "min": 0.0,
+          "quantiles": {
+            "0": 0.0,
+            "100": 52.0,
+            "25": 16.0,
+            "50": 30.0,
+            "75": 43.0,
+            "90": 50.0,
+            "99": 52.0
+          },
+          "status": "ok",
+          "std": 15.38839178970782
+        },
+        "zero_support_skills": 27
+      },
+      "post_sparsification": {
+        "degree_distribution": {
+          "count": 2335,
+          "max": 117.0,
+          "mean": 16.82997858672377,
+          "median": 15.0,
+          "min": 0.0,
+          "quantiles": {
+            "0": 0.0,
+            "100": 117.0,
+            "25": 12.0,
+            "50": 15.0,
+            "75": 19.0,
+            "90": 25.0,
+            "99": 66.97999999999956
+          },
+          "status": "ok",
+          "std": 9.976406889862183
+        },
+        "edge_density": 0.007210787740669996,
+        "edges": 19649,
+        "max_degree": 117,
+        "min_degree": 0,
+        "pair_slots": 2724945,
+        "union_degree_bound_reason": "the undirected union keeps a pair selected by either endpoint",
+        "union_degree_not_bounded_by_top_k": true,
+        "weight_distribution": {
+          "count": 19649,
+          "max": 1.0,
+          "mean": 0.7554877243711854,
+          "median": 0.7857142857142857,
+          "min": 0.07692307692307693,
+          "quantiles": {
+            "0": 0.07692307692307693,
+            "100": 1.0,
+            "25": 0.6296296296296297,
+            "50": 0.7857142857142857,
+            "75": 0.9166666666666666,
+            "90": 0.9803921568627451,
+            "99": 1.0
+          },
+          "status": "ok",
+          "std": 0.19281667420338486
+        }
+      },
+      "pre_sparsification": {
+        "density": 0.9536390642746918,
+        "density_denominator": "unordered distinct skill pairs N*(N-1)/2",
+        "full_score_fraction_of_positive": 0.002135753905735904,
+        "full_score_pairs": 5550,
+        "max_score_fraction_of_positive": 0.002135753905735904,
+        "max_score_pair_count": 5550,
+        "null_reasons": {},
+        "pair_slots": 2724945,
+        "positive_pairs": 2598614,
+        "score_histogram": {
+          "bins": [
+            0.0,
+            0.1,
+            0.2,
+            0.30000000000000004,
+            0.4,
+            0.5,
+            0.6000000000000001,
+            0.7000000000000001,
+            0.8,
+            0.9,
+            1.0
+          ],
+          "counts": [
+            236929,
+            314325,
+            358059,
+            314538,
+            324080,
+            346642,
+            260135,
+            210951,
+            145607,
+            87348
+          ]
+        },
+        "score_max": 1.0,
+        "score_mean": 0.43311895159616937,
+        "score_median": 0.42,
+        "score_min": 0.019230769230769232,
+        "score_quantiles": {
+          "0": 0.019230769230769232,
+          "100": 1.0,
+          "25": 0.225,
+          "50": 0.42,
+          "75": 0.6216216216216216,
+          "90": 0.7843137254901961,
+          "99": 0.9607843137254902
+        },
+        "score_std": 0.24766561186535238,
+        "status": "ok",
+        "zero_score_pairs": 126331
+      },
+      "source_data_name": "r2",
+      "source_file_sha256": "4ada154773b8678ae7d25b42e36a8309a51490bbe9fe059f015bb61724ed4c3c",
+      "source_protocol_version": "P2-occupation-skill-graph-v1",
+      "source_training_content_sha256": "c3bcb3c5cd2bdf1329fb2524bb0e8118c599715b4c430f656dcd76f5a54fedea",
+      "top_k": 10,
+      "training_months": 27,
+      "zero_demand_skills": {
+        "count": 27,
+        "denominator": "all source skills in the node table",
+        "fraction": 0.011563169164882228,
+        "skill_ids": [
+          202,
+          306,
+          309,
+          326,
+          360,
+          410,
+          422,
+          464,
+          527,
+          695,
+          920,
+          975,
+          979,
+          986,
+          1285,
+          1403,
+          1430,
+          1547,
+          1577,
+          1835,
+          2039,
+          2094,
+          2171,
+          2191,
+          2232,
+          2233,
+          2321
+        ]
+      }
+    }
+  },
+  "command": {
+    "argv": [
+      "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python",
+      "-m",
+      "benchmark.occupation_skill_graph",
+      "build",
+      "--purpose",
+      "research",
+      "--run-id",
+      "p02-t009-occupation-20261107-01"
+    ],
+    "created": "2026-11-07T20:45:29+08:00",
+    "cwd": "/Users/watuji/da_chuang/repos/benchmark",
+    "demand_path": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r2.parquet",
+    "fixture": false,
+    "limits": {
+      "build_stage_timeout_seconds": 1800.0,
+      "monitor_interval_seconds": 0.25,
+      "process_rss_limit_bytes": 2147483648,
+      "rss_scope": "worker process lifetime, sampled; not an OS hard cap",
+      "timeout_scope": "separate construction and trend stage wall clocks",
+      "trend_stage_timeout_seconds": 1800.0
+    },
+    "output_root": "/Users/watuji/da_chuang/repos/benchmark/research/runs",
+    "purpose": "research",
+    "run_id": "p02-t009-occupation-20261107-01",
+    "schema": "occupation-skill-graph-command-v1",
+    "target_paths": {
+      "r0": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r0.parquet",
+      "r2": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r2.parquet",
+      "region": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/region.parquet"
+    }
+  },
+  "costs": {
+    "blocks": {
+      "score_block_size": 256,
+      "trend_block_size": 512
+    },
+    "construction_seconds": 1.2119633330003126,
+    "dimensions": {
+      "cosine_edges": 17629,
+      "jaccard_edges": 19649,
+      "occupations": 52,
+      "skills": 2335,
+      "training_months": 27,
+      "union_edges": 36364
+    },
+    "mapping_seconds": 0.06118404200060468,
+    "monitor_interval_seconds": 0.25,
+    "peak_rss": {
+      "bytes": 472743936,
+      "method": "resource.getrusage(RUSAGE_SELF).ru_maxrss",
+      "native_unit": "bytes",
+      "native_value": 472743936,
+      "scope": "worker process lifetime",
+      "status": "ok"
+    },
+    "process_rss_limit_bytes": 2147483648,
+    "source_load_seconds": 0.10436091700103134,
+    "stage_seconds": {
+      "construct": 1.2119633330003126,
+      "source": 0.10436091700103134,
+      "targets": 0.06118404200060468,
+      "trends": 0.5058943330004695
+    },
+    "trend_seconds": 0.5058943330004695
+  },
+  "created": "2026-11-07T20:45:32+08:00",
+  "dimensions": {
+    "cosine_edges": 17629,
+    "jaccard_edges": 19649,
+    "occupations": 52,
+    "skills": 2335,
+    "training_months": 27,
+    "union_edges": 36364
+  },
+  "fixture": false,
+  "graph_bytes_unchanged_by_diagnostics": true,
+  "graph_frozen": false,
+  "limits": {
+    "build_stage_timeout_seconds": 1800.0,
+    "monitor_interval_seconds": 0.25,
+    "process_rss_limit_bytes": 2147483648,
+    "rss_scope": "worker process lifetime, sampled; not an OS hard cap",
+    "timeout_scope": "separate construction and trend stage wall clocks",
+    "trend_stage_timeout_seconds": 1800.0
+  },
+  "predictive_benefit_claimed": false,
+  "protocol": {
+    "min_positive_months": 12,
+    "path": "/Users/watuji/da_chuang/repos/benchmark/research/phases/P02/t009-graph-protocol.md",
+    "sha256": "da5fd31211511e3cb91cad25f57885a6b916b14869bca7ad1df968246ab04344",
+    "task_id": "P02-T009",
+    "top_k": 10,
+    "train_months": [
+      "2021-01",
+      "2021-02",
+      "2021-03",
+      "2021-04",
+      "2021-05",
+      "2021-06",
+      "2021-07",
+      "2021-08",
+      "2021-09",
+      "2021-10",
+      "2021-11",
+      "2021-12",
+      "2022-01",
+      "2022-02",
+      "2022-03",
+      "2022-04",
+      "2022-05",
+      "2022-06",
+      "2022-07",
+      "2022-08",
+      "2022-09",
+      "2022-10",
+      "2022-11",
+      "2022-12",
+      "2023-01",
+      "2023-02",
+      "2023-03"
+    ],
+    "version": "P2-occupation-skill-graph-v1"
+  },
+  "purpose": "research",
+  "research_acceptance_performed": false,
+  "run_id": "p02-t009-occupation-20261107-01",
+  "schema": "occupation-skill-graph-report-v1",
+  "software_scope": "fixture/software evidence only; not research acceptance, graph freezing, prediction training or predictive-benefit evidence",
+  "source": {
+    "dimensions": {
+      "occupations": 52,
+      "skills": 2335,
+      "training_months": 27
+    },
+    "file_identity": {
+      "held_out_values_read": false,
+      "native_dtypes": {
+        "2021-01": "float64",
+        "2021-02": "float64",
+        "2021-03": "float64",
+        "2021-04": "float64",
+        "2021-05": "float64",
+        "2021-06": "float64",
+        "2021-07": "float64",
+        "2021-08": "float64",
+        "2021-09": "float64",
+        "2021-10": "float64",
+        "2021-11": "float64",
+        "2021-12": "float64",
+        "2022-01": "float64",
+        "2022-02": "float64",
+        "2022-03": "float64",
+        "2022-04": "float64",
+        "2022-05": "float64",
+        "2022-06": "float64",
+        "2022-07": "float64",
+        "2022-08": "float64",
+        "2022-09": "float64",
+        "2022-10": "float64",
+        "2022-11": "float64",
+        "2022-12": "float64",
+        "2023-01": "float64",
+        "2023-02": "float64",
+        "2023-03": "float64",
+        "r2_id": "int64",
+        "skill_id": "int64"
+      },
+      "path": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r2.parquet",
+      "read_columns": [
+        "r2_id",
+        "skill_id",
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2021-05",
+        "2021-06",
+        "2021-07",
+        "2021-08",
+        "2021-09",
+        "2021-10",
+        "2021-11",
+        "2021-12",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2022-05",
+        "2022-06",
+        "2022-07",
+        "2022-08",
+        "2022-09",
+        "2022-10",
+        "2022-11",
+        "2022-12",
+        "2023-01",
+        "2023-02",
+        "2023-03"
+      ],
+      "schema": {
+        "column_names": [
+          "r2_id",
+          "skill_id",
+          "2021-01",
+          "2021-02",
+          "2021-03",
+          "2021-04",
+          "2021-05",
+          "2021-06",
+          "2021-07",
+          "2021-08",
+          "2021-09",
+          "2021-10",
+          "2021-11",
+          "2021-12",
+          "2022-01",
+          "2022-02",
+          "2022-03",
+          "2022-04",
+          "2022-05",
+          "2022-06",
+          "2022-07",
+          "2022-08",
+          "2022-09",
+          "2022-10",
+          "2022-11",
+          "2022-12",
+          "2023-01",
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "held_out_month_columns": [
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "month_columns": [
+          "2021-01",
+          "2021-02",
+          "2021-03",
+          "2021-04",
+          "2021-05",
+          "2021-06",
+          "2021-07",
+          "2021-08",
+          "2021-09",
+          "2021-10",
+          "2021-11",
+          "2021-12",
+          "2022-01",
+          "2022-02",
+          "2022-03",
+          "2022-04",
+          "2022-05",
+          "2022-06",
+          "2022-07",
+          "2022-08",
+          "2022-09",
+          "2022-10",
+          "2022-11",
+          "2022-12",
+          "2023-01",
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "path": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r2.parquet",
+        "row_count": 121420,
+        "row_groups": 1,
+        "training_month_columns": [
+          "2021-01",
+          "2021-02",
+          "2021-03",
+          "2021-04",
+          "2021-05",
+          "2021-06",
+          "2021-07",
+          "2021-08",
+          "2021-09",
+          "2021-10",
+          "2021-11",
+          "2021-12",
+          "2022-01",
+          "2022-02",
+          "2022-03",
+          "2022-04",
+          "2022-05",
+          "2022-06",
+          "2022-07",
+          "2022-08",
+          "2022-09",
+          "2022-10",
+          "2022-11",
+          "2022-12",
+          "2023-01",
+          "2023-02",
+          "2023-03"
+        ]
+      },
+      "sha256": "4ada154773b8678ae7d25b42e36a8309a51490bbe9fe059f015bb61724ed4c3c",
+      "size_bytes": 2909686
+    },
+    "fixture": false,
+    "key_columns": [
+      "r2_id",
+      "skill_id"
+    ],
+    "mode": "count",
+    "node_keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+    "published_assertions": {
+      "occupation_ids": [
+        0,
+        51
+      ],
+      "published": true,
+      "rows": 121420,
+      "skill_ids": [
+        0,
+        2334
+      ]
+    },
+    "source_data_name": "r2",
+    "training_content_identity": {
+      "algorithm": "sha256",
+      "includes_held_out_months": false,
+      "includes_protocol_version": true,
+      "includes_training_months": true,
+      "months": [
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2021-05",
+        "2021-06",
+        "2021-07",
+        "2021-08",
+        "2021-09",
+        "2021-10",
+        "2021-11",
+        "2021-12",
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2022-05",
+        "2022-06",
+        "2022-07",
+        "2022-08",
+        "2022-09",
+        "2022-10",
+        "2022-11",
+        "2022-12",
+        "2023-01",
+        "2023-02",
+        "2023-03"
+      ],
+      "scope": "protocol version + 27 training month labels + canonical context ids + canonical skill ids + float64 training observations",
+      "sha256": "c3bcb3c5cd2bdf1329fb2524bb0e8118c599715b4c430f656dcd76f5a54fedea"
+    }
+  },
+  "status": "succeeded",
+  "targets": {
+    "r0": {
+      "contexts": 1,
+      "identity": {
+        "algorithm": "sha256",
+        "contexts": 1,
+        "keys": 2335,
+        "scope": "canonical target context ids + canonical target skill ids",
+        "sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+        "skills": 2335,
+        "value_columns_read": false
+      },
+      "key_columns": [
+        "r0_id",
+        "skill_id"
+      ],
+      "mappings": {
+        "cosine": {
+          "descriptor": {
+            "context_ids": [
+              0
+            ],
+            "contexts": 1,
+            "cross_context_edges": 0,
+            "data_name": "r0",
+            "directed_expansions_per_context": 35258,
+            "duplicated_edge_arrays_saved": false,
+            "mapping": "each shared undirected edge {a,b} is reused inside every target context c as both (c,a)->(c,b) and (c,b)->(c,a) with unchanged score",
+            "per_context_directed_expansions": [
+              35258
+            ],
+            "per_context_undirected_edges": [
+              17629
+            ],
+            "shared_edge_pairs_sha256": "66e602bd11f70a841b7be8707fd50e5496610c634762555360b7069e04cf436c",
+            "shared_edge_scores_sha256": "c9256d0ec3634a90ce1119900490bd0b7bdc11dc7059a495b792d146801e27c9",
+            "skills": 2335,
+            "target_demand_filtering": false,
+            "target_keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+            "target_value_columns_read": false,
+            "total_directed_expansions": 35258,
+            "total_undirected_context_edges": 17629,
+            "undirected_edges_per_context": 17629
+          }
+        },
+        "jaccard": {
+          "descriptor": {
+            "context_ids": [
+              0
+            ],
+            "contexts": 1,
+            "cross_context_edges": 0,
+            "data_name": "r0",
+            "directed_expansions_per_context": 39298,
+            "duplicated_edge_arrays_saved": false,
+            "mapping": "each shared undirected edge {a,b} is reused inside every target context c as both (c,a)->(c,b) and (c,b)->(c,a) with unchanged score",
+            "per_context_directed_expansions": [
+              39298
+            ],
+            "per_context_undirected_edges": [
+              19649
+            ],
+            "shared_edge_pairs_sha256": "dc5d61add2652f523780026c8c4d42ccafefd035e959cb43855a6b24b2f27eba",
+            "shared_edge_scores_sha256": "b42c2ee92a2696193d1b4c3907cc057f2e68eed8af2e4ba4144b70fdebfa9358",
+            "skills": 2335,
+            "target_demand_filtering": false,
+            "target_keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+            "target_value_columns_read": false,
+            "total_directed_expansions": 39298,
+            "total_undirected_context_edges": 19649,
+            "undirected_edges_per_context": 19649
+          }
+        }
+      },
+      "population": {
+        "checked": "exact source skill set in every target context",
+        "contexts": 1,
+        "data_name": "r0",
+        "per_context": {
+          "0": {
+            "keys": 2335,
+            "skills": 2335
+          }
+        },
+        "skills": 2335,
+        "source_skills_sha256": "fad2a9c9ca561c05498e6cd76c4fe6c7d10108792c9187234ac21f9ba10ee59f",
+        "status": "ok",
+        "target_skills_sha256": "fad2a9c9ca561c05498e6cd76c4fe6c7d10108792c9187234ac21f9ba10ee59f"
+      },
+      "skills": 2335,
+      "source_file_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+      "source_path": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r0.parquet"
+    },
+    "r2": {
+      "contexts": 52,
+      "identity": {
+        "algorithm": "sha256",
+        "contexts": 52,
+        "keys": 121420,
+        "scope": "canonical target context ids + canonical target skill ids",
+        "sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+        "skills": 2335,
+        "value_columns_read": false
+      },
+      "key_columns": [
+        "r2_id",
+        "skill_id"
+      ],
+      "mappings": {
+        "cosine": {
+          "descriptor": {
+            "context_ids": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47,
+              48,
+              49,
+              50,
+              51
+            ],
+            "contexts": 52,
+            "cross_context_edges": 0,
+            "data_name": "r2",
+            "directed_expansions_per_context": 35258,
+            "duplicated_edge_arrays_saved": false,
+            "mapping": "each shared undirected edge {a,b} is reused inside every target context c as both (c,a)->(c,b) and (c,b)->(c,a) with unchanged score",
+            "per_context_directed_expansions": [
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258
+            ],
+            "per_context_undirected_edges": [
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629
+            ],
+            "shared_edge_pairs_sha256": "66e602bd11f70a841b7be8707fd50e5496610c634762555360b7069e04cf436c",
+            "shared_edge_scores_sha256": "c9256d0ec3634a90ce1119900490bd0b7bdc11dc7059a495b792d146801e27c9",
+            "skills": 2335,
+            "target_demand_filtering": false,
+            "target_keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+            "target_value_columns_read": false,
+            "total_directed_expansions": 1833416,
+            "total_undirected_context_edges": 916708,
+            "undirected_edges_per_context": 17629
+          }
+        },
+        "jaccard": {
+          "descriptor": {
+            "context_ids": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47,
+              48,
+              49,
+              50,
+              51
+            ],
+            "contexts": 52,
+            "cross_context_edges": 0,
+            "data_name": "r2",
+            "directed_expansions_per_context": 39298,
+            "duplicated_edge_arrays_saved": false,
+            "mapping": "each shared undirected edge {a,b} is reused inside every target context c as both (c,a)->(c,b) and (c,b)->(c,a) with unchanged score",
+            "per_context_directed_expansions": [
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298
+            ],
+            "per_context_undirected_edges": [
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649
+            ],
+            "shared_edge_pairs_sha256": "dc5d61add2652f523780026c8c4d42ccafefd035e959cb43855a6b24b2f27eba",
+            "shared_edge_scores_sha256": "b42c2ee92a2696193d1b4c3907cc057f2e68eed8af2e4ba4144b70fdebfa9358",
+            "skills": 2335,
+            "target_demand_filtering": false,
+            "target_keys_sha256": "7d26eaa0f02b5b2263a6fda849d4257cc107371df02e18b0f0d9cc1155ab0a58",
+            "target_value_columns_read": false,
+            "total_directed_expansions": 2043496,
+            "total_undirected_context_edges": 1021748,
+            "undirected_edges_per_context": 19649
+          }
+        }
+      },
+      "population": {
+        "checked": "exact source skill set in every target context",
+        "contexts": 52,
+        "data_name": "r2",
+        "per_context": {
+          "0": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "1": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "10": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "11": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "12": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "13": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "14": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "15": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "16": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "17": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "18": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "19": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "2": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "20": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "21": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "22": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "23": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "24": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "25": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "26": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "27": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "28": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "29": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "3": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "30": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "31": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "32": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "33": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "34": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "35": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "36": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "37": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "38": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "39": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "4": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "40": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "41": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "42": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "43": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "44": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "45": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "46": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "47": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "48": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "49": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "5": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "50": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "51": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "6": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "7": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "8": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "9": {
+            "keys": 2335,
+            "skills": 2335
+          }
+        },
+        "skills": 2335,
+        "source_skills_sha256": "fad2a9c9ca561c05498e6cd76c4fe6c7d10108792c9187234ac21f9ba10ee59f",
+        "status": "ok",
+        "target_skills_sha256": "fad2a9c9ca561c05498e6cd76c4fe6c7d10108792c9187234ac21f9ba10ee59f"
+      },
+      "skills": 2335,
+      "source_file_sha256": "4ada154773b8678ae7d25b42e36a8309a51490bbe9fe059f015bb61724ed4c3c",
+      "source_path": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/r2.parquet"
+    },
+    "region": {
+      "contexts": 7,
+      "identity": {
+        "algorithm": "sha256",
+        "contexts": 7,
+        "keys": 16345,
+        "scope": "canonical target context ids + canonical target skill ids",
+        "sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+        "skills": 2335,
+        "value_columns_read": false
+      },
+      "key_columns": [
+        "region_id",
+        "skill_id"
+      ],
+      "mappings": {
+        "cosine": {
+          "descriptor": {
+            "context_ids": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "contexts": 7,
+            "cross_context_edges": 0,
+            "data_name": "region",
+            "directed_expansions_per_context": 35258,
+            "duplicated_edge_arrays_saved": false,
+            "mapping": "each shared undirected edge {a,b} is reused inside every target context c as both (c,a)->(c,b) and (c,b)->(c,a) with unchanged score",
+            "per_context_directed_expansions": [
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258,
+              35258
+            ],
+            "per_context_undirected_edges": [
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629,
+              17629
+            ],
+            "shared_edge_pairs_sha256": "66e602bd11f70a841b7be8707fd50e5496610c634762555360b7069e04cf436c",
+            "shared_edge_scores_sha256": "c9256d0ec3634a90ce1119900490bd0b7bdc11dc7059a495b792d146801e27c9",
+            "skills": 2335,
+            "target_demand_filtering": false,
+            "target_keys_sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+            "target_value_columns_read": false,
+            "total_directed_expansions": 246806,
+            "total_undirected_context_edges": 123403,
+            "undirected_edges_per_context": 17629
+          }
+        },
+        "jaccard": {
+          "descriptor": {
+            "context_ids": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "contexts": 7,
+            "cross_context_edges": 0,
+            "data_name": "region",
+            "directed_expansions_per_context": 39298,
+            "duplicated_edge_arrays_saved": false,
+            "mapping": "each shared undirected edge {a,b} is reused inside every target context c as both (c,a)->(c,b) and (c,b)->(c,a) with unchanged score",
+            "per_context_directed_expansions": [
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298,
+              39298
+            ],
+            "per_context_undirected_edges": [
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649,
+              19649
+            ],
+            "shared_edge_pairs_sha256": "dc5d61add2652f523780026c8c4d42ccafefd035e959cb43855a6b24b2f27eba",
+            "shared_edge_scores_sha256": "b42c2ee92a2696193d1b4c3907cc057f2e68eed8af2e4ba4144b70fdebfa9358",
+            "skills": 2335,
+            "target_demand_filtering": false,
+            "target_keys_sha256": "ebb131183fa8a52b48287ee751471781e7fba0baa03466810533740f003a2d86",
+            "target_value_columns_read": false,
+            "total_directed_expansions": 275086,
+            "total_undirected_context_edges": 137543,
+            "undirected_edges_per_context": 19649
+          }
+        }
+      },
+      "population": {
+        "checked": "exact source skill set in every target context",
+        "contexts": 7,
+        "data_name": "region",
+        "per_context": {
+          "0": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "1": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "2": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "3": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "4": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "5": {
+            "keys": 2335,
+            "skills": 2335
+          },
+          "6": {
+            "keys": 2335,
+            "skills": 2335
+          }
+        },
+        "skills": 2335,
+        "source_skills_sha256": "fad2a9c9ca561c05498e6cd76c4fe6c7d10108792c9187234ac21f9ba10ee59f",
+        "status": "ok",
+        "target_skills_sha256": "fad2a9c9ca561c05498e6cd76c4fe6c7d10108792c9187234ac21f9ba10ee59f"
+      },
+      "skills": 2335,
+      "source_file_sha256": "27a946c787efcd5f1d2b25ca35bebd1392320d9b10920e771405a664db5e4a3f",
+      "source_path": "/Users/watuji/da_chuang/repos/benchmark/dataset/demand/region.parquet"
+    }
+  },
+  "terminal_state": "succeeded",
+  "trends": {
+    "cosine": {
+      "candidate": "cosine",
+      "common_zero_fraction": 0.5662467502475443,
+      "common_zero_fraction_reason": null,
+      "common_zero_month_count": 14015239,
+      "constant_context_count": 0,
+      "constant_reason": "constant_difference",
+      "edges": 17629,
+      "edges_with_eligible_context": 14744,
+      "eligibility_rule": "at least 12 positive-demand months at both endpoints and nonzero first-difference variance at both endpoints; a descriptive convention, not a significance or reliability test",
+      "eligible_context_count": 158832,
+      "graph_selection_influence": false,
+      "insufficient_context_count": 757876,
+      "insufficient_reason": "history_insufficient",
+      "interpretation": "diagnostic occupational heterogeneity only; not significance, reliability or predictive benefit",
+      "negative_correlations": 43284,
+      "null_reasons": {
+        "correlation_summary": null,
+        "unknown_edges": "eligible count is zero; correlation remains unknown"
+      },
+      "per_edge_correlation_max": {
+        "count": 14744,
+        "max": 0.9999442521549647,
+        "mean": 0.4395159297396727,
+        "median": 0.46497455580763436,
+        "min": -0.6445095512404198,
+        "quantiles": {
+          "0": -0.6445095512404198,
+          "100": 0.9999442521549647,
+          "25": 0.26576450869090534,
+          "50": 0.46497455580763436,
+          "75": 0.6371662473169143,
+          "90": 0.7830726778601965,
+          "99": 0.939108822197904
+        },
+        "status": "ok",
+        "std": 0.2724735426201701
+      },
+      "per_edge_correlation_mean": {
+        "count": 14744,
+        "max": 0.9906624324347701,
+        "mean": 0.13455027795278215,
+        "median": 0.13718118486816633,
+        "min": -0.6445095512404198,
+        "quantiles": {
+          "0": -0.6445095512404198,
+          "100": 0.9906624324347701,
+          "25": 0.05392964722965065,
+          "50": 0.13718118486816633,
+          "75": 0.21932134681019344,
+          "90": 0.30621850301837794,
+          "99": 0.5036928331907812
+        },
+        "status": "ok",
+        "std": 0.14713010937015475
+      },
+      "per_edge_correlation_median": {
+        "count": 14744,
+        "max": 0.9906624324347701,
+        "mean": 0.13132262147673673,
+        "median": 0.1315901859171869,
+        "min": -0.6445095512404198,
+        "quantiles": {
+          "0": -0.6445095512404198,
+          "100": 0.9906624324347701,
+          "25": 0.03822699135369982,
+          "50": 0.1315901859171869,
+          "75": 0.22440650005111107,
+          "90": 0.320770671291253,
+          "99": 0.5285718512256302
+        },
+        "status": "ok",
+        "std": 0.1567557496157914
+      },
+      "per_edge_correlation_min": {
+        "count": 14744,
+        "max": 0.9906624324347701,
+        "mean": -0.1642263602780613,
+        "median": -0.19654999063009757,
+        "min": -0.7471683295705124,
+        "quantiles": {
+          "0": -0.7471683295705124,
+          "100": 0.9906624324347701,
+          "25": -0.31225113915070146,
+          "50": -0.19654999063009757,
+          "75": -0.04428222445950031,
+          "90": 0.12279618083786296,
+          "99": 0.4688054250151202
+        },
+        "status": "ok",
+        "std": 0.2161528078849436
+      },
+      "positive_correlations": 115503,
+      "unknown_edges": 2885,
+      "zero_correlations": 45
+    },
+    "global": {
+      "common_zero_month_fraction_of_all_context_months": 0.5719619620043116,
+      "constant_context_count": 0,
+      "constant_reason": "constant_difference",
+      "context_count": 52,
+      "correlation_max": 0.9999442521549647,
+      "correlation_mean": 0.16871285727669372,
+      "correlation_median": 0.15539372741435376,
+      "correlation_min": -0.7580652400362914,
+      "correlation_std": 0.2728076604773182,
+      "eligibility_rule": "at least 12 positive-demand months at both endpoints and nonzero first-difference variance at both endpoints; a descriptive convention, not a significance or reliability test",
+      "eligible_context_count": 388732,
+      "first_difference_length": 26,
+      "graph_selection_influence": false,
+      "insufficient_context_count": 1502196,
+      "insufficient_reason": "history_insufficient",
+      "min_positive_months": 12,
+      "negative_correlations": 108890,
+      "null_reasons": {},
+      "positive_correlations": 279714,
+      "reason_codes": {
+        "0": "eligible",
+        "1": "history_insufficient",
+        "2": "constant_difference"
+      },
+      "status": "ok",
+      "zero_correlations": 128
+    },
+    "graph_bytes_unchanged_by_diagnostics": true,
+    "jaccard": {
+      "candidate": "jaccard",
+      "common_zero_fraction": 0.5842062745340266,
+      "common_zero_fraction_reason": null,
+      "common_zero_month_count": 16116613,
+      "constant_context_count": 0,
+      "constant_reason": "constant_difference",
+      "edges": 19649,
+      "edges_with_eligible_context": 15835,
+      "eligibility_rule": "at least 12 positive-demand months at both endpoints and nonzero first-difference variance at both endpoints; a descriptive convention, not a significance or reliability test",
+      "eligible_context_count": 237763,
+      "graph_selection_influence": false,
+      "insufficient_context_count": 783985,
+      "insufficient_reason": "history_insufficient",
+      "interpretation": "diagnostic occupational heterogeneity only; not significance, reliability or predictive benefit",
+      "negative_correlations": 67578,
+      "null_reasons": {
+        "correlation_summary": null,
+        "unknown_edges": "eligible count is zero; correlation remains unknown"
+      },
+      "per_edge_correlation_max": {
+        "count": 15835,
+        "max": 0.9999442521549647,
+        "mean": 0.44667187619113147,
+        "median": 0.47415241969622124,
+        "min": -0.6612754652604099,
+        "quantiles": {
+          "0": -0.6612754652604099,
+          "100": 0.9999442521549647,
+          "25": 0.28982739054409046,
+          "50": 0.47415241969622124,
+          "75": 0.6323028301070255,
+          "90": 0.7637286331261818,
+          "99": 0.9372010734815617
+        },
+        "status": "ok",
+        "std": 0.2622955811663129
+      },
+      "per_edge_correlation_mean": {
+        "count": 15835,
+        "max": 0.9149784008188018,
+        "mean": 0.10963206655472878,
+        "median": 0.11303979686045426,
+        "min": -0.6612754652604099,
+        "quantiles": {
+          "0": -0.6612754652604099,
+          "100": 0.9149784008188018,
+          "25": 0.037411234269396354,
+          "50": 0.11303979686045426,
+          "75": 0.182251300906925,
+          "90": 0.2602940223304162,
+          "99": 0.47567662428175533
+        },
+        "status": "ok",
+        "std": 0.1347235048252432
+      },
+      "per_edge_correlation_median": {
+        "count": 15835,
+        "max": 0.940771065304585,
+        "mean": 0.107603385423439,
+        "median": 0.1081667121772455,
+        "min": -0.6612754652604099,
+        "quantiles": {
+          "0": -0.6612754652604099,
+          "100": 0.940771065304585,
+          "25": 0.025304001981142535,
+          "50": 0.1081667121772455,
+          "75": 0.1888164654920982,
+          "90": 0.273637833106031,
+          "99": 0.5039632141593432
+        },
+        "status": "ok",
+        "std": 0.14475556479384508
+      },
+      "per_edge_correlation_min": {
+        "count": 15835,
+        "max": 0.9072668499728154,
+        "mean": -0.23060117189102686,
+        "median": -0.25412110381817593,
+        "min": -0.7580652400362914,
+        "quantiles": {
+          "0": -0.7580652400362914,
+          "100": 0.9072668499728154,
+          "25": -0.3552469655960947,
+          "50": -0.25412110381817593,
+          "75": -0.13614796111034116,
+          "90": 0.015190695147916301,
+          "99": 0.35684528617795896
+        },
+        "status": "ok",
+        "std": 0.18849771719656463
+      },
+      "positive_correlations": 170100,
+      "unknown_edges": 3814,
+      "zero_correlations": 85
+    },
+    "union_edges": 36364
+  }
+}
