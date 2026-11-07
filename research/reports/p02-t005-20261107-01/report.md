@@ -79,3 +79,10 @@ python3 -B research/reports/p02-t005-20261107-01/summarize_cost.py > research/re
 已做：读取协议、正式证据与当前源码；查询本机非敏感硬件字段、当前默认 Python 的模块可发现性；用标准库脚本汇总既有 summary 中的成本；制定协议与更新研究记录。未训练、未加载模型前向、未重算预测或原验收哈希，未访问 Windows 实时进程。
 
 方案报告、脚本、成本汇总和协议保存在本仓库工作区，具体 Git 保存与备份事实由历史／索引追溯；本轮未 commit、push 或封存，未核验异地备份。本报告给出可恢复的交接位置，不声称所有研究已完成。
+
+
+## 7. T006 实现交接回执（2026-11-07）
+
+T006 已在正确基线 `91ea3d6df8360998d9d2b1ed36ab764322ee26f3` 上创建 `p02-t006-gru-lstm-v2`，新增 `benchmark/multivariate_time_series/effective_temporal_training.py`，实现 P2-effective-training-L6-H3-v1 的训练期 RMS、L6/H3 窗口、完整窗口梯度累积、梯度裁剪、验证集 checkpoint 选择和可审计 JSON 产物。
+
+软件 smoke 测试通过；r0/count 真实数据成本样本和三 seed 对比见 [T006 v2 run](../../runs/p02-t006-gru-lstm-v2-20261107/summary.md)。GRU 与 LSTM 均按验证 MSE 在 `{1e-3, 3e-3}` 中选择 `3e-3`。结果仅是 r0/count 预实验，不推广到其他粒度；P02/T009 未修改、未运行。OpenSpec 独立验证已 PASS，变更已归档于 [add-effective-temporal-training](../../../openspec/changes/archive/2026-11-07-add-effective-temporal-training/verification.md)。

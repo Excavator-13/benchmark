@@ -1,0 +1,215 @@
+{
+  "run_id": "p02-t006-gru-lstm-v2-20261107",
+  "protocol_version": "P2-effective-training-L6-H3-v1",
+  "source_commit": "91ea3d6df8360998d9d2b1ed36ab764322ee26f3",
+  "source_data": "E:\\\u5927\u521b\\repo\\benchmark-p02-t006\\dataset\\demand\\r0.parquet",
+  "models": {
+    "GRU": {
+      "seeds": [
+        {
+          "model": "GRU",
+          "seed": 0,
+          "learning_rate": 0.003,
+          "selected_epoch": 70,
+          "val": {
+            "mae": 125.69941807766628,
+            "mse": 243982.30723551675
+          },
+          "test": {
+            "mae": 211.8903382292742,
+            "mse": 1301870.058699434
+          }
+        },
+        {
+          "model": "GRU",
+          "seed": 1,
+          "learning_rate": 0.003,
+          "selected_epoch": 100,
+          "val": {
+            "mae": 118.4022364078208,
+            "mse": 186488.04132829144
+          },
+          "test": {
+            "mae": 186.6778062397033,
+            "mse": 1251165.3822311203
+          }
+        },
+        {
+          "model": "GRU",
+          "seed": 2,
+          "learning_rate": 0.003,
+          "selected_epoch": 100,
+          "val": {
+            "mae": 114.04561694332533,
+            "mse": 212087.31431060418
+          },
+          "test": {
+            "mae": 195.32580708739462,
+            "mse": 1295952.7267535513
+          }
+        }
+      ],
+      "test_summary": {
+        "mse": {
+          "mean": 1282996.0558947017,
+          "sample_sd": 27724.493570622886
+        },
+        "mae": {
+          "mean": 197.9646505187907,
+          "sample_sd": 12.811735375149246
+        }
+      }
+    },
+    "LSTM": {
+      "seeds": [
+        {
+          "model": "LSTM",
+          "seed": 0,
+          "learning_rate": 0.003,
+          "selected_epoch": 84,
+          "val": {
+            "mae": 104.74430294974543,
+            "mse": 170140.17594698473
+          },
+          "test": {
+            "mae": 182.9952501034924,
+            "mse": 1142178.0123543348
+          }
+        },
+        {
+          "model": "LSTM",
+          "seed": 1,
+          "learning_rate": 0.003,
+          "selected_epoch": 69,
+          "val": {
+            "mae": 113.46343976318782,
+            "mse": 244444.6027636471
+          },
+          "test": {
+            "mae": 191.542697802754,
+            "mse": 1309088.278999476
+          }
+        },
+        {
+          "model": "LSTM",
+          "seed": 2,
+          "learning_rate": 0.003,
+          "selected_epoch": 70,
+          "val": {
+            "mae": 118.36552435924631,
+            "mse": 207230.19899299898
+          },
+          "test": {
+            "mae": 195.64489747380293,
+            "mse": 1272371.7814531613
+          }
+        }
+      ],
+      "test_summary": {
+        "mse": {
+          "mean": 1241212.6909356574,
+          "sample_sd": 87709.32658102292
+        },
+        "mae": {
+          "mean": 190.06094846001645,
+          "sample_sd": 6.453687355638513
+        }
+      }
+    }
+  },
+  "records": [
+    {
+      "model": "GRU",
+      "seed": 0,
+      "learning_rate": 0.003,
+      "selected_epoch": 70,
+      "val": {
+        "mae": 125.69941807766628,
+        "mse": 243982.30723551675
+      },
+      "test": {
+        "mae": 211.8903382292742,
+        "mse": 1301870.058699434
+      }
+    },
+    {
+      "model": "GRU",
+      "seed": 1,
+      "learning_rate": 0.003,
+      "selected_epoch": 100,
+      "val": {
+        "mae": 118.4022364078208,
+        "mse": 186488.04132829144
+      },
+      "test": {
+        "mae": 186.6778062397033,
+        "mse": 1251165.3822311203
+      }
+    },
+    {
+      "model": "GRU",
+      "seed": 2,
+      "learning_rate": 0.003,
+      "selected_epoch": 100,
+      "val": {
+        "mae": 114.04561694332533,
+        "mse": 212087.31431060418
+      },
+      "test": {
+        "mae": 195.32580708739462,
+        "mse": 1295952.7267535513
+      }
+    },
+    {
+      "model": "LSTM",
+      "seed": 0,
+      "learning_rate": 0.003,
+      "selected_epoch": 84,
+      "val": {
+        "mae": 104.74430294974543,
+        "mse": 170140.17594698473
+      },
+      "test": {
+        "mae": 182.9952501034924,
+        "mse": 1142178.0123543348
+      }
+    },
+    {
+      "model": "LSTM",
+      "seed": 1,
+      "learning_rate": 0.003,
+      "selected_epoch": 69,
+      "val": {
+        "mae": 113.46343976318782,
+        "mse": 244444.6027636471
+      },
+      "test": {
+        "mae": 191.542697802754,
+        "mse": 1309088.278999476
+      }
+    },
+    {
+      "model": "LSTM",
+      "seed": 2,
+      "learning_rate": 0.003,
+      "selected_epoch": 70,
+      "val": {
+        "mae": 118.36552435924631,
+        "mse": 207230.19899299898
+      },
+      "test": {
+        "mae": 195.64489747380293,
+        "mse": 1272371.7814531613
+      }
+    }
+  ],
+  "environment": {
+    "python": "3.13.0 (tags/v3.13.0:60403a5, Oct  7 2024, 09:38:07) [MSC v.1941 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.6.0+cpu",
+    "numpy": "2.4.2",
+    "pandas": "3.1.1",
+    "pyarrow": "26.0.1",
+    "threads": 1
+  }
+}

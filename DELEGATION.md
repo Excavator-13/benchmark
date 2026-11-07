@@ -33,18 +33,18 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 - 本文件是指针，不是进度表：不要把 `tasks.md` 的勾选状态镜像到这里、`research/state.md` 或阶段计划。
   研究任务状态以阶段计划为准，变更级进度以变更目录为准；OpenSpec 的 PASS 是研究验收的**证据**，不是验收本身。
 - 研究侧收尾属于常规记录维护；若收尾包含需要新授权的动作（正式运行实验、封存、commit、push），只报告并等待授权。
-- 本文件不改变任何 skill 的行为；`.agents/skills/` 下的 skill 通过各自的更新流程维护，并对各自的流程保持权威。
+- 本文件不改变任何 skill；`.agents/skills/` 下的 skill 保持未修改，并对各自的流程保持权威。
 
 ## 当前委托
 
 | 字段 | 值 |
 | --- | --- |
 | Status | `closed` |
-| 变更名 | `add-resumable-training-checkpoints` |
-| 研究任务 | P02-T002（任务状态见 [P02 计划](research/phases/P02/plan.md) §3） |
-| 登记时间 | 2026-10-20 |
-| 委派给 | OpenSpec 变更流程；本轮先创建完整提案，按技能边界交给后续 apply → 独立 verify-change → archive-change；研究侧不代跑 |
-| 结束判据 | 本文件 §结束判据两条；独立验证覆盖检查点完整性、原子发布、恢复身份拒绝、200 epoch 连续与恢复等价、逐 epoch 进度及控制器恢复；保留原科学冻结项、重复与重算容差 |
-| 研究侧收尾 | 核对归档 PASS 与当前实现后接受恢复能力并关闭指针，更新 state 与 T002 证据入口；按既有授权同步 D 盘，以新批次和 run 身份恢复 r2 的 30 次拟合及 51 项检查，动态估时和异常暂停；保留旧中断现场，全部成功后提交推送，无封存授权 |
-| 上次核对 | 2026-10-20：变更已归档，独立PASS、三项发现verified-resolved，归档前63项当前指纹一致；研究侧按D029接受软件就绪 |
-| 回收记录 | 已回收：接受恢复等价、原200epoch/选模/容差不变；D同步及新身份r2执行见[重启批次](research/reports/p02-t002-r2-20261020-02/report.md)。旧中断现场保留，按既有授权运行并于全部成功后推送；软件验收不代表T002完成 |
+| 变更名 | `add-effective-temporal-training` |
+| 研究任务 | P02-T006 |
+| 登记时间 | 2026-11-07 |
+| 委派给 | E13/spec-driven-compatible 变更流程 |
+| 结束判据 | 活跃变更目录已移除；对应归档 `verification.md` 为 `Verdict: PASS`，验证基准与实现一致 |
+| 研究侧收尾 | 依据独立 PASS 更新 P02 协议、T005 交接记录、state 和归档索引；记录实现与实验身份；不修改 T009 |
+| 上次核对 | 2026-11-07：归档 verification PASS；已完成研究侧收尾 |
+| 回收记录 | 2026-11-07：`add-effective-temporal-training` 已归档，verification 为 PASS；P02 协议、T005 交接记录、state 和 P02 计划已更新并指向 v2 run；T009 未修改、未运行；尚未 push 或创建 Pull Request |
