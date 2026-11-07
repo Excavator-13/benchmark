@@ -1,0 +1,150 @@
+{
+  "kind": "historical_cost_summary",
+  "new_training_executed": false,
+  "datasets": {
+    "r0": {
+      "runs": [
+        {
+          "source": "research/runs/p02-t002-r0-20261022-01-r0-self-s0-a/summary.md",
+          "total_seconds": 56.416,
+          "training_validation_seconds": 49.267,
+          "peak_rss_bytes": 415764480
+        },
+        {
+          "source": "research/runs/p02-t002-r0-20261022-01-r0-self-s0-b/summary.md",
+          "total_seconds": 56.272,
+          "training_validation_seconds": 49.062,
+          "peak_rss_bytes": 416079872
+        },
+        {
+          "source": "research/runs/p02-t002-r0-20261022-01-r0-self-s1-a/summary.md",
+          "total_seconds": 56.452,
+          "training_validation_seconds": 49.206,
+          "peak_rss_bytes": 416522240
+        },
+        {
+          "source": "research/runs/p02-t002-r0-20261022-01-r0-self-s1-b/summary.md",
+          "total_seconds": 58.897,
+          "training_validation_seconds": 51.659,
+          "peak_rss_bytes": 416067584
+        },
+        {
+          "source": "research/runs/p02-t002-r0-20261022-01-r0-self-s2-a/summary.md",
+          "total_seconds": 55.322,
+          "training_validation_seconds": 47.86,
+          "peak_rss_bytes": 416415744
+        },
+        {
+          "source": "research/runs/p02-t002-r0-20261022-01-r0-self-s2-b/summary.md",
+          "total_seconds": 66.718,
+          "training_validation_seconds": 57.622,
+          "peak_rss_bytes": 416301056
+        }
+      ],
+      "total_seconds_range": [
+        55.322,
+        66.718
+      ],
+      "median_training_validation_seconds": 49.23650000000001,
+      "max_peak_rss_bytes": 416522240,
+      "historical_complete_training_passes": 200,
+      "historical_optimizer_steps": 200
+    },
+    "region": {
+      "runs": [
+        {
+          "source": "research/runs/p02-t002-region-20261022-01-region-self-s0-a/summary.md",
+          "total_seconds": 286.763,
+          "training_validation_seconds": 277.878,
+          "peak_rss_bytes": 688611328
+        },
+        {
+          "source": "research/runs/p02-t002-region-20261022-01-region-self-s0-b/summary.md",
+          "total_seconds": 289.012,
+          "training_validation_seconds": 280.253,
+          "peak_rss_bytes": 692568064
+        },
+        {
+          "source": "research/runs/p02-t002-region-20261022-01-region-self-s1-a/summary.md",
+          "total_seconds": 287.85,
+          "training_validation_seconds": 279.116,
+          "peak_rss_bytes": 700248064
+        },
+        {
+          "source": "research/runs/p02-t002-region-20261022-01-region-self-s1-b/summary.md",
+          "total_seconds": 281.194,
+          "training_validation_seconds": 272.287,
+          "peak_rss_bytes": 709799936
+        },
+        {
+          "source": "research/runs/p02-t002-region-20261022-01-region-self-s2-a/summary.md",
+          "total_seconds": 268.521,
+          "training_validation_seconds": 259.592,
+          "peak_rss_bytes": 667766784
+        },
+        {
+          "source": "research/runs/p02-t002-region-20261022-01-region-self-s2-b/summary.md",
+          "total_seconds": 278.989,
+          "training_validation_seconds": 269.103,
+          "peak_rss_bytes": 689184768
+        }
+      ],
+      "total_seconds_range": [
+        268.521,
+        289.012
+      ],
+      "median_training_validation_seconds": 275.0825,
+      "max_peak_rss_bytes": 709799936,
+      "historical_complete_training_passes": 200,
+      "historical_optimizer_steps": 200
+    },
+    "r2": {
+      "runs": [
+        {
+          "source": "research/runs/p02-t002-r2-20261020-02-r2-self-s0-a/summary.md",
+          "total_seconds": 1780.426,
+          "training_validation_seconds": 1765.619,
+          "peak_rss_bytes": 2718986240
+        },
+        {
+          "source": "research/runs/p02-t002-r2-20261020-02-r2-self-s0-b/summary.md",
+          "total_seconds": 1782.56,
+          "training_validation_seconds": 1767.946,
+          "peak_rss_bytes": 2716364800
+        },
+        {
+          "source": "research/runs/p02-t002-r2-20261020-02-r2-self-s1-a/summary.md",
+          "total_seconds": 1778.136,
+          "training_validation_seconds": 1763.998,
+          "peak_rss_bytes": 2719547392
+        },
+        {
+          "source": "research/runs/p02-t002-r2-20261020-02-r2-self-s1-b/summary.md",
+          "total_seconds": 1780.019,
+          "training_validation_seconds": 1764.9,
+          "peak_rss_bytes": 2716426240
+        },
+        {
+          "source": "research/runs/p02-t002-r2-20261020-02-r2-self-s2-a/summary.md",
+          "total_seconds": 2033.03,
+          "training_validation_seconds": 2016.734,
+          "peak_rss_bytes": 2305536000
+        },
+        {
+          "source": "research/runs/p02-t002-r2-20261020-02-r2-self-s2-b/summary.md",
+          "total_seconds": 2064.549,
+          "training_validation_seconds": 2049.913,
+          "peak_rss_bytes": 2305769472
+        }
+      ],
+      "total_seconds_range": [
+        1778.136,
+        2064.549
+      ],
+      "median_training_validation_seconds": 1766.7824999999998,
+      "max_peak_rss_bytes": 2719547392,
+      "historical_complete_training_passes": 200,
+      "historical_optimizer_steps": 200
+    }
+  }
+}

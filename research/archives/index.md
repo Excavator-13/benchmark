@@ -311,3 +311,9 @@ region/r0 产物：[组合报告](../reports/p02-t002-remaining-20261022-01/repo
 已核对：90 个正式 run 的 `models/selected.npz` 与 `training-history.json` 共 180 文件，SHA256 与三组 checks 的 `input_sha256_after` 全部一致（90/90 run）；上传范围的来源哈希见 [upload-scope.json](../reports/t002-upload-20261022-01/upload-scope.json)。同批导入旧中断批次 `p02-t002-r2-20261020-01`（9 文件，含 report 与 prepare 失败记录）和 7 个最终回执：`publication.json` 由 `publishing` 变为 `pushed`（r2 `815f1cc`、r0 `3060af1`），`queue.json` 变为 `complete_and_pushed`，controller/queue 日志补全。收尾报告描述的当时快照不改写，补充见 [T002 收尾报告 §2026-10-22 补充](../reports/p02-t002-closeout-20261022-01/report.md#2026-10-22-补充)。与 `upload-scope.json` 的 `source_paths` 对比：4 个回执逐字节一致；`queue.json` 仅差 CRLF→LF 归一化；两个 stdout 日志是比 scope 计算时更完整的版本（scope 在日志仍写入时生成），所以字节不同。未导入 106 个仅 CRLF/LF 差异的文件（其中含 `.gitattributes` 保护的归档证据），归档字节保持不变。
 
 存储：180 个 artifacts 与上述补充材料随 2026-10-22 文档提交入库并推送至 `origin/xzs`；`.gitignore` 只增加匹配 `p02-t002-*` 的一次性例外。完整预测、checkpoint、源码捕获仍在 Windows D 根，未核验异地备份；未封存。
+
+## P02-T005 条件方案与历史成本汇总（2026-11-07）
+
+对象：[T005 方案报告](../reports/p02-t005-20261107-01/report.md)、同目录的只读成本汇总脚本与 [historical-cost.json](../reports/p02-t005-20261107-01/historical-cost.json)。依据为既有正式自身 run 的可读 summary；本轮没有新训练产物。科学条件由 [P02 新协议](../phases/P02/protocol.md) 维护，研究侧采用见 D038。
+
+存储：上述交付已在本机仓库工作区生成；本轮未 commit、push 或封存，异地备份未核验。旧模型、预测与 checkpoint 的存储事实仍见对应历史条目，本次方案交付不代表它们已迁移或补做核验。
