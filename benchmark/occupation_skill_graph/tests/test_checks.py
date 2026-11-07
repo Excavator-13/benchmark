@@ -26,6 +26,7 @@ class SavedCheckCorruptionTests(unittest.TestCase):
             run_id="golden",
             output_root=cls.root / "output",
         )
+        cls.spec.repo_root = str(Path(__file__).resolve().parents[3])
         runner.execute_build(cls.spec)
         cls.golden = cls.root / "output" / "golden"
 
@@ -59,6 +60,72 @@ class SavedCheckCorruptionTests(unittest.TestCase):
     def _rewrite_array(self, relative: str, array: np.ndarray) -> None:
         np.save(self.run_dir / relative, array)
         self._rehash(relative)
+
+    def _rewrite_json(self, relative, payload):
+        (self.run_dir / relative).write_text(json.dumps(payload))
+        self._rehash(relative)
+
+    def _assert_provenance_failure(self, phrase):
+        before = checks._hash_tree(self.run_dir)
+        result = self._check()
+        self.assertEqual(result["status"], "failed")
+        self.assertIn(phrase, json.dumps(result["report"]["errors"]))
+        self.assertEqual(before, checks._hash_tree(self.run_dir))
+
+    def test_missing_code_provenance_fails_after_reinventory(self):
+        provenance = json.loads((self.run_dir / "provenance.json").read_text())
+        provenance["code_source"] = {}
+        self._rewrite_json("provenance.json", provenance)
+        self._assert_provenance_failure("code_source")
+
+    def test_missing_environment_provenance_fails_after_reinventory(self):
+        provenance = json.loads((self.run_dir / "provenance.json").read_text())
+        provenance["environment"] = {}
+        self._rewrite_json("provenance.json", provenance)
+        self._assert_provenance_failure("environment")
+
+    def test_missing_environment_snapshot_fails_after_reinventory(self):
+        (self.run_dir / "environment.txt").unlink()
+        path = self.run_dir / "artifacts-sha256.json"
+        manifest = json.loads(path.read_text())
+        del manifest["files"]["environment.txt"]
+        path.write_text(json.dumps(manifest))
+        self._assert_provenance_failure("environment.txt")
+
+    def test_empty_source_record_fails_after_reinventory(self):
+        self._rewrite_json("artifacts/source.json", {})
+        self._assert_provenance_failure("source")
+
+    def test_contradictory_code_baseline_fails(self):
+        provenance = json.loads((self.run_dir / "provenance.json").read_text())
+        provenance["code_source"]["commit"] = "0" * 40
+        self._rewrite_json("provenance.json", provenance)
+        self._assert_provenance_failure("code_source")
+
+    def test_missing_recoverable_content_fails_after_reinventory(self):
+        relative = "code-source.json"
+        code = json.loads((self.run_dir / relative).read_text())
+        entry = next(iter(code["files"].values()))
+        entry["git_status"] = "untracked"
+        entry["git_reference"] = None
+        entry["patch_path"] = None
+        entry["content_saved"] = None
+        provenance = json.loads((self.run_dir / "provenance.json").read_text())
+        provenance["code_source"] = code
+        self._rewrite_json(relative, code)
+        self._rewrite_json("provenance.json", provenance)
+        self._assert_provenance_failure("recover")
+
+    def test_environment_snapshot_contradiction_fails(self):
+        (self.run_dir / "environment.txt").write_text("different environment\n")
+        self._rehash("environment.txt")
+        self._assert_provenance_failure("environment")
+
+    def test_target_provenance_contradiction_fails(self):
+        provenance = json.loads((self.run_dir / "provenance.json").read_text())
+        provenance["targets"]["r2"]["keys_sha256"] = "0" * 64
+        self._rewrite_json("provenance.json", provenance)
+        self._assert_provenance_failure("targets.r2")
 
     def test_golden_artifact_passes(self) -> None:
         result = self._check()

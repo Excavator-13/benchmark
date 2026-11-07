@@ -51,6 +51,27 @@ class HelpImportTests(unittest.TestCase):
 
 
 class PathSafetyTests(unittest.TestCase):
+    def test_scratch_root_alias_cannot_authorize_protected_output(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary) / "checkout"
+            repo.mkdir()
+            for name in ("research", "dataset", "benchmark", "source", "history"):
+                with self.subTest(destination=name):
+                    protected = repo / name
+                    protected.mkdir()
+                    scratch = repo / "scratch"
+                    scratch.symlink_to(protected, target_is_directory=True)
+                    try:
+                        for output in (None, scratch / "runs"):
+                            with self.assertRaises(paths.PathError):
+                                paths.resolve_output_root(
+                                    purpose="development", output_root=output,
+                                    repo_root=repo,
+                                )
+                        self.assertEqual(list(protected.iterdir()), [])
+                    finally:
+                        scratch.unlink()
+
     def test_checkout_under_temporary_root_rejects_source_paths(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             repo = Path(temporary) / "checkout"

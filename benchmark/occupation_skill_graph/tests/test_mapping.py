@@ -42,10 +42,29 @@ class TargetMappingTests(unittest.TestCase):
             self.assertEqual(directed.shape, (4, 4))
             self.assertTrue((directed[:, 0] == context.context_id).all())
             self.assertTrue((directed[:, 2] == context.context_id).all())
+            c = context.context_id
+            np.testing.assert_array_equal(
+                directed, [[c, 1, c, 4], [c, 4, c, 7],
+                           [c, 4, c, 1], [c, 7, c, 4]]
+            )
+            keys = {tuple(key) for key in target.key_array.tolist()}
+            for pair in directed:
+                self.assertIn(tuple(pair[:2]), keys)
+                self.assertIn(tuple(pair[2:]), keys)
+            np.testing.assert_array_equal(
+                np.tile(context.scores, 2), [.5, .25, .5, .25]
+            )
             self.assertEqual(context.node_key(4), (context.context_id, 4))
         self.assertEqual(seen, [2, 5])
         self.assertFalse(descriptor["duplicated_edge_arrays_saved"])
         self.assertFalse(descriptor["target_value_columns_read"])
+
+    def test_empty_expansion_keeps_context_qualified_schema(self) -> None:
+        target = fx.target_fixture("r2", [2, 5], self.skills)
+        for context in mapping.iter_context_edges(
+            target, np.empty((0, 2), dtype=np.int64), np.empty(0)
+        ):
+            self.assertEqual(context.directed_pairs().shape, (0, 4))
 
     def test_missing_skill_is_explicit(self) -> None:
         target = fx.target_fixture("r0", [0], [1, 4])

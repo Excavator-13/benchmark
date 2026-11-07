@@ -150,6 +150,7 @@ def launch(
             ]
         )
         started = time.monotonic()
+        _write_supervisor_record(run, {"status": "running", "limits": spec.limits()})
         process = subprocess.Popen(
             argv,
             cwd=str(Path(spec.repo_root)),
@@ -162,6 +163,8 @@ def launch(
                     _terminate(process)
                     break
                 returncode = process.poll()
+                if returncode is not None:
+                    break
                 progress = artifacts.read_progress(run.path)
                 now_epoch = time.time()
                 now_monotonic = time.monotonic()
@@ -189,19 +192,15 @@ def launch(
                         }
                         _terminate(process)
                         break
-                elif rss.get("status") == "unsupported":
-                    # Preflight succeeded, so a later unsupported probe is a
-                    # degraded monitor; record it rather than silently claiming
-                    # an enforced limit.
-                    _write_supervisor_record(
-                        run,
-                        {
-                            "status": "monitor_degraded",
-                            "reason": rss.get("reason"),
-                            "stage": stage,
-                            "time": artifacts.iso_now(),
-                        },
-                    )
+                else:
+                    # A missing sample is harmless only if the worker exited
+                    # during the probe; a live process must remain enforceable.
+                    if process.poll() is not None:
+                        break
+                    termination_reason = "rss_monitor_failure"
+                    termination_detail = {"stage": stage, "measurement": rss}
+                    _terminate(process)
+                    break
                 if elapsed > limit:
                     termination_reason = (
                         "trend_stage_timeout"
@@ -223,19 +222,24 @@ def launch(
             raise
         returncode = process.wait() if process is not None else 1
         supervisor_record = {
-            "status": "completed",
+            "status": "terminated" if termination_reason else (
+                "interrupted" if cancelled else "completed"
+            ),
+            "reason": termination_reason or ("cancellation" if cancelled else None),
+            "detail": termination_detail,
             "worker_returncode": int(returncode),
             "worker_pid": int(process.pid) if process is not None else None,
             "observed_peak_rss_bytes": int(observed_peak_rss),
             "observed_peak_rss_scope": "sampled worker resident set size",
             "limits": spec.limits(),
             "thread_environment": {
-                name: os.environ.get(name) for name in BLAS_VARIABLES
+                name: _worker_environment().get(name) for name in BLAS_VARIABLES
             },
             "time": artifacts.iso_now(),
         }
         _write_supervisor_record(run, supervisor_record)
         if termination_reason is not None:
+            (run.path / protocol.MANIFEST_FILE).unlink(missing_ok=True)
             artifacts.write_status(
                 run,
                 "terminated",
@@ -255,6 +259,7 @@ def launch(
             )
             return 1
         if cancelled:
+            (run.path / protocol.MANIFEST_FILE).unlink(missing_ok=True)
             artifacts.write_status(
                 run,
                 "interrupted",

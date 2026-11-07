@@ -36,7 +36,7 @@ class MappedContext:
 
     data_name: str
     context_id: int
-    edges: np.ndarray  # int64 [E, 2] canonical source skill pairs
+    edges: np.ndarray  # int64 [E, 2] positional indices into source_skills
     scores: np.ndarray  # float64 [E]
     source_skills: np.ndarray  # int64 [S] canonical target skill ids
 
@@ -55,22 +55,23 @@ class MappedContext:
     def directed_pairs(self) -> np.ndarray:
         """Expand the shared relation to both directions for this context."""
         if self.edges.size == 0:
-            return np.empty((0, 2), dtype=np.int64)
+            return np.empty((0, 4), dtype=np.int64)
+        skill_pairs = self.source_skills[self.edges]
         forward = np.stack(
             [
                 np.full(self.edges.shape[0], self.context_id, dtype=np.int64),
-                self.edges[:, 0],
+                skill_pairs[:, 0],
                 np.full(self.edges.shape[0], self.context_id, dtype=np.int64),
-                self.edges[:, 1],
+                skill_pairs[:, 1],
             ],
             axis=1,
         )
         backward = np.stack(
             [
                 np.full(self.edges.shape[0], self.context_id, dtype=np.int64),
-                self.edges[:, 1],
+                skill_pairs[:, 1],
                 np.full(self.edges.shape[0], self.context_id, dtype=np.int64),
-                self.edges[:, 0],
+                skill_pairs[:, 0],
             ],
             axis=1,
         )

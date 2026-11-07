@@ -64,6 +64,7 @@ MANIFEST_EXCLUSIONS: Tuple[str, ...] = (
     "events.jsonl",
     protocol.STATUS_FILE,
     protocol.PROGRESS_FILE,
+    "artifacts/supervisor.json",
 )
 
 #: Launcher files are not necessarily imported by the worker itself.

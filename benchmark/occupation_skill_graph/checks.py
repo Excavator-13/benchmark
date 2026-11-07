@@ -236,6 +236,12 @@ def _validate_status(root: Path) -> Dict[str, Any]:
         raise CheckError(
             f"saved status is {status.get('state')!r}, not 'succeeded'"
         )
+    if (root / "artifacts/supervisor.json").exists():
+        supervisor = _read_json(root, "artifacts/supervisor.json")
+        if (supervisor.get("status") != "completed"
+                or supervisor.get("worker_returncode") != 0
+                or supervisor.get("reason") is not None):
+            raise CheckError("supervisor has not completed successfully")
     return status
 
 
@@ -282,6 +288,117 @@ def _validate_protocol(
         "sha256": digest,
         "bytes": len(text.encode("utf-8")),
     }
+
+
+def _required_fields(record: Any, fields: Sequence[str], label: str) -> None:
+    if not isinstance(record, Mapping):
+        raise CheckError(f"{label}: missing provenance object")
+    missing = sorted(set(fields) - set(record))
+    if missing:
+        raise CheckError(f"{label}: missing provenance fields {missing}")
+
+
+def _validate_execution_provenance(
+    root: Path, report: Mapping[str, Any], provenance: Mapping[str, Any],
+    manifest: Mapping[str, Any],
+) -> None:
+    """Validate saved claims and their evidence without consulting live sources."""
+    _required_fields(provenance, (
+        "schema", "run_id", "purpose", "fixture", "protocol", "command",
+        "limits", "code_source", "environment", "source", "targets",
+    ), "provenance")
+    if provenance["schema"] != "occupation-skill-graph-provenance-v1":
+        raise CheckError("provenance schema is unsupported")
+    for key in ("run_id", "purpose", "fixture", "protocol", "command", "source"):
+        _compare_payload(provenance[key], report.get(key), f"provenance.{key}")
+    _compare_payload(provenance["run_id"], manifest.get("run_id"), "provenance.run_id")
+    _compare_payload(provenance["run_id"], artifacts.read_status(root).get("run_id"),
+                     "provenance.status.run_id")
+    _compare_payload(provenance["command"], _read_json(root, protocol.COMMAND_FILE),
+                     "provenance.command")
+    _compare_payload(provenance["source"], _read_json(root, "artifacts/source.json"),
+                     "provenance.source")
+
+    code = provenance["code_source"]
+    _required_fields(code, (
+        "policy", "runtime_scope", "commit", "identity_available", "scoped_dirty",
+        "files", "protocol", "patch_path", "patch_bytes", "patch_unusable_paths",
+        "unrecoverable_paths", "errors",
+    ), "provenance.code_source")
+    _compare_payload(code, _read_json(root, "code-source.json"), "provenance.code_source")
+    if code["identity_available"] is not (code["commit"] is not None):
+        raise CheckError("code_source: contradictory baseline availability")
+    if code["commit"] is None and not code["errors"].get("commit"):
+        raise CheckError("code_source: unavailable baseline lacks a reason")
+    if set(code["runtime_scope"]) != set(code["files"]):
+        raise CheckError("code_source: runtime scope and file inventory differ")
+    if code["unrecoverable_paths"]:
+        raise CheckError("code_source: unrecoverable execution differences")
+
+    def evidence_path(relative: Any) -> Path:
+        if (not isinstance(relative, str) or Path(relative).is_absolute()
+                or ".." in Path(relative).parts or relative not in manifest["files"]):
+            raise CheckError(f"code_source: missing inventoried recovery evidence {relative!r}")
+        return root / relative
+
+    patch = evidence_path(code["patch_path"]).read_bytes()
+    if len(patch) != code["patch_bytes"]:
+        raise CheckError("code_source: patch byte count contradicts saved patch")
+    entries = list(code["files"].items()) + [("protocol", code["protocol"])]
+    for relative, entry in entries:
+        _required_fields(entry, ("path", "sha256", "git_status", "git_reference",
+                                "content_saved", "patch_path", "unavailable_reason"),
+                         f"code_source.{relative}")
+        reference = entry["git_reference"]
+        if reference is not None:
+            _required_fields(reference, ("commit", "path", "sha256"),
+                             f"code_source.{relative}.git_reference")
+            if reference["commit"] != code["commit"] or reference["path"] != entry["path"]:
+                raise CheckError(f"code_source.{relative}: contradictory baseline reference")
+        if entry["content_saved"]:
+            digest = artifacts.sha256_file(evidence_path(entry["content_saved"]))
+            if digest != entry["sha256"]:
+                raise CheckError(f"code_source.{relative}: saved recovery content hash differs")
+        elif entry["patch_path"]:
+            if (entry["patch_path"] != code["patch_path"] or not patch or reference is None):
+                raise CheckError(f"code_source.{relative}: missing patch recovery evidence")
+        elif (entry["git_status"] != "committed_clean" or reference is None
+              or reference["sha256"] != entry["sha256"]):
+            raise CheckError(f"code_source.{relative}: no recoverable execution content")
+    if code["protocol"]["sha256"] != provenance["protocol"]["sha256"]:
+        raise CheckError("code_source: protocol identity contradicts saved protocol")
+
+    environment = provenance["environment"]
+    _required_fields(environment, (
+        "python_executable", "python_version", "python_version_info", "platform",
+        "system", "machine", "cpu_count", "packages", "pip_freeze",
+        "pip_freeze_error", "numpy_blas_config", "numpy_blas_config_error",
+        "thread_environment", "thread_settings", "occupation_skill_graph",
+    ), "provenance.environment")
+    for key in ("python_executable", "python_version", "platform", "system", "machine"):
+        if not isinstance(environment[key], str) or not environment[key]:
+            raise CheckError(f"provenance.environment: missing {key}")
+    for name in ("numpy", "pandas", "pyarrow"):
+        if not environment["packages"].get(name):
+            raise CheckError(f"provenance.environment: missing package version {name}")
+    for value, error in (("pip_freeze", "pip_freeze_error"),
+                         ("numpy_blas_config", "numpy_blas_config_error")):
+        if environment[value] is None and not environment[error]:
+            raise CheckError(f"provenance.environment: missing {value} and unavailable reason")
+    expected_snapshot = environment["pip_freeze"]
+    if expected_snapshot is None:
+        expected_snapshot = f"pip freeze unavailable: {environment['pip_freeze_error']}\n"
+    _compare_payload(_read_text(root, "environment.txt"), expected_snapshot,
+                     "provenance.environment snapshot")
+    _compare_payload(environment["thread_environment"], environment["thread_settings"],
+                     "provenance.environment.thread_settings")
+    _compare_payload(environment["occupation_skill_graph"], {
+        "protocol_version": protocol.SCIENTIFIC_PROTOCOL_VERSION,
+        "task_id": protocol.TASK_ID, "top_k": protocol.TOP_K,
+        "score_block_size": protocol.SCORE_BLOCK_SIZE,
+        "trend_block_size": protocol.TREND_BLOCK_SIZE,
+        "min_positive_months": protocol.MIN_POSITIVE_MONTHS,
+    }, "provenance.environment.occupation_skill_graph")
 
 
 def _load_source(root: Path) -> Dict[str, np.ndarray]:
@@ -399,6 +516,7 @@ def _validate_targets(
     report: Mapping[str, Any],
     graphs: Mapping[str, scores.CandidateGraph],
     source_skills: np.ndarray,
+    provenance: Mapping[str, Any],
 ) -> Dict[str, Any]:
     result: Dict[str, Any] = {}
     for name in protocol.TARGET_DATA_NAMES:
@@ -450,6 +568,8 @@ def _validate_targets(
         report_target = report.get("targets", {}).get(name)
         if not isinstance(report_target, Mapping):
             raise CheckError(f"report has no target record for {name}")
+        _compare_payload(provenance.get("targets", {}).get(name),
+                         target.identity_payload(), f"provenance.targets.{name}")
         _compare_payload(
             report_target.get("identity", {}),
             target.identity,
@@ -509,6 +629,16 @@ def _validate_targets(
                     raise CheckError(
                         f"target {name}: lazy directed expansion count differs"
                     )
+                pairs = context.directed_pairs()
+                expected = np.empty((graph.n_edges * 2, 4), dtype=np.int64)
+                expected[:, 0] = context.context_id
+                expected[:, 2] = context.context_id
+                endpoints = source_skills[graph.edge_index]
+                expected[:graph.n_edges, 1::2] = endpoints
+                expected[graph.n_edges:, 1::2] = endpoints[:, ::-1]
+                _numeric_equal(pairs, expected, f"{name}.lazy endpoint identities")
+                _numeric_equal(context.scores, graph.edge_score,
+                               f"{name}.lazy scores")
                 expanded += 1
             if expanded != target.n_contexts:
                 raise CheckError(f"target {name}: lazy expansion context count differs")
@@ -649,6 +779,9 @@ def check_artifact(
                 protocol.REPORT_FILE,
                 protocol.SUMMARY_FILE,
                 protocol.PROTOCOL_SNAPSHOT,
+                "environment.txt",
+                "code-source.json",
+                "git-diff.patch",
             ]
             + layout.required_payload_files()
         )
@@ -671,6 +804,9 @@ def check_artifact(
         )
         if not isinstance(provenance, Mapping):
             raise CheckError("provenance.json is not a JSON object")
+        checker.step("execution_provenance", lambda: _validate_execution_provenance(
+            root, report, provenance, manifest
+        ))
         checker.step("command", lambda: _read_json(root, protocol.COMMAND_FILE))
         checker.step("summary", lambda: _read_text(root, protocol.SUMMARY_FILE))
         protocol_info = checker.step(
@@ -681,6 +817,11 @@ def check_artifact(
         source = report.get("source", {})
         if not isinstance(source, Mapping):
             raise CheckError("report source record is missing")
+        for key, expected in (("source_data_name", protocol.SOURCE_DATA_NAME),
+                              ("mode", protocol.MODE),
+                              ("key_columns", list(protocol.SOURCE_KEY_COLUMNS)),
+                              ("fixture", report.get("fixture"))):
+            _compare_payload(source.get(key), expected, f"source.{key}")
         file_identity = source.get("file_identity", {})
         if not isinstance(file_identity, Mapping):
             raise CheckError("report source file identity is missing")
@@ -796,7 +937,7 @@ def check_artifact(
         target_result = checker.step(
             "targets",
             lambda: _validate_targets(
-                root, report, graphs, arrays["skills"]
+                root, report, graphs, arrays["skills"], provenance
             ),
         )
         trend_result = checker.step(

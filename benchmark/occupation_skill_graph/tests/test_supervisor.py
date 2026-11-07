@@ -8,8 +8,9 @@ import tempfile
 import threading
 import unittest
 from pathlib import Path
+from unittest import mock
 
-from benchmark.occupation_skill_graph import supervisor
+from benchmark.occupation_skill_graph import artifacts, checks, supervisor
 from benchmark.occupation_skill_graph.tests import fixtures as fx
 
 
@@ -83,6 +84,97 @@ class SupervisorTests(unittest.TestCase):
         with self.assertRaises(supervisor.SupervisorError):
             supervisor.launch(spec, probe=probe)
         self.assertFalse((self.output / "no-monitor").exists())
+
+    def test_monitor_loss_after_preflight_fails_real_worker(self) -> None:
+        for failure in ("unsupported", "unavailable"):
+            with self.subTest(sample_status=failure):
+                spec = self._spec(f"monitor-{failure}")
+                spec.repo_root = str(Path(__file__).resolve().parents[3])
+                calls = 0
+
+                def probe(pid):
+                    nonlocal calls
+                    calls += 1
+                    if calls == 1:
+                        return {"status": "ok", "bytes": 1024}
+                    return {"status": failure, "bytes": None,
+                            "reason": "injected monitor loss"}
+
+                self.assertNotEqual(supervisor.launch(spec, probe=probe), 0)
+                run = spec.run_directory
+                status = artifacts.read_status(run)
+                self.assertEqual(status["state"], "terminated")
+                self.assertEqual(status["reason"], "rss_monitor_failure")
+                self.assertEqual(status["detail"]["measurement"]["status"], failure)
+                record = json.loads((run / "artifacts/supervisor.json").read_text())
+                self.assertEqual(record["reason"], "rss_monitor_failure")
+                self.assertIn("injected monitor loss", json.dumps(record))
+                self.assertFalse((run / "artifacts-sha256.json").exists())
+
+    def test_monitor_loss_retains_completed_stage(self) -> None:
+        spec = self._spec("completed-stage")
+        spec.repo_root = str(Path(__file__).resolve().parents[3])
+        run = spec.run_directory
+
+        def probe(pid):
+            progress = artifacts.read_progress(run) or {}
+            if "source" in progress.get("completed_stages", []):
+                return {"status": "unavailable", "bytes": None,
+                        "reason": "lost after source"}
+            return {"status": "ok", "bytes": 1024}
+
+        # A separate worker writes real completed source evidence, then waits.
+        script = (
+            "import time\n"
+            "from benchmark.occupation_skill_graph import runner\n"
+            f"spec = runner.BuildSpec.from_dict({spec.to_dict()!r})\n"
+            "spec.run_reserved = True\n"
+            "spec.fail_after_stage = 'source'\n"
+            "try: runner.execute_build(spec)\n"
+            "except runner.InjectedFailure: pass\n"
+            "time.sleep(30)\n"
+        )
+        code = supervisor.launch(spec, probe=probe,
+                                 worker_argv=[sys.executable, "-c", script])
+        self.assertNotEqual(code, 0)
+        status = artifacts.read_status(run)
+        self.assertEqual(status["reason"], "rss_monitor_failure")
+        self.assertIn("source", status["completed_stages"])
+        self.assertTrue((run / "artifacts/observations.npy").exists())
+        self.assertFalse((run / "artifacts-sha256.json").exists())
+
+    def test_exited_worker_does_not_require_rss_sample(self) -> None:
+        spec = self._spec("exit-race")
+        spec.repo_root = str(Path(__file__).resolve().parents[3])
+        workers = []
+        real_popen = supervisor.subprocess.Popen
+
+        def start(*args, **kwargs):
+            worker = real_popen(*args, **kwargs)
+            workers.append(worker)
+            return worker
+
+        def probe(pid):
+            if not workers:
+                return {"status": "ok", "bytes": 1024}
+            # Wait for an actual worker to exit during its RSS probe.
+            workers[0].wait(timeout=10)
+            return {"status": "unavailable", "bytes": None,
+                    "reason": "worker has exited"}
+
+        with mock.patch.object(supervisor.subprocess, "Popen", side_effect=start):
+            self.assertEqual(supervisor.launch(spec, probe=probe), 0)
+        result = checks.check_artifact(spec.run_directory, self.root / "race-check.json",
+                                       repo_root=Path(spec.repo_root), command=["check"])
+        self.assertEqual(result["status"], "ok", result["report"]["errors"])
+
+    def test_successful_supervised_build_is_checkable(self) -> None:
+        spec = self._spec("supervised-ok")
+        spec.repo_root = str(Path(__file__).resolve().parents[3])
+        self.assertEqual(supervisor.launch(spec), 0)
+        result = checks.check_artifact(spec.run_directory, self.root / "check.json",
+                                       repo_root=Path(spec.repo_root), command=["check"])
+        self.assertEqual(result["status"], "ok", result["report"]["errors"])
 
     def test_cancellation_preserves_interrupted_state(self) -> None:
         spec = self._spec("cancelled")

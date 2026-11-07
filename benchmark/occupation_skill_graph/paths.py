@@ -95,9 +95,15 @@ def resolve_output_root(
         else development_root(repo)
     )
     resolved = candidate.resolve()
+    # Protected destinations must be checked independently of the scratch
+    # alias, including protected trees which themselves point outside the repo.
+    for name in ("research", "dataset", "benchmark", "source", "history"):
+        if is_within(resolved, repo / name):
+            raise PathError(f"development output {resolved} resolves inside protected {name}")
     scratch = (repo / "scratch").resolve()
     if is_within(resolved, repo):
-        if not is_within(resolved, scratch):
+        # Do not let resolving scratch redefine which project subtree is safe.
+        if not resolved.is_relative_to(repo / "scratch"):
             raise PathError(
                 f"development output {resolved} is inside the project checkout "
                 "but outside the ignored scratch tree; project source, research, "
