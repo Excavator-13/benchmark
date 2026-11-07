@@ -654,6 +654,109 @@ clock measurements stay outside deterministic graph identity. Saved checks also
 require consistent generator source hashes and recorded Python/package metadata;
 they validate those saved records without reading the original sources.
 
+### 4.7 Occupation-skill graph audit (`benchmark.occupation_skill_graph`)
+
+`benchmark/occupation_skill_graph/` is an independent CPU entry implementing
+`P2-occupation-skill-graph-v1` from `research/phases/P02/t009-graph-protocol.md`.
+It reads only the 27 r2/count training months (2021-01..2023-03) at native
+precision, validates the complete occupation x skill grid and integer keys, and
+never routes source counts through the old `float32` diagnostic loader.
+Held-out months (2023-04..2023-12) are not read into construction, mapping or
+trend diagnostics; the file hash is recorded separately from the canonical
+training-content hash.
+
+The entry requires only NumPy, pandas and PyArrow (the pinned CPU environment
+used by the other CPU entries); it imports neither torch nor a graph-learning
+package:
+
+```bash
+conda activate job-sdf-baseline
+python -m pip install --no-cache-dir -r benchmark/nograph_baseline/requirements.txt
+```
+
+**Graph-score semantics.** For `x[s,c]` equal to training demand summed over the
+27 unique months, support is `x > 0`.
+
+- Occupational-support Jaccard is `|support(s) & support(u)| / |support(s) |
+  support(u)|`, with an empty union scored as zero.
+- Demand-composition cosine compares `p[s] = x[s] / sum_c x[s,c]`; an all-zero
+  demand vector scores zero against every skill.
+- Each candidate independently keeps up to 10 positive-score other skills per
+  skill, ordered by descending score and ascending numeric skill ID for exact
+  ties, then the undirected union of both selections is retained with its
+  original `float64` score. Union degree can exceed 10 and is reported from the
+  final graph. Scores are relation priors only; they do not imply predictive
+  benefit.
+
+**Development fixture example** (writes small non-dense Parquet fixtures under
+the ignored scratch tree; no published-data construction):
+
+```bash
+python - <<'PY'
+from pathlib import Path
+from benchmark.occupation_skill_graph.tests import fixtures as fx
+fx.standard_fixture(Path("scratch/osg-fixture"))
+PY
+
+python -m benchmark.occupation_skill_graph build \
+    --purpose development --run-id fixture-audit \
+    --output-root scratch/osg-runs \
+    --fixture \
+    --demand-path scratch/osg-fixture/r2-source.parquet \
+    --target-path r0=scratch/osg-fixture/r0-target.parquet \
+    --target-path region=scratch/osg-fixture/region-target.parquet \
+    --target-path r2=scratch/osg-fixture/r2-target.parquet
+
+python -m benchmark.occupation_skill_graph check \
+    --artifact-dir scratch/osg-runs/fixture-audit \
+    --report scratch/osg-runs/check-fixture-audit.json
+```
+
+`--fixture` is explicit: published mode never silently accepts fixture
+population assertions. Development output defaults to
+`scratch/occupation-skill-graph/<run-id>` and an `--output-root` override must
+resolve inside the ignored scratch tree or a system temporary directory; project
+source, research, dataset and historical paths are refused even through a
+symlink. The checker never reopens source demand files and writes one exclusive
+external report; existing reports and run directories are never overwritten.
+
+Successful runs write `command.json`, `provenance.json`, `report.json`,
+`summary.md`, a protocol snapshot, and numeric evidence plus progress/status
+under `artifacts/`, with an `artifacts-sha256.json` inventory. The report covers
+structure (zero-demand skills, support counts, pre-sparsification density and
+score concentration, cutoff ties, degree/weight distributions, components and
+degree associations with total demand and occupational breadth), target mapping
+counts for `r0`/`region`/`r2`, and per-edge diagnostic first-difference
+correlations. Trend eligibility requires at least 12 positive-demand months at
+both endpoints and nonzero difference variance; otherwise the value is `null`
+with `history_insufficient` or `constant_difference` reason. This is a
+descriptive convention, not a significance or reliability test, and trends never
+change graph edges or weights.
+
+Construction/source/target and trend stages each default to a 30-minute wall
+clock deadline; the worker process defaults to a 2 GiB sampled RSS limit. A
+monitored isolated worker records stage/block progress and process-lifetime peak
+RSS in bytes; timeout, memory overshoot, cancellation or worker death leaves a
+non-success terminal state, and a hard-killed worker remains detectably
+unfinished. Budgets never reduce nodes/months, alter candidate rules or trigger
+an automatic retry.
+
+**Research acceptance stays separate.** `--purpose research` writes a fresh
+`research/runs/<run-id>` directory and is not invoked by implementation or
+verification. A completed fixture or software check does not freeze a graph,
+accept a scientific candidate, constitute real-data auditing or predict any
+benefit. Real published-data construction, real-data auditing and research-side
+acceptance are separate actions; prediction training and benefit comparisons
+remain T010 work.
+The older no-graph and published-graph entries keep their existing interfaces
+and scientific behavior.
+
+Automated fixture tests:
+
+```bash
+python -m unittest discover -s benchmark/occupation_skill_graph/tests
+```
+
 ## 5 Directory Structure
 
 The expected structure of files is:
