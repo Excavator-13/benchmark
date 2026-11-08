@@ -1,0 +1,16 @@
+{
+  "run_id": "p02-t006-gru-lstm-v2-20261107",
+  "source_commit": "91ea3d6df8360998d9d2b1ed36ab764322ee26f3",
+  "protocol_version": "P2-effective-training-L6-H3-v1",
+  "data": "E:\\\u5927\u521b\\repo\\benchmark-p02-t006\\dataset\\demand\\r0.parquet",
+  "code": "benchmark/multivariate_time_series/effective_temporal_training.py",
+  "models": [
+    "GRU",
+    "LSTM"
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ]
+}
