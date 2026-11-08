@@ -1,0 +1,154 @@
+{
+  "checks": {
+    "data": {
+      "identity": {
+        "dataset": "r0",
+        "key_columns": [
+          "r0_id",
+          "skill_id"
+        ],
+        "mode": "count",
+        "months": 36,
+        "node_keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+        "nodes": 2335,
+        "source_kind": "parquet",
+        "source_path": "dataset/demand/r0.parquet",
+        "source_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946"
+      },
+      "status": "pass"
+    },
+    "dependencies": {
+      "detail": {
+        "numpy": {
+          "available": true,
+          "status": "pass"
+        },
+        "pandas": {
+          "available": true,
+          "status": "pass"
+        },
+        "psutil": {
+          "available": true,
+          "status": "pass"
+        },
+        "pyarrow": {
+          "available": true,
+          "status": "pass"
+        },
+        "torch": {
+          "available": true,
+          "status": "pass"
+        }
+      },
+      "missing": [],
+      "status": "pass"
+    },
+    "environment": {
+      "device": "cpu",
+      "packages": {
+        "numpy": "1.26.4",
+        "pandas": "2.2.3",
+        "psutil": "7.2.2",
+        "pyarrow": "17.0.0",
+        "torch": "2.14.1"
+      },
+      "python": [
+        3,
+        11,
+        17
+      ],
+      "status": "pass"
+    },
+    "output": {
+      "fresh": true,
+      "path": "research/runs/p02-t006-r0-gru-s0-lr1e3-a-20261108-01",
+      "reason": null,
+      "resolved": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p02-t006-r0-gru-s0-lr1e3-a-20261108-01",
+      "status": "pass"
+    },
+    "protocol": {
+      "path": "/Users/watuji/da_chuang/repos/benchmark/research/phases/P02/protocol.md",
+      "reason": null,
+      "sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2",
+      "status": "pass",
+      "version": "P2-effective-training-L6-H3-v1"
+    },
+    "recovery": {
+      "reason": "this operation does not resume a parent trajectory",
+      "status": "not_applicable"
+    },
+    "resources": {
+      "checks": {
+        "available_memory": {
+          "minimum": 6442450944,
+          "status": "pass",
+          "value": 6524256256
+        },
+        "free_disk": {
+          "minimum": 5368709120,
+          "status": "pass",
+          "value": 346521600000
+        },
+        "rss_monitoring": {
+          "reason": null,
+          "status": "pass",
+          "value": true
+        }
+      },
+      "disk_free_bytes": 346521600000,
+      "failed": [],
+      "memory_available_bytes": 6524256256,
+      "memory_stop_bytes": 8589934592,
+      "monitor_interval_seconds": 5.0,
+      "psutil_available": true,
+      "status": "pass"
+    },
+    "source": {
+      "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+      "dirty": null,
+      "reason": null,
+      "status": "pass"
+    },
+    "threads": {
+      "environment": {
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "reason": null,
+      "required": 1,
+      "status": "pass"
+    },
+    "worker_lock": {
+      "reason": null,
+      "state": {
+        "path": "research/runs/locks/p02-t006-effective-20261108-01.lock",
+        "status": "free"
+      },
+      "status": "pass"
+    }
+  },
+  "failing_checks": [],
+  "generated": "2026-11-08T13:05:10+08:00",
+  "kind": "preflight",
+  "operation": "preflight",
+  "protocol_sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2",
+  "purpose": "formal",
+  "request": {
+    "data_name": "r0",
+    "model": "GRU",
+    "output_root": "research/runs",
+    "run_id": "p02-t006-r0-gru-s0-lr1e3-a-20261108-01",
+    "seed": 0
+  },
+  "scientific_version": "P2-effective-training-L6-H3-v1",
+  "status": "pass",
+  "thresholds": {
+    "available_memory_bytes": 6442450944,
+    "free_disk_bytes": 5368709120,
+    "monitor_interval_seconds": 5.0,
+    "rss_stop_bytes": 8589934592
+  }
+}

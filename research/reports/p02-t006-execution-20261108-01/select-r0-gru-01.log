@@ -1,0 +1,14 @@
+{
+  "block_dir": "research/reports/p02-t006-execution-20261108-01/blocks/p02-t006-r0-gru-20261108-01",
+  "status": "frozen",
+  "winner": {
+    "learning_rate": 0.003,
+    "reason": "lowest best-validation original-unit MSE",
+    "run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+    "run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+    "selected_epoch": 70,
+    "selection_metric": "best validation original-unit MSE",
+    "validation_MAE": 125.69969828073467,
+    "validation_MSE": 243984.3029816347
+  }
+}

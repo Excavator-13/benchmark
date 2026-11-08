@@ -1,0 +1,94 @@
+{
+  "completed_epoch": 100,
+  "cost": {
+    "batch_active_seconds": 17.322386917001495,
+    "batch_limit_seconds": 43200,
+    "checks": {
+      "batch": {
+        "active_seconds": 17.322386917001495,
+        "estimated_seconds": 31.305583584544003,
+        "limit": 43200,
+        "projected_seconds": 205.15588842426553,
+        "remaining_fits": 6,
+        "status": "pass"
+      },
+      "sample_complete": {
+        "required": 10,
+        "status": "pass",
+        "value": 10
+      },
+      "sample_duration": {
+        "limit": 900,
+        "status": "pass",
+        "value": 2.9982649170015065
+      },
+      "single_fit": {
+        "estimated_seconds": 31.305583584544003,
+        "limit": 3600,
+        "spent_seconds": 2.9982649170015065,
+        "status": "pass",
+        "value": 34.30384850154551
+      },
+      "steady_state": {
+        "epochs": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "median_epoch_seconds": 0.11127508299978217,
+        "status": "pass"
+      }
+    },
+    "epochs": 100,
+    "estimate_definition": "1.3 * (setup + 2*epochs*t), t = median complete-epoch wall time over epochs 6..10",
+    "estimate_seconds": 31.305583584544003,
+    "estimated": {
+      "fit_seconds": 31.305583584544003
+    },
+    "fit_limit_seconds": 3600,
+    "measured": {
+      "epoch_median_seconds": 0.11127508299978217,
+      "sample_seconds": 2.9982649170015065
+    },
+    "reasons": [],
+    "remaining_fits": 6,
+    "sample_epochs": 10,
+    "sample_measured_seconds": 2.9982649170015065,
+    "setup_seconds": 1.82620154200049,
+    "spent_seconds": 2.9982649170015065,
+    "status": "ok",
+    "steady_state_median_seconds": 0.11127508299978217,
+    "unknown": []
+  },
+  "paused": null,
+  "recovery_sha256": "75086c9ae3fed141490e109c0243fb54ba0f14af13f8ea932300ecd674c72fd2",
+  "report_path": "research/runs/p02-t006-r0-gru-s0-lr3e3-a-20261108-01/report.json",
+  "run_dir": "research/runs/p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+  "run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+  "selected_epoch": 70,
+  "status": "completed",
+  "validation": {
+    "MAE": 125.69969828073467,
+    "MSE": 243984.3029816347
+  }
+}
+{
+  "error": null,
+  "exit_code": 0,
+  "run_dir": "research/runs/p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+  "selected_epoch": 70,
+  "status": "completed",
+  "validation": {
+    "best": {
+      "MAE": 125.69969828073467,
+      "MSE": 243984.3029816347,
+      "epoch": 70
+    },
+    "initial": {
+      "MAE": 1279.1244069599456,
+      "MSE": 16863986.028179
+    }
+  }
+}

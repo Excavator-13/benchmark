@@ -317,3 +317,23 @@ region/r0 产物：[组合报告](../reports/p02-t002-remaining-20261022-01/repo
 对象：[T005 方案报告](../reports/p02-t005-20261107-01/report.md)、同目录的只读成本汇总脚本与 [historical-cost.json](../reports/p02-t005-20261107-01/historical-cost.json)。依据为既有正式自身 run 的可读 summary；本轮没有新训练产物。科学条件由 [P02 新协议](../phases/P02/protocol.md) 维护，研究侧采用见 D038。
 
 存储：上述交付已在本机仓库工作区生成；本轮未 commit、push 或封存，异地备份未核验。旧模型、预测与 checkpoint 的存储事实仍见对应历史条目，本次方案交付不代表它们已迁移或补做核验。
+
+## P02-T006 软件修复交付与旧预实验限制（2026-11-08）
+
+对象：`fix-effective-temporal-training-acceptance` 实现、测试、README、主规格和独立验收交付批次；研究侧接受见 [D039](../decisions.md#d039-t006-软件修复研究侧验收与完成状态纠正)，内容核对和旧实验限制见[收尾报告](../reports/p02-t006-software-closeout-20261108-01/report.md)。
+
+存储：软件交付已随本地提交保存；归档及主规格位于 commit `b347943`（`Archive verified effective temporal training acceptance change`），实现修复位于其祖先 `ca4d5e2`。OpenSpec 工件已归档于 [2026-11-08-fix-effective-temporal-training-acceptance](../../openspec/changes/archive/2026-11-08-fix-effective-temporal-training-acceptance/)，这不表示实验封存包已创建。未核验远端推送、异地备份或恢复。
+
+关联旧实验 [p02-t006-gru-lstm-v2-20261107](../runs/p02-t006-gru-lstm-v2-20261107/summary.md) 在当前本地 Git 中仅含 `summary.md`、`provenance.json`、`metrics.json` 和 `environment.txt`；原 Windows 完整 checkpoint、候选日志与预测／标签本轮未回收、未核验。不因实现已入库或软件独立 PASS 声称这些数组／权重已交付或备份。旧结果适用限制以收尾报告为准，旧 run 与旧归档不改写。本次没有新增真实实验 run 或封存包。
+
+## P02-T006 首个真实 r0/GRU 块（2026-11-08）
+
+对象：batch `p02-t006-effective-20261108-01` 的五条正式轨迹、有限选择、部分独立重复及停止诊断。执行身份、准确 run ID、结果与限制只在[执行报告](../reports/p02-t006-execution-20261108-01/report.md)叙述；执行指导见 [t006-execution-guide](../phases/P02/t006-execution-guide.md)。
+
+存储：五个 run 的完整预测／标签、权重、recovery、历史、监测、成本及数组校验仍在本机 `research/runs/` 对应目录；通用忽略规则仅放行 summary/provenance/command/report，大型与补充机器记录不会因此自动入 Git。选择、诊断、Ridge 来源派生、ledger、预检和终端日志位于上述执行报告目录。上述可读交付随本次用户授权的文档提交入库，提交身份从 Git 历史追溯；完整 run 数组／权重未入库。未 push、未封存，未核验异地备份或恢复；现有 run 内的文件校验不是封存包或异地备份证明。恢复不得覆盖这批证据，未来沿用累计预算身份，不凭新目录重置成本。
+
+## P02-T006 v2 条件与软件提案（2026-11-08）
+
+对象：[v2 科学条件](../phases/P02/protocol-v2.md)与 `extend-effective-training-budget-v2` 的[软件提案](../../openspec/changes/extend-effective-training-budget-v2/proposal.md)、design、specs 和 tasks。研究决定见 D040，软件委托尚在途；没有新的训练产物或软件独立验收结果。
+
+存储：本机仓库工作区已生成，尚未追加提交或 push；未封存，异地备份／恢复未核验。本条与首块结果提交为不同产物范围，不把现有实验提交当作 v2 实现或验收的入库证明。

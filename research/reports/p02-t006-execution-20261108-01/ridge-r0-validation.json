@@ -1,0 +1,67 @@
+{
+  "dataset": "r0",
+  "data_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+  "node_keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+  "split": {
+    "validation_starts": [
+      21
+    ],
+    "validation_target_months": [
+      "2023-04",
+      "2023-05",
+      "2023-06"
+    ]
+  },
+  "preprocessing": {
+    "definition": "per-node standardization",
+    "training_months": [
+      "2021-01",
+      "2021-02",
+      "2021-03",
+      "2021-04",
+      "2021-05",
+      "2021-06",
+      "2021-07",
+      "2021-08",
+      "2021-09",
+      "2021-10",
+      "2021-11",
+      "2021-12",
+      "2022-01",
+      "2022-02",
+      "2022-03",
+      "2022-04",
+      "2022-05",
+      "2022-06",
+      "2022-07",
+      "2022-08",
+      "2022-09",
+      "2022-10",
+      "2022-11",
+      "2022-12",
+      "2023-01",
+      "2023-02",
+      "2023-03"
+    ],
+    "ddof": 0,
+    "constant_node_std": 1.0
+  },
+  "selection": {
+    "lambda": 0.0001,
+    "selected_on": "validation",
+    "metric": "validation original-unit MSE",
+    "tie_break": "larger lambda"
+  },
+  "validation": {
+    "MAE": 149.042806326246,
+    "MSE": 375887.1958260734
+  },
+  "source": {
+    "run_id": "p01-r0-sharedridge-002",
+    "package": "research/archives/p01-r0-sharedridge-002.tar.gz",
+    "selection_sha256": "99bfed231dc2c5dd4424948f6bf4d6154d4d02a9923ac62da887d6d806268632",
+    "provenance_sha256": "47118fe89cafd8238be3013653767e3f682d064ce24549eaafcf8143d6b5e362",
+    "windows_sha256": "87be0aec42caed0b37c388f405872d61a78d6ab7ab002f0f37f8858666adfccf",
+    "operation": "read saved JSON members only; no extraction, refit or restore audit"
+  }
+}

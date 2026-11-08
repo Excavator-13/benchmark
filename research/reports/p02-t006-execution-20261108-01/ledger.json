@@ -1,0 +1,72 @@
+{
+  "batch_id": "p02-t006-effective-20261108-01",
+  "created": "2026-11-08T13:08:45+08:00",
+  "entries": [
+    {
+      "execution_id": "p02-t006-r0-gru-s0-lr1e3-a-20261108-01@327f75e5b78547378f662f48affb1349",
+      "kind": "measured",
+      "note": null,
+      "recorded": "2026-11-08T13:08:58+08:00",
+      "run_id": "p02-t006-r0-gru-s0-lr1e3-a-20261108-01",
+      "seconds": 14.324121999999988,
+      "status": "finished"
+    },
+    {
+      "execution_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01@a64348c74f5b43acb1baca5af9714718",
+      "kind": "measured",
+      "note": null,
+      "recorded": "2026-11-08T13:09:29+08:00",
+      "run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+      "seconds": 13.727369417001682,
+      "status": "finished"
+    },
+    {
+      "execution_id": "run_select@69479fae8fd74f35a7d8079e82cce732",
+      "kind": "measured",
+      "note": "active selection/diagnostic/report/check work including failure publication",
+      "recorded": "2026-11-08T13:09:44+08:00",
+      "run_id": "run_select",
+      "seconds": 0.48004512499937846,
+      "status": "frozen"
+    },
+    {
+      "execution_id": "p02-t006-r0-gru-s1-a-20261108-01@a8c5fb731c1144ca9b8bae419dc5f1cc",
+      "kind": "measured",
+      "note": null,
+      "recorded": "2026-11-08T13:10:22+08:00",
+      "run_id": "p02-t006-r0-gru-s1-a-20261108-01",
+      "seconds": 13.722609500000544,
+      "status": "finished"
+    },
+    {
+      "execution_id": "p02-t006-r0-gru-s2-a-20261108-01@ec098b56aba6446eab875c91e84af090",
+      "kind": "measured",
+      "note": null,
+      "recorded": "2026-11-08T13:10:51+08:00",
+      "run_id": "p02-t006-r0-gru-s2-a-20261108-01",
+      "seconds": 13.72162995799954,
+      "status": "finished"
+    },
+    {
+      "execution_id": "p02-t006-r0-gru-s0-b-20261108-01@08360a6897e64ed783bf53f0358d806b",
+      "kind": "measured",
+      "note": null,
+      "recorded": "2026-11-08T13:11:20+08:00",
+      "run_id": "p02-t006-r0-gru-s0-b-20261108-01",
+      "seconds": 13.843645832999755,
+      "status": "finished"
+    },
+    {
+      "execution_id": "run_diagnose@9b172bd189634621b9dd76df787052b5",
+      "kind": "measured",
+      "note": "active selection/diagnostic/report/check work including failure publication",
+      "recorded": "2026-11-08T13:11:39+08:00",
+      "run_id": "run_diagnose",
+      "seconds": 0.05689495799924771,
+      "status": "failed"
+    }
+  ],
+  "ledger_id": "f93290f346bc47e9914be45203c5edc3",
+  "updated": "2026-11-08T13:11:39+08:00",
+  "version": 1
+}

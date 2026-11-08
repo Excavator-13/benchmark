@@ -1,0 +1,1215 @@
+"""Stage runners: fit/resume, select, diagnose and report artifact assembly.
+
+These functions are the only place where a run directory is written.  They are
+usable in-process (tests inject data, clock, sampler and checkpoint publication)
+and are what the CLI worker subprocess calls for a real fit.
+"""
+
+from __future__ import annotations
+
+import os
+import time
+import uuid
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence
+
+import numpy as np
+
+from benchmark.nograph_baseline import protocol as p01
+
+from . import artifacts, checkpoints, checks, data as temporal_data, diagnostics as temporal_diagnostics
+from . import engine as temporal_engine
+from . import model as temporal_model
+from . import protocol, recovery, report as temporal_report, resources, selection as temporal_selection
+
+PauseRequest = temporal_engine.PauseRequest
+
+
+class RunnerError(protocol.ProtocolError):
+    """Raised when a stage request cannot be executed."""
+
+
+def _clock() -> Callable[[], float]:
+    return time.monotonic
+
+
+def _run_paths(request: Mapping[str, Any], purpose: str, repo: Optional[Path]) -> Path:
+    root = Path(request["output_root"]) if request.get("output_root") else artifacts.default_root(
+        purpose, repo
+    )
+    return root / str(request["run_id"])
+
+
+def _write_preamble(
+    run: Any,
+    *,
+    request: Mapping[str, Any],
+    purpose: str,
+    operation: str,
+    dataset_document: Mapping[str, Any],
+    config_payload: Mapping[str, Any],
+    protocol_controls: Mapping[str, Any],
+    roles: Mapping[str, Any],
+    condition: Mapping[str, Any],
+    data_identity: Mapping[str, Any],
+    config_extra: Optional[Mapping[str, Any]] = None,
+) -> Dict[str, Any]:
+    config_doc: Dict[str, Any] = {
+        "artifact_format_version": protocol.ARTIFACT_FORMAT_VERSION,
+        "scientific_version": protocol.SCIENTIFIC_VERSION,
+        "run_id": run.run_id,
+        "operation": operation,
+        "purpose": purpose,
+        "dataset": dict(dataset_document),
+        "config": dict(config_payload),
+        "protocol_controls": dict(protocol_controls),
+        "roles": dict(roles),
+        "condition": dict(condition),
+        "split": protocol.split_payload(),
+    }
+    if config_extra:
+        config_doc.update(config_extra)
+    run.write_json("config.json", config_doc)
+    artifacts.write_command(run, request.get("argv") or [], operation=operation)
+    source_record = artifacts.capture_source(run)
+    environment = artifacts.write_environment(run)
+    provenance = artifacts.provenance_payload(
+        purpose=purpose,
+        operation=operation,
+        config=config_payload,
+        roles=roles,
+        data_identity=data_identity,
+        source_record=source_record,
+        environment=environment,
+        extra=(
+            {"parent": config_extra.get("parent")}
+            if config_extra and config_extra.get("parent")
+            else None
+        ),
+    )
+    run.write_json("provenance.json", provenance)
+    return {"config": config_doc, "provenance": provenance, "environment": environment}
+
+
+def _dataset_document(temporal: temporal_data.TemporalData) -> Dict[str, Any]:
+    return {
+        "name": temporal.dataset,
+        "mode": temporal.mode,
+        "key_columns": list(temporal.key_columns),
+        "nodes": temporal.node_count,
+    }
+
+
+def _condition(
+    config: protocol.FitConfig, temporal: temporal_data.TemporalData
+) -> Dict[str, Any]:
+    identity = temporal.identity()
+    return protocol.condition_identity(
+        config,
+        dataset=temporal.dataset,
+        mode=temporal.mode,
+        data_sha256=identity["source_sha256"],
+        keys_sha256=identity["node_keys_sha256"],
+        protocol_sha256=protocol.protocol_content_sha256(),
+    )
+
+
+def _fit_report(
+    *,
+    result: temporal_engine.FitResult,
+    config: protocol.FitConfig,
+    recovery_sha256: Optional[str],
+    cost: Mapping[str, Any],
+) -> Dict[str, Any]:
+    best = result.best
+    return {
+        "artifact_format_version": protocol.ARTIFACT_FORMAT_VERSION,
+        "scientific_version": protocol.SCIENTIFIC_VERSION,
+        "kind": "fit-summary",
+        "status": result.status,
+        "purpose": None,
+        "protocol_controls": {
+            "complete": config.complete_protocol,
+            "deviations": config.deviations(),
+        },
+        "config": config.to_payload(),
+        "selected_epoch": best["epoch"],
+        "selected_updates": best["updates"],
+        "validation": {
+            "best": {
+                "MSE": best["validation"]["MSE"],
+                "MAE": best["validation"]["MAE"],
+                "epoch": best["epoch"],
+            },
+            "initial": result.initial_validation,
+        },
+        "history_epochs": len(result.history),
+        "total_updates": result.updates,
+        "parameter_count": result.parameter_count,
+        "preprocessing_scale": result.scale,
+        "reproduction": (result.scores.get("best") or {}).get("reproduction"),
+        "recovery_sha256": recovery_sha256,
+        "cost": dict(cost),
+        "paused": result.pause,
+        "warnings": list(result.warnings),
+    }
+
+
+def _fit_summary_text(
+    *,
+    run_id: str,
+    operation: str,
+    purpose: str,
+    config: protocol.FitConfig,
+    result: temporal_engine.FitResult,
+    data_identity: Mapping[str, Any],
+    cost: Mapping[str, Any],
+    controls: Mapping[str, Any],
+) -> str:
+    best = result.best
+    lines = [
+        f"# {run_id}",
+        "",
+        f"- operation: {operation}",
+        f"- purpose: {purpose}",
+        f"- encoder: {config.model}, seed {config.seed}, learning rate "
+        f"{config.learning_rate:g}",
+        f"- protocol controls complete: {controls['complete']}",
+        f"- dataset: {data_identity.get('dataset')} "
+        f"({data_identity.get('nodes')} nodes)",
+        f"- demand source: {data_identity.get('source_path')}",
+        f"- status: {result.status}",
+        f"- completed epochs: {result.completed_epoch} / {config.epochs}",
+        f"- selected checkpoint: epoch {best['epoch']} "
+        f"(updates {best['updates']})",
+        f"- best validation MSE / MAE: {best['validation']['MSE']:.6g} / "
+        f"{best['validation']['MAE']:.6g}",
+        f"- training-only RMS scale: {result.scale:.6g}",
+        f"- test labels used during fit: no",
+        "",
+        "## Evidence",
+        "",
+        "- per-epoch validation history: `history.json`",
+        "- fixed-parameter scores (init/10/50/100/best): `scores.json`",
+        "- update/clip records: `gradients.json`",
+        "- validation predictions/labels: `validation/`",
+        "- selected weights: `weights/best.pt`",
+        "- recoverable last state: `recovery/last.pt`",
+        "- cost sample and estimate: `cost.json`",
+        "",
+        "## Cost sample",
+        "",
+        f"- status: {cost.get('status')}",
+        f"- measured sample seconds: {cost.get('sample_measured_seconds')}",
+        f"- steady-state median epoch seconds: "
+        f"{cost.get('steady_state_median_seconds')}",
+        f"- estimated full fit seconds: {cost.get('estimate_seconds')}",
+        "",
+        "Development evidence is software evidence only; it is not research "
+        "acceptance, a formal run or a scientific conclusion.",
+    ]
+    if result.pause:
+        lines.insert(6, f"- paused: {result.pause.get('reason')} "
+                       f"({result.pause.get('detail')})")
+    return "\n".join(lines) + "\n"
+
+
+def run_fit(
+    request: Mapping[str, Any],
+    *,
+    data: Optional[temporal_data.TemporalData] = None,
+    clock: Optional[Callable[[], float]] = None,
+    sampler: Optional[Callable[[], Mapping[str, Any]]] = None,
+    after_update: Optional[Callable[[Any, int, int], None]] = None,
+    publish: Optional[Callable[[Path, Mapping[str, Any]], str]] = None,
+    repo: Optional[Path] = None,
+) -> Dict[str, Any]:
+    """Run one fit or resume stage and persist a complete format-v2 run."""
+    purpose = protocol.validate_purpose(str(request["purpose"]))
+    resource_controls = protocol.resource_controls(
+        purpose, request.get("memory_limit_bytes", protocol.MEMORY_STOP_BYTES))
+    operation = str(request.get("operation", "fit"))
+    if operation not in {"fit", "resume"}:
+        raise RunnerError(f"operation {operation!r} is not a fitting stage")
+    config = protocol.FitConfig.from_payload(request["config"])
+    if purpose == "formal":
+        protocol.require_formal_controls(config)
+    controls = {
+        "complete": config.complete_protocol and resource_controls["complete"],
+        "deviations": config.deviations() + (
+            [f"development RSS override={resource_controls['rss_stop_bytes']}"]
+            if resource_controls["development_override"] else []),
+        "resources": resource_controls,
+    }
+    roles = protocol.Roles(**request.get("roles", {})).validate()
+    if roles.candidate_role == "screening":
+        if config.seed != 0:
+            raise RunnerError(
+                "learning-rate screening candidates must use seed 0; "
+                f"requested seed {config.seed}"
+            )
+        if roles.repeat_role != "a":
+            raise RunnerError("a screening candidate is repetition a, never b")
+    if roles.repeat_role == "b" and roles.candidate_role == "screening":
+        raise RunnerError("repetition b never chooses a configuration")
+    clock = clock or _clock()
+    started = float(request["controller_started_at"]) if request.get("controller_managed") else clock()
+    temporal_model.set_determinism(config.seed, config.threads)
+    parent: Optional[Dict[str, Any]] = None
+    restore: Optional[temporal_engine.RestoreState] = None
+    condition_extra: Dict[str, Any] = {}
+    if operation == "resume":
+        parent_dir = Path(request["parent_dir"])
+        parent = recovery.load_parent(
+            parent_dir, ledger_path=Path(request["ledger_path"]) if request.get("ledger_path") else None,
+            batch_id=request.get("batch_id"),
+        )
+        parent_config = parent["parent_config"]
+        inherited_controls = parent["parent_config_doc"].get("protocol_controls") or {}
+        inherited_resources = inherited_controls.get("resources") or {}
+        if inherited_resources.get("development_override") or inherited_resources.get("inherited_development_override"):
+            if purpose == "formal":
+                raise protocol.ProtocolError("formal resume cannot inherit development resource overrides")
+            controls["complete"] = False
+            controls["deviations"].append("parent trajectory used development resource overrides")
+            controls["resources"]["inherited_development_override"] = True
+        if parent_config.to_payload() != config.to_payload():
+            raise RunnerError(
+                "resume configuration must equal the parent trajectory configuration"
+            )
+        restore = recovery.build_restore_state(parent["payload"])
+        condition_extra = {
+            "parent": {
+                "run_id": parent["parent_config_doc"].get("run_id"),
+                "run_dir": str(parent_dir.resolve()),
+                "recovery_sha256": parent["recovery_sha256"],
+                "completed_epoch": parent["completed_epoch"],
+            }
+        }
+        config = parent_config
+    if data is None:
+        data_path = request.get("data_path")
+        data = temporal_data.load_temporal_data(
+            str(request["data_name"]),
+            demand_path=Path(data_path) if data_path else None,
+        )
+    identity = data.identity()
+    condition = _condition(config, data)
+    if operation == "resume" and parent is not None:
+        parent_condition = (parent["parent_config_doc"].get("condition") or {}).get(
+            "condition_id"
+        )
+        if parent_condition != condition["condition_id"]:
+            raise RunnerError(
+                "resume data/protocol identity no longer matches the parent condition; "
+                "a changed dataset is a new condition, not a recovery"
+            )
+    run = artifacts.reserve_run(
+        str(request["run_id"]),
+        purpose=purpose,
+        operation=operation,
+        output_root=Path(request["output_root"]) if request.get("output_root") else None,
+        repo=repo,
+    )
+    ledger_path = Path(parent["ledger_path"]) if parent else (
+        Path(request["ledger_path"]) if request.get("ledger_path") else run.path.parent / "ledger.json")
+    ledger = resources.Ledger(ledger_path, batch_id=(parent["batch_id"] if parent else str(request.get("batch_id", "p02-t006"))))
+    execution_id = str(request.get("execution_id") or f"{run.run_id}@{uuid.uuid4().hex}")
+    inherited_fit_seconds = float(parent["fit_spent_seconds"]) if parent else 0.0
+    trajectory_ids = list(parent["trajectory_execution_ids"]) if parent else []
+    trajectory_ids.append(execution_id)
+    controller_managed = bool(request.get("controller_managed"))
+    last_billed = -1.0
+    def bill(status="running", force=False):
+        nonlocal last_billed
+        elapsed = max(0.0, float(clock() - started))
+        if not controller_managed and (force or elapsed - last_billed >= 1.0):
+            ledger.record(execution_id=execution_id, run_id=run.run_id, seconds=elapsed, status=status)
+            last_billed = elapsed
+        return elapsed
+    bill(force=True)
+    batch_before = sum(float(entry["seconds"]) for entry in ledger.payload["entries"]
+                       if entry["execution_id"] != execution_id and entry["kind"] in {"measured", "replayed"})
+    watchdog: Optional[resources.Watchdog] = None
+    cost_payload: Dict[str, Any] = {
+        "status": "not_measured",
+        "reason": "cost sample does not apply to this short development trajectory",
+    }
+    recovery_sha: Optional[str] = None
+    execution_elapsed = 0.0
+    trajectory = None
+    published_epoch = parent["completed_epoch"] if parent else 0
+    try:
+        preamble = _write_preamble(
+            run,
+            request=request,
+            purpose=purpose,
+            operation=operation,
+            dataset_document=_dataset_document(data),
+            config_payload=config.to_payload(),
+            protocol_controls=controls,
+            roles=roles.to_payload(),
+            condition=condition,
+            data_identity=identity,
+            config_extra={**condition_extra, "budget": ledger.payload_view()},
+        )
+        run.save_npy(protocol.RUN_DIRECTORY_FILES["keys"], data.node_keys)
+        run.write_json(
+            protocol.RUN_DIRECTORY_FILES["months"],
+            {
+                "months": list(p01.MONTHS),
+                "train_observation_months": list(protocol.train_observation_months()),
+                "fit_observations_stop_at": p01.MONTHS[
+                    protocol.fit_observation_month_count() - 1
+                ],
+            },
+        )
+        run.write_json(protocol.RUN_DIRECTORY_FILES["splits"], protocol.split_payload())
+        preprocessing = data.training_rms()
+        run.write_json(protocol.RUN_DIRECTORY_FILES["preprocessing"], preprocessing)
+        masks = data.training_masks()
+        run.save_npz(protocol.RUN_DIRECTORY_FILES["masks"], **masks)
+        fit_arrays = data.fit_arrays()
+        baselines = temporal_data.naive_validation_baselines(fit_arrays)
+        baselines["identity"] = {
+            "dataset": identity["dataset"],
+            "source_sha256": identity["source_sha256"],
+            "node_keys_sha256": identity["node_keys_sha256"],
+            "split": protocol.split_payload(),
+        }
+        run.write_json(protocol.RUN_DIRECTORY_FILES["baselines"], baselines)
+        setup_seconds = 0.0
+        interval = float(
+            request.get("monitor_interval", protocol.MONITOR_INTERVAL_SECONDS)
+        )
+        watchdog = resources.Watchdog(
+            sampler=sampler
+            or (lambda: resources.sample_process_tree_rss(os.getpid())),
+            clock=clock,
+            interval=interval,
+            limit_bytes=resource_controls["rss_stop_bytes"],
+            started_at=started,
+        )
+        watchdog.sample_once()
+        watchdog.start()
+        publish_fn = publish or checkpoints.publish_last
+
+        def on_epoch_complete(trajectory: temporal_engine.Trajectory) -> None:
+            nonlocal recovery_sha, published_epoch
+            check_stop()
+            if trajectory.best is None:
+                return
+            payload = checkpoints.last_payload(
+                config,
+                trajectory,
+                condition=condition,
+                data_identity=identity,
+                best=trajectory.best.manifest(),
+                best_model_state=trajectory.best.model_state,
+                best_optimizer_state=trajectory.best.optimizer_state,
+                scale=trajectory.best.scale,
+                ledger={**ledger.payload_view(), "trajectory_execution_ids": trajectory_ids},
+                execution={"source": preamble["provenance"]["source"],
+                           "environment": preamble["environment"]},
+            )
+            recovery_sha = publish_fn(
+                run.path / protocol.RUN_DIRECTORY_FILES["last_recovery"], payload
+            )
+            published_epoch = trajectory.completed_epoch
+            run.append_event(
+                "recovery_published",
+                epoch=trajectory.completed_epoch,
+                sha256=recovery_sha,
+            )
+
+        def check_stop() -> None:
+            elapsed = bill()
+            reason = watchdog.pause_reason() if watchdog is not None else None
+            if reason is not None:
+                raise PauseRequest("resource_stop", reason)
+            fit_elapsed = inherited_fit_seconds + elapsed
+            if fit_elapsed > protocol.FIT_SECONDS:
+                raise PauseRequest("fit_timeout", {"elapsed_seconds": fit_elapsed, "limit_seconds": protocol.FIT_SECONDS})
+            if batch_before + elapsed > protocol.BATCH_SECONDS:
+                raise PauseRequest("batch_timeout", {"active_seconds": batch_before + elapsed, "limit_seconds": protocol.BATCH_SECONDS})
+            completed = trajectory.completed_epoch if trajectory is not None else 0
+            if config.epochs >= protocol.COST_SAMPLE_EPOCHS and completed < protocol.COST_SAMPLE_EPOCHS and fit_elapsed > protocol.COST_SAMPLE_SECONDS:
+                raise PauseRequest("sample_timeout", {"elapsed_seconds": fit_elapsed, "limit_seconds": protocol.COST_SAMPLE_SECONDS})
+
+        def setup_complete(trajectory):
+            nonlocal setup_seconds
+            setup_seconds = max(0.0, float(clock() - started))
+            # Optional development injection is conservative; measured setup is
+            # always included and cannot be overridden downward.
+            setup_seconds = max(setup_seconds, float(request.get("setup_seconds", 0.0)))
+
+        def after_epoch(trajectory: temporal_engine.Trajectory) -> None:
+            nonlocal cost_payload
+            run.write_json("epoch-timing.json", {"epochs": trajectory.epoch_seconds_map()})
+            check_stop()
+            elapsed = max(0.0, float(clock() - started))
+            if (
+                trajectory.completed_epoch == protocol.COST_SAMPLE_EPOCHS
+                and config.epochs > protocol.COST_SAMPLE_EPOCHS
+            ):
+                cost_payload = resources.cost_gate(
+                    trajectory.history,
+                    epochs=config.epochs,
+                    setup_seconds=setup_seconds,
+                    spent_seconds=inherited_fit_seconds + elapsed,
+                    sample_seconds=inherited_fit_seconds + elapsed,
+                    remaining_fits=int(request.get("remaining_fits", 1)),
+                    batch_active_seconds=(
+                        batch_before + elapsed
+                    ),
+                )
+                run.write_json(protocol.RUN_DIRECTORY_FILES["cost"], cost_payload)
+                if cost_payload["status"] != "ok":
+                    raise PauseRequest(
+                        "cost_stop",
+                        {
+                            "reason": cost_payload.get("reasons"),
+                            "estimate_seconds": cost_payload.get("estimate_seconds"),
+                        },
+                    )
+
+        hooks = temporal_engine.Hooks(
+            on_setup_complete=setup_complete,
+            check_stop=check_stop,
+            on_epoch_complete=on_epoch_complete,
+            after_epoch=after_epoch,
+            after_update=after_update,
+            clock=clock,
+        )
+        trajectory = temporal_engine.Trajectory(fit_arrays, config, hooks=hooks, restore=restore)
+        if parent:
+            inherited_payload = dict(parent["payload"])
+            inherited_payload["ledger"] = {**ledger.payload_view(), "trajectory_execution_ids": trajectory_ids}
+            inherited_payload["execution"] = {"source": preamble["provenance"]["source"], "environment": preamble["environment"]}
+            recovery_sha = checkpoints.publish_last(run.path / protocol.RUN_DIRECTORY_FILES["last_recovery"], inherited_payload)
+        if parent and trajectory.completed_epoch == protocol.COST_SAMPLE_EPOCHS:
+            setup_complete(trajectory)
+            after_epoch(trajectory)
+        result = trajectory.run()
+        execution_elapsed = max(0.0, float(clock() - started))
+        if watchdog is not None:
+            run.write_json("monitor.json", watchdog.payload())
+        reproduction = (result.scores.get("best") or {}).get("reproduction") or {}
+        usable = reproduction.get("status") == "pass"
+        if not usable:
+            result.warnings.append(
+                "restored best checkpoint did not reproduce its saved validation "
+                "metrics within 1e-6"
+            )
+        run.write_json(
+            protocol.RUN_DIRECTORY_FILES["history"],
+            {
+                "epochs": result.history,
+                "initial_validation": result.initial_validation,
+                "note": (
+                    "validation history covers every completed epoch; online train "
+                    "loss is a mixed-parameter cumulative value"
+                ),
+            },
+        )
+        run.write_json(protocol.RUN_DIRECTORY_FILES["scores"], result.scores)
+        run.write_json(
+            protocol.RUN_DIRECTORY_FILES["gradients"],
+            {
+                "grad_clip_norm": float(config.grad_clip),
+                "clip_definition": (
+                    "complete-gradient L2 norm clip after all node chunks of one "
+                    "training window, before the single Adam step"
+                ),
+                "updates_per_epoch": protocol.UPDATES_PER_EPOCH,
+                "total_updates": int(result.updates),
+                "clipped_updates": int(
+                    sum(1 for record in result.update_records if record.get("clipped"))
+                ),
+                "updates": result.update_records,
+            },
+        )
+        run.save_npy(
+            protocol.RUN_DIRECTORY_FILES["validation_prediction"],
+            result.validation_prediction,
+        )
+        run.save_npy(
+            protocol.RUN_DIRECTORY_FILES["validation_gold"],
+            result.validation_targets,
+        )
+        run.write_json(
+            protocol.RUN_DIRECTORY_FILES["validation_metrics"],
+            {
+                "best": {
+                    "MSE": float(result.best["validation"]["MSE"]),
+                    "MAE": float(result.best["validation"]["MAE"]),
+                    "epoch": int(result.best["epoch"]),
+                    "updates": int(result.best["updates"]),
+                },
+                "reevaluated": result.validation_metrics,
+                "reproduction": reproduction,
+                "initial": result.initial_validation,
+                "history_epochs": len(result.history),
+            },
+        )
+        run.write_json(
+            protocol.RUN_DIRECTORY_FILES["fit_diagnostics"], result.fit_diagnostics
+        )
+        best_payload = checkpoints.best_payload(
+            config,
+            best=result.best,
+            model_state=result.best_model_state,
+            optimizer_state=result.best_optimizer_state,
+            scale=result.scale,
+            condition=condition,
+            parameter_report={
+                "observed": int(result.parameter_count),
+                "protocol_expected": protocol.PARAMETER_COUNTS[config.model],
+                "matches_protocol_architecture": (
+                    int(result.parameter_count)
+                    == protocol.PARAMETER_COUNTS[config.model]
+                ),
+            },
+        )
+        checkpoints.save_best(run.path / protocol.RUN_DIRECTORY_FILES["best_weights"], best_payload)
+        cost_file = run.path / protocol.RUN_DIRECTORY_FILES["cost"]
+        if not cost_file.exists():
+            if result.completed_epoch == config.epochs:
+                run.write_json(
+                    protocol.RUN_DIRECTORY_FILES["cost"],
+                    {
+                        "status": "not_measured",
+                        "reason": (
+                            "short development trajectory below the 10-epoch cost "
+                            "sample; steady-state cost remains unknown"
+                        ),
+                        "sample_epochs": protocol.COST_SAMPLE_EPOCHS,
+                        "measurements": {},
+                        "unknown": ["steady-state epoch 6..10 timing not measured"],
+                    },
+                )
+            else:
+                run.write_json(
+                    protocol.RUN_DIRECTORY_FILES["cost"],
+                    {
+                        "status": "paused_before_cost_gate",
+                        "reason": result.pause,
+                        "measurements": {},
+                        "unknown": ["cost sample is incomplete"],
+                    },
+                )
+        fit_report = _fit_report(
+            result=result, config=config, recovery_sha256=recovery_sha, cost=cost_payload
+        )
+        fit_report["purpose"] = purpose
+        fit_report["protocol_controls"] = controls
+        if not usable:
+            fit_report["status"] = "failed"
+            run.write_json("report.json", fit_report)
+            artifacts.write_summary(
+                run,
+                _fit_summary_text(
+                    run_id=run.run_id,
+                    operation=operation,
+                    purpose=purpose,
+                    config=config,
+                    result=result,
+                    data_identity=identity,
+                    cost=cost_payload,
+                    controls=controls,
+                ),
+            )
+            run.set_status(
+                "failed",
+                detail="best checkpoint reproduction failed",
+                reproduction=reproduction,
+            )
+            raise RunnerError(
+                "the restored best checkpoint did not reproduce its saved "
+                f"validation metrics: {reproduction}"
+            )
+        run.write_json("report.json", fit_report)
+        artifacts.write_summary(
+            run,
+            _fit_summary_text(
+                run_id=run.run_id,
+                operation=operation,
+                purpose=purpose,
+                config=config,
+                result=result,
+                data_identity=identity,
+                cost=cost_payload,
+                controls=controls,
+            ),
+        )
+        artifacts.write_array_manifest(run, protocol.RECOMPUTE_ARRAYS)
+        detail = None
+        if result.pause:
+            detail = result.pause
+        run.set_status(
+            result.status,
+            detail=detail,
+            completed_epoch=result.completed_epoch,
+            selected_epoch=result.best["epoch"],
+            recovery_sha256=recovery_sha,
+            protocol_controls_complete=controls["complete"],
+        )
+        check_stop()  # includes final checkpoint, arrays, summaries and status writes
+        return {
+            "run_id": run.run_id,
+            "run_dir": str(run.path),
+            "status": result.status,
+            "paused": result.pause,
+            "selected_epoch": result.best["epoch"],
+            "validation": result.best["validation"],
+            "completed_epoch": result.completed_epoch,
+            "recovery_sha256": recovery_sha,
+            "cost": cost_payload,
+            "report_path": str(run.path / "report.json"),
+        }
+    except PauseRequest as exc:
+        pause = {"reason": exc.reason, "detail": exc.detail}
+        history = [row for row in trajectory.history if row["epoch"] <= published_epoch] if trajectory else []
+        updates = trajectory.updates if trajectory else 0
+        run.write_json("history.json", {"epochs": history})
+        run.write_json("gradients.json", {"total_updates": updates,
+                       "updates": trajectory.update_records if trajectory else []})
+        run.write_json("monitor.json", watchdog.payload() if watchdog else {})
+        run.write_json("report.json", {"kind": "fit-summary", "status": "paused",
+                       "completed_epoch": published_epoch, "paused": pause})
+        run.set_status("paused", detail=pause, completed_epoch=published_epoch)
+        return {"run_id": run.run_id, "run_dir": str(run.path), "status": "paused",
+                "paused": pause, "completed_epoch": published_epoch,
+                "recovery_sha256": recovery_sha, "report_path": str(run.path / "report.json")}
+    except BaseException as exc:
+        execution_elapsed = max(0.0, float(clock() - started))
+        if watchdog is not None:
+            watchdog.stop()
+            try:
+                run.write_json("monitor.json", watchdog.payload())
+            except Exception:  # pragma: no cover - best effort on failure
+                pass
+        try:
+            run.write_json(
+                "report.json",
+                {
+                    "artifact_format_version": protocol.ARTIFACT_FORMAT_VERSION,
+                    "scientific_version": protocol.SCIENTIFIC_VERSION,
+                    "kind": "fit-summary",
+                    "status": "failed",
+                    "error": {"type": type(exc).__name__, "message": str(exc)},
+                    "elapsed_seconds": execution_elapsed,
+                },
+            )
+            run.set_status(
+                "failed",
+                detail={"type": type(exc).__name__, "message": str(exc)},
+            )
+        except Exception:  # pragma: no cover - best effort on failure
+            pass
+        raise
+    finally:
+        if watchdog is not None:
+            watchdog.stop()
+        state = checks.read_json(run.path / "status.json", required=False) or {}
+        execution_seconds = max(0.0, float(clock() - started))
+        run.write_json("billing.json", {
+            "execution_id": execution_id, "ledger_id": ledger.payload.get("ledger_id"),
+            "execution_seconds": execution_seconds,
+            "trajectory_seconds": inherited_fit_seconds + execution_seconds,
+        })
+        bill(status=state.get("state", "failed"), force=True)
+
+
+def run_preflight(request: Mapping[str, Any]) -> Dict[str, Any]:
+    return resources.preflight(
+        purpose=str(request["purpose"]),
+        operation=str(request.get("operation", "preflight")),
+        data_name=request.get("data_name"),
+        model=str(request.get("model", "GRU")),
+        seed=int(request.get("seed", 0)),
+        data_path=Path(request["data_path"]) if request.get("data_path") else None,
+        run_id=request.get("run_id"),
+        output_root=Path(request["output_root"]) if request.get("output_root") else None,
+        ledger_path=Path(request["ledger_path"]) if request.get("ledger_path") else None,
+        lock_path=Path(request["lock_path"]) if request.get("lock_path") else None,
+        recovery_path=Path(request["recovery_path"]) if request.get("recovery_path") else None,
+        dependencies_missing=request.get("dependencies_missing"),
+        memory_available_bytes=request.get("memory_available_bytes"),
+        disk_free_bytes=request.get("disk_free_bytes"),
+        psutil_available=request.get("psutil_available"),
+        data_identity=request.get("data_identity"),
+    )
+
+
+@resources.account_stage
+def run_select(request: Mapping[str, Any], *, repo: Optional[Path] = None) -> Dict[str, Any]:
+    purpose = protocol.validate_purpose(str(request["purpose"]))
+    candidates = [
+        temporal_selection.load_candidate(Path(path))
+        for path in request["candidates"]
+    ]
+    first = candidates[0]
+    block = artifacts.reserve_block(
+        str(request["block_id"]),
+        purpose=purpose,
+        operation="select",
+        output_root=Path(request["output_root"]) if request.get("output_root") else None,
+        repo=repo,
+    )
+    try:
+        payload = temporal_selection.build_selection(
+            candidates,
+            block_id=block.run_id,
+            purpose=purpose,
+            model=first.model,
+            dataset=first.dataset,
+            mode=first.mode,
+        )
+        block.write_json(protocol.RUN_DIRECTORY_FILES["selection"], payload)
+        artifacts.write_command(block, request.get("argv") or [], operation="select")
+        environment = artifacts.write_environment(block)
+        provenance = artifacts.provenance_payload(
+            purpose=purpose,
+            operation="select",
+            config={"candidates": [candidate.config for candidate in candidates]},
+            roles={"kind": "selection", "seed": 0},
+            data_identity={
+                "dataset": first.dataset,
+                "mode": first.mode,
+                "source_sha256": first.data_sha256,
+                "node_keys_sha256": first.keys_sha256,
+            },
+            source_record=artifacts.capture_source(block),
+            environment=environment,
+        )
+        block.write_json("provenance.json", provenance)
+        report = {
+            "artifact_format_version": protocol.ARTIFACT_FORMAT_VERSION,
+            "scientific_version": protocol.SCIENTIFIC_VERSION,
+            "kind": "selection-report",
+            "accounting": resources.stage_accounting(),
+            "block_id": block.run_id,
+            "purpose": purpose,
+            "status": payload["status"],
+            "winner": payload["winner"],
+            "tie": payload["tie"],
+            "candidates": payload["candidates"],
+            "eliminated": payload["eliminated"],
+            "winner_as_a": payload["winner_as_a"],
+            "selection_sha256": payload["selection_sha256"],
+            "test_scores_used": False,
+            "b_used_for_selection": False,
+        }
+        block.write_json("report.json", report)
+        lines = [
+            f"# selection {block.run_id}",
+            "",
+            f"- purpose: {purpose}",
+            f"- dataset/encoder: {first.dataset}/{first.model}",
+            f"- candidate learning rates: {list(protocol.LR_CANDIDATES)}",
+            f"- selection metric: best validation original-unit MSE",
+            f"- status: {payload['status']}",
+        ]
+        if payload["winner"]:
+            lines += [
+                f"- winner: learning rate {payload['winner']['learning_rate']:g} "
+                f"({payload['winner']['run_id']})",
+                f"- winner validation MSE: {payload['winner']['validation_MSE']:.6g}",
+                f"- exact tie: {payload['tie']}",
+                "- winner reused as repetition a by link (not refitted)",
+            ]
+        else:
+            lines.append("- no completed candidate: selection is incomplete")
+        lines += [
+            "- test scores used: no",
+            "- repetition b used for selection: no",
+            "- automatic matrix scheduling: none",
+        ]
+        artifacts.write_summary(block, "\n".join(lines) + "\n")
+        resources.check_stage_budget()
+        block.set_status(
+            "selection_frozen" if payload["status"] == "frozen" else "selection_incomplete",
+            selection_sha256=payload["selection_sha256"],
+        )
+        return {
+            "block_id": block.run_id,
+            "block_dir": str(block.path),
+            "status": payload["status"],
+            "selection": payload,
+            "report_path": str(block.path / "report.json"),
+        }
+    except BaseException as exc:
+        try:
+            block.set_status(
+                "failed", detail={"type": type(exc).__name__, "message": str(exc)}
+            )
+        except Exception:  # pragma: no cover - best effort
+            pass
+        raise
+
+
+def run_diagnose(request: Mapping[str, Any]) -> Dict[str, Any]:
+    return temporal_diagnostics.run_diagnose(request)
+
+
+def load_block_diagnostics(path: Path) -> Optional[Dict[str, Any]]:
+    """Consume the explicitly supplied frozen saved-check JSON report."""
+    if not Path(path).is_file():
+        return None
+    envelope = checks.read_json(path)
+    payload = envelope.get("result") if envelope.get("kind") == "diagnose" else None
+    if not isinstance(payload, dict) or payload.get("kind") != "diagnostics":
+        raise RunnerError("--diagnostics must identify a saved diagnose report")
+    digest = protocol.content_sha256({k: v for k, v in payload.items() if k != "diagnostics_sha256"})
+    if payload.get("diagnostics_sha256") != digest:
+        raise RunnerError("diagnostics content identity is invalid")
+    return payload
+
+
+def _aggregate_cost(
+    request: Mapping[str, Any],
+    a_runs: Mapping[int, Mapping[str, Any]],
+    b_runs: Mapping[int, Mapping[str, Any]],
+) -> Dict[str, Any]:
+    """Aggregate per-run measurements into the block ``cost.json`` record."""
+    estimates: List[float] = []
+    measured: List[float] = []
+    fits = 0
+    for evidence in list(a_runs.values()) + list(b_runs.values()):
+        fits += 1
+        path = Path(evidence["run_dir"]) / protocol.RUN_DIRECTORY_FILES["cost"]
+        if not path.exists():
+            continue
+        payload = artifacts.read_json(path)
+        estimate = payload.get("estimate_seconds")
+        steady = payload.get("steady_state_median_seconds")
+        if isinstance(estimate, (int, float)):
+            estimates.append(float(estimate))
+        if isinstance(steady, (int, float)):
+            measured.append(float(steady))
+    dataset = (request.get("dataset") or request.get("data_name") or
+               next(iter(a_runs.values()), {}).get("dataset"))
+    model = request.get("model")
+    ledger_active = None
+    if request.get("ledger_path") and Path(request["ledger_path"]).exists():
+        ledger_payload = artifacts.read_json(Path(request["ledger_path"]))
+        ledger_active = float(
+            sum(
+                float(entry.get("seconds", 0.0))
+                for entry in ledger_payload.get("entries", [])
+                if entry.get("kind") in {"measured", "replayed"}
+            )
+        )
+    known_blocks = {f"{dataset}/{model}"} if dataset and model else set()
+    unknown = sorted(
+        f"{name}/{kind}"
+        for name in protocol.DATASETS
+        for kind in protocol.MODELS
+        if f"{name}/{kind}" not in known_blocks
+    )
+    return {
+        "status": "measured" if estimates else "unknown",
+        "dataset": dataset,
+        "model": model,
+        "fits_completed_this_block": fits,
+        "block_fit_limit": protocol.MAX_FITS_PER_BLOCK,
+        "remaining_fits": max(0, protocol.MAX_FITS_PER_BLOCK - fits),
+        "requested_remaining_fits": request.get("remaining_fits"),
+        "measured_steady_state_epoch_seconds": measured,
+        "estimated_fit_seconds": max(estimates) if estimates else None,
+        "estimate_definition": (
+            "1.3 * (setup + 2*100*t) with t the epoch 6..10 median; measured and "
+            "estimated values are separate fields"
+        ),
+        "batch_active_seconds": ledger_active,
+        "batch_limit_seconds": protocol.BATCH_SECONDS,
+        "unknown_unmeasured_blocks": unknown,
+        "note": (
+            "each dataset x encoder block needs its own measurement; no automatic "
+            "matrix expansion is permitted"
+        ),
+    }
+
+
+@resources.account_stage
+def run_report(
+    request: Mapping[str, Any],
+    *,
+    data: Optional[temporal_data.TemporalData] = None,
+    repo: Optional[Path] = None,
+) -> Dict[str, Any]:
+    """Explicit four-window test report after selection and diagnostics."""
+    purpose = protocol.validate_purpose(str(request["purpose"]))
+    block_dir = Path(request["block_dir"])
+    winner_dir = Path(request["run_dir"])
+    selection_payload = temporal_selection.load_selection(block_dir)
+    diagnostics_dir = (
+        Path(request["diagnostics_dir"]) if request.get("diagnostics_dir") else block_dir
+    )
+    diagnostics_payload = load_block_diagnostics(diagnostics_dir)
+    winner_config_doc = checks.run_config(winner_dir)
+    winner_config = protocol.FitConfig.from_payload(winner_config_doc["config"])
+    winner_controls = winner_config_doc.get("protocol_controls") or {
+        "complete": winner_config.complete_protocol, "deviations": winner_config.deviations()}
+    winner_complete = winner_config.complete_protocol and winner_controls.get("complete") is True
+    if purpose == "formal":
+        protocol.require_formal_controls(winner_config)
+        if not winner_complete:
+            raise protocol.ProtocolError("formal report requires complete effective resource controls")
+    a_states: Dict[int, str] = {}
+    b_states: Dict[int, str] = {}
+    if diagnostics_payload:
+        for seed, entry in ((diagnostics_payload.get("inputs") or {}).get("a_runs") or {}).items():
+            a_states[int(seed)] = str(entry.get("state"))
+        for seed, entry in ((diagnostics_payload.get("inputs") or {}).get("b_runs") or {}).items():
+            b_states[int(seed)] = str(entry.get("state"))
+    blockers = temporal_report.formal_report_blockers(
+        purpose=purpose,
+        config=winner_config,
+        selection=selection_payload,
+        diagnostics=diagnostics_payload,
+        run_dir=winner_dir,
+        a_states=a_states,
+        b_states=b_states,
+        winner_run_dir=Path(selection_payload["winner"]["run_dir"])
+        if selection_payload.get("winner")
+        else None,
+        run_evidence_sha256=temporal_diagnostics.evidence_sha256(winner_dir),
+    )
+    if purpose == "formal" and blockers:
+        raise temporal_report.ReportError(
+            "a formal test report is refused: " + "; ".join(blockers)
+        )
+    data_name = winner_config_doc["dataset"]["name"]
+    if data is None:
+        data_path = request.get("data_path")
+        data = temporal_data.load_temporal_data(
+            data_name, demand_path=Path(data_path) if data_path else None
+        )
+    winner_provenance = artifacts.read_json(winner_dir / "provenance.json")
+    winner_data = winner_provenance.get("data") or {}
+    identity = data.identity()
+    if identity["source_sha256"] != winner_data.get("source_sha256") or identity[
+        "node_keys_sha256"
+    ] != winner_data.get("node_keys_sha256"):
+        raise temporal_report.ReportError(
+            "the test data source or canonical node keys differ from the selected "
+            "trajectory; the report would describe a different condition"
+        )
+    arrays = data.report_arrays()
+    masks = checks.load_npz(winner_dir / protocol.RUN_DIRECTORY_FILES["masks"])
+    coverage = temporal_report.coverage_masks(
+        data_name,
+        arrays.node_keys,
+        graph_path=Path(request["graph_path"]) if request.get("graph_path") else None,
+        mask_bundle=Path(request["mask_bundle"]) if request.get("mask_bundle") else None,
+    )
+    best_payload = checkpoints.load_best(
+        winner_dir / protocol.RUN_DIRECTORY_FILES["best_weights"],
+        expected_config=winner_config,
+    )
+    condition = winner_config_doc.get("condition") or {}
+    run = artifacts.reserve_run(
+        str(request["run_id"]),
+        purpose=purpose,
+        operation="report",
+        output_root=Path(request["output_root"]) if request.get("output_root") else None,
+        repo=repo,
+    )
+    try:
+        _write_preamble(
+            run,
+            request=request,
+            purpose=purpose,
+            operation="report",
+            dataset_document=_dataset_document(data),
+            config_payload=winner_config.to_payload(),
+            protocol_controls=winner_controls,
+            roles=winner_config_doc.get("roles") or {},
+            condition=condition,
+            data_identity=identity,
+            config_extra={
+                "budget": winner_config_doc.get("budget"),
+                "selection": {
+                    "block_id": block_dir.name,
+                    "selection_sha256": selection_payload.get("selection_sha256"),
+                    "winner_run_id": (selection_payload.get("winner") or {}).get("run_id"),
+                },
+                "diagnostics": (
+                    {
+                        "block_id": diagnostics_payload.get("block_id"),
+                        "diagnostics_sha256": diagnostics_payload.get(
+                            "diagnostics_sha256"
+                        ),
+                        "status": diagnostics_payload.get("status"),
+                        "learning_ready": diagnostics_payload.get("learning_ready"),
+                    }
+                    if diagnostics_payload
+                    else None
+                ),
+                "parent": {
+                    "run_id": winner_config_doc.get("run_id"),
+                    "run_dir": str(winner_dir.resolve()),
+                },
+                "formal_blockers": blockers,
+            },
+        )
+        prediction = temporal_report.predict_test(
+            best_payload, winner_config, arrays.test_inputs, float(best_payload["scale"])
+        )
+        coverage_mask = coverage.mask if coverage is not None else None
+        coverage_provenance = coverage.provenance if coverage is not None else None
+        activity_masks = {
+            name: np.asarray(value, dtype=bool)
+            for name, value in masks.items()
+            if name.startswith("activity_")
+        }
+        constant_masks = {
+            name: np.asarray(masks[name], dtype=bool)
+            for name in ("constant_train27", "nonconstant_train27")
+            if name in masks
+        }
+        report_payload = temporal_report.build_report(
+            prediction=prediction,
+            gold=arrays.test_targets,
+            starts=arrays.starts,
+            key_array=arrays.node_keys,
+            activity_masks=activity_masks,
+            constant_masks=constant_masks,
+            coverage=coverage_mask,
+            coverage_provenance=coverage_provenance,
+            scale=float(best_payload["scale"]),
+            protocol_complete=winner_complete,
+            purpose=purpose,
+        )
+        report_payload["selection"] = {
+            "selection_sha256": selection_payload.get("selection_sha256"),
+            "winner_run_id": (selection_payload.get("winner") or {}).get("run_id"),
+            "selected_learning_rate": (selection_payload.get("winner") or {}).get(
+                "learning_rate"
+            ),
+        }
+        report_payload["diagnostics"] = (
+            {
+                "diagnostics_sha256": diagnostics_payload.get("diagnostics_sha256"),
+                "status": diagnostics_payload.get("status"),
+                "learning_ready": diagnostics_payload.get("learning_ready"),
+            }
+            if diagnostics_payload
+            else None
+        )
+        report_payload["formal_blockers"] = blockers
+        report_payload["accounting"] = resources.stage_accounting()
+        run.save_npy(
+            protocol.RUN_DIRECTORY_FILES["test_prediction"], prediction
+        )
+        run.save_npy(
+            protocol.RUN_DIRECTORY_FILES["test_gold"],
+            np.asarray(arrays.test_targets),
+        )
+        run.write_json(
+            protocol.RUN_DIRECTORY_FILES["test_windows"],
+            report_payload["test_windows"],
+        )
+        run.write_json("report.json", report_payload)
+        run.save_npy(protocol.RUN_DIRECTORY_FILES["keys"], arrays.node_keys)
+        run.write_json(protocol.RUN_DIRECTORY_FILES["months"], {
+            "months": list(p01.MONTHS),
+            "train_observation_months": list(protocol.train_observation_months()),
+        })
+        run.write_json(protocol.RUN_DIRECTORY_FILES["splits"], protocol.split_payload())
+        run.copy_file(
+            winner_dir / protocol.RUN_DIRECTORY_FILES["preprocessing"],
+            protocol.RUN_DIRECTORY_FILES["preprocessing"],
+        )
+        combined_masks: Dict[str, np.ndarray] = {
+            name: np.asarray(value) for name, value in masks.items()
+        }
+        if coverage_mask is not None:
+            combined_masks["has_nonself_neighbor"] = np.asarray(coverage_mask, dtype=bool)
+            combined_masks["no_nonself_neighbor"] = np.asarray(~coverage_mask, dtype=bool)
+        run.save_npz(protocol.RUN_DIRECTORY_FILES["masks"], **combined_masks)
+        run.write_json(
+            "coverage.json",
+            report_payload["coverage"],
+        )
+        for relative in (
+            "validation/prediction.npy",
+            "validation/gold.npy",
+            "validation/metrics.json",
+            "history.json",
+            "scores.json",
+            "baselines.json",
+            "fit-diagnostics.json",
+            "weights/best.pt",
+        ):
+            source = winner_dir / relative
+            if source.is_file():
+                run.copy_file(source, relative)
+        run.copy_file(block_dir / "selection.json", "selection.json")
+        if diagnostics_payload:
+            run.write_json("diagnostics.json", diagnostics_payload)
+        artifacts.write_array_manifest(run, protocol.RECOMPUTE_ARRAYS)
+        lines = [
+            f"# test report {run.run_id}",
+            "",
+            f"- purpose: {purpose}",
+            f"- dataset/encoder: {data_name}/{winner_config.model}",
+            f"- selected run: {winner_config_doc.get('run_id')}",
+            f"- test starts: {list(arrays.starts)}",
+            f"- array shape: {list(prediction.shape)}",
+            f"- target-month multiplicities: "
+            f"{report_payload['test_windows']['target_month_multiplicities']}",
+            f"- overall test MAE: {report_payload['metrics']['MAE']:.6g}",
+            f"- overall test MSE: {report_payload['metrics']['MSE']:.6g}",
+            f"- overall test RMSE: {report_payload['metrics']['RMSE']:.6g}",
+            f"- neighbor coverage available: {coverage_mask is not None}",
+            f"- protocol controls complete: {winner_complete}",
+            f"- formal blockers: {blockers}",
+            "",
+            "Test scores are descriptive only and never select a configuration, "
+            "checkpoint, clip rule or readiness state.",
+        ]
+        artifacts.write_summary(run, "\n".join(lines) + "\n")
+        resources.check_stage_budget()
+        run.set_status(
+            "completed" if winner_complete else "development_incomplete",
+            protocol_controls_complete=winner_complete,
+            selected_epoch=best_payload["manifest"]["epoch"],
+            selection_sha256=selection_payload.get("selection_sha256"),
+            diagnostics_sha256=(
+                diagnostics_payload.get("diagnostics_sha256")
+                if diagnostics_payload
+                else None
+            ),
+        )
+        return {
+            "run_id": run.run_id,
+            "run_dir": str(run.path),
+            "status": "completed"
+            if winner_complete
+            else "development_incomplete",
+            "report_path": str(run.path / "report.json"),
+            "test_shape": list(prediction.shape),
+            "formal_blockers": blockers,
+            "coverage_available": coverage_mask is not None,
+        }
+    except BaseException as exc:
+        try:
+            run.write_json(
+                "report.json",
+                {
+                    "artifact_format_version": protocol.ARTIFACT_FORMAT_VERSION,
+                    "scientific_version": protocol.SCIENTIFIC_VERSION,
+                    "kind": "test-report",
+                    "status": "failed",
+                    "error": {"type": type(exc).__name__, "message": str(exc)},
+                },
+            )
+            run.set_status(
+                "failed", detail={"type": type(exc).__name__, "message": str(exc)}
+            )
+        except Exception:  # pragma: no cover - best effort
+            pass
+        raise
