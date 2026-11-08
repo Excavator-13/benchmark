@@ -1,0 +1,489 @@
+{
+  "artifact_format_version": 2,
+  "config": {
+    "diagnostic_epochs": [
+      10,
+      50,
+      100
+    ],
+    "epochs": 100,
+    "grad_clip": 1.0,
+    "hidden_size": 32,
+    "layers": 1,
+    "learning_rate": 0.003,
+    "model": "GRU",
+    "node_chunk": 2048,
+    "seed": 0,
+    "threads": 1
+  },
+  "data": {
+    "dataset": "r0",
+    "key_columns": [
+      "r0_id",
+      "skill_id"
+    ],
+    "mode": "count",
+    "months": 36,
+    "node_keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+    "nodes": 2335,
+    "source_kind": "parquet",
+    "source_path": "dataset/demand/r0.parquet",
+    "source_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946"
+  },
+  "environment": {
+    "cpu_count": 10,
+    "determinism": {
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms": true,
+      "num_threads": 1
+    },
+    "device": "cpu",
+    "machine": "arm64",
+    "packages": {
+      "numpy": "1.26.4",
+      "pandas": "2.2.3",
+      "psutil": "7.2.2",
+      "pyarrow": "17.0.0",
+      "torch": "2.14.1"
+    },
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "processor": "arm",
+    "python_executable": "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python",
+    "python_version": "3.11.17 (main, Oct  1 2026, 20:09:52) [Clang 20.1.8 ]",
+    "python_version_info": [
+      3,
+      11,
+      17
+    ],
+    "repo_root": "/Users/watuji/da_chuang/repos/benchmark",
+    "system": "Darwin",
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "threads": 1
+  },
+  "generated": "2026-11-08T13:09:17+08:00",
+  "operation": "fit",
+  "protocol": {
+    "path": "/Users/watuji/da_chuang/repos/benchmark/research/phases/P02/protocol.md",
+    "sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2",
+    "version": "P2-effective-training-L6-H3-v1"
+  },
+  "purpose": "formal",
+  "roles": {
+    "candidate_role": "screening",
+    "repeat_role": "a"
+  },
+  "scientific_version": "P2-effective-training-L6-H3-v1",
+  "source": {
+    "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+    "errors": {},
+    "files": {
+      "benchmark/multivariate_time_series/effective_temporal_training.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/effective_temporal_training.py",
+          "sha256": "832ed36483abbaa42c5872193c73440e6543e0c358d18b5e7ea4d36a9ed0a4fb"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/effective_temporal_training.py",
+        "sha256": "832ed36483abbaa42c5872193c73440e6543e0c358d18b5e7ea4d36a9ed0a4fb",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/run.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/run.py",
+          "sha256": "5e3829f268b09db239e22738e66ba1f76bc24f2d97bfe9ac3cd6ad6e698b9edc"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/run.py",
+        "sha256": "5e3829f268b09db239e22738e66ba1f76bc24f2d97bfe9ac3cd6ad6e698b9edc",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/__init__.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/__init__.py",
+          "sha256": "4e9d888eff6b2d9d385f5711432fb3442589be0d60e5688a9d49f4ef9ec51cde"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/__init__.py",
+        "sha256": "4e9d888eff6b2d9d385f5711432fb3442589be0d60e5688a9d49f4ef9ec51cde",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/artifacts.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/artifacts.py",
+          "sha256": "ee63905b72c37120994c7f97b2cb65d55802d062c3b96f165d9bba6d095ca21f"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/artifacts.py",
+        "sha256": "ee63905b72c37120994c7f97b2cb65d55802d062c3b96f165d9bba6d095ca21f",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/checkpoints.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/checkpoints.py",
+          "sha256": "930523808d1e3ddb62ec14a9195990c93526d5412324aa96719ce03555f802ca"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/checkpoints.py",
+        "sha256": "930523808d1e3ddb62ec14a9195990c93526d5412324aa96719ce03555f802ca",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/checks.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/checks.py",
+          "sha256": "5b4b01c25657d026d52ec36f9c461123ef77d9cded51b200b0aa8ca7ec000f1e"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/checks.py",
+        "sha256": "5b4b01c25657d026d52ec36f9c461123ef77d9cded51b200b0aa8ca7ec000f1e",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/cli.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/cli.py",
+          "sha256": "d868bd048eccd7eadffaa777f900ccac384bdf8e9576b077cb75760d250ba749"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/cli.py",
+        "sha256": "d868bd048eccd7eadffaa777f900ccac384bdf8e9576b077cb75760d250ba749",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/data.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/data.py",
+          "sha256": "a7efc700ae2cd2fa517cba708a82575c0272edb87b57bdaaf17409bccca8b999"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/data.py",
+        "sha256": "a7efc700ae2cd2fa517cba708a82575c0272edb87b57bdaaf17409bccca8b999",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/diagnostics.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/diagnostics.py",
+          "sha256": "0f4ddd4d6061569ea777eac808047d5d0125c1c7d93a04d918251fbb6f1e1ec7"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/diagnostics.py",
+        "sha256": "0f4ddd4d6061569ea777eac808047d5d0125c1c7d93a04d918251fbb6f1e1ec7",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/engine.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/engine.py",
+          "sha256": "9409413a5b09bf1da87c3cdbb3da9c7b9a7c4fd4d39409be936dedeca049a7ea"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/engine.py",
+        "sha256": "9409413a5b09bf1da87c3cdbb3da9c7b9a7c4fd4d39409be936dedeca049a7ea",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/model.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/model.py",
+          "sha256": "fb033388f35c8416053e21ea42c8777fcc576052efd57e6cb0937d2ff47d074a"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/model.py",
+        "sha256": "fb033388f35c8416053e21ea42c8777fcc576052efd57e6cb0937d2ff47d074a",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/protocol.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/protocol.py",
+          "sha256": "9c82ca01c6ef9543160f425e4654893ff7bd9169aec5626ec7db211363482b27"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/protocol.py",
+        "sha256": "9c82ca01c6ef9543160f425e4654893ff7bd9169aec5626ec7db211363482b27",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/recovery.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/recovery.py",
+          "sha256": "078798a8eea94b90aaf849d5c04a69a7ddc7ac06a0869f176246eb2d4cef8854"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/recovery.py",
+        "sha256": "078798a8eea94b90aaf849d5c04a69a7ddc7ac06a0869f176246eb2d4cef8854",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/report.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/report.py",
+          "sha256": "26570a95c3e34f5a8e0441adf09cc452b3ce87fcd2263aeb8b5af0759c1b95cd"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/report.py",
+        "sha256": "26570a95c3e34f5a8e0441adf09cc452b3ce87fcd2263aeb8b5af0759c1b95cd",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/resources.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/resources.py",
+          "sha256": "fb032dfc6fe6d299899efe270d85233444215aaf83fa4715a1e00e4e37b775cb"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/resources.py",
+        "sha256": "fb032dfc6fe6d299899efe270d85233444215aaf83fa4715a1e00e4e37b775cb",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/runner.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/runner.py",
+          "sha256": "e3c041e7bb798d93d7cdbc4aa635d3b8706603caeb9c4de3a8f56c2ade27c2ce"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/runner.py",
+        "sha256": "e3c041e7bb798d93d7cdbc4aa635d3b8706603caeb9c4de3a8f56c2ade27c2ce",
+        "unavailable_reason": null
+      },
+      "benchmark/multivariate_time_series/temporal/selection.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/multivariate_time_series/temporal/selection.py",
+          "sha256": "dfa5619ae843d6cf4e9c0aa8b2fff91858bfb14050da15ca7bdabfa778aa2005"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/selection.py",
+        "sha256": "dfa5619ae843d6cf4e9c0aa8b2fff91858bfb14050da15ca7bdabfa778aa2005",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/__init__.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/nograph_baseline/__init__.py",
+          "sha256": "d9c569ef793ad4575f7fef38f798f059687e3fd118a471b4d091bfec74c17d78"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/__init__.py",
+        "sha256": "d9c569ef793ad4575f7fef38f798f059687e3fd118a471b4d091bfec74c17d78",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/artifacts.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/nograph_baseline/artifacts.py",
+          "sha256": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/artifacts.py",
+        "sha256": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/baselines.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/nograph_baseline/baselines.py",
+          "sha256": "90030ee66ddd71ef18677dc6195fde06ae3574b6298b5ac070a977372e5d293a"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/baselines.py",
+        "sha256": "90030ee66ddd71ef18677dc6195fde06ae3574b6298b5ac070a977372e5d293a",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/coverage.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/nograph_baseline/coverage.py",
+          "sha256": "fad3fa9302e9da44a3cc348977c5f2beaae0951a188cb4cdb983ef0b53177b22"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/coverage.py",
+        "sha256": "fad3fa9302e9da44a3cc348977c5f2beaae0951a188cb4cdb983ef0b53177b22",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/data.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/nograph_baseline/data.py",
+          "sha256": "790dd78339e6b7f5476a34a9d272e4fbef1be21075a5b57691e7dff22871cc63"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/data.py",
+        "sha256": "790dd78339e6b7f5476a34a9d272e4fbef1be21075a5b57691e7dff22871cc63",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/metrics.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/nograph_baseline/metrics.py",
+          "sha256": "476040954e611cafeb05eea71731cd43209ef7601455999f6772c0e21ebf127c"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/metrics.py",
+        "sha256": "476040954e611cafeb05eea71731cd43209ef7601455999f6772c0e21ebf127c",
+        "unavailable_reason": null
+      },
+      "benchmark/nograph_baseline/protocol.py": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "benchmark/nograph_baseline/protocol.py",
+          "sha256": "7b941e0f097ccd3b3f1a02337fab497dbbdadae3d478cce74011ea5f8591d73b"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/protocol.py",
+        "sha256": "7b941e0f097ccd3b3f1a02337fab497dbbdadae3d478cce74011ea5f8591d73b",
+        "unavailable_reason": null
+      },
+      "research/phases/P02/protocol.md": {
+        "content_saved": null,
+        "git_reference": {
+          "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+          "path": "research/phases/P02/protocol.md",
+          "sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2"
+        },
+        "git_status": "committed_clean",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "research/phases/P02/protocol.md",
+        "sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2",
+        "unavailable_reason": null
+      }
+    },
+    "generated": "2026-11-08T13:09:17+08:00",
+    "identity_available": true,
+    "patch_bytes": 0,
+    "patch_errors": {},
+    "patch_path": "git-diff.patch",
+    "patch_unusable_paths": [],
+    "policy": "P01-records-v2",
+    "protocol": {
+      "content_saved": null,
+      "git_reference": {
+        "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+        "path": "research/phases/P02/protocol.md",
+        "sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2"
+      },
+      "git_status": "committed_clean",
+      "outside_repository": false,
+      "patch_path": null,
+      "path": "research/phases/P02/protocol.md",
+      "sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2",
+      "unavailable_reason": null
+    },
+    "runtime_scope": [
+      "benchmark/multivariate_time_series/effective_temporal_training.py",
+      "benchmark/multivariate_time_series/run.py",
+      "benchmark/multivariate_time_series/temporal/__init__.py",
+      "benchmark/multivariate_time_series/temporal/artifacts.py",
+      "benchmark/multivariate_time_series/temporal/checkpoints.py",
+      "benchmark/multivariate_time_series/temporal/checks.py",
+      "benchmark/multivariate_time_series/temporal/cli.py",
+      "benchmark/multivariate_time_series/temporal/data.py",
+      "benchmark/multivariate_time_series/temporal/diagnostics.py",
+      "benchmark/multivariate_time_series/temporal/engine.py",
+      "benchmark/multivariate_time_series/temporal/model.py",
+      "benchmark/multivariate_time_series/temporal/protocol.py",
+      "benchmark/multivariate_time_series/temporal/recovery.py",
+      "benchmark/multivariate_time_series/temporal/report.py",
+      "benchmark/multivariate_time_series/temporal/resources.py",
+      "benchmark/multivariate_time_series/temporal/runner.py",
+      "benchmark/multivariate_time_series/temporal/selection.py",
+      "benchmark/nograph_baseline/__init__.py",
+      "benchmark/nograph_baseline/artifacts.py",
+      "benchmark/nograph_baseline/baselines.py",
+      "benchmark/nograph_baseline/coverage.py",
+      "benchmark/nograph_baseline/data.py",
+      "benchmark/nograph_baseline/metrics.py",
+      "benchmark/nograph_baseline/protocol.py",
+      "research/phases/P02/protocol.md"
+    ],
+    "scoped_dirty": false,
+    "unrecoverable_paths": [],
+    "whole_repository_dirty": true
+  }
+}

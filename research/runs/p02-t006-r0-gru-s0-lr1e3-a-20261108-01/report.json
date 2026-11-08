@@ -1,0 +1,132 @@
+{
+  "artifact_format_version": 2,
+  "config": {
+    "diagnostic_epochs": [
+      10,
+      50,
+      100
+    ],
+    "epochs": 100,
+    "grad_clip": 1.0,
+    "hidden_size": 32,
+    "layers": 1,
+    "learning_rate": 0.001,
+    "model": "GRU",
+    "node_chunk": 2048,
+    "seed": 0,
+    "threads": 1
+  },
+  "cost": {
+    "batch_active_seconds": 3.2952644580000197,
+    "batch_limit_seconds": 43200,
+    "checks": {
+      "batch": {
+        "active_seconds": 3.2952644580000197,
+        "estimated_seconds": 31.648374788030925,
+        "limit": 43200,
+        "projected_seconds": 224.83388797421648,
+        "remaining_fits": 7,
+        "status": "pass"
+      },
+      "sample_complete": {
+        "required": 10,
+        "status": "pass",
+        "value": 10
+      },
+      "sample_duration": {
+        "limit": 900,
+        "status": "pass",
+        "value": 3.2952644580000197
+      },
+      "single_fit": {
+        "estimated_seconds": 31.648374788030925,
+        "limit": 3600,
+        "spent_seconds": 3.2952644580000197,
+        "status": "pass",
+        "value": 34.94363924603094
+      },
+      "steady_state": {
+        "epochs": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "median_epoch_seconds": 0.11125033300049836,
+        "status": "pass"
+      }
+    },
+    "epochs": 100,
+    "estimate_definition": "1.3 * (setup + 2*epochs*t), t = median complete-epoch wall time over epochs 6..10",
+    "estimate_seconds": 31.648374788030925,
+    "estimated": {
+      "fit_seconds": 31.648374788030925
+    },
+    "fit_limit_seconds": 3600,
+    "measured": {
+      "epoch_median_seconds": 0.11125033300049836,
+      "sample_seconds": 3.2952644580000197
+    },
+    "reasons": [],
+    "remaining_fits": 7,
+    "sample_epochs": 10,
+    "sample_measured_seconds": 3.2952644580000197,
+    "setup_seconds": 2.094837083001039,
+    "spent_seconds": 3.2952644580000197,
+    "status": "ok",
+    "steady_state_median_seconds": 0.11125033300049836,
+    "unknown": []
+  },
+  "history_epochs": 100,
+  "kind": "fit-summary",
+  "parameter_count": 3459,
+  "paused": null,
+  "preprocessing_scale": 3505.721244333227,
+  "protocol_controls": {
+    "complete": true,
+    "deviations": [],
+    "resources": {
+      "complete": true,
+      "conservative_limit": false,
+      "development_override": false,
+      "protocol_rss_stop_bytes": 8589934592,
+      "rss_stop_bytes": 8589934592
+    }
+  },
+  "purpose": "formal",
+  "recovery_sha256": "3fe6c0dd78d2e329ce8a1469f91281752514e489d18f6dc2ba11def879c3ef34",
+  "reproduction": {
+    "absolute_differences": {
+      "MAE": 0.0,
+      "MSE": 0.0
+    },
+    "reevaluated": {
+      "MAE": 115.15263099659667,
+      "MSE": 432771.8430923054
+    },
+    "saved": {
+      "MAE": 115.15263099659667,
+      "MSE": 432771.8430923054
+    },
+    "status": "pass",
+    "tolerance": 1e-06
+  },
+  "scientific_version": "P2-effective-training-L6-H3-v1",
+  "selected_epoch": 100,
+  "selected_updates": 1900,
+  "status": "completed",
+  "total_updates": 1900,
+  "validation": {
+    "best": {
+      "MAE": 115.15263099659667,
+      "MSE": 432771.8430923054,
+      "epoch": 100
+    },
+    "initial": {
+      "MAE": 1279.1244069599456,
+      "MSE": 16863986.028179
+    }
+  },
+  "warnings": []
+}

@@ -1,0 +1,791 @@
+{
+  "accounting": {
+    "limit_seconds": 43200,
+    "mode": "live-batch"
+  },
+  "checker": {
+    "commit": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+    "errors": {},
+    "files": {
+      "benchmark/multivariate_time_series/effective_temporal_training.py": "832ed36483abbaa42c5872193c73440e6543e0c358d18b5e7ea4d36a9ed0a4fb",
+      "benchmark/multivariate_time_series/run.py": "5e3829f268b09db239e22738e66ba1f76bc24f2d97bfe9ac3cd6ad6e698b9edc",
+      "benchmark/multivariate_time_series/temporal/__init__.py": "4e9d888eff6b2d9d385f5711432fb3442589be0d60e5688a9d49f4ef9ec51cde",
+      "benchmark/multivariate_time_series/temporal/artifacts.py": "ee63905b72c37120994c7f97b2cb65d55802d062c3b96f165d9bba6d095ca21f",
+      "benchmark/multivariate_time_series/temporal/checkpoints.py": "930523808d1e3ddb62ec14a9195990c93526d5412324aa96719ce03555f802ca",
+      "benchmark/multivariate_time_series/temporal/checks.py": "5b4b01c25657d026d52ec36f9c461123ef77d9cded51b200b0aa8ca7ec000f1e",
+      "benchmark/multivariate_time_series/temporal/cli.py": "d868bd048eccd7eadffaa777f900ccac384bdf8e9576b077cb75760d250ba749",
+      "benchmark/multivariate_time_series/temporal/data.py": "a7efc700ae2cd2fa517cba708a82575c0272edb87b57bdaaf17409bccca8b999",
+      "benchmark/multivariate_time_series/temporal/diagnostics.py": "0f4ddd4d6061569ea777eac808047d5d0125c1c7d93a04d918251fbb6f1e1ec7",
+      "benchmark/multivariate_time_series/temporal/engine.py": "9409413a5b09bf1da87c3cdbb3da9c7b9a7c4fd4d39409be936dedeca049a7ea",
+      "benchmark/multivariate_time_series/temporal/model.py": "fb033388f35c8416053e21ea42c8777fcc576052efd57e6cb0937d2ff47d074a",
+      "benchmark/multivariate_time_series/temporal/protocol.py": "9c82ca01c6ef9543160f425e4654893ff7bd9169aec5626ec7db211363482b27",
+      "benchmark/multivariate_time_series/temporal/recovery.py": "078798a8eea94b90aaf849d5c04a69a7ddc7ac06a0869f176246eb2d4cef8854",
+      "benchmark/multivariate_time_series/temporal/report.py": "26570a95c3e34f5a8e0441adf09cc452b3ce87fcd2263aeb8b5af0759c1b95cd",
+      "benchmark/multivariate_time_series/temporal/resources.py": "fb032dfc6fe6d299899efe270d85233444215aaf83fa4715a1e00e4e37b775cb",
+      "benchmark/multivariate_time_series/temporal/runner.py": "e3c041e7bb798d93d7cdbc4aa635d3b8706603caeb9c4de3a8f56c2ade27c2ce",
+      "benchmark/multivariate_time_series/temporal/selection.py": "dfa5619ae843d6cf4e9c0aa8b2fff91858bfb14050da15ca7bdabfa778aa2005",
+      "benchmark/nograph_baseline/__init__.py": "d9c569ef793ad4575f7fef38f798f059687e3fd118a471b4d091bfec74c17d78",
+      "benchmark/nograph_baseline/artifacts.py": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86",
+      "benchmark/nograph_baseline/baselines.py": "90030ee66ddd71ef18677dc6195fde06ae3574b6298b5ac070a977372e5d293a",
+      "benchmark/nograph_baseline/coverage.py": "fad3fa9302e9da44a3cc348977c5f2beaae0951a188cb4cdb983ef0b53177b22",
+      "benchmark/nograph_baseline/data.py": "790dd78339e6b7f5476a34a9d272e4fbef1be21075a5b57691e7dff22871cc63",
+      "benchmark/nograph_baseline/metrics.py": "476040954e611cafeb05eea71731cd43209ef7601455999f6772c0e21ebf127c",
+      "benchmark/nograph_baseline/protocol.py": "7b941e0f097ccd3b3f1a02337fab497dbbdadae3d478cce74011ea5f8591d73b"
+    },
+    "identity_available": true,
+    "module": "benchmark.multivariate_time_series.effective_temporal_training",
+    "protocol_sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2",
+    "whole_repository_dirty": true
+  },
+  "command": {
+    "argv": [
+      "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python",
+      "-m",
+      "benchmark.multivariate_time_series.effective_temporal_training",
+      "diagnose",
+      "--block",
+      "research/reports/p02-t006-execution-20261108-01/blocks/p02-t006-r0-gru-20261108-01",
+      "--a-run",
+      "0=research/runs/p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+      "--a-run",
+      "1=research/runs/p02-t006-r0-gru-s1-a-20261108-01",
+      "--a-run",
+      "2=research/runs/p02-t006-r0-gru-s2-a-20261108-01",
+      "--b-run",
+      "0=research/runs/p02-t006-r0-gru-s0-b-20261108-01",
+      "--ridge",
+      "research/reports/p02-t006-execution-20261108-01/ridge-r0-validation.json",
+      "--purpose",
+      "formal",
+      "--report",
+      "research/reports/p02-t006-execution-20261108-01/diagnose-r0-gru-01.json"
+    ],
+    "cwd": "/Users/watuji/da_chuang/repos/benchmark"
+  },
+  "created": "2026-11-08T13:11:39+08:00",
+  "errors": [
+    "seed 1: repetition b evidence is missing",
+    "seed 2: repetition b evidence is missing",
+    "seed 1: a/b repetition evidence is incomplete (missing b)",
+    "seed 2: a/b repetition evidence is incomplete (missing b)"
+  ],
+  "inputs": {
+    "a_runs": {
+      "0": "research/runs/p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+      "1": "research/runs/p02-t006-r0-gru-s1-a-20261108-01",
+      "2": "research/runs/p02-t006-r0-gru-s2-a-20261108-01"
+    },
+    "b_runs": {
+      "0": "research/runs/p02-t006-r0-gru-s0-b-20261108-01"
+    },
+    "block_dir": "/Users/watuji/da_chuang/repos/benchmark/research/reports/p02-t006-execution-20261108-01/blocks/p02-t006-r0-gru-20261108-01",
+    "ridge_path": "research/reports/p02-t006-execution-20261108-01/ridge-r0-validation.json"
+  },
+  "kind": "diagnose",
+  "result": {
+    "appendix": {
+      "input_zeroing": {
+        "MAE_change": 935.5340689745489,
+        "baseline_validation_MAE": 125.69969828073467,
+        "definition": "validation prediction difference when every validation input is replaced by zero; diagnostic only, never used for tuning",
+        "max_absolute_prediction_change": 67059.09557914734,
+        "zeroed_validation_MAE": 1061.2337672552835
+      },
+      "note": "diagnostic appendix only; never used to select a configuration or clip rule",
+      "prediction_scale": {
+        "validation": {
+          "max": 67035.1875,
+          "mean": 1039.921804047733,
+          "min": -50.2473258972168,
+          "negative_fraction": 0.26181299072091363,
+          "saturated_above_99th_target_percentile": null,
+          "std": 3660.1156256238273,
+          "target_max": 80169.0
+        }
+      },
+      "quantiles": {
+        "percentiles": [
+          0,
+          1,
+          5,
+          25,
+          50,
+          75,
+          95,
+          99,
+          100
+        ],
+        "train_scaled_inputs": {
+          "elements": 266190,
+          "max": 27.160174287647813,
+          "mean": 0.2715984880122903,
+          "min": 0.0,
+          "p1": 0.0,
+          "p25": 0.0031377280831386104,
+          "p5": 0.0,
+          "p50": 0.025101824665108883,
+          "p75": 0.14369368380737046,
+          "p95": 1.222858208401384,
+          "p99": 4.313520370292915,
+          "std": 0.9984517690645036
+        },
+        "train_scaled_targets": {
+          "elements": 133095,
+          "max": 27.160174287647813,
+          "mean": 0.266021168816553,
+          "min": 0.0,
+          "p1": 0.0,
+          "p25": 0.0031377280831386104,
+          "p5": 0.0,
+          "p50": 0.02538707267266694,
+          "p75": 0.14205350776391162,
+          "p95": 1.1949039036606945,
+          "p99": 4.233816372021014,
+          "std": 0.982782335483676
+        },
+        "validation_scaled_inputs": {
+          "elements": 14010,
+          "max": 25.56592317340584,
+          "mean": 0.24991569489482304,
+          "min": 0.0,
+          "p1": 0.0,
+          "p25": 0.0031377280831386104,
+          "p5": 0.0,
+          "p50": 0.024246080642434716,
+          "p75": 0.1352075555825183,
+          "p95": 1.1056498020957783,
+          "p99": 4.055299611450984,
+          "std": 0.9374309861560904
+        },
+        "validation_scaled_targets": {
+          "elements": 7005,
+          "max": 22.868047517921752,
+          "mean": 0.2974364248494562,
+          "min": 0.0,
+          "p1": 0.0,
+          "p25": 0.003993472105812777,
+          "p5": 0.0,
+          "p50": 0.029951040793595826,
+          "p75": 0.16373235633832386,
+          "p95": 1.3027276505176384,
+          "p99": 4.964102616011026,
+          "std": 1.1012835010161506
+        }
+      },
+      "saturation": {
+        "definition": "fraction of output hidden-sequence elements with abs(h) > 0.99 on validation windows; LSTM cell state is not used",
+        "validation_fraction": 0.0005375624553890079
+      },
+      "source_run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01"
+    },
+    "artifact_format_version": 2,
+    "baselines": {
+      "expected": {
+        "data_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+        "dataset": "r0",
+        "keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+        "protocol_sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2",
+        "split_validation_months": [
+          "2023-04",
+          "2023-05",
+          "2023-06"
+        ],
+        "split_validation_starts": [
+          21
+        ]
+      },
+      "naive_validation": {
+        "LastValue": {
+          "MAE": 185.62655246252677,
+          "MSE": 397984.1727337616,
+          "elements": 7005
+        },
+        "SeasonalNaive12": {
+          "MAE": 226.25024982155603,
+          "MSE": 846365.5601713062,
+          "elements": 7005
+        },
+        "TrainMean27": {
+          "MAE": 180.80885082084225,
+          "MSE": 606931.7965286407,
+          "elements": 7005
+        },
+        "WindowMean6": {
+          "MAE": 185.12186533428505,
+          "MSE": 669875.6088746135,
+          "elements": 7005
+        },
+        "Zero": {
+          "MAE": 1042.729193433262,
+          "MSE": 15993006.493647395,
+          "elements": 7005
+        }
+      },
+      "reasons": [],
+      "ridge": {
+        "compatibility": [
+          "node",
+          "month",
+          "source-data",
+          "split",
+          "selection",
+          "preprocessing"
+        ],
+        "mismatches": [],
+        "note": "neural RMS and Ridge per-node standardization are different preprocessing conditions; compatibility is checked on node/month/source/split identity, not on a shared scaler",
+        "provided": {
+          "data_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+          "dataset": "r0",
+          "keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+          "preprocessing": {
+            "constant_node_std": 1.0,
+            "ddof": 0,
+            "definition": "per-node standardization",
+            "training_months": [
+              "2021-01",
+              "2021-02",
+              "2021-03",
+              "2021-04",
+              "2021-05",
+              "2021-06",
+              "2021-07",
+              "2021-08",
+              "2021-09",
+              "2021-10",
+              "2021-11",
+              "2021-12",
+              "2022-01",
+              "2022-02",
+              "2022-03",
+              "2022-04",
+              "2022-05",
+              "2022-06",
+              "2022-07",
+              "2022-08",
+              "2022-09",
+              "2022-10",
+              "2022-11",
+              "2022-12",
+              "2023-01",
+              "2023-02",
+              "2023-03"
+            ]
+          },
+          "selection": {
+            "lambda": 0.0001,
+            "metric": "validation original-unit MSE",
+            "selected_on": "validation",
+            "tie_break": "larger lambda"
+          },
+          "split": {
+            "validation_starts": [
+              21
+            ],
+            "validation_target_months": [
+              "2023-04",
+              "2023-05",
+              "2023-06"
+            ]
+          },
+          "validation": {
+            "MAE": 149.042806326246,
+            "MSE": 375887.1958260734
+          }
+        }
+      },
+      "status": "pass"
+    },
+    "block_id": "p02-t006-r0-gru-20261108-01",
+    "declares_research_acceptance": false,
+    "diagnostics_sha256": "a0b2a6761be21f2a9c3956a925a02688d4937468f61bd71f102da008d085e167",
+    "gates": {
+      "beyond_zero_baseline": {
+        "failing_seeds": [],
+        "incomplete_seeds": [],
+        "name": "beyond_zero_baseline",
+        "passing_seeds": [
+          0,
+          1,
+          2
+        ],
+        "per_seed": [
+          {
+            "improvement": 0.8794512524705871,
+            "model_MAE": 125.69969828073467,
+            "run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+            "seed": 0,
+            "status": "pass",
+            "zero_MAE": 1042.729193433262
+          },
+          {
+            "improvement": 0.8864521987038939,
+            "model_MAE": 118.39960726160905,
+            "run_id": "p02-t006-r0-gru-s1-a-20261108-01",
+            "seed": 1,
+            "status": "pass",
+            "zero_MAE": 1042.729193433262
+          },
+          {
+            "improvement": 0.8906276782188245,
+            "model_MAE": 114.04571287480836,
+            "run_id": "p02-t006-r0-gru-s2-a-20261108-01",
+            "seed": 2,
+            "status": "pass",
+            "zero_MAE": 1042.729193433262
+          }
+        ],
+        "reasons": [],
+        "required_passing_seeds": 2,
+        "status": "pass",
+        "threshold": {
+          "required_seeds": 2,
+          "validation_MAE_improvement_over_Zero": 0.05,
+          "zero_denominator": "unavailable / all-zero diagnostic, never a pass"
+        }
+      },
+      "budget_tail_stability": {
+        "failing_seeds": [
+          1,
+          2
+        ],
+        "incomplete_seeds": [],
+        "name": "budget_tail_stability",
+        "passing_seeds": [
+          0
+        ],
+        "per_seed": [
+          {
+            "b100": 243984.3029816347,
+            "b80": 243984.3029816347,
+            "both_zero": false,
+            "relative": 0.0,
+            "run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+            "seed": 0,
+            "status": "pass"
+          },
+          {
+            "b100": 186487.28297138642,
+            "b80": 192078.32952153558,
+            "both_zero": false,
+            "relative": 0.029108158968668536,
+            "run_id": "p02-t006-r0-gru-s1-a-20261108-01",
+            "seed": 1,
+            "status": "fail"
+          },
+          {
+            "b100": 212087.37518981405,
+            "b80": 220700.02348236702,
+            "both_zero": false,
+            "relative": 0.03902422916253602,
+            "run_id": "p02-t006-r0-gru-s2-a-20261108-01",
+            "seed": 2,
+            "status": "fail"
+          }
+        ],
+        "reasons": [
+          "seed 1: budget-tail relative change 0.0291082 exceeds 0.01; the block remains budget-limited",
+          "seed 2: budget-tail relative change 0.0390242 exceeds 0.01; the block remains budget-limited"
+        ],
+        "required_passing_seeds": 2,
+        "status": "fail",
+        "threshold": {
+          "best_through_epoch": 80,
+          "relative": 0.01,
+          "required_seeds": 2
+        }
+      },
+      "complete_and_finite_trajectories": {
+        "failing_seeds": [],
+        "incomplete_seeds": [
+          1,
+          2
+        ],
+        "name": "complete_and_finite_trajectories",
+        "passing_seeds": [
+          0,
+          0,
+          1,
+          2
+        ],
+        "per_seed": [
+          {
+            "incomplete": [],
+            "problems": [],
+            "repeat_role": "a",
+            "run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+            "seed": 0,
+            "status": "pass"
+          },
+          {
+            "incomplete": [],
+            "problems": [],
+            "repeat_role": "b",
+            "run_id": "p02-t006-r0-gru-s0-b-20261108-01",
+            "seed": 0,
+            "status": "pass"
+          },
+          {
+            "incomplete": [],
+            "problems": [],
+            "repeat_role": "a",
+            "run_id": "p02-t006-r0-gru-s1-a-20261108-01",
+            "seed": 1,
+            "status": "pass"
+          },
+          {
+            "reason": "no b-run",
+            "repeat_role": "b",
+            "seed": 1,
+            "status": "incomplete"
+          },
+          {
+            "incomplete": [],
+            "problems": [],
+            "repeat_role": "a",
+            "run_id": "p02-t006-r0-gru-s2-a-20261108-01",
+            "seed": 2,
+            "status": "pass"
+          },
+          {
+            "reason": "no b-run",
+            "repeat_role": "b",
+            "seed": 2,
+            "status": "incomplete"
+          }
+        ],
+        "reasons": [
+          "seed 1: repetition b evidence is missing",
+          "seed 2: repetition b evidence is missing"
+        ],
+        "required_passing_seeds": 6,
+        "status": "incomplete",
+        "threshold": "every required a/b run covers all 100 epochs finitely"
+      },
+      "definite_learning": {
+        "failing_seeds": [],
+        "incomplete_seeds": [],
+        "name": "definite_learning",
+        "passing_seeds": [
+          0,
+          1,
+          2
+        ],
+        "per_seed": [
+          {
+            "incomplete": [],
+            "problems": [],
+            "run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+            "seed": 0,
+            "status": "pass",
+            "values": {
+              "train_best_MSE": 602584.3910099001,
+              "train_initial_MSE": 13484870.416326554,
+              "train_reduction": 0.9553140391856986,
+              "validation_best_MSE": 243984.3029816347,
+              "validation_initial_MSE": 16863986.028179,
+              "validation_reduction": 0.9855322281117911
+            }
+          },
+          {
+            "incomplete": [],
+            "problems": [],
+            "run_id": "p02-t006-r0-gru-s1-a-20261108-01",
+            "seed": 1,
+            "status": "pass",
+            "values": {
+              "train_best_MSE": 563374.3015609862,
+              "train_initial_MSE": 13313565.124163853,
+              "train_reduction": 0.9576841892981413,
+              "validation_best_MSE": 186487.28297138642,
+              "validation_initial_MSE": 16555137.65205154,
+              "validation_reduction": 0.9887353831245084
+            }
+          },
+          {
+            "incomplete": [],
+            "problems": [],
+            "run_id": "p02-t006-r0-gru-s2-a-20261108-01",
+            "seed": 2,
+            "status": "pass",
+            "values": {
+              "train_best_MSE": 569526.8037050721,
+              "train_initial_MSE": 13467335.800783556,
+              "train_reduction": 0.9577105069532805,
+              "validation_best_MSE": 212087.37518981405,
+              "validation_initial_MSE": 16856030.27474759,
+              "validation_reduction": 0.9874177151005983
+            }
+          }
+        ],
+        "reasons": [],
+        "required_passing_seeds": 2,
+        "status": "pass",
+        "threshold": {
+          "required_seeds": 2,
+          "train_MSE_reduction": 0.1,
+          "validation_MSE_reduction": 0.05
+        }
+      },
+      "frozen_evidence_identity": {
+        "incomplete": [],
+        "name": "frozen_evidence_identity",
+        "per_seed": [],
+        "problems": [],
+        "reasons": [],
+        "status": "pass"
+      },
+      "same_condition_repetition": {
+        "failing_seeds": [],
+        "incomplete_seeds": [
+          1,
+          2
+        ],
+        "name": "same_condition_repetition",
+        "passing_seeds": [
+          0
+        ],
+        "per_seed": [
+          {
+            "a_run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+            "b_run_id": "p02-t006-r0-gru-s0-b-20261108-01",
+            "incomplete": [],
+            "problems": [],
+            "seed": 0,
+            "status": "pass",
+            "values": {
+              "a_MAE": 125.69969828073467,
+              "b_MAE": 125.69969828073467,
+              "max_absolute_prediction_difference": 0.0,
+              "normalized_MAE_difference": 0.0
+            }
+          },
+          {
+            "reason": "both a and b repetitions are required",
+            "seed": 1,
+            "status": "incomplete"
+          },
+          {
+            "reason": "both a and b repetitions are required",
+            "seed": 2,
+            "status": "incomplete"
+          }
+        ],
+        "reasons": [
+          "seed 1: a/b repetition evidence is incomplete (missing b)",
+          "seed 2: a/b repetition evidence is incomplete (missing b)"
+        ],
+        "required_passing_seeds": 3,
+        "status": "incomplete",
+        "threshold": {
+          "normalized_MAE_difference": 1e-06,
+          "required_pairs": [
+            0,
+            1,
+            2
+          ]
+        }
+      }
+    },
+    "incomplete_reasons": [
+      "seed 1: repetition b evidence is missing",
+      "seed 2: repetition b evidence is missing",
+      "seed 1: a/b repetition evidence is incomplete (missing b)",
+      "seed 2: a/b repetition evidence is incomplete (missing b)"
+    ],
+    "inputs": {
+      "a_runs": {
+        "0": {
+          "condition_id": "0b11bde3385b0552d582c069e43c72c6b147ad6bb6d2614882f13175464fd720",
+          "config": {
+            "diagnostic_epochs": [
+              10,
+              50,
+              100
+            ],
+            "epochs": 100,
+            "grad_clip": 1.0,
+            "hidden_size": 32,
+            "layers": 1,
+            "learning_rate": 0.003,
+            "model": "GRU",
+            "node_chunk": 2048,
+            "seed": 0,
+            "threads": 1
+          },
+          "evidence_sha256": "1629b51d4c61985b4d336a16ed3f44b4b3c019e14f031dfa8a302179b5aee1c1",
+          "run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+          "run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+          "state": "completed",
+          "validation": {
+            "MAE": 125.69969828073467,
+            "MSE": 243984.3029816347,
+            "epoch": 70,
+            "updates": 1330
+          }
+        },
+        "1": {
+          "condition_id": "104354799511fb72d85693648e1eccb7a9f382e59cfdabd4c1d854d23c9f6f4b",
+          "config": {
+            "diagnostic_epochs": [
+              10,
+              50,
+              100
+            ],
+            "epochs": 100,
+            "grad_clip": 1.0,
+            "hidden_size": 32,
+            "layers": 1,
+            "learning_rate": 0.003,
+            "model": "GRU",
+            "node_chunk": 2048,
+            "seed": 1,
+            "threads": 1
+          },
+          "evidence_sha256": "b6d3bb16282b8f189f1f13c3b2d91e964d7fb421e2d06edf5cbdeded4862bdd4",
+          "run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p02-t006-r0-gru-s1-a-20261108-01",
+          "run_id": "p02-t006-r0-gru-s1-a-20261108-01",
+          "state": "completed",
+          "validation": {
+            "MAE": 118.39960726160905,
+            "MSE": 186487.28297138642,
+            "epoch": 100,
+            "updates": 1900
+          }
+        },
+        "2": {
+          "condition_id": "ad694987bba2cfb2028133c17e46c56b9e4ea389255c3a65f270d158e4d0af7b",
+          "config": {
+            "diagnostic_epochs": [
+              10,
+              50,
+              100
+            ],
+            "epochs": 100,
+            "grad_clip": 1.0,
+            "hidden_size": 32,
+            "layers": 1,
+            "learning_rate": 0.003,
+            "model": "GRU",
+            "node_chunk": 2048,
+            "seed": 2,
+            "threads": 1
+          },
+          "evidence_sha256": "82939383ba998375a0315949df8a3631f8e10c1dc961f16559995348574e7cc2",
+          "run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p02-t006-r0-gru-s2-a-20261108-01",
+          "run_id": "p02-t006-r0-gru-s2-a-20261108-01",
+          "state": "completed",
+          "validation": {
+            "MAE": 114.04571287480836,
+            "MSE": 212087.37518981405,
+            "epoch": 100,
+            "updates": 1900
+          }
+        }
+      },
+      "b_runs": {
+        "0": {
+          "condition_id": "0b11bde3385b0552d582c069e43c72c6b147ad6bb6d2614882f13175464fd720",
+          "config": {
+            "diagnostic_epochs": [
+              10,
+              50,
+              100
+            ],
+            "epochs": 100,
+            "grad_clip": 1.0,
+            "hidden_size": 32,
+            "layers": 1,
+            "learning_rate": 0.003,
+            "model": "GRU",
+            "node_chunk": 2048,
+            "seed": 0,
+            "threads": 1
+          },
+          "evidence_sha256": "6b802e55c1c85da4661690a88a203bb8751b75cdcf027fa5de0a76065988c551",
+          "run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p02-t006-r0-gru-s0-b-20261108-01",
+          "run_id": "p02-t006-r0-gru-s0-b-20261108-01",
+          "state": "completed"
+        }
+      }
+    },
+    "kind": "diagnostics",
+    "learning_ready": false,
+    "note": "learning_ready states only that the frozen section-5 software gates all evaluated true; it is not research acceptance, graph benefit or a claim of full convergence",
+    "required_epochs": 100,
+    "scientific_version": "P2-effective-training-L6-H3-v1",
+    "selection_sha256": "60946aae367202cfe349afdb86989ffc3ae7a10ed31f9afc40f33285c82bead7",
+    "status": "fail",
+    "summary": {
+      "complete_comparison": false,
+      "complete_seed_count": 3,
+      "failed_or_incomplete": [
+        {
+          "reason": "missing repetition b",
+          "role": "b",
+          "seed": 1
+        },
+        {
+          "reason": "missing repetition b",
+          "role": "b",
+          "seed": 2
+        }
+      ],
+      "note": "failed or incomplete seeds are retained here and never dropped from a claimed complete comparison",
+      "per_seed": [
+        {
+          "a_run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+          "a_state": "completed",
+          "b_run_id": "p02-t006-r0-gru-s0-b-20261108-01",
+          "b_state": "completed",
+          "seed": 0,
+          "selected_epoch": 70,
+          "validation_MAE": 125.69969828073467,
+          "validation_MSE": 243984.3029816347
+        },
+        {
+          "a_run_id": "p02-t006-r0-gru-s1-a-20261108-01",
+          "a_state": "completed",
+          "b_run_id": null,
+          "b_state": "missing",
+          "seed": 1,
+          "selected_epoch": 100,
+          "validation_MAE": 118.39960726160905,
+          "validation_MSE": 186487.28297138642
+        },
+        {
+          "a_run_id": "p02-t006-r0-gru-s2-a-20261108-01",
+          "a_state": "completed",
+          "b_run_id": null,
+          "b_state": "missing",
+          "seed": 2,
+          "selected_epoch": 100,
+          "validation_MAE": 114.04571287480836,
+          "validation_MSE": 212087.37518981405
+        }
+      ],
+      "selected_learning_rate": 0.003,
+      "selection_status": "frozen",
+      "validation_MAE": {
+        "count": 3,
+        "mean": 119.38167280571736,
+        "sample_sd": 5.888733608347333
+      },
+      "validation_MSE": {
+        "count": 3,
+        "mean": 214186.32038094508,
+        "sample_sd": 28805.919629500673
+      },
+      "winner_run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01"
+    },
+    "test_scores_used": false
+  },
+  "status": "failed",
+  "tolerances": {
+    "budget_tail_relative": 0.01,
+    "learning_train_reduction": 0.1,
+    "learning_validation_reduction": 0.05,
+    "repetition_normalized_mae": 1e-06,
+    "zero_mae_improvement": 0.05
+  },
+  "version": 1
+}

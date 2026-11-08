@@ -1,0 +1,124 @@
+{
+  "accounting": {
+    "limit_seconds": 43200,
+    "mode": "live-batch"
+  },
+  "artifact_format_version": 2,
+  "b_used_for_selection": false,
+  "block_id": "p02-t006-r0-gru-20261108-01",
+  "candidates": [
+    {
+      "condition_id": "0d5ad08e905f52c0228bc36352d97359b29334aca37c9ac522db9f2fbfcc7fc8",
+      "config": {
+        "diagnostic_epochs": [
+          10,
+          50,
+          100
+        ],
+        "epochs": 100,
+        "grad_clip": 1.0,
+        "hidden_size": 32,
+        "layers": 1,
+        "learning_rate": 0.001,
+        "model": "GRU",
+        "node_chunk": 2048,
+        "seed": 0,
+        "threads": 1
+      },
+      "data_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+      "dataset": "r0",
+      "keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+      "learning_rate": 0.001,
+      "message": null,
+      "mode": "count",
+      "model": "GRU",
+      "protocol_controls_complete": true,
+      "protocol_sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2",
+      "purpose": "formal",
+      "roles": {
+        "candidate_role": "screening",
+        "repeat_role": "a"
+      },
+      "run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p02-t006-r0-gru-s0-lr1e3-a-20261108-01",
+      "run_id": "p02-t006-r0-gru-s0-lr1e3-a-20261108-01",
+      "run_sha256": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+      "seed": 0,
+      "selected_epoch": 100,
+      "status": "complete",
+      "validation_MAE": 115.15263099659667,
+      "validation_MSE": 432771.8430923054
+    },
+    {
+      "condition_id": "0b11bde3385b0552d582c069e43c72c6b147ad6bb6d2614882f13175464fd720",
+      "config": {
+        "diagnostic_epochs": [
+          10,
+          50,
+          100
+        ],
+        "epochs": 100,
+        "grad_clip": 1.0,
+        "hidden_size": 32,
+        "layers": 1,
+        "learning_rate": 0.003,
+        "model": "GRU",
+        "node_chunk": 2048,
+        "seed": 0,
+        "threads": 1
+      },
+      "data_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+      "dataset": "r0",
+      "keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+      "learning_rate": 0.003,
+      "message": null,
+      "mode": "count",
+      "model": "GRU",
+      "protocol_controls_complete": true,
+      "protocol_sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2",
+      "purpose": "formal",
+      "roles": {
+        "candidate_role": "screening",
+        "repeat_role": "a"
+      },
+      "run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+      "run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+      "run_sha256": "bf5abed8a17403c1a5a87955c39d835d8df902ab",
+      "seed": 0,
+      "selected_epoch": 70,
+      "status": "complete",
+      "validation_MAE": 125.69969828073467,
+      "validation_MSE": 243984.3029816347
+    }
+  ],
+  "eliminated": [
+    {
+      "learning_rate": 0.001,
+      "reason": "higher validation MSE 432772 than 243984",
+      "run_id": "p02-t006-r0-gru-s0-lr1e3-a-20261108-01"
+    }
+  ],
+  "kind": "selection-report",
+  "purpose": "formal",
+  "scientific_version": "P2-effective-training-L6-H3-v1",
+  "selection_sha256": "60946aae367202cfe349afdb86989ffc3ae7a10ed31f9afc40f33285c82bead7",
+  "status": "frozen",
+  "test_scores_used": false,
+  "tie": false,
+  "winner": {
+    "learning_rate": 0.003,
+    "reason": "lowest best-validation original-unit MSE",
+    "run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+    "run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+    "selected_epoch": 70,
+    "selection_metric": "best validation original-unit MSE",
+    "validation_MAE": 125.69969828073467,
+    "validation_MSE": 243984.3029816347
+  },
+  "winner_as_a": {
+    "condition_id": "0b11bde3385b0552d582c069e43c72c6b147ad6bb6d2614882f13175464fd720",
+    "note": "the winning seed-0 screening trajectory is reused as repetition a by link; it is not refitted",
+    "repeat_role": "a",
+    "run_dir": "/Users/watuji/da_chuang/repos/benchmark/research/runs/p02-t006-r0-gru-s0-lr3e3-a-20261108-01",
+    "run_id": "p02-t006-r0-gru-s0-lr3e3-a-20261108-01"
+  }
+}

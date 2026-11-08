@@ -1,0 +1,36 @@
+{
+  "cpu_count": 10,
+  "determinism": {
+    "default_dtype": "torch.float32",
+    "deterministic_algorithms": false,
+    "num_threads": 1
+  },
+  "device": "cpu",
+  "machine": "arm64",
+  "packages": {
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "psutil": "7.2.2",
+    "pyarrow": "17.0.0",
+    "torch": "2.14.1"
+  },
+  "platform": "macOS-27.2-arm64-arm-64bit",
+  "processor": "arm",
+  "python_executable": "/opt/homebrew/Caskroom/miniconda/base/envs/job-sdf-baseline/bin/python",
+  "python_version": "3.11.17 (main, Oct  1 2026, 20:09:52) [Clang 20.1.8 ]",
+  "python_version_info": [
+    3,
+    11,
+    17
+  ],
+  "repo_root": "/Users/watuji/da_chuang/repos/benchmark",
+  "system": "Darwin",
+  "thread_environment": {
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "threads": 1
+}
