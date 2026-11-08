@@ -654,6 +654,180 @@ clock measurements stay outside deterministic graph identity. Saved checks also
 require consistent generator source hashes and recorded Python/package metadata;
 they validate those saved records without reading the original sources.
 
+### 4.7 P02 effective recurrent entry (`benchmark.multivariate_time_series`)
+
+`benchmark/multivariate_time_series/effective_temporal_training.py` is the
+protocol-isolated CPU GRU/LSTM entry for `P2-effective-training-L6-H3-v1`
+(`research/phases/P02/protocol.md`, sections 2–7). It is intentionally **staged**
+instead of one implicit train-then-test call:
+
+```text
+preflight -> fit -> select -> diagnose -> report
+                          \-> recompute / compare (saved evidence only)
+preflight -> resume (parent-linked recovery)
+```
+
+`fit` receives only training and validation observations; the four rolling test
+windows 24..27 are constructed exclusively by the explicit `report` stage after
+the frozen selection and the section-5 validation diagnostics.
+
+**Dedicated environment.** This entry needs a CPU PyTorch build plus NumPy,
+pandas, PyArrow and psutil. It does not need the root CUDA/DGL requirements:
+
+```bash
+conda activate job-sdf-baseline
+python -m pip install --no-cache-dir numpy pandas pyarrow torch psutil
+```
+
+The CLI forces `OMP/OPENBLAS/MKL/NUMEXPR/VECLIB` and torch to one thread before
+torch is imported, and fits use CPU float32 with deterministic algorithms.
+
+**Purpose and namespaces.** `--purpose development` is the default and writes the
+ignored `scratch/effective-temporal/`; `--purpose formal` writes
+`research/runs/`. A development output that resolves inside `research/runs/`
+(including through a symlink alias) is rejected before any directory or worker is
+created. Purpose never changes a scientific calculation. Formal operation
+requires a complete 100-epoch protocol trajectory and is a research-side
+authorization decision, not an implementation action.
+
+Commands (run from the repository root; one worker at a time, fresh
+non-overwriting run identity):
+
+```bash
+# machine-readable preflight; works without real data
+python -m benchmark.multivariate_time_series.effective_temporal_training preflight \
+    --data-name r0 --model GRU --seed 0 --purpose development \
+    --run-id probe-r0-preflight --output-root scratch/effective-temporal
+
+# two seed-0 learning-rate screening candidates (1e-3 and 3e-3)
+python -m benchmark.multivariate_time_series.effective_temporal_training fit \
+    --data-name r0 --model GRU --seed 0 --learning-rate 1e-3 \
+    --candidate-role screening --repeat-role a \
+    --run-id p02-r0-gru-s0-lr1e-3 --purpose development \
+    --output-root scratch/effective-temporal
+python -m benchmark.multivariate_time_series.effective_temporal_training fit \
+    --data-name r0 --model GRU --seed 0 --learning-rate 3e-3 \
+    --candidate-role screening --repeat-role a \
+    --run-id p02-r0-gru-s0-lr3e-3 --purpose development \
+    --output-root scratch/effective-temporal
+
+# freeze the selection (winner is reused as repetition a by link, not refitted)
+python -m benchmark.multivariate_time_series.effective_temporal_training select \
+    --block-id p02-r0-gru --purpose development \
+    --output-root scratch/effective-temporal/blocks \
+    --candidate scratch/effective-temporal/p02-r0-gru-s0-lr1e-3 \
+    --candidate scratch/effective-temporal/p02-r0-gru-s0-lr3e-3
+
+# repetitions a for seeds 1/2 (seed 0 comes from the linked winner) and b for 0/1/2
+python -m benchmark.multivariate_time_series.effective_temporal_training fit \
+    --data-name r0 --model GRU --seed 1 --learning-rate 1e-3 \
+    --candidate-role confirmation --repeat-role a \
+    --run-id p02-r0-gru-s1-a --purpose development \
+    --output-root scratch/effective-temporal
+# ... and the equivalent b runs with --repeat-role b
+
+# section-5 gates from saved evidence (incomplete evidence never becomes a pass);
+# each run reserves a fresh <block>/diagnostics/<diagnostics-id>/ directory
+python -m benchmark.multivariate_time_series.effective_temporal_training diagnose \
+    --block scratch/effective-temporal/blocks/p02-r0-gru --purpose development \
+    --a-run 0=scratch/effective-temporal/p02-r0-gru-s0-lr1e-3 \
+    --a-run 1=scratch/effective-temporal/p02-r0-gru-s1-a \
+    --a-run 2=scratch/effective-temporal/p02-r0-gru-s2-a \
+    --b-run 0=scratch/effective-temporal/p02-r0-gru-s0-b \
+    --b-run 1=scratch/effective-temporal/p02-r0-gru-s1-b \
+    --b-run 2=scratch/effective-temporal/p02-r0-gru-s2-b \
+    --ridge <identity-checked Ridge validation evidence.json> \
+    --report scratch/effective-temporal/reports/p02-r0-gru-diagnose.json
+
+# explicit four-window test report after the selection/diagnostics are frozen
+python -m benchmark.multivariate_time_series.effective_temporal_training report \
+    --data-name r0 \
+    --block scratch/effective-temporal/blocks/p02-r0-gru \
+    --run scratch/effective-temporal/p02-r0-gru-s0-lr1e-3 \
+    --run-id p02-r0-gru-test-report --purpose development \
+    --output-root scratch/effective-temporal
+# optional coverage evidence: --graph <raw graph parquet> or --mask-bundle <npz>
+
+# saved-only checks (no source demand/graph read, no fitting, no torch needed)
+python -m benchmark.multivariate_time_series.effective_temporal_training recompute \
+    --run-dir scratch/effective-temporal/p02-r0-gru-test-report \
+    --report scratch/effective-temporal/reports/p02-r0-gru-recompute.json
+python -m benchmark.multivariate_time_series.effective_temporal_training compare \
+    --run-a scratch/effective-temporal/p02-r0-gru-s0-a \
+    --run-b scratch/effective-temporal/p02-r0-gru-s0-b \
+    --report scratch/effective-temporal/reports/p02-r0-gru-repeat.json
+
+# parent-linked recovery from the last complete epoch
+python -m benchmark.multivariate_time_series.effective_temporal_training resume \
+    --parent scratch/effective-temporal/p02-r0-gru-s1-a \
+    --run-id p02-r0-gru-s1-a-resume --purpose development \
+    --output-root scratch/effective-temporal --data-name r0
+```
+
+`fit` and `resume` accept the full control surface explicitly:
+`--epochs` (frozen at 100), `--hidden-size`, `--layers`, `--node-chunk`,
+`--grad-clip`, `--threads` (only 1), `--ledger`, `--batch-id`,
+`--remaining-fits`, `--monitor-interval`, `--memory-limit-bytes`,
+`--setup-seconds`, `--takeover-stale`. Any control that differs from the frozen
+protocol is a labelled development override and cannot be used for a formal
+report. For software rehearsal only, `fit`/`resume` accept
+`--memory-available-bytes`/`--disk-free-bytes` to inject the preflight resource
+readings; the flags are rejected for `--purpose formal`.
+
+**Exit codes.** `0` pass/completed, `1` failed, `2` usage or protocol violation,
+`3` paused (resource/cost/batch stop, recovery point preserved), `4` incomplete
+(unfrozen selection, failing/incomplete gates, or a labelled development report).
+
+**Outputs (artifact format v2).** A fit/resume directory contains
+`config.json`, `command.json`, `provenance.json`, `status.json`, `report.json`,
+`summary.md`, `keys.npy`, `months.json`, `splits.json`, `preprocessing.json`,
+`masks.npz`, `history.json`, `scores.json`, `gradients.json`, `baselines.json`,
+`fit-diagnostics.json`, `validation/{prediction,gold}.npy`,
+`validation/metrics.json`, `weights/best.pt`, `recovery/last.pt`, `cost.json`,
+`monitor.json`, `arrays-sha256.json` and `events.jsonl`. A diagnose execution reserves
+`<block>/diagnostics/<diagnostics-id>/` with `diagnostics.json`, `cost.json`,
+`provenance.json`, `command.json`, `report.json` and `summary.md`, and updates
+the `<block>/latest-diagnostics.json` pointer. A report directory adds
+`test/{prediction,gold}.npy`, `test/windows.json`, copied validation/selection/
+diagnostics evidence and `coverage.json`; `report --diagnostics <dir>` may select
+an explicit diagnostics execution. Only `summary.md`, `provenance.json`,
+`command.json` and `report.json` are Git-readable entries under the existing
+generic ignore policy; full arrays/checkpoints remain local evidence and their
+delivery/sealing is research-side.
+
+**Check contract.** `recompute` and `compare` read only saved evidence and write
+exactly one exclusive JSON report; the destination is refused when it exists or
+resolves inside a consumed run. `compare` validates the scientific condition
+first (dataset, data contents, canonical keys, split, protocol content, model,
+seed, learning rate, effective configuration and environment) and only then the
+normalized MAE bound `|a-b|/max(1,a,b) <= 1e-6` plus the maximum absolute
+prediction difference; test predictions are compared after final reporting.
+A failure still writes a report and exits nonzero.
+
+**Recovery contract.** `recovery/last.pt` is published atomically at every
+complete epoch and contains model/optimizer, RNG, epoch/update, next-window
+position, history, best snapshot, condition/data identity and the ledger
+reference. `resume` reserves a new output identity linked to the parent,
+validates data/protocol/configuration/environment/budget, and restarts only from
+the last complete epoch; the parent directory is never modified. Legacy
+checkpoints without `artifact_format_version` (and the old single-window
+`checkpoint.pt` format) are rejected rather than upgraded.
+
+**Diagnostics.** `fit` saves fixed-parameter original-unit train/validation MSE
+and MAE at initialization, epochs 10/50/100 and the selected checkpoint, the
+complete per-epoch validation history, and mixed-parameter online training loss
+(clearly labelled as different-parameter). `diagnose` implements P02 section 5
+without changing thresholds and reports per-seed and aggregate gate evidence,
+including the all-zero diagnostic when a denominator is zero. `learning_ready`
+is a computed software state; it is not research acceptance, graph benefit or a
+claim of convergence.
+
+**Tests** (CPU, synthetic fixtures, no source data):
+
+```bash
+python -m unittest discover -s benchmark/multivariate_time_series/tests
+```
+
 ## 5 Directory Structure
 
 The expected structure of files is:
@@ -673,6 +847,10 @@ Job-SDF
  |    |    |-- cli.py                 # run / recompute / compare / align-v2 commands
  |    |    |-- requirements.txt       # NumPy + pandas + PyArrow only
  |    |    |-- tests/                 # CPU unittest suite with synthetic fixtures
+ |    |-- multivariate_time_series    # P02 effective recurrent entry (L6/H3, staged CLI)
+ |    |    |-- effective_temporal_training.py  # preflight/fit/select/diagnose/report checks
+ |    |    |-- temporal/              # protocol, data adapter, engine, diagnostics, recovery
+ |    |    |-- tests/                 # CPU fixture suite (synthetic Parquet + saved evidence)
  |-- dataset  # Job-SDF_data
  |    |-- demand
  |    |-- entity_map
