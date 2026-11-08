@@ -775,6 +775,10 @@ protocol is a labelled development override and cannot be used for a formal
 report. For software rehearsal only, `fit`/`resume` accept
 `--memory-available-bytes`/`--disk-free-bytes` to inject the preflight resource
 readings; the flags are rejected for `--purpose formal`.
+The RSS limit must be a positive integer. Formal `fit`/`resume` reject values
+above 8 GiB before starting a worker; smaller conservative limits are allowed.
+Development RSS overrides are recorded in effective protocol controls and make
+those controls incomplete, including when inherited by a resumed trajectory.
 
 **Exit codes.** `0` pass/completed, `1` failed, `2` usage or protocol violation,
 `3` paused (resource/cost/batch stop, recovery point preserved), `4` incomplete
@@ -809,9 +813,14 @@ prediction difference; test predictions are compared after final reporting.
 A usable destination retains a failure report and exits nonzero. Saved checks
 need NumPy and the saved artifacts; torch, pandas, Arrow, demand and graph readers
 are not required. Recompute derives sample counts from arrays and canonical keys.
-When saved evidence links to an available active batch ledger, stage/check time
-is billed there, outside the consumed directories. Offline copies remain checkable
-without the original ledger.
+When saved evidence links to an available active batch ledger, select, diagnose,
+report, recompute and compare enforce its cumulative 12-hour budget before work
+and at cancellation points between saved reads, metric units, seeds and inference
+chunks. Exhaustion retains paused/failed output and bills consumed time, including
+failure publication, outside the consumed directories. A native array or file
+operation finishes before the next cancellation point. Offline copies remain
+checkable without the original ledger; reports identify `live-batch` or `offline`
+accounting. An explicitly requested live ledger must exist.
 
 Ridge validation JSON must supply `dataset`, `data_sha256`, `node_keys_sha256`,
 `split.validation_starts` and `split.validation_target_months` matching the

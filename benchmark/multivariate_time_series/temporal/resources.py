@@ -10,6 +10,7 @@ preceding complete recovery state when it stops mid-epoch.
 
 from __future__ import annotations
 
+import contextvars
 import importlib.util
 import json
 import uuid
@@ -866,13 +867,132 @@ def _check_recovery(
         return {"status": "fail", "reason": f"{type(exc).__name__}: {exc}"}
 
 
-def account_stage(function):
-    """Bill active saved-check/selection/report work to a linked live batch.
+class BatchBudgetExceeded(ResourceError):
+    """A live stage has consumed the remaining cumulative batch budget."""
 
-    Offline copies remain independently checkable when their batch ledger is
-    unavailable. A live linked ledger is outside all consumed evidence roots;
-    accounting never rewrites the saved runs or creates another check report.
+
+_STAGE_BUDGET = contextvars.ContextVar("temporal_stage_budget", default=None)
+
+
+def check_stage_budget() -> None:
+    """Cancellation point between saved reads, metrics, seeds and inference chunks.
+
+    Native array/file operations finish before the next cancellation point.
+    Failure publication runs with this guard detached so evidence can be retained.
     """
+    guard = _STAGE_BUDGET.get()
+    if guard is not None:
+        guard.check()
+
+
+def stage_accounting() -> Dict[str, Any]:
+    guard = _STAGE_BUDGET.get()
+    return {"mode": "live-batch" if guard is not None else "offline",
+            "limit_seconds": protocol.BATCH_SECONDS if guard is not None else None}
+
+
+def register_stage_output(run) -> None:
+    guard = _STAGE_BUDGET.get()
+    if guard is not None:
+        guard.outputs.append(run)
+
+
+def register_stage_report(path: Path) -> None:
+    guard = _STAGE_BUDGET.get()
+    if guard is not None:
+        guard.reports[Path(path)] = Path(path).stat().st_ino
+
+
+class _StageBudget:
+    def __init__(self, ledgers, clock, started, execution_id, name):
+        self.ledgers, self.clock, self.started = ledgers, clock, started
+        self.execution_id, self.name = execution_id, name
+        self.before = [ledger.active_seconds() for ledger in ledgers]
+        self.last_refresh = started
+        self.tripped = False
+        self.outputs = []
+        self.reports = {}
+
+    def check(self):
+        now = self.clock()
+        elapsed = max(0.0, float(now - self.started))
+        if now - self.last_refresh >= 1.0:
+            for index, ledger in enumerate(self.ledgers):
+                current = Ledger(ledger.path, batch_id=ledger.batch_id)
+                self.before[index] = sum(float(entry["seconds"]) for entry in current.payload["entries"]
+                                         if entry["execution_id"] != self.execution_id
+                                         and entry["kind"] in {"measured", "replayed"})
+                current.record(execution_id=self.execution_id, run_id=self.name,
+                               seconds=elapsed, status="running", note="live stage heartbeat")
+            self.last_refresh = now
+        self.tripped = self.tripped or any(spent + elapsed >= protocol.BATCH_SECONDS for spent in self.before)
+        if self.tripped:
+            raise BatchBudgetExceeded("the cumulative live batch budget is exhausted (12 h); stage paused")
+
+
+def _pause_stage(function, request, directories, guard, exc, repo=None):
+    # This runs after detaching cancellation: publishing failure evidence is
+    # required even though no further scientific/check work may run.
+    from . import checks
+    operation = function.__name__.removeprefix("run_")
+    consumed = [("saved input", path, "dir") for path in directories]
+    consumed.extend((key, request[key], "file") for key in ("ridge_path", "diagnostics_dir")
+                    if request.get(key))
+    destination = request.get("report_path")
+    if destination:
+        destination = Path(destination)
+        owned = (destination in guard.reports and destination.exists()
+                 and destination.stat().st_ino == guard.reports[destination])
+        if not owned:
+            checks.reject_destination(destination, consumed)
+        artifacts.check_development_namespace(request.get("purpose", "development"), destination)
+        payload = checks.failure_envelope(operation, argv=request.get("argv") or [],
+                                          inputs={"directories": [str(p.resolve()) for p in directories]},
+                                          tolerances={}, exc=exc)
+        payload["accounting"] = {"mode": "live-batch", "limit_seconds": protocol.BATCH_SECONDS}
+        if owned:
+            # Only a report exclusively created by THIS invocation can be
+            # invalidated if its final publication itself crossed the budget.
+            destination.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        else:
+            checks.write_report(destination, payload)
+        return {"status": "failed", "report_path": str(destination),
+                "result": payload["result"], "learning_ready": False,
+                "accounting": payload["accounting"]}
+    if not guard.outputs:
+        root = Path(request["output_root"]) if request.get("output_root") else (
+            artifacts.blocks_root(request["purpose"], repo) if operation == "select"
+            else artifacts.default_root(request["purpose"], repo))
+        identity = str(request["block_id"] if operation == "select" else request["run_id"])
+        checks.reject_destination(root / identity, consumed)
+        if operation == "select":
+            run = artifacts.reserve_block(str(request["block_id"]), purpose=request["purpose"],
+                                          operation=operation,
+                                          output_root=root, repo=repo)
+        else:
+            run = artifacts.reserve_run(str(request["run_id"]), purpose=request["purpose"],
+                                        operation=operation,
+                                        output_root=root, repo=repo)
+        guard.outputs.append(run)
+    run = guard.outputs[-1]
+    payload = {"status": "paused", "operation": operation, "reason": str(exc),
+               "accounting": {"mode": "live-batch", "limit_seconds": protocol.BATCH_SECONDS}}
+    selection_path = run.path / "selection.json"
+    if operation == "select" and selection_path.is_file():
+        selection = json.loads(selection_path.read_text(encoding="utf-8"))
+        selection.update(status="paused", frozen=False)
+        selection["selection_sha256"] = protocol.content_sha256(
+            {key: value for key, value in selection.items() if key != "selection_sha256"})
+        run.write_json("selection.json", selection)
+    run.write_json("report.json", payload)
+    run.set_status("paused", detail=str(exc))
+    artifacts.write_summary(run, f"# {run.run_id}\n\nPaused: {exc}\n")
+    return {**payload, "run_dir": str(run.path), "block_dir": str(run.path),
+            "report_path": str(run.path / "report.json"), "selection": None}
+
+
+def account_stage(function):
+    """Enforce and bill live stages; absent original ledgers mean offline checks."""
     import functools
     import inspect
 
@@ -889,6 +1009,15 @@ def account_stage(function):
         directories.extend(Path(path) for path in request.get("candidates", []))
         for key in ("a_runs", "b_runs"):
             directories.extend(Path(path) for path in (request.get(key) or {}).values())
+        # Include a selection's linked winner even when omitted from run arguments.
+        if request.get("block_dir"):
+            try:
+                selection = json.loads((Path(request["block_dir"]) / "selection.json").read_text(encoding="utf-8"))
+                winner = (selection.get("winner") or {}).get("run_dir")
+                if winner:
+                    directories.append(Path(winner))
+            except (OSError, ValueError, TypeError):
+                pass  # the stage retains responsibility for malformed input
         budgets = []
         for directory in directories:
             config = directory / "config.json"
@@ -896,13 +1025,14 @@ def account_stage(function):
                 try:
                     document = json.loads(config.read_text(encoding="utf-8"))
                 except (OSError, ValueError):
-                    continue  # the stage writes its own malformed-input failure report
+                    continue
                 if document.get("budget"):
                     budgets.append(document["budget"])
         explicit = request.get("ledger_path")
         if explicit:
-            budgets = [{"path": explicit, "batch_id": request.get("batch_id", "p02-t006")}]
-        # A check of offline evidence must not require its original machine.
+            if not Path(explicit).is_file():
+                raise ResourceError("explicit live batch ledger is unavailable")
+            budgets.append({"path": explicit, "batch_id": request.get("batch_id", "p02-t006")})
         live = {str(Path(item["path"]).resolve()): item for item in budgets
                 if item.get("path") and Path(item["path"]).is_file()}
         ledgers = []
@@ -912,17 +1042,26 @@ def account_stage(function):
                 raise ResourceError("batch accounting ledger must be outside consumed evidence directories")
             ledgers.append(Ledger(resolved, batch_id=budget["batch_id"]))
         execution_id = f"{function.__name__}@{uuid.uuid4().hex}"
+        guard = _StageBudget(ledgers, clock, started, execution_id, function.__name__)
+        token = _STAGE_BUDGET.set(guard if ledgers else None)
         state = "failed"
         try:
+            check_stage_budget()  # exhausted batches never enter the stage
             result = function(*args, **kwargs)
+            check_stage_budget()  # includes final output/publication time
+            result["accounting"] = stage_accounting()
             state = str(result.get("status", "completed"))
             return result
+        except BatchBudgetExceeded as exc:
+            _STAGE_BUDGET.set(None)
+            state = "paused"
+            return _pause_stage(function, request, directories, guard, exc, arguments.get("repo"))
         finally:
+            _STAGE_BUDGET.reset(token)
             elapsed = max(0.0, float(clock() - started))
             for ledger in ledgers:
-                # Reload so nested calls or another sequential stage are retained.
                 current = Ledger(ledger.path, batch_id=ledger.batch_id)
                 current.record(execution_id=execution_id, run_id=function.__name__,
                                seconds=elapsed, status=state,
-                               note="active selection/diagnostic/report/check work")
+                               note="active selection/diagnostic/report/check work including failure publication")
     return wrapped

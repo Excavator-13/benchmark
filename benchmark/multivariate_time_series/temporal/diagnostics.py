@@ -29,6 +29,7 @@ class DiagnosticsError(protocol.ProtocolError):
 
 
 def _read_json(path: Path) -> Any:
+    resources.check_stage_budget()
     path = Path(path)
     if not path.exists():
         return None
@@ -36,6 +37,7 @@ def _read_json(path: Path) -> Any:
 
 
 def _load_array(path: Path) -> Optional[np.ndarray]:
+    resources.check_stage_budget()
     path = Path(path)
     if not path.exists():
         return None
@@ -43,6 +45,7 @@ def _load_array(path: Path) -> Optional[np.ndarray]:
 
 
 def evidence_sha256(directory: Path) -> str:
+    resources.check_stage_budget()
     paths = ("config.json", "provenance.json", "status.json", "history.json", "scores.json",
              "validation/metrics.json", "validation/prediction.npy", "validation/gold.npy",
              "weights/best.pt", "baselines.json", "fit-diagnostics.json")
@@ -53,6 +56,7 @@ def evidence_sha256(directory: Path) -> str:
 
 def load_run_evidence(run_dir: Path) -> Dict[str, Any]:
     """Load one completed (or failed) run's saved diagnostics evidence."""
+    resources.check_stage_budget()
     directory = Path(run_dir)
     config_doc = _read_json(directory / "config.json")
     if not isinstance(config_doc, dict):
@@ -112,6 +116,7 @@ def _gate_result(
     required_seeds: int = protocol.MIN_PASSING_SEEDS,
     evidence: Optional[Mapping[str, Any]] = None,
 ) -> Dict[str, Any]:
+    resources.check_stage_budget()
     passed = [row["seed"] for row in per_seed if row["status"] == PASS]
     failed = [row["seed"] for row in per_seed if row["status"] == FAIL]
     incomplete = [row["seed"] for row in per_seed if row["status"] == INCOMPLETE]
@@ -147,12 +152,14 @@ def gate_completeness(
     b_runs: Mapping[int, Mapping[str, Any]],
 ) -> Dict[str, Any]:
     """Gate 1: complete, finite trajectories with protocol controls and identity."""
+    resources.check_stage_budget()
     rows: List[Dict[str, Any]] = []
     reasons: List[str] = []
     for seed, role, evidence in (
         (seed, role, runs.get(seed)) for seed in protocol.SEEDS
         for role, runs in (("a", a_runs), ("b", b_runs))
     ):
+        resources.check_stage_budget()
         if evidence is None:
             rows.append({"seed": seed, "repeat_role": role, "status": INCOMPLETE,
                          "reason": f"no {role}-run"})
@@ -182,6 +189,7 @@ def gate_completeness(
             if epochs != list(range(1, len(records) + 1)):
                 problems.append("history epochs are not the ordered 1..N sequence")
             for record in records:
+                resources.check_stage_budget()
                 for key in (
                     "validation_MSE",
                     "validation_MAE",
@@ -189,6 +197,7 @@ def gate_completeness(
                     "pre_clip_norm_max",
                     "wall_seconds",
                 ):
+                    resources.check_stage_budget()
                     if not _finite(record.get(key)):
                         problems.append(
                             f"epoch {record.get('epoch')} has nonfinite {key}"
@@ -196,11 +205,13 @@ def gate_completeness(
                         break
         scores = evidence.get("scores") or {}
         for name in ("init", "10", "50", "100", "best"):
+            resources.check_stage_budget()
             block = scores.get(name)
             if not isinstance(block, dict):
                 incomplete.append(f"missing fixed-parameter {name} score block")
                 continue
             for key in ("MSE", "MAE"):
+                resources.check_stage_budget()
                 if not _finite((block.get("train") or {}).get(key)):
                     problems.append(f"{name} train {key} is nonfinite or missing")
                 if not _finite((block.get("validation") or {}).get(key)):
@@ -245,9 +256,11 @@ def gate_learning(
     a_runs: Mapping[int, Mapping[str, Any]],
 ) -> Dict[str, Any]:
     """Gate 2: fixed-parameter train MSE -10% and validation MSE -5% vs init."""
+    resources.check_stage_budget()
     rows: List[Dict[str, Any]] = []
     reasons: List[str] = []
     for seed in protocol.SEEDS:
+        resources.check_stage_budget()
         evidence = a_runs.get(seed)
         if evidence is None:
             rows.append({"seed": seed, "status": INCOMPLETE, "reason": "no a-run"})
@@ -260,6 +273,7 @@ def gate_learning(
         problems: List[str] = []
         incomplete: List[str] = []
         for split in ("train", "validation"):
+            resources.check_stage_budget()
             initial = (init.get(split) or {}).get("MSE")
             selected = (best.get(split) or {}).get("MSE")
             if not _finite(initial) or not _finite(selected):
@@ -325,9 +339,11 @@ def gate_beyond_zero(
     a_runs: Mapping[int, Mapping[str, Any]],
 ) -> Dict[str, Any]:
     """Gate 3: validation MAE improvement of at least 5% over the Zero baseline."""
+    resources.check_stage_budget()
     rows: List[Dict[str, Any]] = []
     reasons: List[str] = []
     for seed in protocol.SEEDS:
+        resources.check_stage_budget()
         evidence = a_runs.get(seed)
         if evidence is None:
             rows.append({"seed": seed, "status": INCOMPLETE, "reason": "no a-run"})
@@ -404,9 +420,11 @@ def gate_budget_tail(
     a_runs: Mapping[int, Mapping[str, Any]],
 ) -> Dict[str, Any]:
     """Gate 4: ``(b80-b100)/max(1e-12,b80) <= 1%`` for at least 2/3 seeds."""
+    resources.check_stage_budget()
     rows: List[Dict[str, Any]] = []
     reasons: List[str] = []
     for seed in protocol.SEEDS:
+        resources.check_stage_budget()
         evidence = a_runs.get(seed)
         if evidence is None:
             rows.append({"seed": seed, "status": INCOMPLETE, "reason": "no a-run"})
@@ -504,9 +522,11 @@ def gate_repetition(
     dataset: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Gate 5: every required same-condition a/b pair agrees within 1e-6."""
+    resources.check_stage_budget()
     rows: List[Dict[str, Any]] = []
     reasons: List[str] = []
     for seed in protocol.SEEDS:
+        resources.check_stage_budget()
         a = a_runs.get(seed)
         b = b_runs.get(seed)
         if a is None or b is None:
@@ -525,6 +545,7 @@ def gate_repetition(
         problems: List[str] = []
         incomplete: List[str] = []
         for label, run in (("a", a), ("b", b)):
+            resources.check_stage_budget()
             if run.get("state") != "completed":
                 incomplete.append(f"repetition {label} state is {run.get('state')!r}")
             if run["roles"].get("repeat_role") != label:
@@ -546,6 +567,7 @@ def gate_repetition(
                 f"{a.get('condition_id')} vs {b.get('condition_id')}"
             )
         for field in ("protocol_sha256", "environment", "source", "split", "config_payload"):
+            resources.check_stage_budget()
             if a.get(field) != b.get(field):
                 problems.append(f"a/b {field} differs")
         if a.get("data_sha256") != b.get("data_sha256"):
@@ -657,6 +679,7 @@ def _baseline_compatibility(
         provided["keys_sha256"] = provided["node_keys_sha256"]
     mismatches: List[str] = []
     for field in ("dataset", "data_sha256", "keys_sha256"):
+        resources.check_stage_budget()
         if not provided.get(field) or provided.get(field) != expected[field]:
             mismatches.append(
                 f"Ridge evidence {field}={provided.get(field)!r} does not match "
@@ -724,11 +747,13 @@ def summarize_per_seed(
     b_runs: Mapping[int, Mapping[str, Any]],
 ) -> Dict[str, Any]:
     """Per-seed metrics with mean/sample SD, retaining failed/incomplete seeds."""
+    resources.check_stage_budget()
     per_seed: List[Dict[str, Any]] = []
     complete_mse: List[float] = []
     complete_mae: List[float] = []
     failed: List[Dict[str, Any]] = []
     for seed in protocol.SEEDS:
+        resources.check_stage_budget()
         a = a_runs.get(seed)
         b = b_runs.get(seed)
         entry: Dict[str, Any] = {
@@ -784,6 +809,7 @@ def summarize_per_seed(
 
 def gate_evidence_identity(selection, a_runs, b_runs):
     """Bind all trajectories to the frozen winner and effective execution identity."""
+    resources.check_stage_budget()
     problems, missing = [], []
     winner = selection.get("winner") or {}
     if selection.get("status") != "frozen" or selection.get("frozen") is not True:
@@ -797,6 +823,7 @@ def gate_evidence_identity(selection, a_runs, b_runs):
         missing.append("seed-0 winner-as-a evidence is missing")
     else:
         for item in (winner, link):
+            resources.check_stage_budget()
             if not item.get("run_dir") or Path(item["run_dir"]).resolve() != Path(reference["run_dir"]).resolve():
                 problems.append("seed-0 a-run is not the frozen winner-as-a")
             if item.get("run_id") != reference.get("run_id"):
@@ -804,7 +831,9 @@ def gate_evidence_identity(selection, a_runs, b_runs):
         if link.get("condition_id") != reference.get("condition_id"):
             problems.append("winner-as-a condition differs")
     for seed in protocol.SEEDS:
+        resources.check_stage_budget()
         for role, runs in (("a", a_runs), ("b", b_runs)):
+            resources.check_stage_budget()
             run = runs.get(seed)
             if not run:
                 continue  # completeness reports absent trajectories
@@ -822,6 +851,7 @@ def gate_evidence_identity(selection, a_runs, b_runs):
             if run.get("condition_id") != expected:
                 problems.append(f"{label}: effective condition identity is invalid")
             for field in ("data_sha256", "keys_sha256", "protocol_sha256", "source", "environment", "split"):
+                resources.check_stage_budget()
                 value = run.get(field)
                 if not value or (isinstance(value, dict) and any(v is None for v in value.values())):
                     missing.append(f"{label}: {field} identity is missing")
@@ -848,6 +878,7 @@ def build_diagnostics(
     required_epochs: int = protocol.EPOCHS,
 ) -> Dict[str, Any]:
     """Run every section-5 gate and assemble the saved diagnostics record."""
+    resources.check_stage_budget()
     completeness = gate_completeness(a_runs, b_runs)
     learning = gate_learning(a_runs)
     beyond_zero = gate_beyond_zero(a_runs)
@@ -884,6 +915,7 @@ def build_diagnostics(
     summary = summarize_per_seed(selection, a_runs, b_runs)
     incomplete_reasons: List[str] = []
     for gate in gates.values():
+        resources.check_stage_budget()
         if gate["status"] == INCOMPLETE:
             incomplete_reasons.extend(gate.get("reasons", []))
     if baselines.get("status") != PASS:
@@ -956,6 +988,7 @@ def run_diagnose(request: Mapping[str, Any]) -> Dict[str, Any]:
     destination = Path(request["report_path"])
     consumed = [("block", block, "dir")]
     for role in ("a_runs", "b_runs"):
+        resources.check_stage_budget()
         consumed.extend((f"{role}/{seed}", path, "dir")
                         for seed, path in (request.get(role) or {}).items())
     if request.get("ridge_path"):

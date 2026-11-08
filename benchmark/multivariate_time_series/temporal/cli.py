@@ -311,6 +311,9 @@ def _config_payload(args: argparse.Namespace) -> Dict[str, Any]:
 
 
 def _preflight_request(args: argparse.Namespace, *, operation: str) -> Dict[str, Any]:
+    controls = protocol.resource_controls(
+        args.purpose, getattr(args, "memory_limit_bytes", protocol.MEMORY_STOP_BYTES)
+    )
     memory = getattr(args, "memory_available_bytes", None)
     disk = getattr(args, "disk_free_bytes", None)
     if args.purpose == "formal" and (memory is not None or disk is not None):
@@ -319,6 +322,7 @@ def _preflight_request(args: argparse.Namespace, *, operation: str) -> Dict[str,
             "rehearsal; a formal preflight must measure the machine"
         )
     return {
+        "resource_controls": controls,
         "purpose": args.purpose,
         "operation": operation,
         "data_name": getattr(args, "data_name", None),

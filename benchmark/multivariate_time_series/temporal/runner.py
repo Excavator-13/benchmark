@@ -164,6 +164,7 @@ def _fit_summary_text(
     result: temporal_engine.FitResult,
     data_identity: Mapping[str, Any],
     cost: Mapping[str, Any],
+    controls: Mapping[str, Any],
 ) -> str:
     best = result.best
     lines = [
@@ -173,7 +174,7 @@ def _fit_summary_text(
         f"- purpose: {purpose}",
         f"- encoder: {config.model}, seed {config.seed}, learning rate "
         f"{config.learning_rate:g}",
-        f"- protocol controls complete: {config.complete_protocol}",
+        f"- protocol controls complete: {controls['complete']}",
         f"- dataset: {data_identity.get('dataset')} "
         f"({data_identity.get('nodes')} nodes)",
         f"- demand source: {data_identity.get('source_path')}",
@@ -225,12 +226,21 @@ def run_fit(
 ) -> Dict[str, Any]:
     """Run one fit or resume stage and persist a complete format-v2 run."""
     purpose = protocol.validate_purpose(str(request["purpose"]))
+    resource_controls = protocol.resource_controls(
+        purpose, request.get("memory_limit_bytes", protocol.MEMORY_STOP_BYTES))
     operation = str(request.get("operation", "fit"))
     if operation not in {"fit", "resume"}:
         raise RunnerError(f"operation {operation!r} is not a fitting stage")
     config = protocol.FitConfig.from_payload(request["config"])
     if purpose == "formal":
         protocol.require_formal_controls(config)
+    controls = {
+        "complete": config.complete_protocol and resource_controls["complete"],
+        "deviations": config.deviations() + (
+            [f"development RSS override={resource_controls['rss_stop_bytes']}"]
+            if resource_controls["development_override"] else []),
+        "resources": resource_controls,
+    }
     roles = protocol.Roles(**request.get("roles", {})).validate()
     if roles.candidate_role == "screening":
         if config.seed != 0:
@@ -255,6 +265,14 @@ def run_fit(
             batch_id=request.get("batch_id"),
         )
         parent_config = parent["parent_config"]
+        inherited_controls = parent["parent_config_doc"].get("protocol_controls") or {}
+        inherited_resources = inherited_controls.get("resources") or {}
+        if inherited_resources.get("development_override") or inherited_resources.get("inherited_development_override"):
+            if purpose == "formal":
+                raise protocol.ProtocolError("formal resume cannot inherit development resource overrides")
+            controls["complete"] = False
+            controls["deviations"].append("parent trajectory used development resource overrides")
+            controls["resources"]["inherited_development_override"] = True
         if parent_config.to_payload() != config.to_payload():
             raise RunnerError(
                 "resume configuration must equal the parent trajectory configuration"
@@ -329,10 +347,7 @@ def run_fit(
             operation=operation,
             dataset_document=_dataset_document(data),
             config_payload=config.to_payload(),
-            protocol_controls={
-                "complete": config.complete_protocol,
-                "deviations": config.deviations(),
-            },
+            protocol_controls=controls,
             roles=roles.to_payload(),
             condition=condition,
             data_identity=identity,
@@ -372,9 +387,7 @@ def run_fit(
             or (lambda: resources.sample_process_tree_rss(os.getpid())),
             clock=clock,
             interval=interval,
-            limit_bytes=int(
-                request.get("memory_limit_bytes", protocol.MEMORY_STOP_BYTES)
-            ),
+            limit_bytes=resource_controls["rss_stop_bytes"],
             started_at=started,
         )
         watchdog.sample_once()
@@ -589,6 +602,7 @@ def run_fit(
             result=result, config=config, recovery_sha256=recovery_sha, cost=cost_payload
         )
         fit_report["purpose"] = purpose
+        fit_report["protocol_controls"] = controls
         if not usable:
             fit_report["status"] = "failed"
             run.write_json("report.json", fit_report)
@@ -602,6 +616,7 @@ def run_fit(
                     result=result,
                     data_identity=identity,
                     cost=cost_payload,
+                    controls=controls,
                 ),
             )
             run.set_status(
@@ -624,6 +639,7 @@ def run_fit(
                 result=result,
                 data_identity=identity,
                 cost=cost_payload,
+                controls=controls,
             ),
         )
         artifacts.write_array_manifest(run, protocol.RECOMPUTE_ARRAYS)
@@ -636,7 +652,7 @@ def run_fit(
             completed_epoch=result.completed_epoch,
             selected_epoch=result.best["epoch"],
             recovery_sha256=recovery_sha,
-            protocol_controls_complete=config.complete_protocol,
+            protocol_controls_complete=controls["complete"],
         )
         check_stop()  # includes final checkpoint, arrays, summaries and status writes
         return {
@@ -772,6 +788,7 @@ def run_select(request: Mapping[str, Any], *, repo: Optional[Path] = None) -> Di
             "artifact_format_version": protocol.ARTIFACT_FORMAT_VERSION,
             "scientific_version": protocol.SCIENTIFIC_VERSION,
             "kind": "selection-report",
+            "accounting": resources.stage_accounting(),
             "block_id": block.run_id,
             "purpose": purpose,
             "status": payload["status"],
@@ -810,6 +827,7 @@ def run_select(request: Mapping[str, Any], *, repo: Optional[Path] = None) -> Di
             "- automatic matrix scheduling: none",
         ]
         artifacts.write_summary(block, "\n".join(lines) + "\n")
+        resources.check_stage_budget()
         block.set_status(
             "selection_frozen" if payload["status"] == "frozen" else "selection_incomplete",
             selection_sha256=payload["selection_sha256"],
@@ -932,8 +950,13 @@ def run_report(
     diagnostics_payload = load_block_diagnostics(diagnostics_dir)
     winner_config_doc = checks.run_config(winner_dir)
     winner_config = protocol.FitConfig.from_payload(winner_config_doc["config"])
+    winner_controls = winner_config_doc.get("protocol_controls") or {
+        "complete": winner_config.complete_protocol, "deviations": winner_config.deviations()}
+    winner_complete = winner_config.complete_protocol and winner_controls.get("complete") is True
     if purpose == "formal":
         protocol.require_formal_controls(winner_config)
+        if not winner_complete:
+            raise protocol.ProtocolError("formal report requires complete effective resource controls")
     a_states: Dict[int, str] = {}
     b_states: Dict[int, str] = {}
     if diagnostics_payload:
@@ -1002,10 +1025,7 @@ def run_report(
             operation="report",
             dataset_document=_dataset_document(data),
             config_payload=winner_config.to_payload(),
-            protocol_controls={
-                "complete": winner_config.complete_protocol,
-                "deviations": winner_config.deviations(),
-            },
+            protocol_controls=winner_controls,
             roles=winner_config_doc.get("roles") or {},
             condition=condition,
             data_identity=identity,
@@ -1060,7 +1080,7 @@ def run_report(
             coverage=coverage_mask,
             coverage_provenance=coverage_provenance,
             scale=float(best_payload["scale"]),
-            protocol_complete=winner_config.complete_protocol,
+            protocol_complete=winner_complete,
             purpose=purpose,
         )
         report_payload["selection"] = {
@@ -1080,6 +1100,7 @@ def run_report(
             else None
         )
         report_payload["formal_blockers"] = blockers
+        report_payload["accounting"] = resources.stage_accounting()
         run.save_npy(
             protocol.RUN_DIRECTORY_FILES["test_prediction"], prediction
         )
@@ -1144,16 +1165,17 @@ def run_report(
             f"- overall test MSE: {report_payload['metrics']['MSE']:.6g}",
             f"- overall test RMSE: {report_payload['metrics']['RMSE']:.6g}",
             f"- neighbor coverage available: {coverage_mask is not None}",
-            f"- protocol controls complete: {winner_config.complete_protocol}",
+            f"- protocol controls complete: {winner_complete}",
             f"- formal blockers: {blockers}",
             "",
             "Test scores are descriptive only and never select a configuration, "
             "checkpoint, clip rule or readiness state.",
         ]
         artifacts.write_summary(run, "\n".join(lines) + "\n")
+        resources.check_stage_budget()
         run.set_status(
-            "completed" if winner_config.complete_protocol else "development_incomplete",
-            protocol_controls_complete=winner_config.complete_protocol,
+            "completed" if winner_complete else "development_incomplete",
+            protocol_controls_complete=winner_complete,
             selected_epoch=best_payload["manifest"]["epoch"],
             selection_sha256=selection_payload.get("selection_sha256"),
             diagnostics_sha256=(
@@ -1166,7 +1188,7 @@ def run_report(
             "run_id": run.run_id,
             "run_dir": str(run.path),
             "status": "completed"
-            if winner_config.complete_protocol
+            if winner_complete
             else "development_incomplete",
             "report_path": str(run.path / "report.json"),
             "test_shape": list(prediction.shape),

@@ -21,9 +21,11 @@ import numpy as np
 from benchmark.nograph_baseline import artifacts as nb_artifacts
 from benchmark.nograph_baseline import metrics as p01_metrics
 from benchmark.nograph_baseline import protocol as p01
-from benchmark.nograph_baseline.data import iso_now, sha256_file
+from benchmark.nograph_baseline.data import iso_now
 
 from . import protocol, resources
+
+sha256_file = protocol.sha256_file
 
 DIAGNOSTIC_TOLERANCE = 1e-12
 NUMERIC_RELATIVE_TOLERANCE = 1e-9
@@ -166,7 +168,10 @@ def failure_envelope(
 
 
 def finish(destination: Path, payload: Dict[str, Any]) -> Dict[str, Any]:
+    resources.check_stage_budget()
+    payload["accounting"] = resources.stage_accounting()
     write_report(destination, payload)
+    resources.register_stage_report(destination)
     return {
         "report_path": str(destination),
         "status": payload["status"],
@@ -176,6 +181,7 @@ def finish(destination: Path, payload: Dict[str, Any]) -> Dict[str, Any]:
 
 # -- shared reading helpers ------------------------------------------------
 def read_json(path: Path, *, required: bool = True) -> Any:
+    resources.check_stage_budget()
     path = Path(path)
     if not path.exists():
         if required:
@@ -185,6 +191,7 @@ def read_json(path: Path, *, required: bool = True) -> Any:
 
 
 def load_npy(path: Path, *, required: bool = True) -> Optional[np.ndarray]:
+    resources.check_stage_budget()
     path = Path(path)
     if not path.exists():
         if required:
@@ -194,6 +201,7 @@ def load_npy(path: Path, *, required: bool = True) -> Optional[np.ndarray]:
 
 
 def load_npz(path: Path) -> Dict[str, np.ndarray]:
+    resources.check_stage_budget()
     path = Path(path)
     if not path.exists():
         raise CheckError(f"required mask artifact is missing: {path}")
@@ -255,9 +263,11 @@ def _numbers(payload: Any, prefix: str = "") -> Dict[str, float]:
     found: Dict[str, float] = {}
     if isinstance(payload, Mapping):
         for key, value in payload.items():
+            resources.check_stage_budget()
             found.update(_numbers(value, f"{prefix}.{key}" if prefix else str(key)))
     elif isinstance(payload, (list, tuple)):
         for index, value in enumerate(payload):
+            resources.check_stage_budget()
             found.update(_numbers(value, f"{prefix}[{index}]"))
     elif isinstance(payload, bool):
         return found
@@ -272,10 +282,12 @@ def compare_numbers(
     tolerance: float,
 ) -> Dict[str, Any]:
     """Compare numeric leaves and report decisive differences."""
+    resources.check_stage_budget()
     left = _numbers(expected)
     right = _numbers(actual)
     differences: List[Dict[str, Any]] = []
     for key in sorted(set(left) | set(right)):
+        resources.check_stage_budget()
         if key not in left or key not in right:
             differences.append(
                 {
@@ -312,6 +324,7 @@ def normalized_mae_difference(left: float, right: float) -> float:
 
 # -- recompute -------------------------------------------------------------
 def _recompute_fit_metrics(directory: Path) -> Dict[str, Any]:
+    resources.check_stage_budget()
     prediction = load_npy(directory / "validation" / "prediction.npy")
     gold = load_npy(directory / "validation" / "gold.npy")
     if prediction.shape != gold.shape:
@@ -346,6 +359,7 @@ def _recompute_fit_metrics(directory: Path) -> Dict[str, Any]:
 
 
 def _recompute_report_metrics(directory: Path) -> Dict[str, Any]:
+    resources.check_stage_budget()
     payload = read_json(directory / "report.json")
     saved = payload.get("metrics") or {}
     windows = read_json(directory / "test" / "windows.json")
@@ -515,6 +529,7 @@ def run_recompute(
         "arrays": {},
     }
     for relative in protocol.RECOMPUTE_ARRAYS:
+        resources.check_stage_budget()
         path = directory / relative
         if path.is_file():
             inputs["arrays"][relative] = {
@@ -601,6 +616,7 @@ def _identity_mismatches(left: Mapping[str, Any], right: Mapping[str, Any]) -> L
         "threads",
         "diagnostic_epochs",
     ):
+        resources.check_stage_budget()
         record(f"config.{field}", left_config.get(field), right_config.get(field))
     record(
         "protocol_complete",
@@ -608,6 +624,7 @@ def _identity_mismatches(left: Mapping[str, Any], right: Mapping[str, Any]) -> L
         right.get("protocol_complete"),
     )
     for field in ENVIRONMENT_FIELDS:
+        resources.check_stage_budget()
         record(
             f"environment.{field}",
             (left.get("environment") or {}).get(field),
@@ -624,6 +641,7 @@ def _prediction_comparison(
     label: str,
     tolerance: float,
 ) -> Dict[str, Any]:
+    resources.check_stage_budget()
     if a.shape != b.shape:
         return {
             "label": label,

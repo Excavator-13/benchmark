@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-from . import protocol
+from . import resources, protocol
 
 
 class SelectionError(protocol.ProtocolError):
@@ -42,6 +42,7 @@ class Candidate:
     protocol_sha256: Optional[str]
     run_sha256: Optional[str]
     message: Optional[str] = None
+    protocol_controls_complete: bool = True
 
     def payload(self) -> Dict[str, Any]:
         return {
@@ -65,10 +66,12 @@ class Candidate:
             "protocol_sha256": self.protocol_sha256,
             "run_sha256": self.run_sha256,
             "message": self.message,
+            "protocol_controls_complete": self.protocol_controls_complete,
         }
 
 
 def _read_json(path: Path) -> Any:
+    resources.check_stage_budget()
     if not Path(path).exists():
         return None
     return json.loads(Path(path).read_text(encoding="utf-8"))
@@ -76,6 +79,7 @@ def _read_json(path: Path) -> Any:
 
 def load_candidate(run_dir: Path) -> Candidate:
     """Read one candidate trajectory's frozen identity and validation score."""
+    resources.check_stage_budget()
     directory = Path(run_dir)
     config_doc = _read_json(directory / "config.json")
     if not isinstance(config_doc, dict):
@@ -124,12 +128,14 @@ def load_candidate(run_dir: Path) -> Candidate:
             protocol_sha256=protocol_entry.get("sha256"),
             run_sha256=None,
             message=str(status_doc.get("detail") or "run did not complete"),
+            protocol_controls_complete=(config_doc.get("protocol_controls") or {}).get("complete") is True,
         )
     return Candidate(
         learning_rate=float(config.learning_rate),
         run_id=run_id,
         run_dir=str(directory.resolve()),
         status="complete",
+        protocol_controls_complete=(config_doc.get("protocol_controls") or {}).get("complete") is True,
         validation_mse=float(best["MSE"]),
         validation_mae=float(best["MAE"]),
         selected_epoch=int(best.get("epoch", 0)),
@@ -157,6 +163,7 @@ def validate_candidates(
     candidates: Sequence[Candidate], *, purpose: str
 ) -> None:
     """Reject candidates that cannot be compared under one frozen condition."""
+    resources.check_stage_budget()
     _require(len(candidates) == 2, "selection needs exactly two candidate runs")
     rates = sorted(float(candidate.learning_rate) for candidate in candidates)
     _require(
@@ -165,6 +172,7 @@ def validate_candidates(
     )
     first = candidates[0]
     for candidate in candidates:
+        resources.check_stage_budget()
         _require(
             candidate.seed == 0,
             "learning-rate selection must use the screening seed 0; candidate "
@@ -220,13 +228,15 @@ def validate_candidates(
     )
     if purpose == "formal":
         for candidate in candidates:
+            resources.check_stage_budget()
             _require(
                 candidate.status == "complete",
                 f"formal selection requires complete candidates; {candidate.run_id} "
                 f"is {candidate.status}",
             )
             _require(
-                protocol.FitConfig.from_payload(candidate.config).complete_protocol,
+                protocol.FitConfig.from_payload(candidate.config).complete_protocol
+                and candidate.protocol_controls_complete,
                 f"formal selection requires complete protocol controls; "
                 f"{candidate.run_id} is a development override",
             )
@@ -238,6 +248,7 @@ def choose(candidates: Sequence[Candidate]) -> Dict[str, Any]:
     complete = [candidate for candidate in ordered if candidate.status == "complete"]
     table: List[Dict[str, Any]] = []
     for candidate in ordered:
+        resources.check_stage_budget()
         table.append(
             {
                 "learning_rate": float(candidate.learning_rate),
@@ -277,6 +288,7 @@ def choose(candidates: Sequence[Candidate]) -> Dict[str, Any]:
         if candidate is not best
     ]
     for candidate in ordered:
+        resources.check_stage_budget()
         if candidate.status != "complete":
             eliminated.append(
                 {
@@ -319,6 +331,7 @@ def build_selection(
     dataset: str,
     mode: str,
 ) -> Dict[str, Any]:
+    resources.check_stage_budget()
     validate_candidates(candidates, purpose=purpose)
     decision = choose(candidates)
     winner = decision["winner"]
@@ -338,6 +351,7 @@ def build_selection(
             ),
         }
     for candidate in candidates:
+        resources.check_stage_budget()
         protocol.FitConfig.from_payload(candidate.config)
     payload = {
         "artifact_format_version": protocol.ARTIFACT_FORMAT_VERSION,
@@ -372,6 +386,7 @@ def build_selection(
 
 
 def load_selection(path: Path) -> Dict[str, Any]:
+    resources.check_stage_budget()
     payload = _read_json(Path(path) / "selection.json" if Path(path).is_dir() else path)
     if not isinstance(payload, dict):
         raise SelectionError(f"selection record not found at {path}")

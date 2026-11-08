@@ -112,6 +112,8 @@ def reserve_run(
             "updated": iso_now(),
         },
     )
+    from . import resources
+    resources.register_stage_output(run)
     return run
 
 
@@ -146,6 +148,8 @@ def reserve_block(
             "updated": iso_now(),
         },
     )
+    from . import resources
+    resources.register_stage_output(run)
     return run
 
 

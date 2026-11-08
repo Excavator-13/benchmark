@@ -21,7 +21,7 @@ from benchmark.nograph_baseline import metrics as p01_metrics
 from benchmark.nograph_baseline import protocol as p01
 
 from . import model as temporal_model
-from . import protocol
+from . import resources, protocol
 
 AGGREGATION_NOTE = (
     "overall RMSE is sqrt(MSE over all 4*N*3 test elements), not the mean of "
@@ -40,6 +40,7 @@ def predict_test(
     scale: float,
 ) -> np.ndarray:
     """Restore the selected weights and predict the four test windows."""
+    resources.check_stage_budget()
     model = temporal_model.build_model(config)
     state = best_payload.get("model_state")
     if not isinstance(state, Mapping):
@@ -60,6 +61,7 @@ def coverage_masks(
     mask_bundle: Optional[Path] = None,
 ) -> Optional[p01_coverage.CoverageMask]:
     """Load validated coverage evidence, or return ``None`` when absent."""
+    resources.check_stage_budget()
     if graph_path is None and mask_bundle is None:
         return None
     if graph_path is not None and mask_bundle is not None:
@@ -88,6 +90,7 @@ def build_report(
     purpose: str,
 ) -> Dict[str, Any]:
     """Aggregate raw and separately-labelled clipped test metrics."""
+    resources.check_stage_budget()
     prediction = np.asarray(prediction, dtype=np.float64)
     gold = np.asarray(gold, dtype=np.float64)
     expected = (len(starts), key_array.shape[0], p01.HORIZON)
@@ -237,6 +240,7 @@ def formal_report_blockers(
     run_evidence_sha256: Optional[str] = None,
 ) -> List[str]:
     """Return every reason a *formal* test report must be refused."""
+    resources.check_stage_budget()
     blockers: List[str] = []
     if purpose != "formal":
         return blockers
@@ -259,6 +263,7 @@ def formal_report_blockers(
         blockers.append("trajectory encoder differs from the frozen selection")
     members = []
     for role in ("a_runs", "b_runs"):
+        resources.check_stage_budget()
         entry = ((diagnostics or {}).get("inputs") or {}).get(role, {}).get(str(config.seed))
         if entry and entry.get("run_dir") and Path(entry["run_dir"]).resolve() == Path(run_dir).resolve():
             members.append(entry)

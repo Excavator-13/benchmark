@@ -185,6 +185,8 @@ def predict(
     with torch.no_grad():
         for window in range(windows):
             for begin in range(0, nodes, int(node_chunk)):
+                from . import resources
+                resources.check_stage_budget()
                 if check_stop is not None:
                     check_stop()
                 end = min(nodes, begin + int(node_chunk))

@@ -145,9 +145,11 @@ def sha256_bytes(data: bytes) -> str:
 
 
 def sha256_file(path: Path) -> str:
+    from . import resources
     digest = hashlib.sha256()
     with open(path, "rb") as handle:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
+            resources.check_stage_budget()
             digest.update(block)
     return digest.hexdigest()
 
@@ -364,6 +366,23 @@ def require_formal_controls(config: FitConfig) -> None:
             "formal purpose requires complete protocol controls; deviations: "
             + ", ".join(deviations)
         )
+
+
+def resource_controls(purpose: str, limit_bytes: Any = MEMORY_STOP_BYTES) -> Dict[str, Any]:
+    """Validate the effective RSS stop before reserving any execution output."""
+    validate_purpose(purpose)
+    if isinstance(limit_bytes, bool) or not isinstance(limit_bytes, int) or limit_bytes <= 0:
+        raise ProtocolError("memory_limit_bytes must be a positive integer")
+    if purpose == "formal" and limit_bytes > MEMORY_STOP_BYTES:
+        raise ProtocolError("formal RSS stopping line cannot exceed 8 GiB")
+    override = limit_bytes != MEMORY_STOP_BYTES
+    return {
+        "rss_stop_bytes": limit_bytes,
+        "protocol_rss_stop_bytes": MEMORY_STOP_BYTES,
+        "development_override": purpose == "development" and override,
+        "conservative_limit": limit_bytes < MEMORY_STOP_BYTES,
+        "complete": not (purpose == "development" and override),
+    }
 
 
 @dataclass(frozen=True)
