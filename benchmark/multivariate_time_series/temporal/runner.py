@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import os
 import time
+import uuid
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence
 
@@ -242,14 +243,16 @@ def run_fit(
     if roles.repeat_role == "b" and roles.candidate_role == "screening":
         raise RunnerError("repetition b never chooses a configuration")
     clock = clock or _clock()
-    started = clock()
+    started = float(request["controller_started_at"]) if request.get("controller_managed") else clock()
+    temporal_model.set_determinism(config.seed, config.threads)
     parent: Optional[Dict[str, Any]] = None
     restore: Optional[temporal_engine.RestoreState] = None
     condition_extra: Dict[str, Any] = {}
     if operation == "resume":
         parent_dir = Path(request["parent_dir"])
         parent = recovery.load_parent(
-            parent_dir, ledger_path=Path(request["ledger_path"]) if request.get("ledger_path") else None
+            parent_dir, ledger_path=Path(request["ledger_path"]) if request.get("ledger_path") else None,
+            batch_id=request.get("batch_id"),
         )
         parent_config = parent["parent_config"]
         if parent_config.to_payload() != config.to_payload():
@@ -290,7 +293,25 @@ def run_fit(
         output_root=Path(request["output_root"]) if request.get("output_root") else None,
         repo=repo,
     )
-    ledger: Optional[resources.Ledger] = None
+    ledger_path = Path(parent["ledger_path"]) if parent else (
+        Path(request["ledger_path"]) if request.get("ledger_path") else run.path.parent / "ledger.json")
+    ledger = resources.Ledger(ledger_path, batch_id=(parent["batch_id"] if parent else str(request.get("batch_id", "p02-t006"))))
+    execution_id = str(request.get("execution_id") or f"{run.run_id}@{uuid.uuid4().hex}")
+    inherited_fit_seconds = float(parent["fit_spent_seconds"]) if parent else 0.0
+    trajectory_ids = list(parent["trajectory_execution_ids"]) if parent else []
+    trajectory_ids.append(execution_id)
+    controller_managed = bool(request.get("controller_managed"))
+    last_billed = -1.0
+    def bill(status="running", force=False):
+        nonlocal last_billed
+        elapsed = max(0.0, float(clock() - started))
+        if not controller_managed and (force or elapsed - last_billed >= 1.0):
+            ledger.record(execution_id=execution_id, run_id=run.run_id, seconds=elapsed, status=status)
+            last_billed = elapsed
+        return elapsed
+    bill(force=True)
+    batch_before = sum(float(entry["seconds"]) for entry in ledger.payload["entries"]
+                       if entry["execution_id"] != execution_id and entry["kind"] in {"measured", "replayed"})
     watchdog: Optional[resources.Watchdog] = None
     cost_payload: Dict[str, Any] = {
         "status": "not_measured",
@@ -298,8 +319,10 @@ def run_fit(
     }
     recovery_sha: Optional[str] = None
     execution_elapsed = 0.0
+    trajectory = None
+    published_epoch = parent["completed_epoch"] if parent else 0
     try:
-        _write_preamble(
+        preamble = _write_preamble(
             run,
             request=request,
             purpose=purpose,
@@ -313,7 +336,7 @@ def run_fit(
             roles=roles.to_payload(),
             condition=condition,
             data_identity=identity,
-            config_extra=condition_extra or None,
+            config_extra={**condition_extra, "budget": ledger.payload_view()},
         )
         run.save_npy(protocol.RUN_DIRECTORY_FILES["keys"], data.node_keys)
         run.write_json(
@@ -340,12 +363,7 @@ def run_fit(
             "split": protocol.split_payload(),
         }
         run.write_json(protocol.RUN_DIRECTORY_FILES["baselines"], baselines)
-        if request.get("ledger_path"):
-            ledger = resources.Ledger(
-                Path(request["ledger_path"]),
-                batch_id=str(request.get("batch_id", "p02-t006")),
-            )
-        setup_seconds = float(request.get("setup_seconds", 0.0))
+        setup_seconds = 0.0
         interval = float(
             request.get("monitor_interval", protocol.MONITOR_INTERVAL_SECONDS)
         )
@@ -364,7 +382,8 @@ def run_fit(
         publish_fn = publish or checkpoints.publish_last
 
         def on_epoch_complete(trajectory: temporal_engine.Trajectory) -> None:
-            nonlocal recovery_sha
+            nonlocal recovery_sha, published_epoch
+            check_stop()
             if trajectory.best is None:
                 return
             payload = checkpoints.last_payload(
@@ -376,43 +395,46 @@ def run_fit(
                 best_model_state=trajectory.best.model_state,
                 best_optimizer_state=trajectory.best.optimizer_state,
                 scale=trajectory.best.scale,
-                ledger=ledger.payload_view() if ledger is not None else None,
+                ledger={**ledger.payload_view(), "trajectory_execution_ids": trajectory_ids},
+                execution={"source": preamble["provenance"]["source"],
+                           "environment": preamble["environment"]},
             )
             recovery_sha = publish_fn(
                 run.path / protocol.RUN_DIRECTORY_FILES["last_recovery"], payload
             )
+            published_epoch = trajectory.completed_epoch
             run.append_event(
                 "recovery_published",
                 epoch=trajectory.completed_epoch,
                 sha256=recovery_sha,
             )
 
-        def after_epoch(trajectory: temporal_engine.Trajectory) -> None:
-            nonlocal cost_payload
+        def check_stop() -> None:
+            elapsed = bill()
             reason = watchdog.pause_reason() if watchdog is not None else None
             if reason is not None:
                 raise PauseRequest("resource_stop", reason)
+            fit_elapsed = inherited_fit_seconds + elapsed
+            if fit_elapsed > protocol.FIT_SECONDS:
+                raise PauseRequest("fit_timeout", {"elapsed_seconds": fit_elapsed, "limit_seconds": protocol.FIT_SECONDS})
+            if batch_before + elapsed > protocol.BATCH_SECONDS:
+                raise PauseRequest("batch_timeout", {"active_seconds": batch_before + elapsed, "limit_seconds": protocol.BATCH_SECONDS})
+            completed = trajectory.completed_epoch if trajectory is not None else 0
+            if config.epochs >= protocol.COST_SAMPLE_EPOCHS and completed < protocol.COST_SAMPLE_EPOCHS and fit_elapsed > protocol.COST_SAMPLE_SECONDS:
+                raise PauseRequest("sample_timeout", {"elapsed_seconds": fit_elapsed, "limit_seconds": protocol.COST_SAMPLE_SECONDS})
+
+        def setup_complete(trajectory):
+            nonlocal setup_seconds
+            setup_seconds = max(0.0, float(clock() - started))
+            # Optional development injection is conservative; measured setup is
+            # always included and cannot be overridden downward.
+            setup_seconds = max(setup_seconds, float(request.get("setup_seconds", 0.0)))
+
+        def after_epoch(trajectory: temporal_engine.Trajectory) -> None:
+            nonlocal cost_payload
+            run.write_json("epoch-timing.json", {"epochs": trajectory.epoch_seconds_map()})
+            check_stop()
             elapsed = max(0.0, float(clock() - started))
-            if elapsed > protocol.FIT_SECONDS:
-                raise PauseRequest(
-                    "fit_timeout",
-                    {
-                        "elapsed_seconds": elapsed,
-                        "limit_seconds": protocol.FIT_SECONDS,
-                    },
-                )
-            if (
-                ledger is not None
-                and ledger.active_seconds() + elapsed > protocol.BATCH_SECONDS
-            ):
-                raise PauseRequest(
-                    "batch_timeout",
-                    {
-                        "active_seconds": ledger.active_seconds(),
-                        "elapsed_seconds": elapsed,
-                        "limit_seconds": protocol.BATCH_SECONDS,
-                    },
-                )
             if (
                 trajectory.completed_epoch == protocol.COST_SAMPLE_EPOCHS
                 and config.epochs > protocol.COST_SAMPLE_EPOCHS
@@ -421,10 +443,11 @@ def run_fit(
                     trajectory.history,
                     epochs=config.epochs,
                     setup_seconds=setup_seconds,
-                    spent_seconds=elapsed,
+                    spent_seconds=inherited_fit_seconds + elapsed,
+                    sample_seconds=inherited_fit_seconds + elapsed,
                     remaining_fits=int(request.get("remaining_fits", 1)),
                     batch_active_seconds=(
-                        ledger.active_seconds() if ledger is not None else 0.0
+                        batch_before + elapsed
                     ),
                 )
                 run.write_json(protocol.RUN_DIRECTORY_FILES["cost"], cost_payload)
@@ -438,31 +461,26 @@ def run_fit(
                     )
 
         hooks = temporal_engine.Hooks(
+            on_setup_complete=setup_complete,
+            check_stop=check_stop,
             on_epoch_complete=on_epoch_complete,
             after_epoch=after_epoch,
             after_update=after_update,
             clock=clock,
         )
-        result = temporal_engine.run_trajectory(
-            fit_arrays, config, hooks=hooks, restore=restore
-        )
+        trajectory = temporal_engine.Trajectory(fit_arrays, config, hooks=hooks, restore=restore)
+        if parent:
+            inherited_payload = dict(parent["payload"])
+            inherited_payload["ledger"] = {**ledger.payload_view(), "trajectory_execution_ids": trajectory_ids}
+            inherited_payload["execution"] = {"source": preamble["provenance"]["source"], "environment": preamble["environment"]}
+            recovery_sha = checkpoints.publish_last(run.path / protocol.RUN_DIRECTORY_FILES["last_recovery"], inherited_payload)
+        if parent and trajectory.completed_epoch == protocol.COST_SAMPLE_EPOCHS:
+            setup_complete(trajectory)
+            after_epoch(trajectory)
+        result = trajectory.run()
         execution_elapsed = max(0.0, float(clock() - started))
         if watchdog is not None:
             run.write_json("monitor.json", watchdog.payload())
-        if ledger is not None:
-            ledger.record(
-                execution_id=f"{run.run_id}@{time.strftime('%Y%m%dT%H%M%S')}",
-                run_id=run.run_id,
-                seconds=execution_elapsed,
-                kind="measured",
-                status=result.status,
-                note=(
-                    "resumed execution; any discarded partial-epoch work from the "
-                    "parent execution is billed separately there"
-                    if operation == "resume"
-                    else None
-                ),
-            )
         reproduction = (result.scores.get("best") or {}).get("reproduction") or {}
         usable = reproduction.get("status") == "pass"
         if not usable:
@@ -620,6 +638,7 @@ def run_fit(
             recovery_sha256=recovery_sha,
             protocol_controls_complete=config.complete_protocol,
         )
+        check_stop()  # includes final checkpoint, arrays, summaries and status writes
         return {
             "run_id": run.run_id,
             "run_dir": str(run.path),
@@ -632,6 +651,20 @@ def run_fit(
             "cost": cost_payload,
             "report_path": str(run.path / "report.json"),
         }
+    except PauseRequest as exc:
+        pause = {"reason": exc.reason, "detail": exc.detail}
+        history = [row for row in trajectory.history if row["epoch"] <= published_epoch] if trajectory else []
+        updates = trajectory.updates if trajectory else 0
+        run.write_json("history.json", {"epochs": history})
+        run.write_json("gradients.json", {"total_updates": updates,
+                       "updates": trajectory.update_records if trajectory else []})
+        run.write_json("monitor.json", watchdog.payload() if watchdog else {})
+        run.write_json("report.json", {"kind": "fit-summary", "status": "paused",
+                       "completed_epoch": published_epoch, "paused": pause})
+        run.set_status("paused", detail=pause, completed_epoch=published_epoch)
+        return {"run_id": run.run_id, "run_dir": str(run.path), "status": "paused",
+                "paused": pause, "completed_epoch": published_epoch,
+                "recovery_sha256": recovery_sha, "report_path": str(run.path / "report.json")}
     except BaseException as exc:
         execution_elapsed = max(0.0, float(clock() - started))
         if watchdog is not None:
@@ -640,15 +673,6 @@ def run_fit(
                 run.write_json("monitor.json", watchdog.payload())
             except Exception:  # pragma: no cover - best effort on failure
                 pass
-        if ledger is not None and execution_elapsed > 0:
-            ledger.record(
-                execution_id=f"{run.run_id}@{time.strftime('%Y%m%dT%H%M%S')}",
-                run_id=run.run_id,
-                seconds=execution_elapsed,
-                kind="measured",
-                status="failed",
-                note=f"failed execution: {type(exc).__name__}",
-            )
         try:
             run.write_json(
                 "report.json",
@@ -671,6 +695,14 @@ def run_fit(
     finally:
         if watchdog is not None:
             watchdog.stop()
+        state = checks.read_json(run.path / "status.json", required=False) or {}
+        execution_seconds = max(0.0, float(clock() - started))
+        run.write_json("billing.json", {
+            "execution_id": execution_id, "ledger_id": ledger.payload.get("ledger_id"),
+            "execution_seconds": execution_seconds,
+            "trajectory_seconds": inherited_fit_seconds + execution_seconds,
+        })
+        bill(status=state.get("state", "failed"), force=True)
 
 
 def run_preflight(request: Mapping[str, Any]) -> Dict[str, Any]:
@@ -694,6 +726,7 @@ def run_preflight(request: Mapping[str, Any]) -> Dict[str, Any]:
     )
 
 
+@resources.account_stage
 def run_select(request: Mapping[str, Any], *, repo: Optional[Path] = None) -> Dict[str, Any]:
     purpose = protocol.validate_purpose(str(request["purpose"]))
     candidates = [
@@ -799,166 +832,21 @@ def run_select(request: Mapping[str, Any], *, repo: Optional[Path] = None) -> Di
 
 
 def run_diagnose(request: Mapping[str, Any]) -> Dict[str, Any]:
-    """Run the section-5 gates and reserve a fresh diagnostics execution identity."""
-    block_dir = Path(request["block_dir"])
-    selection_payload = temporal_selection.load_selection(block_dir)
-    a_runs: Dict[int, Dict[str, Any]] = {}
-    b_runs: Dict[int, Dict[str, Any]] = {}
-    for seed, path in (request.get("a_runs") or {}).items():
-        a_runs[int(seed)] = temporal_diagnostics.load_run_evidence(Path(path))
-    for seed, path in (request.get("b_runs") or {}).items():
-        b_runs[int(seed)] = temporal_diagnostics.load_run_evidence(Path(path))
-    ridge = None
-    if request.get("ridge_path"):
-        ridge = artifacts.read_json(Path(request["ridge_path"]))
-    payload = temporal_diagnostics.build_diagnostics(
-        selection=selection_payload,
-        block_id=block_dir.name,
-        a_runs=a_runs,
-        b_runs=b_runs,
-        ridge=ridge,
-    )
-    diagnostics_id = str(
-        request.get("diagnostics_id")
-        or "diagnostics-" + time.strftime("%Y%m%dT%H%M%S")
-    )
-    diagnostics_root = block_dir / "diagnostics"
-    diagnostics_run = artifacts.RunDirectory(
-        diagnostics_root, diagnostics_id, run_type="effective-temporal-diagnostics"
-    )
-    diagnostics_run.reserve()
-    diagnostics_run.write_json(protocol.RUN_DIRECTORY_FILES["diagnostics"], payload)
-    diagnostics_run.write_json("cost.json", _aggregate_cost(request, a_runs, b_runs))
-    artifacts.write_command(
-        diagnostics_run, request.get("argv") or [], operation="diagnose"
-    )
-    reference = a_runs.get(0) or next(iter(a_runs.values()), None)
-    artifacts.write_environment(diagnostics_run)
-    provenance = artifacts.provenance_payload(
-        purpose=str(request.get("purpose", "development")),
-        operation="diagnose",
-        config={"learning_rate_candidates": list(protocol.LR_CANDIDATES)},
-        roles={"kind": "diagnostics", "block_id": block_dir.name},
-        data_identity=(
-            {
-                "dataset": reference.get("dataset"),
-                "mode": reference.get("mode"),
-                "source_sha256": reference.get("data_sha256"),
-                "node_keys_sha256": reference.get("keys_sha256"),
-            }
-            if reference
-            else None
-        ),
-        source_record=artifacts.capture_source(diagnostics_run),
-        environment=artifacts.read_json(diagnostics_run.path / "environment.json"),
-    )
-    diagnostics_run.write_json("provenance.json", provenance)
-    status = "pass" if payload["status"] == "pass" else (
-        "failed" if payload["status"] == "fail" else "incomplete"
-    )
-    result = {
-        "block_id": payload["block_id"],
-        "diagnostics_id": diagnostics_id,
-        "status": payload["status"],
-        "learning_ready": payload["learning_ready"],
-        "gates": {
-            name: {
-                "status": gate["status"],
-                "passing_seeds": gate.get("passing_seeds"),
-                "failing_seeds": gate.get("failing_seeds"),
-                "incomplete_seeds": gate.get("incomplete_seeds"),
-                "reasons": gate.get("reasons"),
-            }
-            for name, gate in payload["gates"].items()
-        },
-        "summary": payload["summary"],
-        "incomplete_reasons": payload["incomplete_reasons"],
-        "diagnostics_sha256": payload["diagnostics_sha256"],
-    }
-    diagnostics_run.write_json("report.json", result)
-    artifacts.write_summary(
-        diagnostics_run,
-        "\n".join(
-            [
-                f"# diagnostics {diagnostics_id}",
-                "",
-                f"- block: {block_dir.name}",
-                f"- status: {payload['status']}",
-                f"- learning_ready: {payload['learning_ready']}",
-                f"- selection sha256: {selection_payload.get('selection_sha256')}",
-                f"- diagnostics sha256: {payload['diagnostics_sha256']}",
-                "",
-                "`learning_ready` is a computed software state; it is not research "
-                "acceptance, graph benefit or a convergence claim.",
-            ]
-        )
-        + "\n",
-    )
-    artifacts.write_json_atomic(
-        block_dir / "latest-diagnostics.json",
-        {
-            "diagnostics_id": diagnostics_id,
-            "run_dir": str(diagnostics_run.path.resolve()),
-            "diagnostics_sha256": payload["diagnostics_sha256"],
-            "selection_sha256": selection_payload.get("selection_sha256"),
-            "status": payload["status"],
-            "learning_ready": payload["learning_ready"],
-        },
-    )
-    diagnostics_run.set_status(
-        status,
-        diagnostics_status=payload["status"],
-        learning_ready=payload["learning_ready"],
-        block_id=block_dir.name,
-    )
-    tolerances = {
-        "learning_train_reduction": protocol.LEARNING_TRAIN_REDUCTION,
-        "learning_validation_reduction": protocol.LEARNING_VAL_REDUCTION,
-        "zero_mae_improvement": protocol.ZERO_MAE_IMPROVEMENT,
-        "budget_tail_relative": protocol.BUDGET_TAIL_RELATIVE,
-        "repetition_normalized_mae": protocol.REPETITION_TOLERANCE,
-    }
-    inputs = {
-        "block_dir": str(block_dir.resolve()),
-        "diagnostics_dir": str(diagnostics_run.path.resolve()),
-        "selection_sha256": selection_payload.get("selection_sha256"),
-        "a_runs": {str(seed): evidence["run_dir"] for seed, evidence in a_runs.items()},
-        "b_runs": {str(seed): evidence["run_dir"] for seed, evidence in b_runs.items()},
-    }
-    envelope = checks.envelope(
-        "diagnose",
-        argv=request.get("argv") or [],
-        inputs=inputs,
-        tolerances=tolerances,
-        status=status,
-        result=result,
-        errors=payload["incomplete_reasons"][:10] if status != "pass" else [],
-    )
-    written = checks.finish(Path(request["report_path"]), envelope)
-    return {
-        **written,
-        "learning_ready": payload["learning_ready"],
-        "diagnostics_dir": str(diagnostics_run.path),
-        "diagnostics_path": str(
-            diagnostics_run.path / protocol.RUN_DIRECTORY_FILES["diagnostics"]
-        ),
-        "diagnostics_id": diagnostics_id,
-    }
+    return temporal_diagnostics.run_diagnose(request)
 
 
-def load_block_diagnostics(block_dir: Path) -> Optional[Dict[str, Any]]:
-    """Read the latest diagnostics evidence for a block (explicit pointer first)."""
-    block_dir = Path(block_dir)
-    pointer = block_dir / "latest-diagnostics.json"
-    if pointer.exists():
-        record = artifacts.read_json(pointer)
-        target = Path(record["run_dir"]) / protocol.RUN_DIRECTORY_FILES["diagnostics"]
-        if target.exists():
-            return artifacts.read_json(target)
-    legacy = block_dir / protocol.RUN_DIRECTORY_FILES["diagnostics"]
-    if legacy.exists():
-        return artifacts.read_json(legacy)
-    return None
+def load_block_diagnostics(path: Path) -> Optional[Dict[str, Any]]:
+    """Consume the explicitly supplied frozen saved-check JSON report."""
+    if not Path(path).is_file():
+        return None
+    envelope = checks.read_json(path)
+    payload = envelope.get("result") if envelope.get("kind") == "diagnose" else None
+    if not isinstance(payload, dict) or payload.get("kind") != "diagnostics":
+        raise RunnerError("--diagnostics must identify a saved diagnose report")
+    digest = protocol.content_sha256({k: v for k, v in payload.items() if k != "diagnostics_sha256"})
+    if payload.get("diagnostics_sha256") != digest:
+        raise RunnerError("diagnostics content identity is invalid")
+    return payload
 
 
 def _aggregate_cost(
@@ -1026,6 +914,7 @@ def _aggregate_cost(
     }
 
 
+@resources.account_stage
 def run_report(
     request: Mapping[str, Any],
     *,
@@ -1045,6 +934,30 @@ def run_report(
     winner_config = protocol.FitConfig.from_payload(winner_config_doc["config"])
     if purpose == "formal":
         protocol.require_formal_controls(winner_config)
+    a_states: Dict[int, str] = {}
+    b_states: Dict[int, str] = {}
+    if diagnostics_payload:
+        for seed, entry in ((diagnostics_payload.get("inputs") or {}).get("a_runs") or {}).items():
+            a_states[int(seed)] = str(entry.get("state"))
+        for seed, entry in ((diagnostics_payload.get("inputs") or {}).get("b_runs") or {}).items():
+            b_states[int(seed)] = str(entry.get("state"))
+    blockers = temporal_report.formal_report_blockers(
+        purpose=purpose,
+        config=winner_config,
+        selection=selection_payload,
+        diagnostics=diagnostics_payload,
+        run_dir=winner_dir,
+        a_states=a_states,
+        b_states=b_states,
+        winner_run_dir=Path(selection_payload["winner"]["run_dir"])
+        if selection_payload.get("winner")
+        else None,
+        run_evidence_sha256=temporal_diagnostics.evidence_sha256(winner_dir),
+    )
+    if purpose == "formal" and blockers:
+        raise temporal_report.ReportError(
+            "a formal test report is refused: " + "; ".join(blockers)
+        )
     data_name = winner_config_doc["dataset"]["name"]
     if data is None:
         data_path = request.get("data_path")
@@ -1073,29 +986,6 @@ def run_report(
         winner_dir / protocol.RUN_DIRECTORY_FILES["best_weights"],
         expected_config=winner_config,
     )
-    a_states: Dict[int, str] = {}
-    b_states: Dict[int, str] = {}
-    if diagnostics_payload:
-        for seed, entry in ((diagnostics_payload.get("inputs") or {}).get("a_runs") or {}).items():
-            a_states[int(seed)] = str(entry.get("state"))
-        for seed, entry in ((diagnostics_payload.get("inputs") or {}).get("b_runs") or {}).items():
-            b_states[int(seed)] = str(entry.get("state"))
-    blockers = temporal_report.formal_report_blockers(
-        purpose=purpose,
-        config=winner_config,
-        selection=selection_payload,
-        diagnostics=diagnostics_payload,
-        run_dir=winner_dir,
-        a_states=a_states,
-        b_states=b_states,
-        winner_run_dir=Path(selection_payload["winner"]["run_dir"])
-        if selection_payload.get("winner")
-        else None,
-    )
-    if purpose == "formal" and blockers:
-        raise temporal_report.ReportError(
-            "a formal test report is refused: " + "; ".join(blockers)
-        )
     condition = winner_config_doc.get("condition") or {}
     run = artifacts.reserve_run(
         str(request["run_id"]),
@@ -1120,6 +1010,7 @@ def run_report(
             condition=condition,
             data_identity=identity,
             config_extra={
+                "budget": winner_config_doc.get("budget"),
                 "selection": {
                     "block_id": block_dir.name,
                     "selection_sha256": selection_payload.get("selection_sha256"),
@@ -1235,14 +1126,9 @@ def run_report(
             source = winner_dir / relative
             if source.is_file():
                 run.copy_file(source, relative)
-        for relative in ("selection.json", "diagnostics.json"):
-            source = (
-                diagnostics_dir / relative
-                if relative == "diagnostics.json" and diagnostics_payload
-                else block_dir / relative
-            )
-            if source.is_file():
-                run.copy_file(source, relative)
+        run.copy_file(block_dir / "selection.json", "selection.json")
+        if diagnostics_payload:
+            run.write_json("diagnostics.json", diagnostics_payload)
         artifacts.write_array_manifest(run, protocol.RECOMPUTE_ARRAYS)
         lines = [
             f"# test report {run.run_id}",

@@ -187,7 +187,7 @@ class DiagnosticsGateTests(unittest.TestCase):
         )
 
     def _diagnose(self, a_runs, b_runs=None, *, ridge=None):
-        selection = fx.selection_document(self.root, selection_sha="s" * 64)
+        selection = self._selection(a_runs)
         return diagnostics.build_diagnostics(
             selection=selection,
             block_id="block",
@@ -195,6 +195,16 @@ class DiagnosticsGateTests(unittest.TestCase):
             b_runs=b_runs or {},
             ridge=ridge,
         )
+
+    def _selection(self, a_runs):
+        run = a_runs.get(0)
+        selection = fx.selection_document(self.root, winner_run_dir=Path(run["run_dir"]) if run else None)
+        if run:
+            selection["winner"]["run_id"] = run["run_id"]
+            selection["winner_as_a"] = {"run_dir": run["run_dir"], "run_id": run["run_id"],
+                                       "condition_id": run["condition_id"], "repeat_role": "a"}
+        selection["selection_sha256"] = protocol.content_sha256({k:v for k,v in selection.items() if k != "selection_sha256"})
+        return selection
 
     @staticmethod
     def _passing(seed: int, **overrides) -> dict:
@@ -207,7 +217,6 @@ class DiagnosticsGateTests(unittest.TestCase):
             validation_mae=9.5,
             zero_mae=10.0,
             history_values=[max(10.0 - 0.1 * index, 5.0) for index in range(100)],
-            condition_id=f"condition-{seed}",
         )
         payload.update(overrides)
         return payload
@@ -235,9 +244,13 @@ class DiagnosticsGateTests(unittest.TestCase):
             "dataset": "r0",
             "data_sha256": "a" * 64,
             "node_keys_sha256": "b" * 64,
-            "split": {"validation_starts": [21]},
-            "selection": {"lambda": 0.01, "selected_on": "validation"},
-            "preprocessing": {"definition": "per-node standardization"},
+            "split": {"validation_starts": [21],
+                      "validation_target_months": protocol.split_payload()["validation_target_months"]},
+            "selection": {"lambda": 0.01, "selected_on": "validation",
+                          "metric": "validation original-unit MSE", "tie_break": "larger lambda"},
+            "preprocessing": {"definition": "per-node standardization", "ddof": 0,
+                              "constant_node_std": 1,
+                              "training_months": list(protocol.train_observation_months())},
             "validation": {"MAE": 6.0, "MSE": 36.0},
         }
 

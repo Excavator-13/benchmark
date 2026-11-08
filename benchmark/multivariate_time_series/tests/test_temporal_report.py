@@ -259,7 +259,8 @@ class ReportTests(unittest.TestCase):
         selection = {
             "status": "frozen",
             "frozen": True,
-            "winner": {"run_dir": str(self.winner_dir)},
+            "winner": {"run_dir": str(self.winner_dir), "learning_rate": complete.learning_rate},
+            "model": complete.model,
             "selection_sha256": frozen_sha,
         }
         diagnostics = {
@@ -267,6 +268,8 @@ class ReportTests(unittest.TestCase):
             "learning_ready": True,
             "selection_sha256": frozen_sha,
             "summary": {"complete_comparison": True},
+            "inputs": {"a_runs": {"0": {"run_dir": str(self.winner_dir),
+                                         "config": complete.to_payload(), "evidence_sha256": "fixture"}}},
         }
         passing = temporal_report.formal_report_blockers(
             purpose="formal",

@@ -234,6 +234,7 @@ def formal_report_blockers(
     a_states: Mapping[int, str],
     b_states: Mapping[int, str],
     winner_run_dir: Optional[Path],
+    run_evidence_sha256: Optional[str] = None,
 ) -> List[str]:
     """Return every reason a *formal* test report must be refused."""
     blockers: List[str] = []
@@ -252,14 +253,23 @@ def formal_report_blockers(
     winner = selection.get("winner") or {}
     if not winner:
         blockers.append("selection has no winning candidate")
-    elif winner_run_dir is not None:
-        resolved_run = Path(run_dir).resolve()
-        resolved_winner = Path(winner.get("run_dir", "")).resolve()
-        if resolved_run != resolved_winner:
-            blockers.append(
-                f"report run {resolved_run} is not the selected winner "
-                f"{resolved_winner}"
-            )
+    elif winner.get("learning_rate") != config.learning_rate:
+        blockers.append("trajectory learning rate differs from the frozen winner")
+    if selection.get("model") != config.model:
+        blockers.append("trajectory encoder differs from the frozen selection")
+    members = []
+    for role in ("a_runs", "b_runs"):
+        entry = ((diagnostics or {}).get("inputs") or {}).get(role, {}).get(str(config.seed))
+        if entry and entry.get("run_dir") and Path(entry["run_dir"]).resolve() == Path(run_dir).resolve():
+            members.append(entry)
+    if len(members) != 1:
+        blockers.append("trajectory is not a unique required seed/repetition in frozen diagnostics")
+    else:
+        member = members[0]
+        if member.get("config") != config.to_payload():
+            blockers.append("trajectory effective configuration differs from frozen diagnostics")
+        if not member.get("evidence_sha256") or (run_evidence_sha256 is not None and member["evidence_sha256"] != run_evidence_sha256):
+            blockers.append("trajectory evidence differs from frozen diagnostics")
     if diagnostics is None:
         blockers.append("validation diagnostics evidence is missing")
     else:

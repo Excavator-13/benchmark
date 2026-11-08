@@ -107,6 +107,7 @@ def last_payload(
     best_optimizer_state: Mapping[str, Any],
     scale: float,
     ledger: Optional[Mapping[str, Any]] = None,
+    execution: Optional[Mapping[str, Any]] = None,
 ) -> Dict[str, Any]:
     """Build the complete epoch-boundary recovery state for one trajectory."""
     payload = _base(LAST_KIND, config)
@@ -143,6 +144,7 @@ def last_payload(
             "condition": dict(condition),
             "data": dict(data_identity),
             "ledger": dict(ledger or {}),
+            "execution": dict(execution or {}),
         }
     )
     return payload

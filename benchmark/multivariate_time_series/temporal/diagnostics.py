@@ -17,7 +17,7 @@ import numpy as np
 
 from benchmark.nograph_baseline import metrics as p01_metrics
 
-from . import protocol
+from . import protocol, resources
 
 PASS = "pass"
 FAIL = "fail"
@@ -42,6 +42,15 @@ def _load_array(path: Path) -> Optional[np.ndarray]:
     return np.load(path, allow_pickle=False)
 
 
+def evidence_sha256(directory: Path) -> str:
+    paths = ("config.json", "provenance.json", "status.json", "history.json", "scores.json",
+             "validation/metrics.json", "validation/prediction.npy", "validation/gold.npy",
+             "weights/best.pt", "baselines.json", "fit-diagnostics.json")
+    return protocol.content_sha256({name: protocol.sha256_file(Path(directory) / name)
+                                   if (Path(directory) / name).is_file() else None
+                                   for name in paths})
+
+
 def load_run_evidence(run_dir: Path) -> Dict[str, Any]:
     """Load one completed (or failed) run's saved diagnostics evidence."""
     directory = Path(run_dir)
@@ -55,6 +64,7 @@ def load_run_evidence(run_dir: Path) -> Dict[str, Any]:
     provenance = _read_json(directory / "provenance.json") or {}
     data = provenance.get("data") or {}
     return {
+        "evidence_sha256": evidence_sha256(directory),
         "run_id": config_doc.get("run_id", directory.name),
         "run_dir": str(directory.resolve()),
         "state": str(status_doc.get("state", "unknown")),
@@ -69,6 +79,12 @@ def load_run_evidence(run_dir: Path) -> Dict[str, Any]:
         "data_sha256": data.get("source_sha256"),
         "keys_sha256": data.get("node_keys_sha256"),
         "protocol_sha256": (provenance.get("protocol") or {}).get("sha256"),
+        "environment": {field: (provenance.get("environment") or {}).get(field)
+                        for field in ("python_version_info", "platform", "machine", "device", "threads",
+                                      "packages", "thread_environment", "determinism")},
+        "source": {name: entry.get("sha256") for name, entry in
+                   ((provenance.get("source") or {}).get("files") or {}).items()},
+        "split": config_doc.get("split"),
         "history": _read_json(directory / "history.json"),
         "scores": _read_json(directory / "scores.json"),
         "validation_metrics": _read_json(directory / "validation" / "metrics.json"),
@@ -118,6 +134,8 @@ def _gate_result(
 def _aggregate_status(
     per_seed: Sequence[Mapping[str, Any]], *, required_seeds: int
 ) -> str:
+    if required_seeds == len(per_seed) and any(row["status"] == FAIL for row in per_seed):
+        return FAIL
     if any(row["status"] == INCOMPLETE for row in per_seed):
         return INCOMPLETE
     passed = sum(1 for row in per_seed if row["status"] == PASS)
@@ -131,18 +149,21 @@ def gate_completeness(
     """Gate 1: complete, finite trajectories with protocol controls and identity."""
     rows: List[Dict[str, Any]] = []
     reasons: List[str] = []
-    for seed in protocol.SEEDS:
-        evidence = a_runs.get(seed)
+    for seed, role, evidence in (
+        (seed, role, runs.get(seed)) for seed in protocol.SEEDS
+        for role, runs in (("a", a_runs), ("b", b_runs))
+    ):
         if evidence is None:
-            rows.append({"seed": seed, "status": INCOMPLETE, "reason": "no a-run"})
-            reasons.append(f"seed {seed}: repetition a evidence is missing")
+            rows.append({"seed": seed, "repeat_role": role, "status": INCOMPLETE,
+                         "reason": f"no {role}-run"})
+            reasons.append(f"seed {seed}: repetition {role} evidence is missing")
             continue
         problems: List[str] = []
         incomplete: List[str] = []
         if evidence["state"] != "completed":
             incomplete.append(f"run state is {evidence['state']!r}")
         controls = evidence.get("protocol_controls") or {}
-        if controls.get("complete") is not True:
+        if controls.get("complete") is not True or not evidence["config"].complete_protocol:
             incomplete.append(
                 "development override, not a complete protocol trajectory "
                 f"({controls.get('deviations')})"
@@ -174,7 +195,7 @@ def gate_completeness(
                         )
                         break
         scores = evidence.get("scores") or {}
-        for name in ("init", "best"):
+        for name in ("init", "10", "50", "100", "best"):
             block = scores.get(name)
             if not isinstance(block, dict):
                 incomplete.append(f"missing fixed-parameter {name} score block")
@@ -201,6 +222,7 @@ def gate_completeness(
         row = {
             "seed": seed,
             "run_id": evidence["run_id"],
+            "repeat_role": role,
             "status": FAIL if problems else (INCOMPLETE if incomplete else PASS),
             "problems": problems,
             "incomplete": incomplete,
@@ -208,14 +230,14 @@ def gate_completeness(
         rows.append(row)
         reasons.extend(f"seed {seed}: {item}" for item in incomplete)
         reasons.extend(f"seed {seed}: {item}" for item in problems)
-    status = _aggregate_status(rows, required_seeds=len(protocol.SEEDS))
+    status = _aggregate_status(rows, required_seeds=2 * len(protocol.SEEDS))
     return _gate_result(
         "complete_and_finite_trajectories",
         status=status,
-        threshold="every required a-run covers all 100 epochs finitely",
+        threshold="every required a/b run covers all 100 epochs finitely",
         per_seed=rows,
         reasons=reasons,
-        required_seeds=len(protocol.SEEDS),
+        required_seeds=2 * len(protocol.SEEDS),
     )
 
 
@@ -523,6 +545,9 @@ def gate_repetition(
                 "a/b condition identities differ: "
                 f"{a.get('condition_id')} vs {b.get('condition_id')}"
             )
+        for field in ("protocol_sha256", "environment", "source", "split", "config_payload"):
+            if a.get(field) != b.get(field):
+                problems.append(f"a/b {field} differs")
         if a.get("data_sha256") != b.get("data_sha256"):
             problems.append("a/b demand contents differ; not the same condition")
         if a.get("keys_sha256") != b.get("keys_sha256"):
@@ -538,6 +563,12 @@ def gate_repetition(
         b_gold = b.get("validation_gold")
         if a_pred is None or b_pred is None or a_gold is None or b_gold is None:
             incomplete.append("saved validation predictions or labels are missing")
+        elif not all(np.isfinite(arr).all() for arr in (a_pred, b_pred, a_gold, b_gold)):
+            problems.append("a/b validation arrays contain nonfinite values")
+        elif a_gold.shape != b_gold.shape or not np.array_equal(a_gold, b_gold):
+            problems.append("a/b validation labels differ")
+        elif a_pred.shape != a_gold.shape or b_pred.shape != b_gold.shape:
+            problems.append("validation predictions and labels have different shapes")
         elif a_pred.shape != b_pred.shape:
             problems.append(
                 f"a/b validation prediction shapes differ: {a_pred.shape} vs {b_pred.shape}"
@@ -621,29 +652,39 @@ def _baseline_compatibility(
         )
         record["ridge"] = None
         return record
-    provided = ridge if isinstance(ridge, Mapping) else {}
+    provided = dict(ridge) if isinstance(ridge, Mapping) else {}
+    if "keys_sha256" not in provided and "node_keys_sha256" in provided:
+        provided["keys_sha256"] = provided["node_keys_sha256"]
     mismatches: List[str] = []
     for field in ("dataset", "data_sha256", "keys_sha256"):
-        if field in provided and provided.get(field) != expected[field]:
+        if not provided.get(field) or provided.get(field) != expected[field]:
             mismatches.append(
                 f"Ridge evidence {field}={provided.get(field)!r} does not match "
                 f"{expected[field]!r}"
             )
     split = provided.get("split") or {}
-    if split and list(split.get("validation_starts", [])) != expected[
+    if list(split.get("validation_starts", [])) != expected[
         "split_validation_starts"
     ]:
         mismatches.append("Ridge evidence validation starts differ from the split")
-    if split.get("validation_target_months") and list(
-        split["validation_target_months"]
-    ) != expected["split_validation_months"]:
+    if list(split.get("validation_target_months", [])) != expected["split_validation_months"]:
         mismatches.append(
             "Ridge evidence validation target months differ from the protocol month "
             "identity"
         )
     selection = provided.get("selection") or {}
-    if not selection:
-        mismatches.append("Ridge evidence has no validation-selection record")
+    if selection.get("selected_on") != "validation" or not _finite(selection.get("lambda")) or selection.get("lambda", -1) < 0:
+        mismatches.append("Ridge evidence needs a finite nonnegative lambda selected on validation")
+    preprocessing = provided.get("preprocessing") or {}
+    if (preprocessing.get("definition") != "per-node standardization"
+            or preprocessing.get("training_months") != list(protocol.train_observation_months())
+            or preprocessing.get("ddof") != 0
+            or preprocessing.get("constant_node_std") != 1):
+        mismatches.append("Ridge evidence needs training-only 27-month per-node standardization, ddof=0, constant std=1")
+    if (selection.get("metric") != "validation original-unit MSE"
+            or selection.get("lambda") not in (1e-4, 1e-3, 1e-2, 1e-1, 1.0)
+            or selection.get("tie_break") != "larger lambda"):
+        mismatches.append("Ridge selection must use the inherited lambda grid, original-unit validation MSE and larger-lambda tie break")
     validation = provided.get("validation") or {}
     if not _finite(validation.get("MAE")) or not _finite(validation.get("MSE")):
         mismatches.append("Ridge evidence has no finite validation MAE/MSE")
@@ -741,6 +782,62 @@ def summarize_per_seed(
     }
 
 
+def gate_evidence_identity(selection, a_runs, b_runs):
+    """Bind all trajectories to the frozen winner and effective execution identity."""
+    problems, missing = [], []
+    winner = selection.get("winner") or {}
+    if selection.get("status") != "frozen" or selection.get("frozen") is not True:
+        missing.append("selection is not frozen")
+    expected_hash = protocol.content_sha256({k: v for k, v in selection.items() if k != "selection_sha256"})
+    if selection.get("selection_sha256") != expected_hash:
+        problems.append("selection content identity is invalid")
+    reference = a_runs.get(0)
+    link = selection.get("winner_as_a") or {}
+    if not reference:
+        missing.append("seed-0 winner-as-a evidence is missing")
+    else:
+        for item in (winner, link):
+            if not item.get("run_dir") or Path(item["run_dir"]).resolve() != Path(reference["run_dir"]).resolve():
+                problems.append("seed-0 a-run is not the frozen winner-as-a")
+            if item.get("run_id") != reference.get("run_id"):
+                problems.append("winner-as-a run identity differs")
+        if link.get("condition_id") != reference.get("condition_id"):
+            problems.append("winner-as-a condition differs")
+    for seed in protocol.SEEDS:
+        for role, runs in (("a", a_runs), ("b", b_runs)):
+            run = runs.get(seed)
+            if not run:
+                continue  # completeness reports absent trajectories
+            label = f"seed {seed} {role}"
+            cfg = run["config"]
+            if cfg.learning_rate != winner.get("learning_rate"):
+                problems.append(f"{label}: learning rate differs from frozen selection")
+            if cfg.model != selection.get("model") or run.get("dataset") != selection.get("dataset") or run.get("mode") != selection.get("mode"):
+                problems.append(f"{label}: model/dataset/mode differs from selection")
+            if cfg.seed != seed or (run.get("roles") or {}).get("repeat_role") != role:
+                problems.append(f"{label}: seed/repetition identity differs")
+            expected = protocol.condition_identity(cfg, dataset=run.get("dataset"), mode=run.get("mode"),
+                        data_sha256=run.get("data_sha256"), keys_sha256=run.get("keys_sha256"),
+                        protocol_sha256=run.get("protocol_sha256"))["condition_id"]
+            if run.get("condition_id") != expected:
+                problems.append(f"{label}: effective condition identity is invalid")
+            for field in ("data_sha256", "keys_sha256", "protocol_sha256", "source", "environment", "split"):
+                value = run.get(field)
+                if not value or (isinstance(value, dict) and any(v is None for v in value.values())):
+                    missing.append(f"{label}: {field} identity is missing")
+                elif reference and value != reference.get(field):
+                    problems.append(f"{label}: {field} differs across required trajectories")
+            if run.get("split") != protocol.split_payload():
+                problems.append(f"{label}: split differs from protocol")
+            if reference:
+                left, right = cfg.to_payload(), reference["config"].to_payload()
+                left.pop("seed"); right.pop("seed")
+                if left != right:
+                    problems.append(f"{label}: effective configuration differs across seeds")
+    return {"name": "frozen_evidence_identity", "status": FAIL if problems else (INCOMPLETE if missing else PASS),
+            "reasons": problems + missing, "per_seed": [], "problems": problems, "incomplete": missing}
+
+
 def build_diagnostics(
     *,
     selection: Mapping[str, Any],
@@ -762,6 +859,7 @@ def build_diagnostics(
         dataset=selection.get("dataset"),
     )
     gates = {
+        "frozen_evidence_identity": gate_evidence_identity(selection, a_runs, b_runs),
         "complete_and_finite_trajectories": completeness,
         "definite_learning": learning,
         "beyond_zero_baseline": beyond_zero,
@@ -815,6 +913,8 @@ def build_diagnostics(
                     "run_dir": run["run_dir"],
                     "state": run["state"],
                     "condition_id": run.get("condition_id"),
+                    "config": run["config"].to_payload(),
+                    "evidence_sha256": run.get("evidence_sha256"),
                     "validation": (run.get("validation_metrics") or {}).get("best"),
                 }
                 for seed, run in a_runs.items()
@@ -825,6 +925,8 @@ def build_diagnostics(
                     "run_dir": run["run_dir"],
                     "state": run["state"],
                     "condition_id": run.get("condition_id"),
+                    "config": run["config"].to_payload(),
+                    "evidence_sha256": run.get("evidence_sha256"),
                 }
                 for seed, run in b_runs.items()
             },
@@ -843,3 +945,53 @@ def build_diagnostics(
         {key: value for key, value in payload.items() if key != "diagnostics_sha256"}
     )
     return payload
+
+
+@resources.account_stage
+def run_diagnose(request: Mapping[str, Any]) -> Dict[str, Any]:
+    """Read saved evidence and publish exactly one isolated exclusive report."""
+    from . import artifacts, checks, selection as saved_selection
+
+    block = Path(request["block_dir"])
+    destination = Path(request["report_path"])
+    consumed = [("block", block, "dir")]
+    for role in ("a_runs", "b_runs"):
+        consumed.extend((f"{role}/{seed}", path, "dir")
+                        for seed, path in (request.get(role) or {}).items())
+    if request.get("ridge_path"):
+        consumed.append(("Ridge", request["ridge_path"], "file"))
+    checks.reject_destination(destination, consumed)
+    artifacts.check_development_namespace(str(request.get("purpose", "development")), destination)
+    inputs = {"block_dir": str(block.resolve()),
+              "a_runs": dict(request.get("a_runs") or {}),
+              "b_runs": dict(request.get("b_runs") or {}),
+              "ridge_path": request.get("ridge_path")}
+    tolerances = {"repetition_normalized_mae": protocol.REPETITION_TOLERANCE,
+                  "learning_train_reduction": protocol.LEARNING_TRAIN_REDUCTION,
+                  "learning_validation_reduction": protocol.LEARNING_VAL_REDUCTION,
+                  "zero_mae_improvement": protocol.ZERO_MAE_IMPROVEMENT,
+                  "budget_tail_relative": protocol.BUDGET_TAIL_RELATIVE}
+    try:
+        selection = saved_selection.load_selection(block)
+        # Selection may link a winner omitted from the explicit run arguments.
+        winner_path = (selection.get("winner") or {}).get("run_dir")
+        if winner_path:
+            consumed.append(("winner", winner_path, "dir"))
+            checks.reject_destination(destination, consumed)
+        a_runs = {int(seed): load_run_evidence(Path(path))
+                  for seed, path in (request.get("a_runs") or {}).items()}
+        b_runs = {int(seed): load_run_evidence(Path(path))
+                  for seed, path in (request.get("b_runs") or {}).items()}
+        ridge = checks.read_json(Path(request["ridge_path"])) if request.get("ridge_path") else None
+        result = build_diagnostics(selection=selection, block_id=block.name,
+                                   a_runs=a_runs, b_runs=b_runs, ridge=ridge)
+        status = "failed" if result["status"] == FAIL else result["status"]
+        payload = checks.envelope("diagnose", argv=request.get("argv") or [],
+                                  inputs=inputs, tolerances=tolerances, status=status,
+                                  result=result, errors=result["incomplete_reasons"][:10])
+    except Exception as exc:
+        payload = checks.failure_envelope("diagnose", argv=request.get("argv") or [],
+                                          inputs=inputs, tolerances=tolerances, exc=exc)
+    checks.reject_destination(destination, consumed)
+    written = checks.finish(destination, payload)
+    return {**written, "learning_ready": payload["result"].get("learning_ready", False)}

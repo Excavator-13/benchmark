@@ -129,7 +129,7 @@ class StagedChainTests(unittest.TestCase):
                     "argv": ["test"],
                 }
             )
-            self.assertEqual(diagnosis["status"], "incomplete")
+            self.assertEqual(diagnosis["status"], "failed")
             report = runner.run_report(
                 {
                     "block_dir": str(block),

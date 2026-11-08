@@ -230,7 +230,7 @@ class FitResourceTests(unittest.TestCase):
     def tearDown(self) -> None:
         self._tmp.cleanup()
 
-    def test_rss_breach_pauses_at_an_epoch_boundary_with_recovery(self):
+    def test_initial_rss_breach_stops_before_any_update(self):
         result = fx.fit_run(
             self.root / "runs",
             run_id="rss",
@@ -240,11 +240,10 @@ class FitResourceTests(unittest.TestCase):
             sampler=lambda: {"status": "ok", "rss_bytes": protocol.MEMORY_STOP_BYTES + 1},
         )
         self.assertEqual(result["status"], "paused")
-        self.assertEqual(result["completed_epoch"], 1)
+        self.assertEqual(result["completed_epoch"], 0)
         directory = Path(result["run_dir"])
-        self.assertTrue((directory / "recovery" / "last.pt").is_file())
-        payload = checkpoints.load_last(directory / "recovery" / "last.pt")
-        self.assertEqual(payload["completed_epoch"], 1)
+        self.assertFalse((directory / "recovery" / "last.pt").exists())
+        self.assertEqual(fx.read_json(directory / "gradients.json")["total_updates"], 0)
         status = fx.read_json(directory / "status.json")
         self.assertEqual(status["state"], "paused")
         self.assertEqual(status["detail"]["reason"], "resource_stop")
@@ -264,7 +263,7 @@ class FitResourceTests(unittest.TestCase):
             sampler=broken,
         )
         self.assertEqual(result["status"], "paused")
-        self.assertEqual(result["completed_epoch"], 1)
+        self.assertEqual(result["completed_epoch"], 0)
         self.assertEqual(
             fx.read_json(Path(result["run_dir"]) / "monitor.json")["monitor_failure"][
                 "reason"

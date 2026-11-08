@@ -31,7 +31,7 @@ MetricMap = Dict[str, float]
 
 
 class PauseRequest(RuntimeError):
-    """Raised by a controller hook to stop the trajectory at an epoch boundary."""
+    """Raised by a controller hook to stop bounded computation while retaining the last complete epoch."""
 
     def __init__(self, reason: str, detail: Optional[Mapping[str, Any]] = None):
         super().__init__(reason)
@@ -90,10 +90,12 @@ class EpochRecord:
 class Hooks:
     """Controller callbacks; the scientific loop itself stays injectable-safe."""
 
+    on_setup_complete: Optional[Callable[["Trajectory"], None]] = None
     on_epoch_complete: Optional[Callable[["Trajectory"], None]] = None
     after_epoch: Optional[Callable[["Trajectory"], None]] = None
     after_update: Optional[Callable[["Trajectory", int, int], None]] = None
     clock: Optional[Callable[[], float]] = None
+    check_stop: Optional[Callable[[], None]] = None
 
 
 @dataclass
@@ -141,11 +143,19 @@ class FitResult:
         return self.status != "completed"
 
 
-def chunk_ranges(node_count: int, chunk: int) -> List[Tuple[int, int]]:
+def chunk_ranges(node_count: int, chunk: int, contexts: Optional[np.ndarray] = None) -> List[Tuple[int, int]]:
     """Return contiguous canonical node ranges (chunks never reorder nodes)."""
     if chunk <= 0:
         raise protocol.ProtocolError("node_chunk must be positive")
-    return [(begin, min(node_count, begin + chunk)) for begin in range(0, node_count, chunk)]
+    boundaries = [0, node_count]
+    if contexts is not None:
+        contexts = np.asarray(contexts)
+        if contexts.shape != (node_count,):
+            raise protocol.ProtocolError("context identities must cover every node")
+        boundaries = [0, *(np.flatnonzero(contexts[1:] != contexts[:-1]) + 1).tolist(), node_count]
+    return [(begin, min(end, begin + chunk))
+            for start, end in zip(boundaries[:-1], boundaries[1:])
+            for begin in range(start, end, chunk)]
 
 
 def squared_error_sum(
@@ -155,6 +165,8 @@ def squared_error_sum(
     scale: float,
     chunk: int,
     denominator: int,
+    contexts: Optional[np.ndarray] = None,
+    check_stop: Optional[Callable[[], None]] = None,
 ) -> torch.Tensor:
     """Accumulate one complete window's scaled squared error and pre-clip norms.
 
@@ -162,7 +174,9 @@ def squared_error_sum(
     window, independent of how many chunks the nodes were split into.
     """
     total: Optional[torch.Tensor] = None
-    for begin, end in chunk_ranges(inputs.shape[0], chunk):
+    for begin, end in chunk_ranges(inputs.shape[0], chunk, contexts):
+        if check_stop is not None:
+            check_stop()
         x = torch.from_numpy(
             (inputs[begin:end] / float(scale)).astype(np.float32)
         ).unsqueeze(-1)
@@ -270,6 +284,7 @@ class Trajectory:
             self.arrays.validation_inputs,
             self.scale,
             self.config.node_chunk,
+            check_stop=self.hooks.check_stop,
         )
         record = p01_metrics.error_metrics(
             prediction, self.arrays.validation_targets
@@ -282,6 +297,7 @@ class Trajectory:
             self.arrays.validation_inputs,
             self.scale,
             self.config.node_chunk,
+            check_stop=self.hooks.check_stop,
         )
         return prediction
 
@@ -292,6 +308,7 @@ class Trajectory:
             self.arrays.train_inputs,
             self.scale,
             self.config.node_chunk,
+            check_stop=self.hooks.check_stop,
         )
         validation_prediction = self.validation_prediction()
         train = p01_metrics.error_metrics(
@@ -310,6 +327,10 @@ class Trajectory:
         }
 
     # -- training ----------------------------------------------------------
+    def _check_stop(self) -> None:
+        if self.hooks.check_stop is not None:
+            self.hooks.check_stop()
+
     def _train_epoch(self, epoch: int) -> Tuple[float, int, float]:
         self.model.train()
         denominator = int(self.arrays.node_count * protocol.p01.HORIZON)
@@ -325,8 +346,12 @@ class Trajectory:
                 self.scale,
                 self.config.node_chunk,
                 denominator,
+                contexts=self.arrays.node_keys[:, 0],
+                check_stop=self.hooks.check_stop,
             )
+            self._check_stop()
             contribution.backward()
+            self._check_stop()
             loss_total += float(contribution.detach())
             pre_clip = float(
                 torch.nn.utils.clip_grad_norm_(
@@ -336,6 +361,7 @@ class Trajectory:
             pre_clip_max = max(pre_clip_max, pre_clip)
             was_clipped = pre_clip > float(self.config.grad_clip)
             clipped += int(was_clipped)
+            self._check_stop()
             self.optimizer.step()
             self.updates += 1
             if self.hooks.after_update is not None:
@@ -378,6 +404,7 @@ class Trajectory:
     # -- run ---------------------------------------------------------------
     def run(self) -> FitResult:
         start_epoch = int(self.completed_epoch)
+        self._check_stop()
         if start_epoch == 0:
             initial = self.fixed_parameter_scores()
             initial["updates"] = 0
@@ -385,6 +412,8 @@ class Trajectory:
             initial["note"] = "initialization evaluation; never a selectable step"
             self.scores["init"] = initial
             self.initial_validation = dict(initial["validation"])
+        if self.hooks.on_setup_complete is not None:
+            self.hooks.on_setup_complete(self)
         try:
             for epoch in range(start_epoch + 1, self.config.epochs + 1):
                 started = self.clock()
@@ -401,17 +430,25 @@ class Trajectory:
                     pre_clip_norm_max=pre_clip_max,
                     wall_seconds=elapsed,
                 )
+                self._check_stop()
                 self.history.append(record.payload())
                 self.epoch_seconds.append(elapsed)
                 self._maybe_select(epoch, validation)
                 self.completed_epoch = epoch
                 if epoch in self.config.diagnostic_epochs:
                     self._record_score(str(epoch))
+                self._check_stop()
                 if self.hooks.on_epoch_complete is not None:
                     self.hooks.on_epoch_complete(self)
+                # Includes fixed-parameter diagnostic work and atomic checkpoint I/O.
+                elapsed = max(0.0, float(self.clock() - started))
+                self.history[-1]["wall_seconds"] = elapsed
+                self.epoch_seconds[-1] = elapsed
                 if self.hooks.after_epoch is not None:
                     self.hooks.after_epoch(self)
         except PauseRequest as exc:
+            if exc.reason in {"resource_stop", "fit_timeout", "batch_timeout", "sample_timeout"}:
+                raise
             self.pause = {"reason": exc.reason, "detail": dict(exc.detail)}
         return self._finish()
 
@@ -501,6 +538,7 @@ class Trajectory:
             np.zeros_like(self.arrays.validation_inputs),
             self.scale,
             self.config.node_chunk,
+            check_stop=self.hooks.check_stop,
         )
         _, saturation = temporal_model.predict(
             self.model,
@@ -508,6 +546,7 @@ class Trajectory:
             self.scale,
             self.config.node_chunk,
             collect_hidden_stats=True,
+            check_stop=self.hooks.check_stop,
         )
         baseline = p01_metrics.error_metrics(
             validation_prediction, self.arrays.validation_targets

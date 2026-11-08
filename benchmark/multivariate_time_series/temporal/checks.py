@@ -23,7 +23,7 @@ from benchmark.nograph_baseline import metrics as p01_metrics
 from benchmark.nograph_baseline import protocol as p01
 from benchmark.nograph_baseline.data import iso_now, sha256_file
 
-from . import protocol
+from . import protocol, resources
 
 DIAGNOSTIC_TOLERANCE = 1e-12
 NUMERIC_RELATIVE_TOLERANCE = 1e-9
@@ -350,6 +350,8 @@ def _recompute_report_metrics(directory: Path) -> Dict[str, Any]:
     saved = payload.get("metrics") or {}
     windows = read_json(directory / "test" / "windows.json")
     starts = [int(start) for start in windows["starts"]]
+    if starts != list(p01.MAIN_SPLIT.evaluation_starts):
+        raise CheckError("test windows do not cover all four protocol starts")
     prediction = load_npy(directory / "test" / "prediction.npy")
     gold = load_npy(directory / "test" / "gold.npy")
     keys = load_npy(directory / "keys.npy")
@@ -443,7 +445,13 @@ def _recompute_report_metrics(directory: Path) -> Dict[str, Any]:
     recomputed["aggregation_note"] = payload.get("metrics", {}).get(
         "aggregation_note"
     )
-    recomputed["sample_counts"] = payload.get("metrics", {}).get("sample_counts")
+    recomputed["sample_counts"] = {
+        "windows": int(prediction.shape[0]),
+        "nodes": int(keys.shape[0]),
+        "horizon": int(prediction.shape[2]),
+        "elements": int(prediction.size),
+        "per_window_elements": int(keys.shape[0] * prediction.shape[2]),
+    }
     recomputed["negative_prediction_ratio"] = float((prediction < 0).mean())
     comparison = compare_numbers(saved, recomputed, DIAGNOSTIC_TOLERANCE)
     clipped_saved = payload.get("clipped_nonnegative") or {}
@@ -488,6 +496,7 @@ def _recompute_report_metrics(directory: Path) -> Dict[str, Any]:
     }
 
 
+@resources.account_stage
 def run_recompute(
     *,
     run_dir: Path,
@@ -636,6 +645,7 @@ def _prediction_comparison(
     }
 
 
+@resources.account_stage
 def run_compare(
     *,
     run_a: Path,

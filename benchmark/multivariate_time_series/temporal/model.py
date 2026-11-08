@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import copy
 import random
-from typing import Any, Dict, Mapping, Optional, Tuple
+from typing import Any, Callable, Dict, Mapping, Optional, Tuple
 
 import numpy as np
 import torch
@@ -162,6 +162,7 @@ def predict(
     node_chunk: int,
     *,
     collect_hidden_stats: bool = False,
+    check_stop: Optional[Callable[[], None]] = None,
 ) -> Tuple[np.ndarray, Optional[float]]:
     """Predict original-unit values for ``[windows, nodes, 6]`` inputs.
 
@@ -184,6 +185,8 @@ def predict(
     with torch.no_grad():
         for window in range(windows):
             for begin in range(0, nodes, int(node_chunk)):
+                if check_stop is not None:
+                    check_stop()
                 end = min(nodes, begin + int(node_chunk))
                 tensor = torch.from_numpy(scaled[window, begin:end]).unsqueeze(-1)
                 prediction = model(tensor) * float(scale)

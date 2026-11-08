@@ -246,7 +246,7 @@ class StageBoundaryTests(unittest.TestCase):
             )
         self.assertEqual(base["status"], "completed")
         self.assertEqual(selection_result["status"], "frozen")
-        self.assertIn(diagnosis["status"], {"incomplete", "fail", "pass"})
+        self.assertIn(diagnosis["status"], {"incomplete", "failed", "pass"})
 
 
 def _set(signal: np.ndarray, row: int, column: int, value: float) -> None:

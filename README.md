@@ -727,7 +727,7 @@ python -m benchmark.multivariate_time_series.effective_temporal_training fit \
 # ... and the equivalent b runs with --repeat-role b
 
 # section-5 gates from saved evidence (incomplete evidence never becomes a pass);
-# each run reserves a fresh <block>/diagnostics/<diagnostics-id>/ directory
+# write one exclusive external JSON report; saved block/runs stay read-only
 python -m benchmark.multivariate_time_series.effective_temporal_training diagnose \
     --block scratch/effective-temporal/blocks/p02-r0-gru --purpose development \
     --a-run 0=scratch/effective-temporal/p02-r0-gru-s0-lr1e-3 \
@@ -744,6 +744,7 @@ python -m benchmark.multivariate_time_series.effective_temporal_training report 
     --data-name r0 \
     --block scratch/effective-temporal/blocks/p02-r0-gru \
     --run scratch/effective-temporal/p02-r0-gru-s0-lr1e-3 \
+    --diagnostics scratch/effective-temporal/reports/p02-r0-gru-diagnose.json \
     --run-id p02-r0-gru-test-report --purpose development \
     --output-root scratch/effective-temporal
 # optional coverage evidence: --graph <raw graph parquet> or --mask-bundle <npz>
@@ -768,7 +769,8 @@ python -m benchmark.multivariate_time_series.effective_temporal_training resume 
 `--epochs` (frozen at 100), `--hidden-size`, `--layers`, `--node-chunk`,
 `--grad-clip`, `--threads` (only 1), `--ledger`, `--batch-id`,
 `--remaining-fits`, `--monitor-interval`, `--memory-limit-bytes`,
-`--setup-seconds`, `--takeover-stale`. Any control that differs from the frozen
+`--setup-seconds` (a conservative development timing injection; measured setup
+is always included), `--takeover-stale`. Any control that differs from the frozen
 protocol is a labelled development override and cannot be used for a formal
 report. For software rehearsal only, `fit`/`resume` accept
 `--memory-available-bytes`/`--disk-free-bytes` to inject the preflight resource
@@ -776,7 +778,7 @@ readings; the flags are rejected for `--purpose formal`.
 
 **Exit codes.** `0` pass/completed, `1` failed, `2` usage or protocol violation,
 `3` paused (resource/cost/batch stop, recovery point preserved), `4` incomplete
-(unfrozen selection, failing/incomplete gates, or a labelled development report).
+(unfrozen selection, incomplete gates, or a labelled development report).
 
 **Outputs (artifact format v2).** A fit/resume directory contains
 `config.json`, `command.json`, `provenance.json`, `status.json`, `report.json`,
@@ -784,34 +786,58 @@ readings; the flags are rejected for `--purpose formal`.
 `masks.npz`, `history.json`, `scores.json`, `gradients.json`, `baselines.json`,
 `fit-diagnostics.json`, `validation/{prediction,gold}.npy`,
 `validation/metrics.json`, `weights/best.pt`, `recovery/last.pt`, `cost.json`,
-`monitor.json`, `arrays-sha256.json` and `events.jsonl`. A diagnose execution reserves
-`<block>/diagnostics/<diagnostics-id>/` with `diagnostics.json`, `cost.json`,
-`provenance.json`, `command.json`, `report.json` and `summary.md`, and updates
-the `<block>/latest-diagnostics.json` pointer. A report directory adds
+`monitor.json`, `epoch-timing.json`, `billing.json`, `arrays-sha256.json` and `events.jsonl`.
+`diagnose` writes its complete frozen gate evidence into the single external
+`--report` JSON. It leaves the block, all trajectories and Ridge evidence unchanged.
+A report directory adds
 `test/{prediction,gold}.npy`, `test/windows.json`, copied validation/selection/
-diagnostics evidence and `coverage.json`; `report --diagnostics <dir>` may select
-an explicit diagnostics execution. Only `summary.md`, `provenance.json`,
+diagnostics evidence and `coverage.json`; `report --diagnostics <report.json>`
+consumes the explicitly frozen diagnose report. Formal reporting requires this
+report and accepts each linked seed 0/1/2 repetition a/b at the selected rate;
+it verifies membership and unchanged evidence before constructing test arrays. Only `summary.md`, `provenance.json`,
 `command.json` and `report.json` are Git-readable entries under the existing
 generic ignore policy; full arrays/checkpoints remain local evidence and their
 delivery/sealing is research-side.
 
-**Check contract.** `recompute` and `compare` read only saved evidence and write
+**Check contract.** `diagnose`, `recompute` and `compare` read saved evidence and write
 exactly one exclusive JSON report; the destination is refused when it exists or
 resolves inside a consumed run. `compare` validates the scientific condition
 first (dataset, data contents, canonical keys, split, protocol content, model,
 seed, learning rate, effective configuration and environment) and only then the
 normalized MAE bound `|a-b|/max(1,a,b) <= 1e-6` plus the maximum absolute
 prediction difference; test predictions are compared after final reporting.
-A failure still writes a report and exits nonzero.
+A usable destination retains a failure report and exits nonzero. Saved checks
+need NumPy and the saved artifacts; torch, pandas, Arrow, demand and graph readers
+are not required. Recompute derives sample counts from arrays and canonical keys.
+When saved evidence links to an available active batch ledger, stage/check time
+is billed there, outside the consumed directories. Offline copies remain checkable
+without the original ledger.
+
+Ridge validation JSON must supply `dataset`, `data_sha256`, `node_keys_sha256`,
+`split.validation_starts` and `split.validation_target_months` matching the
+neural evidence. Its `preprocessing` records `definition: "per-node standardization"`,
+the 27 `training_months`, `ddof: 0` and `constant_node_std: 1`. Its `selection`
+records a protocol-grid `lambda`, `selected_on: "validation"`,
+`metric: "validation original-unit MSE"` and `tie_break: "larger lambda"`.
+Finite `validation.MAE` and `validation.MSE` are required. Missing compatibility
+evidence keeps readiness incomplete.
 
 **Recovery contract.** `recovery/last.pt` is published atomically at every
 complete epoch and contains model/optimizer, RNG, epoch/update, next-window
-position, history, best snapshot, condition/data identity and the ledger
-reference. `resume` reserves a new output identity linked to the parent,
-validates data/protocol/configuration/environment/budget, and restarts only from
-the last complete epoch; the parent directory is never modified. Legacy
+position, history, best snapshot, condition/data identity, bound source/environment
+and ledger/batch identity. `epoch-timing.json` records complete epoch durations
+including diagnostic and atomic checkpoint publication time. `resume` reserves a new output identity linked to the parent,
+validates data/protocol/configuration/source/environment/budget, and restarts only
+from the last complete epoch; the parent directory is never modified. Resume
+inherits the original ledger path, ledger ID, batch and total trajectory time;
+a missing/replaced ledger or a different path cannot reset either time budget.
+A stop is checked between bounded model operations, retaining the preceding
+complete checkpoint. The controller also terminates on sampled RSS/monitor
+failure and persists active cost through worker termination. Setup, complete
+epochs, final writes and failed/replayed work all count toward active time. Legacy
 checkpoints without `artifact_format_version` (and the old single-window
-`checkpoint.pt` format) are rejected rather than upgraded.
+`checkpoint.pt` format), and earlier v2 recovery files without bound execution
+and budget evidence, are rejected rather than upgraded.
 
 **Diagnostics.** `fit` saves fixed-parameter original-unit train/validation MSE
 and MAE at initialization, epochs 10/50/100 and the selected checkpoint, the

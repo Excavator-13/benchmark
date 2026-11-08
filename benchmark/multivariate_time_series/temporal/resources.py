@@ -4,14 +4,15 @@ The controller runs one CPU worker, sets BLAS/torch thread variables before the
 worker imports torch, samples the worker process-tree RSS at intervals <= 5 s
 with psutil and persists an active-time ledger that survives pauses and resumes.
 The watchdog is an independent thread: a breach is recorded continuously and the
-training loop reacts at the next complete epoch boundary, so a run never stops
-mid-epoch with an ambiguous recovery state.
+training loop checks that flag between bounded operations and preserves the
+preceding complete recovery state when it stops mid-epoch.
 """
 
 from __future__ import annotations
 
 import importlib.util
 import json
+import uuid
 import os
 import statistics
 import threading
@@ -287,6 +288,7 @@ class Ledger:
         return {
             "version": self.VERSION,
             "batch_id": self.batch_id,
+            "ledger_id": uuid.uuid4().hex,
             "created": iso_now(),
             "entries": [],
         }
@@ -322,6 +324,9 @@ class Ledger:
             "recorded": iso_now(),
             "note": note,
         }
+        # Heartbeats replace one execution's elapsed total, never double-bill it.
+        self.payload["entries"] = [old for old in self.payload["entries"]
+                                   if old["execution_id"] != execution_id]
         self.payload["entries"].append(entry)
         self.payload["updated"] = entry["recorded"]
         self._write()
@@ -353,7 +358,8 @@ class Ledger:
         return {
             "version": self.VERSION,
             "batch_id": self.batch_id,
-            "path": str(self.path),
+            "path": str(self.path.resolve()),
+            "ledger_id": self.payload.get("ledger_id"),
             "active_seconds": self.active_seconds(),
             "estimated_seconds": self.estimated_seconds(),
             "entries": len(self.payload["entries"]),
@@ -384,7 +390,7 @@ def sample_process_tree_rss(root_pid: int) -> Dict[str, Any]:
 
 
 class Watchdog:
-    """Independent RSS/active-time sampler reacting at epoch boundaries."""
+    """Independent RSS/active-time sampler with a cancellation flag."""
 
     def __init__(
         self,
@@ -424,7 +430,10 @@ class Watchdog:
                 "at": timestamp,
             }
             return {"status": "monitor_failure", **self.monitor_failure}
-        rss = int(sample.get("rss_bytes", 0))
+        if sample.get("status", "ok") != "ok" or "rss_bytes" not in sample:
+            self.monitor_failure = {"reason": "process monitoring failed", "sample": sample, "at": timestamp}
+            return {"status": "monitor_failure", **self.monitor_failure}
+        rss = int(sample["rss_bytes"])
         sample.update(
             {
                 "sampled_at": timestamp,
@@ -855,3 +864,65 @@ def _check_recovery(
         }
     except Exception as exc:
         return {"status": "fail", "reason": f"{type(exc).__name__}: {exc}"}
+
+
+def account_stage(function):
+    """Bill active saved-check/selection/report work to a linked live batch.
+
+    Offline copies remain independently checkable when their batch ledger is
+    unavailable. A live linked ledger is outside all consumed evidence roots;
+    accounting never rewrites the saved runs or creates another check report.
+    """
+    import functools
+    import inspect
+
+    @functools.wraps(function)
+    def wrapped(*args, **kwargs):
+        arguments = inspect.signature(function).bind(*args, **kwargs).arguments
+        request = arguments.get("request") or arguments
+        clock = request.get("accounting_clock") or time.monotonic
+        started = clock()
+        directories = []
+        for key in ("run_dir", "run_a", "run_b", "block_dir"):
+            if request.get(key):
+                directories.append(Path(request[key]))
+        directories.extend(Path(path) for path in request.get("candidates", []))
+        for key in ("a_runs", "b_runs"):
+            directories.extend(Path(path) for path in (request.get(key) or {}).values())
+        budgets = []
+        for directory in directories:
+            config = directory / "config.json"
+            if config.is_file():
+                try:
+                    document = json.loads(config.read_text(encoding="utf-8"))
+                except (OSError, ValueError):
+                    continue  # the stage writes its own malformed-input failure report
+                if document.get("budget"):
+                    budgets.append(document["budget"])
+        explicit = request.get("ledger_path")
+        if explicit:
+            budgets = [{"path": explicit, "batch_id": request.get("batch_id", "p02-t006")}]
+        # A check of offline evidence must not require its original machine.
+        live = {str(Path(item["path"]).resolve()): item for item in budgets
+                if item.get("path") and Path(item["path"]).is_file()}
+        ledgers = []
+        for path, budget in live.items():
+            resolved = Path(path)
+            if any(resolved == directory.resolve() or directory.resolve() in resolved.parents for directory in directories):
+                raise ResourceError("batch accounting ledger must be outside consumed evidence directories")
+            ledgers.append(Ledger(resolved, batch_id=budget["batch_id"]))
+        execution_id = f"{function.__name__}@{uuid.uuid4().hex}"
+        state = "failed"
+        try:
+            result = function(*args, **kwargs)
+            state = str(result.get("status", "completed"))
+            return result
+        finally:
+            elapsed = max(0.0, float(clock() - started))
+            for ledger in ledgers:
+                # Reload so nested calls or another sequential stage are retained.
+                current = Ledger(ledger.path, batch_id=ledger.batch_id)
+                current.record(execution_id=execution_id, run_id=function.__name__,
+                               seconds=elapsed, status=state,
+                               note="active selection/diagnostic/report/check work")
+    return wrapped

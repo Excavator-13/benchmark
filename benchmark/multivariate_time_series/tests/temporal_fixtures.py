@@ -233,21 +233,15 @@ def synthetic_completed_run(
         seed=seed,
         learning_rate=learning_rate,
         epochs=epochs,
-        hidden_size=4,
+        hidden_size=32,
         layers=1,
         node_chunk=3,
         grad_clip=1.0,
         threads=1,
     )
-    condition = condition_id or protocol.content_sha256(
-        {
-            "seed": seed,
-            "model": model,
-            "learning_rate": learning_rate,
-            "data_sha": data_sha,
-            "keys_sha": keys_sha,
-        }
-    )
+    condition = condition_id or protocol.condition_identity(
+        config, dataset=dataset, mode="count", data_sha256=data_sha,
+        keys_sha256=keys_sha, protocol_sha256=protocol.protocol_content_sha256())["condition_id"]
     config_doc = {
         "artifact_format_version": protocol.ARTIFACT_FORMAT_VERSION,
         "scientific_version": protocol.SCIENTIFIC_VERSION,
@@ -300,7 +294,17 @@ def synthetic_completed_run(
             },
         },
     }
+    for epoch in (10, 50, 100):
+        if epoch <= len(records):
+            scores[str(epoch)] = {"epoch": epoch, "updates": epoch * protocol.UPDATES_PER_EPOCH,
+                                  "train": dict(scores["best"]["train"]),
+                                  "validation": dict(scores["best"]["validation"])}
     provenance = {
+        "source": {"files": {"fixture.py": {"sha256": "fixture-source"}}},
+        "environment": {"python_version_info": [3, 11, 17], "platform": "fixture-platform",
+                        "machine": "fixture-machine", "device": "cpu", "threads": 1,
+                        "packages": {"torch": "fixture-torch"}, "thread_environment": {},
+                        "determinism": {"num_threads": 1}},
         "artifact_format_version": protocol.ARTIFACT_FORMAT_VERSION,
         "scientific_version": protocol.SCIENTIFIC_VERSION,
         "data": {

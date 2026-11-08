@@ -13,9 +13,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict, Mapping, Optional
 
+import math
+
 import torch
 
-from . import artifacts, checkpoints, protocol
+from . import artifacts, checkpoints, protocol, resources, checks
 from . import engine as temporal_engine
 
 
@@ -50,6 +52,7 @@ def load_parent(
     parent_dir: Path,
     *,
     ledger_path: Optional[Path] = None,
+    batch_id: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Validate a parent run and return its recovery payload plus identity."""
     directory = Path(parent_dir)
@@ -83,6 +86,69 @@ def load_parent(
         raise RecoveryError(
             f"{directory}: recovery condition identity does not match the parent run"
         )
+    # The checkpoint binds the captured runtime and actual execution environment.
+    execution = payload.get("execution") or {}
+    if not execution.get("source") or not execution.get("environment"):
+        raise RecoveryError("recovery lacks bound source/environment evidence; refit with the current format")
+    if execution["source"] != provenance.get("source") or execution["environment"] != provenance.get("environment"):
+        raise RecoveryError("parent source/environment differs from the bound recovery state")
+    files = execution["source"].get("files") or {}
+    if not files:
+        raise RecoveryError("recovery source inventory is missing")
+    for name, entry in files.items():
+        current = artifacts.repo_root() / name
+        actual = protocol.sha256_file(current) if current.is_file() else None
+        if actual != entry.get("sha256"):
+            raise RecoveryError(f"current source differs from parent: {name}")
+    temporal_engine.temporal_model.set_determinism(parent_config.seed, parent_config.threads)
+    environment = artifacts.capture_environment()
+    if any(environment.get(field) != execution["environment"].get(field) for field in checks.ENVIRONMENT_FIELDS):
+        raise RecoveryError("current execution environment differs from parent")
+    if (provenance.get("protocol") or {}).get("sha256") != protocol.protocol_content_sha256():
+        raise RecoveryError("current protocol differs from parent")
+    bound = payload.get("ledger") or {}
+    bound_path = bound.get("path")
+    if not bound_path or not bound.get("ledger_id") or not bound.get("trajectory_execution_ids"):
+        raise RecoveryError("recovery lacks verifiable inherited ledger evidence")
+    if ledger_path is not None and Path(ledger_path).resolve() != Path(bound_path).resolve():
+        raise RecoveryError("resume ledger path must match the inherited ledger")
+    if not Path(bound_path).is_file():
+        raise RecoveryError("inherited ledger is missing; budget cannot be reset")
+    if batch_id is not None and batch_id != bound.get("batch_id"):
+        raise RecoveryError("resume batch identity differs from inherited ledger")
+    ledger = resources.Ledger(Path(bound_path), batch_id=bound["batch_id"])
+    if ledger.payload.get("ledger_id") != bound["ledger_id"] or ledger.active_seconds() < bound.get("active_seconds", 0):
+        raise RecoveryError("inherited ledger was replaced or lost consumed budget")
+    entries = {entry["execution_id"]: entry for entry in ledger.payload["entries"]}
+    ids = bound["trajectory_execution_ids"]
+    if any(identity not in entries for identity in ids):
+        raise RecoveryError("inherited trajectory billing evidence is missing")
+    for identity in ids:
+        entry = entries[identity]
+        if (entry.get("kind") not in {"measured", "replayed"}
+                or not math.isfinite(float(entry.get("seconds", -1)))
+                or float(entry.get("seconds", -1)) < 0
+                or entry.get("status") == "running"):
+            raise RecoveryError("inherited active-time entry is incomplete or unverifiable")
+    fit_spent = sum(float(entries[identity]["seconds"]) for identity in ids)
+    billing_path = directory / "billing.json"
+    if billing_path.is_file():
+        billing = _read_json(billing_path)
+        if (billing.get("ledger_id") != bound["ledger_id"]
+                or billing.get("execution_id") not in ids
+                or float(entries[billing["execution_id"]]["seconds"]) < billing.get("execution_seconds", float("inf"))
+                or fit_spent < billing.get("trajectory_seconds", float("inf"))):
+            raise RecoveryError("inherited ledger lost measured execution time")
+    if fit_spent >= protocol.FIT_SECONDS:
+        raise RecoveryError("inherited single-fit trajectory budget is exhausted")
+    # Complete-epoch time includes its own checkpoint publication, so the exact
+    # final duration is recorded after that publication in this immutable sidecar.
+    timing = directory / "epoch-timing.json"
+    if timing.is_file():
+        durations = _read_json(timing).get("epochs") or {}
+        for record in payload["history"]:
+            if str(record["epoch"]) in durations:
+                record["wall_seconds"] = durations[str(record["epoch"])]
     completed_epoch = int(payload.get("completed_epoch", 0))
     if completed_epoch <= 0:
         raise RecoveryError(
@@ -93,7 +159,7 @@ def load_parent(
             f"{directory}: the parent trajectory already completed all "
             f"{parent_config.epochs} epochs; there is nothing to resume"
         )
-    remaining = remaining_budget_seconds(ledger_path)
+    remaining = ledger.remaining_seconds()
     if remaining is not None and remaining <= 0:
         raise RecoveryError(
             "the cumulative batch budget is exhausted; a new execution identity "
@@ -115,6 +181,10 @@ def load_parent(
             directory / protocol.RUN_DIRECTORY_FILES["last_recovery"]
         ),
         "remaining_batch_seconds": remaining,
+        "ledger_path": str(Path(bound_path).resolve()),
+        "batch_id": bound["batch_id"],
+        "trajectory_execution_ids": ids,
+        "fit_spent_seconds": fit_spent,
     }
 
 

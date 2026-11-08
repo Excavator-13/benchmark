@@ -167,14 +167,13 @@ class DevelopmentChainTests(unittest.TestCase):
             "--report", str(self.report_dir / "diagnose.json"),
         )
         self.assertEqual(
-            diagnose.returncode, 4, diagnose.stdout + diagnose.stderr
+            diagnose.returncode, 1, diagnose.stdout + diagnose.stderr
         )
         self.assertTrue((self.report_dir / "diagnose.json").is_file())
-        pointer = fx.read_json(block / "latest-diagnostics.json")
-        diagnostics_dir = Path(pointer["run_dir"])
-        self.assertTrue((diagnostics_dir / "diagnostics.json").is_file())
-        self.assertTrue((diagnostics_dir / "cost.json").is_file())
-        self.assertEqual(pointer["status"], "incomplete")
+        first_report = fx.read_json(self.report_dir / "diagnose.json")
+        self.assertEqual(first_report["status"], "failed")
+        self.assertFalse((block / "latest-diagnostics.json").exists())
+        self.assertFalse((block / "diagnostics").exists())
         second = run_cli(
             "diagnose",
             "--block", str(block),
@@ -184,16 +183,15 @@ class DevelopmentChainTests(unittest.TestCase):
             "--diagnostics-id", "second-diagnostics",
             "--report", str(self.report_dir / "diagnose-2.json"),
         )
-        self.assertEqual(second.returncode, 4, second.stdout + second.stderr)
-        self.assertTrue((block / "diagnostics" / "second-diagnostics" / "diagnostics.json").is_file())
-        self.assertTrue(diagnostics_dir.exists())
+        self.assertEqual(second.returncode, 1, second.stdout + second.stderr)
+        self.assertTrue((self.report_dir / "diagnose-2.json").exists())
         collision = run_cli(
             "diagnose",
             "--block", str(block),
             "--a-run", f"0={self.root / 'runs' / 'a0'}",
             "--purpose", "development",
             "--diagnostics-id", "second-diagnostics",
-            "--report", str(self.report_dir / "diagnose-3.json"),
+            "--report", str(self.report_dir / "diagnose-2.json"),
         )
         self.assertEqual(collision.returncode, 1, collision.stdout + collision.stderr)
 

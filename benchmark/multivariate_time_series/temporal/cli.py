@@ -16,6 +16,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import uuid
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
@@ -225,7 +226,7 @@ def build_parser() -> argparse.ArgumentParser:
     diagnose.add_argument(
         "--diagnostics-id",
         default=None,
-        help="fresh diagnostics execution identity (default: timestamp)",
+        help="optional label retained for command compatibility; report path is the output identity",
     )
     diagnose.set_defaults(handler="diagnose")
 
@@ -243,7 +244,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--diagnostics",
         type=Path,
         default=None,
-        help="explicit diagnostics execution directory (default: block pointer)",
+        help="frozen diagnose JSON report; required for formal reporting",
     )
     report.set_defaults(handler="report")
 
@@ -367,8 +368,8 @@ def _worker_environment() -> Dict[str, str]:
 
 
 def _run_stage(args: argparse.Namespace, operation: str) -> int:
-    from . import artifacts, resources, runner
-
+    stage_started = time.monotonic()
+    from . import artifacts, resources, runner, recovery
     root = _default_root(args)
     lock_path = _lock_path(args)
     preflight_request = _preflight_request(args, operation=operation)
@@ -447,6 +448,21 @@ def _run_stage(args: argparse.Namespace, operation: str) -> int:
         )
         lock.release()
         return EXIT_PAUSED
+    inherited_fit_seconds = 0.0
+    if operation == "resume":
+        try:
+            inherited = recovery.load_parent(Path(args.parent), ledger_path=_ledger_path(args), batch_id=args.batch_id)
+            inherited_fit_seconds = inherited["fit_spent_seconds"]
+        except Exception:
+            lock.release()
+            raise
+    request["execution_id"] = f"{args.run_id}@{uuid.uuid4().hex}"
+    request["controller_managed"] = True
+    request["controller_started_at"] = stage_started
+    if ledger is not None:
+        # Persist one ledger identity before the worker can open the same file.
+        ledger.record(execution_id=request["execution_id"], run_id=args.run_id,
+                      seconds=max(0.0, time.monotonic() - stage_started), status="running")
     handle = tempfile.NamedTemporaryFile(
         mode="w", suffix=".json", prefix="effective-temporal-", delete=False
     )
@@ -471,18 +487,9 @@ def _run_stage(args: argparse.Namespace, operation: str) -> int:
             )
             watchdog.sample_once()
             watchdog.start()
-            started = time.monotonic()
-            while process.poll() is None:
-                if time.monotonic() - started > protocol.FIT_SECONDS:
-                    timeout_reason = {
-                        "reason": "single fit exceeded the 60 min wall-clock limit",
-                        "elapsed_seconds": time.monotonic() - started,
-                        "limit_seconds": protocol.FIT_SECONDS,
-                    }
-                    process.terminate()
-                    break
-                time.sleep(min(0.5, request["monitor_interval"]))
-            code = process.wait()
+            code, timeout_reason = supervise_worker(
+                process, watchdog=watchdog, ledger=ledger, request=request,
+                started=stage_started, inherited_fit_seconds=inherited_fit_seconds)
         finally:
             if watchdog is not None:
                 watchdog.stop()
@@ -492,7 +499,7 @@ def _run_stage(args: argparse.Namespace, operation: str) -> int:
             if watchdog is not None and watchdog.pause_reason() is not None
             else timeout_reason
         )
-        if code != 0 and pause_reason is not None:
+        if pause_reason is not None:
             _mark_controller_pause(run_dir, pause_reason)
             code = EXIT_PAUSED
         return _report_stage_result(run_dir, code)
@@ -502,6 +509,40 @@ def _run_stage(args: argparse.Namespace, operation: str) -> int:
             os.unlink(handle.name)
         except OSError:
             pass
+
+
+def supervise_worker(process, *, watchdog, ledger, request, started,
+                     inherited_fit_seconds=0.0, clock=time.monotonic, sleeper=time.sleep):
+    """Enforce sampled stops independently and persist cost even on termination."""
+    base = sum(float(entry["seconds"]) for entry in ledger.payload["entries"]
+               if entry["execution_id"] != request["execution_id"] and entry["kind"] in {"measured", "replayed"}) if ledger is not None else 0.0
+    reason = None
+    def bill(status="running"):
+        elapsed = max(0.0, clock() - started)
+        if ledger is not None:
+            ledger.record(execution_id=request["execution_id"], run_id=request["run_id"],
+                          seconds=elapsed, status=status)
+        return elapsed
+    try:
+        while process.poll() is None:
+            elapsed = bill()
+            reason = watchdog.pause_reason()
+            if reason is None and inherited_fit_seconds + elapsed > protocol.FIT_SECONDS:
+                reason = {"reason": "single fit exceeded the 60 min wall-clock limit",
+                          "elapsed_seconds": inherited_fit_seconds + elapsed}
+            if reason is None and base + elapsed > protocol.BATCH_SECONDS:
+                reason = {"reason": "cumulative batch budget exhausted", "active_seconds": base + elapsed}
+            if reason is not None:
+                process.terminate()
+                try:
+                    process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                break
+            sleeper(min(0.5, request["monitor_interval"]))
+        return process.wait(), reason
+    finally:
+        bill("paused" if reason else "finished")
 
 
 def _mark_controller_pause(run_dir: Path, reason: Mapping[str, Any]) -> None:
@@ -626,7 +667,7 @@ def _handle_select(args: argparse.Namespace) -> int:
 
 
 def _handle_diagnose(args: argparse.Namespace) -> int:
-    from . import runner
+    from . import diagnostics
 
     try:
         a_runs = _parse_seed_runs(args.a_runs, "--a-run")
@@ -635,7 +676,7 @@ def _handle_diagnose(args: argparse.Namespace) -> int:
         _emit({"status": "failed", "reason": str(exc)})
         return EXIT_USAGE
     try:
-        result = runner.run_diagnose(
+        result = diagnostics.run_diagnose(
             {
                 "block_dir": str(args.block),
                 "purpose": args.purpose,
