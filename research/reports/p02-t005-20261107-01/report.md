@@ -86,3 +86,5 @@ python3 -B research/reports/p02-t005-20261107-01/summarize_cost.py > research/re
 T006 已在正确基线 `91ea3d6df8360998d9d2b1ed36ab764322ee26f3` 上创建 `p02-t006-gru-lstm-v2`，新增 `benchmark/multivariate_time_series/effective_temporal_training.py`，实现 P2-effective-training-L6-H3-v1 的训练期 RMS、L6/H3 窗口、完整窗口梯度累积、梯度裁剪、验证集 checkpoint 选择和可审计 JSON 产物。
 
 软件 smoke 测试通过；r0/count 真实数据成本样本和三 seed 对比见 [T006 v2 run](../../runs/p02-t006-gru-lstm-v2-20261107/summary.md)。GRU 与 LSTM 均按验证 MSE 在 `{1e-3, 3e-3}` 中选择 `3e-3`。结果仅是 r0/count 预实验，不推广到其他粒度；P02/T009 未修改、未运行。OpenSpec 独立验证已 PASS，变更已归档于 [add-effective-temporal-training](../../../openspec/changes/archive/2026-11-07-add-effective-temporal-training/verification.md)。
+
+2026-11-08 补充：后续 `add-effective-temporal-training-v2` 归档的独立验证为 PASS（[verification](../../../openspec/changes/archive/2026-11-08-add-effective-temporal-training-v2/verification.md)）。该变更只补强 L6/H3 输入计数校验、测试标签延迟物化、身份绑定 checkpoint、原子写入与确定性恢复；没有重跑上述科研比较，也没有改变 `91ea3d6` 的 run/provenance、T006 科学结果或 T009 归属。当前 v2 归档与研究记录尚未 commit/push，训练 checkpoint 仍为本地 scratch 产物。

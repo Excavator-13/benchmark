@@ -40,11 +40,11 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 | 字段 | 值 |
 | --- | --- |
 | Status | `closed` |
-| 变更名 | `add-effective-temporal-training` |
+| 变更名 | `add-effective-temporal-training-v2` |
 | 研究任务 | P02-T006 |
-| 登记时间 | 2026-11-07 |
+| 登记时间 | 2026-11-08（接手；v1 委托已于 2026-11-07 回收） |
 | 委派给 | E13/spec-driven-compatible 变更流程 |
 | 结束判据 | 活跃变更目录已移除；对应归档 `verification.md` 为 `Verdict: PASS`，验证基准与实现一致 |
-| 研究侧收尾 | 依据独立 PASS 更新 P02 协议、T005 交接记录、state 和归档索引；记录实现与实验身份；不修改 T009 |
-| 上次核对 | 2026-11-07：归档 verification PASS；已完成研究侧收尾 |
-| 回收记录 | 2026-11-07：`add-effective-temporal-training` 已归档，verification 为 PASS；P02 协议、T005 交接记录、state 和 P02 计划已更新并指向 v2 run；T009 未修改、未运行；尚未 push 或创建 Pull Request |
+| 研究侧收尾 | 依据 v2 独立 PASS 更新 P02 计划、协议、T005 交接记录、state、归档索引和决定；保留 v1 run 身份与结果；不修改 T009 |
+| 上次核对 | 2026-11-08：v2 归档 verification PASS；实现、测试和 config 指纹与报告一致；已完成研究侧收尾 |
+| 回收记录 | 2026-11-08：`add-effective-temporal-training-v2` 已归档，verification 为 PASS；v2 只修复恢复/审计边界，未新增科研 run 或重跑比较；v1 `91ea3d6` run 与 T009 归属保持不变；研究记录和 v2 归档当前未 commit/push，异地备份未核验 |

@@ -566,3 +566,14 @@ T006 任务状态改为 `in_progress`（实现部分完成）。剩余研究项�
 兼容性与边界：新版本改变预处理／优化轨迹，不覆盖 P01 或原 T002 协议／run，不将旧失败追认为新条件失败。新方案多处条件共同变化，不据未来改善声称单一因素因果。沿用主数据／切分、原始单位选模与评测及既有图收益门槛；自适应机制、alpha 候选及新图算法未在本决定中冻结。首批设置如须扩大或科学门槛须改变，另留条件修订与决定，不能按测试结果事后放宽。
 
 本次完成于方案和研究交接：未启动训练、未创建 OpenSpec 变更或在途委托，未安装依赖或访问原 Windows 执行根，未封存、commit 或 push。
+
+## D039: P02-T006 v2 实现修复研究侧收尾
+
+提出及接受日期：2026-11-08。状态：`accepted`。
+来源：接手已归档的 `add-effective-temporal-training-v2`；依据 [OpenSpec 独立验证报告](../openspec/changes/archive/2026-11-08-add-effective-temporal-training-v2/verification.md)、当前实现文件和 P02-T006 run 记录。
+
+只读核对：活跃变更目录不存在；归档 `verification.md` 为 `Verdict: PASS`，V-001 为 `verified-resolved`。报告记录的实现、测试和配置指纹与当前文件一致，验证 revision 为 `4295ead0af0f80341b79f2dd532f024319143dba`。
+
+决定：接受 v2 作为 P02-T006 的实现就绪补充证据。它只修复输入边界、测试标签隔离、身份绑定 checkpoint、原子写入和确定性恢复；不改变 `P2-effective-training-L6-H3-v1`，不重跑 `r0/count` 三 seed 比较，不改写 `91ea3d6` run/provenance，也不改变 T009 归属。P02-T006 继续保持 `done`，研究侧委托回收完成。
+
+保存状态：v1/v2 OpenSpec 归档和研究记录当前尚未 commit/push，训练 checkpoint 仍在本地 `scratch/`，异地备份未核验。该保存事实不等同于科研证据封存或远端备份。

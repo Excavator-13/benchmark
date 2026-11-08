@@ -317,3 +317,9 @@ region/r0 产物：[组合报告](../reports/p02-t002-remaining-20261022-01/repo
 对象：[T005 方案报告](../reports/p02-t005-20261107-01/report.md)、同目录的只读成本汇总脚本与 [historical-cost.json](../reports/p02-t005-20261107-01/historical-cost.json)。依据为既有正式自身 run 的可读 summary；本轮没有新训练产物。科学条件由 [P02 新协议](../phases/P02/protocol.md) 维护，研究侧采用见 D038。
 
 存储：上述交付已在本机仓库工作区生成；本轮未 commit、push 或封存，异地备份未核验。旧模型、预测与 checkpoint 的存储事实仍见对应历史条目，本次方案交付不代表它们已迁移或补做核验。
+
+## P02-T006 运行与软件收尾（2026-11-08）
+
+运行 [p02-t006-gru-lstm-v2-20261107](../runs/p02-t006-gru-lstm-v2-20261107/summary.md) 属于 P02/T006 的 `r0/count` 三 seed GRU/LSTM 预实验；两个模型各完成 3 个 seed，结果仅限该粒度和协议边界。v1 OpenSpec 变更 `add-effective-temporal-training` 与 v2 修复变更 `add-effective-temporal-training-v2` 均已独立验证 PASS 并归档。v2 只修复输入边界、测试标签隔离、checkpoint 身份/恢复和原子写入，不重跑科研比较、不改变 v1 run/provenance，也不修改 T009。
+
+保存状态：当前研究记录和 v2 OpenSpec 归档仍在本地工作树，尚未 commit、push 或完成异地备份核验；训练 checkpoint 仍位于本地 `scratch/`。本条记录不把归档目录的存在误写为 Git 保存或远端备份完成。

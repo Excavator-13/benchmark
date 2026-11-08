@@ -3,7 +3,7 @@
 科学版本：`P2-effective-training-L6-H3-v1`。制定日期：2026-11-07。
 来源：[D037](../../decisions.md#d037-中期后图收益检验融合强度与跨粒度关系的路线候选) 授权的新条件制定与 [D038](../../decisions.md#d038-t005-新训练条件与成本方案)。
 适用范围：首先用于 P02-T006 的 GRU/LSTM 自身基线；T007 继承其中可比的训练定义，另行冻结图／alpha 比较清单。T008–T010 在各自启动前明确适用与修改项，不自动套用全部超参数。
-执行状态由 [P02 计划](plan.md) 维护；本次 T006 已实现独立入口并完成 r0/count 三 seed GRU/LSTM 训练，OpenSpec 独立验证已 PASS 并归档。
+执行状态由 [P02 计划](plan.md) 维护；本次 T006 已实现独立入口并完成 r0/count 三 seed GRU/LSTM 训练，v1 OpenSpec 独立验证已 PASS 并归档；随后 v2 修复归档的独立验证也为 PASS。v2 只补强恢复与审计边界，不改变本协议或既有 run 结果。
 
 ## 1. 与既有协议的关系
 
@@ -88,7 +88,7 @@ GRU 未通过的数据组不展开 T007；LSTM 未通过时记录另一编码器
 
 ## 7. 软件与保存边界
 
-当前冻结 runner 不支持本协议。T006 新增入口 `benchmark/multivariate_time_series/effective_temporal_training.py` 已实现本协议核心训练语义，并完成 smoke 与 r0/count 实验；OpenSpec 独立验证已 PASS，研究侧软件就绪验收记录见 [T005 方案报告 §7](../../reports/p02-t005-20261107-01/report.md#7-t006-实现交接回执-2026-11-07)。
+当前冻结 runner 不支持本协议。T006 新增入口 `benchmark/multivariate_time_series/effective_temporal_training.py` 已实现本协议核心训练语义，并完成 smoke 与 r0/count 实验；v1 OpenSpec 独立验证已 PASS，v2 进一步验证恢复/输入边界后也已 PASS。研究侧软件就绪验收记录见 [T005 方案报告 §7](../../reports/p02-t005-20261107-01/report.md#7-t006-实现交接回执-2026-11-07) 及其 2026-11-08 补充。
 
 预检须机器可读地产出 pass/fail，覆盖协议／源码／数据／环境身份、CPU／线程／依赖、资源可用性、旧控制器冲突、输出不覆盖与恢复身份。模型训练接口不接收测试标签；验证期方案选择与有效性检查完成后才由报告环节生成测试预测。
 
