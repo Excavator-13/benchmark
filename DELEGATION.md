@@ -39,7 +39,7 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 
 | 字段 | 值 |
 | --- | --- |
-| Status | `open` |
+| Status | `closed` |
 | 变更名 | `fix-effective-temporal-training-acceptance` |
 | 研究任务 | P02-T006 |
 | 登记时间 | 2026-11-08 |
@@ -47,5 +47,5 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 | 委派给 | E13/spec-driven-compatible 变更流程 |
 | 结束判据 | 活跃变更目录已移除；对应归档 `verification.md` 为 `Verdict: PASS`，验证基准与实现一致 |
 | 研究侧收尾 | 核对当前基准的独立 PASS 并判断软件就绪；依据新证据记录旧 r0 预实验的适用限制及 T006 研究验收缺口，更新阶段计划、state 和保存索引；明确后续正式实验范围与前置条件。软件 PASS 不代替 learning_ready 或 T006 研究验收，不自动启动正式实验、commit 或 push；不修改 T009 |
-| 上次核对 | 2026-11-08：活跃变更目录仍存在，结束判据未满足；仅委托软件修复及 fixture/development 验证，正式实验与研究验收由研究侧负责 |
-| 回收记录 | 尚未回收 |
+| 上次核对 | 2026-11-08：活跃目录已移除，对应归档 verification 为 PASS，验证清单与当前实现一致；结束判据满足 |
+| 回收记录 | 2026-11-08：按 [D039](research/decisions.md#d039-t006-软件修复研究侧验收与完成状态纠正) 接受软件就绪并完成研究侧收尾；旧结果限制与后续范围见[收尾报告](research/reports/p02-t006-software-closeout-20261108-01/report.md)，阶段计划、state 和保存索引已更新。软件就绪不等于 T006 研究完成，未启动正式实验、未 commit/push，T009 未介入 |

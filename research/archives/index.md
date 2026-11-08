@@ -317,3 +317,11 @@ region/r0 产物：[组合报告](../reports/p02-t002-remaining-20261022-01/repo
 对象：[T005 方案报告](../reports/p02-t005-20261107-01/report.md)、同目录的只读成本汇总脚本与 [historical-cost.json](../reports/p02-t005-20261107-01/historical-cost.json)。依据为既有正式自身 run 的可读 summary；本轮没有新训练产物。科学条件由 [P02 新协议](../phases/P02/protocol.md) 维护，研究侧采用见 D038。
 
 存储：上述交付已在本机仓库工作区生成；本轮未 commit、push 或封存，异地备份未核验。旧模型、预测与 checkpoint 的存储事实仍见对应历史条目，本次方案交付不代表它们已迁移或补做核验。
+
+## P02-T006 软件修复交付与旧预实验限制（2026-11-08）
+
+对象：`fix-effective-temporal-training-acceptance` 实现、测试、README、主规格和独立验收交付批次；研究侧接受见 [D039](../decisions.md#d039-t006-软件修复研究侧验收与完成状态纠正)，内容核对和旧实验限制见[收尾报告](../reports/p02-t006-software-closeout-20261108-01/report.md)。
+
+存储：软件交付已随本地提交保存；归档及主规格位于 commit `b347943`（`Archive verified effective temporal training acceptance change`），实现修复位于其祖先 `ca4d5e2`。OpenSpec 工件已归档于 [2026-11-08-fix-effective-temporal-training-acceptance](../../openspec/changes/archive/2026-11-08-fix-effective-temporal-training-acceptance/)，这不表示实验封存包已创建。未核验远端推送、异地备份或恢复。
+
+关联旧实验 [p02-t006-gru-lstm-v2-20261107](../runs/p02-t006-gru-lstm-v2-20261107/summary.md) 在当前本地 Git 中仅含 `summary.md`、`provenance.json`、`metrics.json` 和 `environment.txt`；原 Windows 完整 checkpoint、候选日志与预测／标签本轮未回收、未核验。不因实现已入库或软件独立 PASS 声称这些数组／权重已交付或备份。旧结果适用限制以收尾报告为准，旧 run 与旧归档不改写。本次没有新增真实实验 run 或封存包。
