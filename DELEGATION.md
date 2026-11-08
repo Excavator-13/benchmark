@@ -39,12 +39,13 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 
 | 字段 | 值 |
 | --- | --- |
-| Status | `closed` |
-| 变更名 | `add-effective-temporal-training` |
+| Status | `open` |
+| 变更名 | `fix-effective-temporal-training-acceptance` |
 | 研究任务 | P02-T006 |
-| 登记时间 | 2026-11-07 |
+| 登记时间 | 2026-11-08 |
+| 登记说明 | 研究侧补登记：前一轮已按用户要求创建提案，但遗漏了流程启动前的登记；本条记录实际补登记时间，不追写为事前登记 |
 | 委派给 | E13/spec-driven-compatible 变更流程 |
 | 结束判据 | 活跃变更目录已移除；对应归档 `verification.md` 为 `Verdict: PASS`，验证基准与实现一致 |
-| 研究侧收尾 | 依据独立 PASS 更新 P02 协议、T005 交接记录、state 和归档索引；记录实现与实验身份；不修改 T009 |
-| 上次核对 | 2026-11-07：归档 verification PASS；已完成研究侧收尾 |
-| 回收记录 | 2026-11-07：`add-effective-temporal-training` 已归档，verification 为 PASS；P02 协议、T005 交接记录、state 和 P02 计划已更新并指向 v2 run；T009 未修改、未运行；尚未 push 或创建 Pull Request |
+| 研究侧收尾 | 核对当前基准的独立 PASS 并判断软件就绪；依据新证据记录旧 r0 预实验的适用限制及 T006 研究验收缺口，更新阶段计划、state 和保存索引；明确后续正式实验范围与前置条件。软件 PASS 不代替 learning_ready 或 T006 研究验收，不自动启动正式实验、commit 或 push；不修改 T009 |
+| 上次核对 | 2026-11-08：活跃变更目录仍存在，结束判据未满足；仅委托软件修复及 fixture/development 验证，正式实验与研究验收由研究侧负责 |
+| 回收记录 | 尚未回收 |
