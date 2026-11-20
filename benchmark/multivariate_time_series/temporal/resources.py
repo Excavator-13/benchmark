@@ -11,8 +11,11 @@ preceding complete recovery state when it stops mid-epoch.
 from __future__ import annotations
 
 import contextvars
+import copy
+import hashlib
 import importlib.util
 import json
+import math
 import uuid
 import os
 import statistics
@@ -262,29 +265,61 @@ class Ledger:
     Paused wall-clock time with no worker process is never counted: only
     measured execution durations (including failed, interrupted and replayed
     work) accumulate.
+
+    The version-1 debit extension is for isolated temporary-ledger validation
+    only.  It does not make old writers debit-aware or enable formal budgets.
+    Write-time reloads protect serial callers, not concurrent processes.
     """
 
     VERSION = 1
+    ORDINARY_KINDS = {"measured", "estimated", "replayed"}
+    DEBIT_KIND = "budget-debit"
+    _EXECUTION_IDENTITY = "_execution_identity"
+    _EXECUTION_IDENTITY_DIGEST = "_execution_identity_sha256"
+    _NO_REPLACEMENT = object()
 
     def __init__(self, path: Path, batch_id: str):
         self.path = Path(path)
         self.batch_id = batch_id
+        self._expected_batch_id = batch_id
+        self._has_persisted = False
+        self._write_uncertain = False
         self.payload = self._load()
+        self._ledger_id = self.payload.get("ledger_id")
 
-    def _load(self) -> Dict[str, Any]:
-        if self.path.exists():
-            payload = json.loads(self.path.read_text(encoding="utf-8"))
+    def _load(
+        self, *, allow_create: bool = True, restore_identities: bool = True,
+    ) -> Dict[str, Any]:
+        try:
+            text = self.path.read_text(encoding="utf-8", errors="surrogatepass")
+        except FileNotFoundError:
+            if not allow_create:
+                raise
+        else:
+            payload = self._parse_json(text)
+            if not isinstance(payload, dict):
+                raise ResourceError(f"{self.path}: ledger state is not an object")
             if payload.get("version") != self.VERSION:
                 raise ResourceError(
                     f"{self.path}: ledger version {payload.get('version')!r} is not "
                     f"{self.VERSION}"
                 )
-            payload.setdefault("entries", [])
+            if not isinstance(payload.get("entries"), list):
+                raise ResourceError(f"{self.path}: ledger entries are unavailable")
             if payload.get("batch_id") and payload["batch_id"] != self.batch_id:
                 raise ResourceError(
                     f"{self.path}: ledger belongs to batch {payload['batch_id']!r}, "
                     f"not {self.batch_id!r}"
                 )
+            if restore_identities:
+                for entry in payload["entries"]:
+                    if isinstance(entry, dict):
+                        kind = entry.get("kind")
+                        if ((isinstance(kind, str) and kind in self.ORDINARY_KINDS)
+                                or self._EXECUTION_IDENTITY in entry
+                                or self._EXECUTION_IDENTITY_DIGEST in entry):
+                            self._restore_execution_id(entry)
+            self._has_persisted = True
             return payload
         return {
             "version": self.VERSION,
@@ -294,14 +329,401 @@ class Ledger:
             "entries": [],
         }
 
-    def _write(self) -> None:
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        temporary = self.path.with_suffix(self.path.suffix + ".tmp")
-        temporary.write_text(
-            json.dumps(self.payload, indent=2, sort_keys=True) + "\n",
-            encoding="utf-8",
-        )
-        os.replace(temporary, self.path)
+    @staticmethod
+    def _unique_json_members(pairs: List[Any]) -> Dict[str, Any]:
+        result = {}
+        for name, value in pairs:
+            if name in result:
+                raise ResourceError(f"duplicate JSON member {name!r} in ledger")
+            result[name] = value
+        return result
+
+    @classmethod
+    def _parse_json(cls, text: str) -> Any:
+        return json.loads(text, object_pairs_hook=cls._unique_json_members)
+
+    def _write(
+        self,
+        *,
+        payload: Optional[Dict[str, Any]] = None,
+        ordinary_entry: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        document = self.payload if payload is None else payload
+        try:
+            if ordinary_entry is not None:
+                # Preserve HEAD's JSON-write exception for unsupported ID types
+                # before adding internal metadata to the new ordinary record.
+                json.dumps(document, indent=2, sort_keys=True, ensure_ascii=False)
+                metadata = {
+                    "version": 1,
+                    "value": self._encode_execution_id(ordinary_entry["execution_id"]),
+                }
+                ordinary_entry[self._EXECUTION_IDENTITY] = metadata
+                ordinary_entry[self._EXECUTION_IDENTITY_DIGEST] = self._identity_digest(metadata)
+            text = json.dumps(
+                document, indent=2, sort_keys=True, ensure_ascii=False,
+            ) + "\n"
+            # Validate exactly the bytes that would be persisted before any
+            # temporary file or replacement is created.
+            self._parse_json(text)
+        except ResourceError:
+            # Deterministic validation failures do not make write outcome
+            # uncertain and do not alter the confirmed instance payload.
+            raise
+        except Exception:
+            # The caller cannot assume a failed write left the old file intact.
+            self._write_uncertain = True
+            raise
+        try:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            temporary = self.path.with_suffix(self.path.suffix + ".tmp")
+            temporary.write_text(text, encoding="utf-8", errors="surrogatepass")
+            os.replace(temporary, self.path)
+        except Exception:
+            self._write_uncertain = True
+            raise
+        self._has_persisted = True
+
+    @staticmethod
+    def _debit_seconds(seconds: float) -> float:
+        if isinstance(seconds, bool) or not isinstance(seconds, (int, float)):
+            raise ResourceError("debit seconds must be a positive finite number")
+        try:
+            value = float(seconds)
+        except OverflowError as exc:
+            raise ResourceError("debit seconds must be finite") from exc
+        if not math.isfinite(value) or value <= 0:
+            raise ResourceError("debit seconds must be a positive finite number")
+        return value
+
+    @staticmethod
+    def _debit_text(value: str, field: str) -> str:
+        if not isinstance(value, str) or not value.strip():
+            raise ResourceError(f"debit {field} must be a nonblank string")
+        return value
+
+    @staticmethod
+    def _entry_seconds(value: Any) -> None:
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise ResourceError("ledger entry seconds must be numeric")
+        try:
+            number = float(value)
+        except (OverflowError, TypeError, ValueError) as exc:
+            raise ResourceError("ledger entry seconds must be numeric") from exc
+        if math.isnan(number) or number < 0:
+            raise ResourceError("ledger entry seconds must be nonnegative and not NaN")
+
+    @classmethod
+    def _reject_nan_execution_id(cls, value: Any, seen: Optional[set] = None) -> None:
+        """NaN cannot keep Python container equality stable after JSON reload."""
+        if isinstance(value, float) and math.isnan(value):
+            raise ResourceError("execution_id containing NaN is not supported")
+        if not isinstance(value, (tuple, list, dict)):
+            return  # Leave unsupported types to HEAD's JSON-write TypeError.
+        if seen is None:
+            seen = set()
+        if id(value) in seen:
+            return  # Let JSON serialization report circular references.
+        seen.add(id(value))
+        items = value.items() if isinstance(value, dict) else ((None, item) for item in value)
+        for key, item in items:
+            cls._reject_nan_execution_id(key, seen)
+            cls._reject_nan_execution_id(item, seen)
+
+    @staticmethod
+    def _canonical_identity(metadata: Mapping[str, Any]) -> bytes:
+        return json.dumps(
+            metadata, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
+        ).encode("utf-8", errors="surrogatepass")
+
+    @classmethod
+    def _identity_digest(cls, metadata: Mapping[str, Any]) -> str:
+        # Integrity redundancy, not authentication against coordinated edits.
+        encoded = b"P02-T006 ledger execution identity v1\0" + cls._canonical_identity(metadata)
+        return hashlib.sha256(encoded).hexdigest()
+
+    @classmethod
+    def _encode_execution_id(cls, value: Any) -> List[Any]:
+        """Keep Python container/key types without changing the public ID field."""
+        try:
+            if isinstance(value, str):
+                # JSON escape decoding can combine two surrogate code points.
+                # Integer code points keep Python string equality reversible,
+                # including strings used as dictionary keys.
+                return ["string", [ord(character) for character in value]]
+            if isinstance(value, tuple):
+                return ["tuple", [cls._encode_execution_id(item) for item in value]]
+            if isinstance(value, list):
+                return ["list", [cls._encode_execution_id(item) for item in value]]
+            if isinstance(value, dict):
+                pairs = []
+                for key, item in value.items():
+                    if key is not None and not isinstance(key, (str, int, float, bool)):
+                        raise ResourceError("ordinary execution_id has a non-JSON dictionary key")
+                    pairs.append([cls._encode_execution_id(key), cls._encode_execution_id(item)])
+                return ["dict", pairs]
+            if value is None or isinstance(value, (int, float, bool)):
+                if isinstance(value, float) and math.isnan(value):
+                    raise ResourceError("execution_id containing NaN is not supported")
+                return ["scalar", value]
+        except (TypeError, ValueError, OverflowError, RecursionError) as exc:
+            raise ResourceError("ordinary execution_id is not JSON serializable") from exc
+        raise ResourceError("ordinary execution_id is not JSON serializable")
+
+    @classmethod
+    def _decode_execution_id(cls, encoded: Any) -> Any:
+        if not isinstance(encoded, list) or len(encoded) != 2:
+            raise ResourceError("ordinary execution identity encoding is invalid")
+        kind, value = encoded
+        if kind == "string" and isinstance(value, list):
+            if any(type(codepoint) is not int or not 0 <= codepoint <= 0x10FFFF
+                   for codepoint in value):
+                raise ResourceError("ordinary execution identity string code points are invalid")
+            return "".join(chr(codepoint) for codepoint in value)
+        elif kind == "scalar":
+            if value is None or isinstance(value, (int, float, bool)):
+                if isinstance(value, float) and math.isnan(value):
+                    raise ResourceError("execution_id containing NaN is not supported")
+                return value
+        elif kind in ("tuple", "list") and isinstance(value, list):
+            items = [cls._decode_execution_id(item) for item in value]
+            return tuple(items) if kind == "tuple" else items
+        elif kind == "dict" and isinstance(value, list):
+            result = {}
+            for pair in value:
+                if not isinstance(pair, list) or len(pair) != 2:
+                    raise ResourceError("ordinary execution identity dictionary is invalid")
+                key = cls._decode_execution_id(pair[0])
+                if key is not None and not isinstance(key, (str, int, float, bool)):
+                    raise ResourceError("ordinary execution identity dictionary key is invalid")
+                if key in result:
+                    raise ResourceError("ordinary execution identity dictionary key is duplicated")
+                result[key] = cls._decode_execution_id(pair[1])
+            return result
+        raise ResourceError("ordinary execution identity encoding is invalid")
+
+    @classmethod
+    def _restore_execution_id(cls, entry: Dict[str, Any]) -> None:
+        """Validate the reversible internal identity against its JSON projection."""
+        encoded = entry.get(cls._EXECUTION_IDENTITY)
+        digest = entry.get(cls._EXECUTION_IDENTITY_DIGEST)
+        if (not isinstance(entry.get("kind"), str)
+                or entry["kind"] not in cls.ORDINARY_KINDS
+                or "execution_id" not in entry
+                or not isinstance(encoded, dict)
+                or type(encoded.get("version")) is not int
+                or encoded["version"] != 1
+                or set(encoded) != {"version", "value"}
+                or not isinstance(digest, str)):
+            raise ResourceError("ordinary execution identity metadata is invalid")
+        try:
+            if digest != cls._identity_digest(encoded):
+                raise ResourceError("ordinary execution identity digest does not match metadata")
+            restored = cls._decode_execution_id(encoded["value"])
+            canonical = {"version": 1, "value": cls._encode_execution_id(restored)}
+            if cls._canonical_identity(encoded) != cls._canonical_identity(canonical):
+                raise ResourceError("ordinary execution identity encoding is not canonical")
+            # Compare JSON projections only for metadata integrity, never for
+            # ID equality.  Sort after projection because numeric dictionary
+            # keys become strings and may then have a different sort order.
+            original_json = json.dumps(
+                cls._parse_json(json.dumps(
+                    entry["execution_id"], sort_keys=True, ensure_ascii=False,
+                )), sort_keys=True, ensure_ascii=False,
+            )
+            restored_json = json.dumps(
+                cls._parse_json(json.dumps(restored, sort_keys=True, ensure_ascii=False)),
+                sort_keys=True, ensure_ascii=False,
+            )
+        except (TypeError, ValueError, OverflowError, RecursionError) as exc:
+            raise ResourceError("ordinary execution identity metadata is invalid") from exc
+        if original_json != restored_json:
+            raise ResourceError("ordinary execution identity does not match execution_id")
+        entry["execution_id"] = restored
+
+    @staticmethod
+    def _same_execution_id(left: Any, right: Any) -> bool:
+        return left == right
+
+    def _validated_entries(
+        self,
+        payload: Mapping[str, Any],
+        *,
+        replacement_id: Any = _NO_REPLACEMENT,
+    ) -> Dict[str, Dict[str, Any]]:
+        if not isinstance(payload, dict) or not isinstance(payload.get("entries"), list):
+            raise ResourceError(f"{self.path}: ledger entries are unavailable")
+        debits: Dict[str, Dict[str, Any]] = {}
+        ordinary_entries = []
+        ordinary_ids = []
+        for entry in payload["entries"]:
+            if not isinstance(entry, dict):
+                raise ResourceError(f"{self.path}: ledger entry is not an object")
+            if "kind" not in entry or not isinstance(entry["kind"], str):
+                raise ResourceError(f"{self.path}: ledger entry kind is missing")
+            kind = entry["kind"]
+            if kind in self.ORDINARY_KINDS:
+                required = {
+                    "execution_id", "run_id", "seconds", "kind", "status",
+                    "recorded", "note", self._EXECUTION_IDENTITY,
+                    self._EXECUTION_IDENTITY_DIGEST,
+                }
+                if not required.issubset(entry):
+                    raise ResourceError(f"{self.path}: ordinary ledger entry is incomplete")
+                self._restore_execution_id(entry)
+                self._entry_seconds(entry["seconds"])
+                if not isinstance(entry["recorded"], str) or not entry["recorded"].strip():
+                    raise ResourceError(f"{self.path}: ledger entry recorded time is invalid")
+                ordinary_entries.append(entry)
+                ordinary_ids.append(entry["execution_id"])
+                continue
+            if kind != self.DEBIT_KIND:
+                raise ResourceError(f"{self.path}: unsupported ledger entry kind {kind!r}")
+            if self._EXECUTION_IDENTITY in entry or self._EXECUTION_IDENTITY_DIGEST in entry:
+                raise ResourceError(f"{self.path}: debit has ordinary execution identity metadata")
+            required = {
+                "execution_id", "debit_id", "run_id", "kind", "seconds",
+                "reason", "status", "recorded",
+            }
+            if not required.issubset(entry):
+                raise ResourceError(f"{self.path}: debit ledger entry is incomplete")
+            debit_id = self._debit_text(entry["debit_id"], "id")
+            self._debit_seconds(entry["seconds"])
+            self._debit_text(entry["reason"], "reason")
+            self._debit_text(entry["recorded"], "recorded")
+            if (entry["execution_id"] != debit_id
+                    or entry["run_id"] != debit_id
+                    or entry["status"] != "registered"
+                    or debit_id in debits):
+                raise ResourceError(f"{self.path}: debit identity or state is ambiguous")
+            debits[debit_id] = entry
+        for index, identity in enumerate(ordinary_ids):
+            if any(self._same_execution_id(identity, previous)
+                   for previous in ordinary_ids[:index]):
+                if (replacement_id is self._NO_REPLACEMENT
+                        or not self._same_execution_id(identity, replacement_id)):
+                    raise ResourceError(f"{self.path}: duplicate ordinary execution identity")
+        for debit_id in debits:
+            for entry in ordinary_entries:
+                if self._same_execution_id(entry["execution_id"], debit_id):
+                    raise ResourceError(f"{self.path}: debit identity conflicts with an execution")
+        return debits
+
+    def _validated_debits(self, payload: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
+        return self._validated_entries(payload)
+
+    def _assert_identity(self, payload: Mapping[str, Any]) -> None:
+        if not isinstance(payload, dict):
+            raise ResourceError(f"{self.path}: ledger state is not an object")
+        if payload.get("version") != self.VERSION:
+            raise ResourceError(f"{self.path}: ledger version is invalid")
+        if (not isinstance(self._ledger_id, str) or not self._ledger_id.strip()
+                or payload.get("ledger_id") != self._ledger_id):
+            raise ResourceError(f"{self.path}: ledger identity is unavailable or changed")
+        if (not isinstance(self._expected_batch_id, str)
+                or not self._expected_batch_id.strip()
+                or self.batch_id != self._expected_batch_id
+                or payload.get("batch_id") != self._expected_batch_id):
+            raise ResourceError(f"{self.path}: ledger batch identity is unavailable or changed")
+        if not isinstance(payload.get("entries"), list):
+            raise ResourceError(f"{self.path}: ledger entries are unavailable")
+
+    def _query_payload(self) -> Dict[str, Any]:
+        if self._write_uncertain:
+            raise ResourceError(f"{self.path}: ledger state is uncertain; query refused")
+        try:
+            persisted = self._load(allow_create=False, restore_identities=False)
+        except FileNotFoundError as exc:
+            if self._has_persisted:
+                self._write_uncertain = True
+                raise ResourceError(f"{self.path}: persisted ledger is unavailable") from exc
+            # A newly constructed in-memory ledger remains queryable until its
+            # first successful write; it has not yet lost persisted history.
+            persisted = self.payload
+        except ResourceError:
+            self._write_uncertain = True
+            raise
+        except (OSError, ValueError) as exc:
+            self._write_uncertain = True
+            raise ResourceError(f"{self.path}: ledger query state is unavailable") from exc
+        try:
+            self._assert_identity(persisted)
+            self._validated_entries(persisted)
+        except ResourceError:
+            self._write_uncertain = True
+            raise
+        # All parts of a public query consume this one verified snapshot.
+        self.payload = persisted
+        return persisted
+
+    def _reload_for_write(
+        self, *, require_existing: bool = False, replacement_id: Any = _NO_REPLACEMENT,
+    ) -> Dict[str, Dict[str, Any]]:
+        if self._write_uncertain:
+            raise ResourceError(f"{self.path}: ledger state is uncertain; writing refused")
+        try:
+            payload = self._load(allow_create=False, restore_identities=False)
+        except FileNotFoundError as exc:
+            if self._has_persisted or require_existing:
+                self._write_uncertain = self._has_persisted
+                raise ResourceError(f"{self.path}: existing ledger is unavailable") from exc
+            # First record: retain the identity allocated by the constructor.
+            payload = self.payload
+        except ResourceError:
+            self._write_uncertain = True
+            raise
+        except (OSError, ValueError) as exc:
+            self._write_uncertain = True
+            raise ResourceError(f"{self.path}: ledger reload failed; writing refused") from exc
+        try:
+            if (not isinstance(self._ledger_id, str) or not self._ledger_id.strip()
+                    or payload.get("ledger_id") != self._ledger_id
+                    or not isinstance(self._expected_batch_id, str)
+                    or not self._expected_batch_id.strip()
+                    or payload.get("batch_id") != self._expected_batch_id
+                    or self.batch_id != self._expected_batch_id
+                    or not isinstance(payload.get("entries"), list)):
+                raise ResourceError(f"{self.path}: ledger identity is unavailable or changed")
+            debits = self._validated_entries(
+                payload, replacement_id=replacement_id,
+            )
+        except ResourceError:
+            self._write_uncertain = True
+            raise
+        self.payload = payload
+        return debits
+
+    def register_debit(
+        self, *, debit_id: str, seconds: float, reason: str,
+    ) -> Dict[str, Any]:
+        """Register an immutable debit in an existing isolated test ledger."""
+        debit_id = self._debit_text(debit_id, "id")
+        seconds = self._debit_seconds(seconds)
+        reason = self._debit_text(reason, "reason")
+        debits = self._reload_for_write(require_existing=True)
+        if debit_id in debits:
+            original = debits[debit_id]
+            if original["seconds"] == seconds and original["reason"] == reason:
+                return original
+            raise ResourceError("debit id already has a different amount or reason")
+        if any(entry["execution_id"] == debit_id for entry in self.payload["entries"]):
+            raise ResourceError("debit id conflicts with an execution")
+        entry = {
+            "execution_id": debit_id,
+            "debit_id": debit_id,
+            "run_id": debit_id,
+            "kind": "budget-debit",
+            "seconds": seconds,
+            "reason": reason,
+            "status": "registered",
+            "recorded": iso_now(),
+        }
+        candidate = copy.deepcopy(self.payload)
+        candidate["entries"].append(entry)
+        candidate["updated"] = entry["recorded"]
+        self._write(payload=candidate)
+        self.payload = candidate
+        return entry
 
     def record(
         self,
@@ -325,45 +747,78 @@ class Ledger:
             "recorded": iso_now(),
             "note": note,
         }
+        self._reject_nan_execution_id(execution_id)
+        debits = self._reload_for_write(replacement_id=execution_id)
+        if any(self._same_execution_id(execution_id, debit_id) for debit_id in debits):
+            raise ResourceError("record cannot replace a budget debit")
         # Heartbeats replace one execution's elapsed total, never double-bill it.
-        self.payload["entries"] = [old for old in self.payload["entries"]
-                                   if old["execution_id"] != execution_id]
-        self.payload["entries"].append(entry)
-        self.payload["updated"] = entry["recorded"]
-        self._write()
+        candidate = copy.deepcopy(self.payload)
+        candidate["entries"] = [old for old in candidate["entries"]
+                                  if not self._same_execution_id(
+                                      old["execution_id"], execution_id)]
+        stored_entry = dict(entry)
+        candidate["entries"].append(stored_entry)
+        candidate["updated"] = entry["recorded"]
+        self._write(payload=candidate, ordinary_entry=stored_entry)
+        self.payload = candidate
         return entry
 
     def active_seconds(self) -> float:
         """Measured + replayed execution seconds (estimates never count)."""
-        return float(
-            sum(
-                entry["seconds"]
-                for entry in self.payload["entries"]
-                if entry["kind"] in {"measured", "replayed"}
-            )
-        )
+        payload = self._query_payload()
+        return self._active_seconds_from(payload)
+
+    @classmethod
+    def _active_seconds_from(cls, payload: Mapping[str, Any]) -> float:
+        return float(sum(
+            entry["seconds"] for entry in payload["entries"]
+            if entry["kind"] in {"measured", "replayed"}
+        ))
+
+    @classmethod
+    def _estimated_seconds_from(cls, payload: Mapping[str, Any]) -> float:
+        return float(sum(
+            entry["seconds"] for entry in payload["entries"]
+            if entry["kind"] == "estimated"
+        ))
+
+    @classmethod
+    def _debited_seconds_from(cls, payload: Mapping[str, Any]) -> float:
+        return float(sum(
+            entry["seconds"] for entry in payload["entries"]
+            if entry["kind"] == cls.DEBIT_KIND
+        ))
 
     def estimated_seconds(self) -> float:
-        return float(
-            sum(
-                entry["seconds"]
-                for entry in self.payload["entries"]
-                if entry["kind"] == "estimated"
-            )
-        )
+        payload = self._query_payload()
+        return self._estimated_seconds_from(payload)
 
     def remaining_seconds(self, limit: float = protocol.BATCH_SECONDS) -> float:
         return max(0.0, float(limit) - self.active_seconds())
 
+    def debited_seconds(self) -> float:
+        payload = self._query_payload()
+        return self._debited_seconds_from(payload)
+
+    def effective_used_seconds(self) -> float:
+        payload = self._query_payload()
+        return self._active_seconds_from(payload) + self._debited_seconds_from(payload)
+
+    def remaining_effective_seconds(self, limit: float = protocol.BATCH_SECONDS) -> float:
+        payload = self._query_payload()
+        used = self._active_seconds_from(payload) + self._debited_seconds_from(payload)
+        return max(0.0, float(limit) - used)
+
     def payload_view(self) -> Dict[str, Any]:
+        payload = self._query_payload()
         return {
             "version": self.VERSION,
             "batch_id": self.batch_id,
             "path": str(self.path.resolve()),
-            "ledger_id": self.payload.get("ledger_id"),
-            "active_seconds": self.active_seconds(),
-            "estimated_seconds": self.estimated_seconds(),
-            "entries": len(self.payload["entries"]),
+            "ledger_id": payload.get("ledger_id"),
+            "active_seconds": self._active_seconds_from(payload),
+            "estimated_seconds": self._estimated_seconds_from(payload),
+            "entries": len(payload["entries"]),
         }
 
 
