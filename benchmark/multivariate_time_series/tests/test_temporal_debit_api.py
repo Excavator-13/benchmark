@@ -14,6 +14,14 @@ from pathlib import Path
 from unittest import mock
 
 from benchmark.multivariate_time_series.temporal import protocol, resources
+from benchmark.multivariate_time_series.temporal.ledger_lock import NoopLedgerWriteLock
+
+_LedgerClass = resources.Ledger
+
+
+def _test_ledger(*args, **kwargs):
+    kwargs["write_lock"] = NoopLedgerWriteLock()
+    return _LedgerClass(*args, **kwargs)
 
 
 class DebitApiTests(unittest.TestCase):
@@ -25,7 +33,10 @@ class DebitApiTests(unittest.TestCase):
         self.addCleanup(self._cleanup_files)
 
     def _cleanup_files(self):
+        paths = set(self._created)
         for path in self._created:
+            paths.update(path.parent.glob(f".{path.name}.ledger-write-*.tmp"))
+        for path in paths:
             try:
                 path.unlink()
             except FileNotFoundError:
@@ -38,7 +49,7 @@ class DebitApiTests(unittest.TestCase):
             path = self.root / f".p02-t006-debit-api-{uuid.uuid4().hex}-{name}.json"
             self._created.add(path)
             self._created.add(path.with_suffix(path.suffix + ".tmp"))
-        ledger = resources.Ledger(path, batch_id="isolated-test")
+        ledger = _test_ledger(path, batch_id="isolated-test")
         ledger.record(execution_id="initial", run_id="test", seconds=2)
         return ledger
 
@@ -53,7 +64,7 @@ class DebitApiTests(unittest.TestCase):
         return ledger.register_debit(**arguments)
 
     def test_first_record_preserves_constructor_identity(self):
-        ledger = resources.Ledger(self.path, batch_id="isolated-test")
+        ledger = _test_ledger(self.path, batch_id="isolated-test")
         identity = ledger.payload["ledger_id"]
         self.assertFalse(self.path.exists())
         with mock.patch.object(resources.uuid, "uuid4", side_effect=AssertionError):
@@ -63,7 +74,7 @@ class DebitApiTests(unittest.TestCase):
         self.assertEqual(saved["version"], 1)
 
     def test_unpersisted_empty_ledger_remains_queryable(self):
-        ledger = resources.Ledger(self.path, batch_id="isolated-test")
+        ledger = _test_ledger(self.path, batch_id="isolated-test")
         identity = ledger.payload["ledger_id"]
         self.assertFalse(self.path.exists())
         self.assertEqual(ledger.active_seconds(), 0)
@@ -77,7 +88,7 @@ class DebitApiTests(unittest.TestCase):
         self.assertFalse(self.path.exists())
 
     def test_debit_requires_existing_ledger_without_creating_history(self):
-        ledger = resources.Ledger(self.path, batch_id="isolated-test")
+        ledger = _test_ledger(self.path, batch_id="isolated-test")
         identity = ledger.payload["ledger_id"]
         with self.assertRaises(resources.ResourceError):
             self.debit(ledger)
@@ -117,7 +128,7 @@ class DebitApiTests(unittest.TestCase):
     def test_idempotent_lookup_reloads_intervening_writes(self):
         ledger = self.ledger()
         original = self.debit(ledger)
-        other = resources.Ledger(self.path, batch_id="isolated-test")
+        other = _test_ledger(self.path, batch_id="isolated-test")
         other.record(execution_id="later", run_id="test", seconds=3)
         before = self.path.read_bytes()
         self.assertEqual(self.debit(ledger), original)
@@ -196,11 +207,11 @@ class DebitApiTests(unittest.TestCase):
 
     def test_queries_use_current_persisted_snapshot(self):
         ledger = self.ledger()
-        stale = resources.Ledger(self.path, batch_id="isolated-test")
+        stale = _test_ledger(self.path, batch_id="isolated-test")
         self.debit(ledger)
         self.assertEqual(stale.debited_seconds(), 7)
         self.assertEqual(stale.effective_used_seconds(), 9)
-        current = resources.Ledger(self.path, batch_id="isolated-test")
+        current = _test_ledger(self.path, batch_id="isolated-test")
         self.assertEqual(current.debited_seconds(), 7)
 
     def test_composite_queries_read_and_validate_one_snapshot(self):
@@ -314,7 +325,7 @@ class DebitApiTests(unittest.TestCase):
                     self.write_payload(ledger.path, payload)
                     before = ledger.path.read_bytes()
                     with self.assertRaises(resources.ResourceError):
-                        query_ledger = resources.Ledger(
+                        query_ledger = _test_ledger(
                             ledger.path, batch_id="isolated-test"
                         )
                         getattr(query_ledger, operation)()
@@ -322,21 +333,21 @@ class DebitApiTests(unittest.TestCase):
 
     def test_two_instances_reload_before_each_serial_write(self):
         first = self.ledger()
-        second = resources.Ledger(self.path, batch_id="isolated-test")
+        second = _test_ledger(self.path, batch_id="isolated-test")
         first.record(execution_id="first", run_id="test", seconds=3)
         second.record(execution_id="second", run_id="test", seconds=5)
         self.debit(first)
         second.record(execution_id="third", run_id="test", seconds=11)
         first.register_debit(debit_id="debit-2", seconds=13, reason="another bound")
-        saved = resources.Ledger(self.path, batch_id="isolated-test")
+        saved = _test_ledger(self.path, batch_id="isolated-test")
         self.assertEqual({entry["execution_id"] for entry in saved.payload["entries"]},
                          {"initial", "first", "second", "third", "debit-1", "debit-2"})
         self.assertEqual(saved.active_seconds(), 21)
         self.assertEqual(saved.debited_seconds(), 20)
 
     def test_separate_unpersisted_identities_cannot_overwrite_first_creator(self):
-        first = resources.Ledger(self.path, batch_id="isolated-test")
-        second = resources.Ledger(self.path, batch_id="isolated-test")
+        first = _test_ledger(self.path, batch_id="isolated-test")
+        second = _test_ledger(self.path, batch_id="isolated-test")
         self.assertNotEqual(first.payload["ledger_id"], second.payload["ledger_id"])
         first.record(execution_id="first", run_id="test", seconds=1)
         before = self.path.read_bytes()
@@ -356,6 +367,9 @@ class DebitApiTests(unittest.TestCase):
                         self.debit(ledger)
                 self.assertFalse(ledger.path.exists())
                 self.assertFalse(ledger.path.with_suffix(".json.tmp").exists())
+                self.assertEqual(
+                    list(ledger.path.parent.glob(f".{ledger.path.name}.ledger-write-*.tmp")), [],
+                )
 
     def test_replaced_or_missing_identity_is_refused_by_both_apis(self):
         changes = [
@@ -411,11 +425,16 @@ class DebitApiTests(unittest.TestCase):
         self.assertEqual(ledger.path.read_bytes(), before)
 
     def test_failed_first_write_does_not_allow_empty_history_retry(self):
-        ledger = resources.Ledger(self.path, batch_id="isolated-test")
+        ledger = _test_ledger(self.path, batch_id="isolated-test")
         with mock.patch.object(resources.os, "replace", side_effect=OSError("test failure")):
             with self.assertRaises(OSError):
                 ledger.record(execution_id="first", run_id="test", seconds=1)
         self.assertFalse(self.path.exists())
+        residuals = list(self.path.parent.glob(f".{self.path.name}.ledger-write-*.tmp"))
+        self.assertEqual(len(residuals), 1)
+        self.addCleanup(lambda: self.assertTrue(all(not path.exists() for path in residuals)))
+        # Run the existing cleanup first, then verify it covered the unique temp name.
+        self.addCleanup(self._cleanup_files)
         with self.assertRaises(resources.ResourceError):
             ledger.record(execution_id="retry", run_id="test", seconds=1)
         with self.assertRaises(resources.ResourceError):
@@ -475,12 +494,12 @@ class DebitApiTests(unittest.TestCase):
                     entry[case] = None
                 self.write_payload(ledger.path, payload)
                 before = ledger.path.read_bytes()
-                invalid = resources.Ledger(ledger.path, batch_id="isolated-test")
+                invalid = _test_ledger(ledger.path, batch_id="isolated-test")
                 with self.assertRaises(resources.ResourceError):
                     invalid.debited_seconds()
                 with self.assertRaises(resources.ResourceError):
                     self.debit(ledger)
-                another = resources.Ledger(ledger.path, batch_id="isolated-test")
+                another = _test_ledger(ledger.path, batch_id="isolated-test")
                 with self.assertRaises(resources.ResourceError):
                     another.record(execution_id="later", run_id="test", seconds=1)
                 self.assertEqual(ledger.path.read_bytes(), before)
@@ -598,7 +617,7 @@ class DebitApiTests(unittest.TestCase):
         ledger = self.ledger()
         ledger.record(execution_id=("job", 1), run_id="test", seconds=3)
         ledger.record(execution_id=["job", 1], run_id="test", seconds=5)
-        reopened = resources.Ledger(self.path, batch_id="isolated-test")
+        reopened = _test_ledger(self.path, batch_id="isolated-test")
         tuple_entry, list_entry = reopened.payload["entries"][1:]
         self.assertEqual(tuple_entry["execution_id"], ("job", 1))
         self.assertEqual(list_entry["execution_id"], ["job", 1])
@@ -607,7 +626,7 @@ class DebitApiTests(unittest.TestCase):
         reopened.record(execution_id=["job", 1], run_id="test", seconds=11)
         self.assertEqual(reopened.active_seconds(), 20)
         self.assertEqual(len(reopened.payload["entries"]), 3)
-        again = resources.Ledger(self.path, batch_id="isolated-test")
+        again = _test_ledger(self.path, batch_id="isolated-test")
         self.assertEqual(again.payload["entries"][1]["execution_id"], ("job", 1))
         self.assertEqual(again.payload["entries"][2]["execution_id"], ["job", 1])
 
@@ -624,7 +643,7 @@ class DebitApiTests(unittest.TestCase):
             with self.subTest(identity=identity):
                 ledger = self.ledger(f"typed-{index}")
                 ledger.record(execution_id=identity, run_id="test", seconds=3)
-                reopened = resources.Ledger(ledger.path, batch_id="isolated-test")
+                reopened = _test_ledger(ledger.path, batch_id="isolated-test")
                 self.assertEqual(reopened.payload["entries"][-1]["execution_id"], identity)
                 reopened.record(execution_id=copy.deepcopy(identity), run_id="test", seconds=7)
                 self.assertEqual(reopened.active_seconds(), 9)
@@ -651,7 +670,7 @@ class DebitApiTests(unittest.TestCase):
                 payload = copy.deepcopy(ledger.payload)
                 payload["entries"].append(copy.deepcopy(payload["entries"][-1]))
                 self.write_payload(ledger.path, payload)
-                reopened = resources.Ledger(ledger.path, batch_id="isolated-test")
+                reopened = _test_ledger(ledger.path, batch_id="isolated-test")
                 reopened.record(execution_id=identity, run_id="test", seconds=7)
                 self.assertEqual(reopened.active_seconds(), 9)
                 self.assertEqual(len(reopened.payload["entries"]), 2)
@@ -699,7 +718,7 @@ class DebitApiTests(unittest.TestCase):
         ledger.record(execution_id=identity, run_id="", status="", seconds=3)
         self.assertEqual(ledger.active_seconds(), 5)
         self.assertEqual(len(ledger.payload["entries"]), 2)
-        reopened = resources.Ledger(self.path, batch_id="isolated-test")
+        reopened = _test_ledger(self.path, batch_id="isolated-test")
         reopened.record(execution_id=identity, run_id="", status="", seconds=7)
         self.assertEqual(reopened.active_seconds(), 9)
 
@@ -752,7 +771,7 @@ class DebitApiTests(unittest.TestCase):
                             else:
                                 self.debit(ledger)
                     with self.assertRaises(resources.ResourceError):
-                        resources.Ledger(ledger.path, batch_id="isolated-test")
+                        _test_ledger(ledger.path, batch_id="isolated-test")
                     self.assertEqual(ledger.path.read_bytes(), before)
 
     def test_single_identity_field_corruption_blocks_queries_and_writes(self):
@@ -839,14 +858,14 @@ class DebitApiTests(unittest.TestCase):
                                 ledger.record(execution_id=identity, run_id="test", seconds=1)
                         self.assertEqual(ledger.path.read_bytes(), before)
                         self.assertEqual(ledger.active_seconds(), 2)
-                        reopened = resources.Ledger(ledger.path, batch_id="isolated-test")
+                        reopened = _test_ledger(ledger.path, batch_id="isolated-test")
                         self.assertEqual(reopened.active_seconds(), 2)
                 ledger.record(execution_id="safe", run_id="test", seconds=3)
                 ledger.record(execution_id="safe", run_id="test", seconds=5)
                 self.assertEqual(ledger.active_seconds(), 7)
 
     def test_nan_id_is_refused_without_creating_a_new_ledger(self):
-        ledger = resources.Ledger(self.path, batch_id="isolated-test")
+        ledger = _test_ledger(self.path, batch_id="isolated-test")
         with mock.patch.object(ledger, "_write", side_effect=AssertionError):
             with self.assertRaisesRegex(resources.ResourceError, "NaN"):
                 ledger.record(execution_id=[float("nan")], run_id="test", seconds=1)
@@ -908,7 +927,7 @@ class DebitApiTests(unittest.TestCase):
             for entry in ledger.payload["entries"][1:]
         ]
         self.assertNotEqual(*digests)
-        reopened = resources.Ledger(self.path, batch_id="isolated-test")
+        reopened = _test_ledger(self.path, batch_id="isolated-test")
         self.assertEqual([entry["execution_id"] for entry in reopened.payload["entries"][1:]],
                          [pair, scalar])
         self.assertEqual(reopened.active_seconds(), 10)
@@ -916,7 +935,7 @@ class DebitApiTests(unittest.TestCase):
         self.assertEqual(reopened.active_seconds(), 14)
         reopened.record(execution_id=scalar, run_id="test", seconds=11)
         self.assertEqual(reopened.active_seconds(), 20)
-        again = resources.Ledger(self.path, batch_id="isolated-test")
+        again = _test_ledger(self.path, batch_id="isolated-test")
         self.assertEqual(again.active_seconds(), 20)
         self.assertEqual([entry["execution_id"] for entry in again.payload["entries"][1:]],
                          [pair, scalar])
@@ -934,14 +953,14 @@ class DebitApiTests(unittest.TestCase):
         ledger.record(execution_id=pair_id, run_id="test", seconds=3)
         ledger.record(execution_id=scalar_id, run_id="test", seconds=5)
         self.assertEqual(ledger.active_seconds(), 10)
-        reopened = resources.Ledger(self.path, batch_id="isolated-test")
+        reopened = _test_ledger(self.path, batch_id="isolated-test")
         self.assertEqual([entry["execution_id"] for entry in reopened.payload["entries"][1:]],
                          [pair_id, scalar_id])
         reopened.record(execution_id=pair_id, run_id="test", seconds=7)
         self.assertEqual(reopened.active_seconds(), 14)
         reopened.record(execution_id=scalar_id, run_id="test", seconds=11)
         self.assertEqual(reopened.active_seconds(), 20)
-        again = resources.Ledger(self.path, batch_id="isolated-test")
+        again = _test_ledger(self.path, batch_id="isolated-test")
         self.assertEqual(len(again.payload["entries"]), 3)
         self.assertEqual([entry["execution_id"] for entry in again.payload["entries"][1:]],
                          [pair_id, scalar_id])
@@ -958,7 +977,7 @@ class DebitApiTests(unittest.TestCase):
         result = ledger.record(execution_id=identity, run_id="test", seconds=3)
         self.assertEqual(result["execution_id"], identity)
         self.assertEqual(ledger.active_seconds(), 5)
-        reopened = resources.Ledger(self.path, batch_id="isolated-test")
+        reopened = _test_ledger(self.path, batch_id="isolated-test")
         restored = reopened.payload["entries"][-1]["execution_id"]
         self.assertEqual(restored, identity)
         self.assertEqual(len(restored), 2)
@@ -1018,7 +1037,7 @@ class DebitApiTests(unittest.TestCase):
                         self.assertEqual(ledger.path.read_bytes(), before)
                         with self.assertRaisesRegex(resources.ResourceError,
                                                     "duplicate JSON member"):
-                            resources.Ledger(ledger.path, batch_id="isolated-test")
+                            _test_ledger(ledger.path, batch_id="isolated-test")
 
     def test_matching_identity_digest_does_not_hide_duplicate_json_metadata(self):
         for operation in ("query", "record", "debit"):
@@ -1076,7 +1095,7 @@ class DebitApiTests(unittest.TestCase):
         self.assertEqual(ledger.active_seconds(), 2)
         ledger.record(execution_id="safe-after-reject", run_id="test", seconds=3)
         self.assertEqual(ledger.active_seconds(), 5)
-        reopened = resources.Ledger(ledger.path, batch_id="isolated-test")
+        reopened = _test_ledger(ledger.path, batch_id="isolated-test")
         self.assertEqual(reopened.active_seconds(), 5)
 
 

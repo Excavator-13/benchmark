@@ -20,6 +20,7 @@ import uuid
 import os
 import statistics
 import threading
+import tempfile
 import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence
@@ -27,6 +28,14 @@ from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence
 from benchmark.nograph_baseline.data import iso_now
 
 from . import artifacts, protocol
+from .ledger_lock import (
+    AcquireStatus,
+    canonical_ledger_path,
+    LedgerPathBinding,
+    LedgerWriteLock,
+    NoopLedgerWriteLock,
+    ReleaseStatus,
+)
 
 THREAD_VARIABLES = (
     "OMP_NUM_THREADS",
@@ -278,37 +287,123 @@ class Ledger:
     _EXECUTION_IDENTITY_DIGEST = "_execution_identity_sha256"
     _NO_REPLACEMENT = object()
 
-    def __init__(self, path: Path, batch_id: str):
-        self.path = Path(path)
+    def __init__(
+        self,
+        path: Path,
+        batch_id: str,
+        *,
+        write_lock: Optional[LedgerWriteLock] = None,
+        lock_timeout: float = 5.0,
+    ):
+        self._ledger_binding = LedgerPathBinding.from_path(path)
+        self._path_invalid = False
         self.batch_id = batch_id
+        self.write_lock = write_lock
+        if (isinstance(write_lock, NoopLedgerWriteLock)
+                and write_lock.ledger_path is None):
+            # Noop is an explicit isolated-test injection.  Bind it here so
+            # even that backend cannot be reused for another ledger.
+            write_lock.bind_to(self._ledger_binding.ledger_path)
+        if write_lock is not None:
+            self._validate_write_lock_binding(
+                write_lock, self._ledger_binding, check_declaration=True,
+            )
+        self.lock_timeout = float(lock_timeout)
         self._expected_batch_id = batch_id
         self._has_persisted = False
         self._write_uncertain = False
         self.payload = self._load()
         self._ledger_id = self.payload.get("ledger_id")
 
+    @property
+    def path(self) -> Path:
+        return self._capture_path_binding().ledger_path
+
+    def __setattr__(self, name, value):
+        if name in {"path", "_path", "_path_binding", "_ledger_binding"} \
+                and "_ledger_binding" in self.__dict__:
+            object.__setattr__(self, "_path_invalid", True)
+            raise AttributeError("ledger path binding is immutable")
+        object.__setattr__(self, name, value)
+
+    def __delattr__(self, name):
+        if name in {"path", "_path", "_path_binding", "_ledger_binding"}:
+            object.__setattr__(self, "_path_invalid", True)
+            raise AttributeError("ledger path binding is immutable")
+        object.__delattr__(self, name)
+
+    def _capture_path_binding(self) -> LedgerPathBinding:
+        binding = self._ledger_binding
+        self._assert_path_binding(binding)
+        return binding
+
+    def _assert_path_binding(self, binding: LedgerPathBinding) -> None:
+        if self._path_invalid or self._ledger_binding is not binding:
+            raise ResourceError("ledger path identity changed or is unavailable")
+
+    def _validate_write_lock_binding(
+        self, lock: LedgerWriteLock, binding: LedgerPathBinding,
+        *, check_declaration: bool = False,
+    ) -> None:
+        """Reject unbound or mutable lock identities before touching the ledger."""
+        path_text = str(binding.ledger_path)
+        if check_declaration:
+            try:
+                bound_path = lock.ledger_path
+                if bound_path is None or (isinstance(bound_path, str) and not bound_path.strip()):
+                    raise ValueError("empty ledger_path")
+                if canonical_ledger_path(bound_path) != binding.ledger_path:
+                    raise ValueError("ledger_path belongs to another ledger")
+            except Exception as exc:
+                raise ResourceError(
+                    f"{path_text}: injected ledger lock has an invalid ledger_path"
+                ) from exc
+        try:
+            binding_matches = lock.binding_matches
+        except AttributeError as exc:
+            raise ResourceError(
+                f"{path_text}: injected ledger lock has no immutable binding identity"
+            ) from exc
+        if not callable(binding_matches):
+            raise ResourceError(
+                f"{path_text}: injected ledger lock has no immutable binding identity"
+            )
+        try:
+            matches = binding_matches(binding)
+        except Exception as exc:
+            raise ResourceError(
+                f"{path_text}: injected ledger lock binding could not be verified"
+            ) from exc
+        if matches is not True:
+            raise ResourceError(
+                f"{path_text}: injected ledger lock binding could not be verified"
+            )
+
     def _load(
         self, *, allow_create: bool = True, restore_identities: bool = True,
+        binding: Optional[LedgerPathBinding] = None,
     ) -> Dict[str, Any]:
+        binding = self._capture_path_binding() if binding is None else binding
+        path = binding.ledger_path
         try:
-            text = self.path.read_text(encoding="utf-8", errors="surrogatepass")
+            text = path.read_text(encoding="utf-8", errors="surrogatepass")
         except FileNotFoundError:
             if not allow_create:
                 raise
         else:
             payload = self._parse_json(text)
             if not isinstance(payload, dict):
-                raise ResourceError(f"{self.path}: ledger state is not an object")
+                raise ResourceError(f"{path}: ledger state is not an object")
             if payload.get("version") != self.VERSION:
                 raise ResourceError(
-                    f"{self.path}: ledger version {payload.get('version')!r} is not "
+                    f"{path}: ledger version {payload.get('version')!r} is not "
                     f"{self.VERSION}"
                 )
             if not isinstance(payload.get("entries"), list):
-                raise ResourceError(f"{self.path}: ledger entries are unavailable")
+                raise ResourceError(f"{path}: ledger entries are unavailable")
             if payload.get("batch_id") and payload["batch_id"] != self.batch_id:
                 raise ResourceError(
-                    f"{self.path}: ledger belongs to batch {payload['batch_id']!r}, "
+                    f"{path}: ledger belongs to batch {payload['batch_id']!r}, "
                     f"not {self.batch_id!r}"
                 )
             if restore_identities:
@@ -347,9 +442,22 @@ class Ledger:
         *,
         payload: Optional[Dict[str, Any]] = None,
         ordinary_entry: Optional[Dict[str, Any]] = None,
+        binding: LedgerPathBinding,
+        verify: Callable[[], None],
     ) -> None:
+        path = binding.ledger_path
         document = self.payload if payload is None else payload
         try:
+            verify()
+            path.parent.mkdir(parents=True, exist_ok=True)
+            residuals = sorted(
+                path.parent.glob(f".{path.name}.ledger-write-*.tmp")
+            )
+            if residuals:
+                raise ResourceError(
+                    f"{path}: residual ledger temp file blocks publication: "
+                    f"{residuals[0]}"
+                )
             if ordinary_entry is not None:
                 # Preserve HEAD's JSON-write exception for unsupported ID types
                 # before adding internal metadata to the new ordinary record.
@@ -374,15 +482,108 @@ class Ledger:
             # The caller cannot assume a failed write left the old file intact.
             self._write_uncertain = True
             raise
+        temporary: Optional[Path] = None
+        verify()
         try:
-            self.path.parent.mkdir(parents=True, exist_ok=True)
-            temporary = self.path.with_suffix(self.path.suffix + ".tmp")
-            temporary.write_text(text, encoding="utf-8", errors="surrogatepass")
-            os.replace(temporary, self.path)
+            descriptor, temporary_name = tempfile.mkstemp(
+                prefix=f".{path.name}.ledger-write-",
+                suffix=".tmp",
+                dir=str(path.parent),
+                text=True,
+            )
+            temporary = Path(temporary_name)
+            with os.fdopen(descriptor, "w", encoding="utf-8", errors="surrogatepass") as handle:
+                handle.write(text)
+                handle.flush()
+                os.fsync(handle.fileno())
+            verify()
+            os.replace(temporary, path)
+            verify()
         except Exception:
             self._write_uncertain = True
             raise
         self._has_persisted = True
+
+    def _run_locked_write(
+        self, operation: Callable[
+            [bool, LedgerPathBinding, Callable[[], None]], Dict[str, Any]
+        ],
+    ) -> Dict[str, Any]:
+        binding = self._capture_path_binding()
+        path_text = str(binding.ledger_path)
+        lock = self.write_lock
+        if lock is None:
+            raise ResourceError(f"{path_text}: ledger write lock is not configured")
+
+        def verify() -> None:
+            self._assert_path_binding(binding)
+            self._validate_write_lock_binding(lock, binding)
+            self._assert_path_binding(binding)
+
+        verify()
+        acquired = lock.acquire(timeout=self.lock_timeout, binding=binding)
+        if acquired.status not in {AcquireStatus.ACQUIRED, AcquireStatus.ABANDONED}:
+            raise ResourceError(
+                f"{path_text}: ledger lock acquisition failed: "
+                f"{acquired.status.value}: {acquired.detail}"
+            )
+        abandoned = acquired.status is AcquireStatus.ABANDONED
+        operation_error: Optional[BaseException] = None
+        diagnostics: List[BaseException] = []
+        result: Optional[Dict[str, Any]] = None
+        try:
+            verify()
+            result = operation(abandoned, binding, verify)
+        except BaseException as exc:
+            operation_error = exc
+        try:
+            verify()
+        except BaseException as exc:
+            self._write_uncertain = True
+            diagnostics.append(exc)
+        try:
+            released = lock.release(binding=binding)
+            if released.status is not ReleaseStatus.RELEASED:
+                release_failure = ResourceError(
+                    f"{path_text}: ledger lock release failed: "
+                    f"{released.status.value}: {released.detail}"
+                )
+                if released.errors:
+                    raise release_failure from BaseExceptionGroup(
+                        f"{path_text}: lock backend release errors", list(released.errors),
+                    )
+                raise release_failure
+        except BaseException as release_error:
+            self._write_uncertain = True
+            failure = ResourceError(
+                f"{path_text}: ledger lock release raised "
+                f"{type(release_error).__name__}: {release_error}"
+            )
+            failure.__cause__ = release_error
+            diagnostics.append(failure)
+        try:
+            verify()
+        except BaseException as exc:
+            self._write_uncertain = True
+            diagnostics.append(exc)
+        if operation_error is not None:
+            if diagnostics:
+                for error in diagnostics:
+                    operation_error.add_note(f"{path_text}: {error}")
+                if operation_error.__cause__ is not None:
+                    diagnostics.insert(0, operation_error.__cause__)
+                raise operation_error from BaseExceptionGroup(
+                    f"{path_text}: ledger transaction diagnostics", diagnostics,
+                )
+            raise operation_error
+        if diagnostics:
+            raise ResourceError(
+                f"{path_text}: ledger transaction outcome is uncertain"
+            ) from BaseExceptionGroup(
+                f"{path_text}: ledger transaction diagnostics", diagnostics,
+            )
+        assert result is not None
+        return result
 
     @staticmethod
     def _debit_seconds(seconds: float) -> float:
@@ -550,17 +751,20 @@ class Ledger:
         payload: Mapping[str, Any],
         *,
         replacement_id: Any = _NO_REPLACEMENT,
+        binding: Optional[LedgerPathBinding] = None,
     ) -> Dict[str, Dict[str, Any]]:
+        binding = self._capture_path_binding() if binding is None else binding
+        path_text = str(binding.ledger_path)
         if not isinstance(payload, dict) or not isinstance(payload.get("entries"), list):
-            raise ResourceError(f"{self.path}: ledger entries are unavailable")
+            raise ResourceError(f"{path_text}: ledger entries are unavailable")
         debits: Dict[str, Dict[str, Any]] = {}
         ordinary_entries = []
         ordinary_ids = []
         for entry in payload["entries"]:
             if not isinstance(entry, dict):
-                raise ResourceError(f"{self.path}: ledger entry is not an object")
+                raise ResourceError(f"{path_text}: ledger entry is not an object")
             if "kind" not in entry or not isinstance(entry["kind"], str):
-                raise ResourceError(f"{self.path}: ledger entry kind is missing")
+                raise ResourceError(f"{path_text}: ledger entry kind is missing")
             kind = entry["kind"]
             if kind in self.ORDINARY_KINDS:
                 required = {
@@ -569,24 +773,24 @@ class Ledger:
                     self._EXECUTION_IDENTITY_DIGEST,
                 }
                 if not required.issubset(entry):
-                    raise ResourceError(f"{self.path}: ordinary ledger entry is incomplete")
+                    raise ResourceError(f"{path_text}: ordinary ledger entry is incomplete")
                 self._restore_execution_id(entry)
                 self._entry_seconds(entry["seconds"])
                 if not isinstance(entry["recorded"], str) or not entry["recorded"].strip():
-                    raise ResourceError(f"{self.path}: ledger entry recorded time is invalid")
+                    raise ResourceError(f"{path_text}: ledger entry recorded time is invalid")
                 ordinary_entries.append(entry)
                 ordinary_ids.append(entry["execution_id"])
                 continue
             if kind != self.DEBIT_KIND:
-                raise ResourceError(f"{self.path}: unsupported ledger entry kind {kind!r}")
+                raise ResourceError(f"{path_text}: unsupported ledger entry kind {kind!r}")
             if self._EXECUTION_IDENTITY in entry or self._EXECUTION_IDENTITY_DIGEST in entry:
-                raise ResourceError(f"{self.path}: debit has ordinary execution identity metadata")
+                raise ResourceError(f"{path_text}: debit has ordinary execution identity metadata")
             required = {
                 "execution_id", "debit_id", "run_id", "kind", "seconds",
                 "reason", "status", "recorded",
             }
             if not required.issubset(entry):
-                raise ResourceError(f"{self.path}: debit ledger entry is incomplete")
+                raise ResourceError(f"{path_text}: debit ledger entry is incomplete")
             debit_id = self._debit_text(entry["debit_id"], "id")
             self._debit_seconds(entry["seconds"])
             self._debit_text(entry["reason"], "reason")
@@ -595,18 +799,18 @@ class Ledger:
                     or entry["run_id"] != debit_id
                     or entry["status"] != "registered"
                     or debit_id in debits):
-                raise ResourceError(f"{self.path}: debit identity or state is ambiguous")
+                raise ResourceError(f"{path_text}: debit identity or state is ambiguous")
             debits[debit_id] = entry
         for index, identity in enumerate(ordinary_ids):
             if any(self._same_execution_id(identity, previous)
                    for previous in ordinary_ids[:index]):
                 if (replacement_id is self._NO_REPLACEMENT
                         or not self._same_execution_id(identity, replacement_id)):
-                    raise ResourceError(f"{self.path}: duplicate ordinary execution identity")
+                    raise ResourceError(f"{path_text}: duplicate ordinary execution identity")
         for debit_id in debits:
             for entry in ordinary_entries:
                 if self._same_execution_id(entry["execution_id"], debit_id):
-                    raise ResourceError(f"{self.path}: debit identity conflicts with an execution")
+                    raise ResourceError(f"{path_text}: debit identity conflicts with an execution")
         return debits
 
     def _validated_debits(self, payload: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
@@ -658,15 +862,20 @@ class Ledger:
 
     def _reload_for_write(
         self, *, require_existing: bool = False, replacement_id: Any = _NO_REPLACEMENT,
+        binding: LedgerPathBinding, verify: Callable[[], None],
     ) -> Dict[str, Dict[str, Any]]:
+        path_text = str(binding.ledger_path)
+        verify()
         if self._write_uncertain:
-            raise ResourceError(f"{self.path}: ledger state is uncertain; writing refused")
+            raise ResourceError(f"{path_text}: ledger state is uncertain; writing refused")
         try:
-            payload = self._load(allow_create=False, restore_identities=False)
+            payload = self._load(
+                allow_create=False, restore_identities=False, binding=binding,
+            )
         except FileNotFoundError as exc:
             if self._has_persisted or require_existing:
                 self._write_uncertain = self._has_persisted
-                raise ResourceError(f"{self.path}: existing ledger is unavailable") from exc
+                raise ResourceError(f"{path_text}: existing ledger is unavailable") from exc
             # First record: retain the identity allocated by the constructor.
             payload = self.payload
         except ResourceError:
@@ -674,7 +883,7 @@ class Ledger:
             raise
         except (OSError, ValueError) as exc:
             self._write_uncertain = True
-            raise ResourceError(f"{self.path}: ledger reload failed; writing refused") from exc
+            raise ResourceError(f"{path_text}: ledger reload failed; writing refused") from exc
         try:
             if (not isinstance(self._ledger_id, str) or not self._ledger_id.strip()
                     or payload.get("ledger_id") != self._ledger_id
@@ -683,13 +892,14 @@ class Ledger:
                     or payload.get("batch_id") != self._expected_batch_id
                     or self.batch_id != self._expected_batch_id
                     or not isinstance(payload.get("entries"), list)):
-                raise ResourceError(f"{self.path}: ledger identity is unavailable or changed")
+                raise ResourceError(f"{path_text}: ledger identity is unavailable or changed")
             debits = self._validated_entries(
-                payload, replacement_id=replacement_id,
+                payload, replacement_id=replacement_id, binding=binding,
             )
         except ResourceError:
             self._write_uncertain = True
             raise
+        verify()
         self.payload = payload
         return debits
 
@@ -700,7 +910,20 @@ class Ledger:
         debit_id = self._debit_text(debit_id, "id")
         seconds = self._debit_seconds(seconds)
         reason = self._debit_text(reason, "reason")
-        debits = self._reload_for_write(require_existing=True)
+        return self._run_locked_write(
+            lambda abandoned, binding, verify: self._register_debit_locked(
+                debit_id=debit_id, seconds=seconds, reason=reason,
+                abandoned=abandoned, binding=binding, verify=verify,
+            )
+        )
+
+    def _register_debit_locked(
+        self, *, debit_id: str, seconds: float, reason: str, abandoned: bool,
+        binding: LedgerPathBinding, verify: Callable[[], None],
+    ) -> Dict[str, Any]:
+        debits = self._reload_for_write(
+            require_existing=True, binding=binding, verify=verify,
+        )
         if debit_id in debits:
             original = debits[debit_id]
             if original["seconds"] == seconds and original["reason"] == reason:
@@ -721,7 +944,8 @@ class Ledger:
         candidate = copy.deepcopy(self.payload)
         candidate["entries"].append(entry)
         candidate["updated"] = entry["recorded"]
-        self._write(payload=candidate)
+        self._write(payload=candidate, binding=binding, verify=verify)
+        verify()
         self.payload = candidate
         return entry
 
@@ -748,7 +972,24 @@ class Ledger:
             "note": note,
         }
         self._reject_nan_execution_id(execution_id)
-        debits = self._reload_for_write(replacement_id=execution_id)
+        return self._run_locked_write(
+            lambda abandoned, binding, verify: self._record_locked(
+                entry=entry, execution_id=execution_id, abandoned=abandoned,
+                binding=binding, verify=verify,
+            )
+        )
+
+    def _record_locked(
+        self, *, entry: Dict[str, Any], execution_id: Any, abandoned: bool,
+        binding: LedgerPathBinding, verify: Callable[[], None],
+    ) -> Dict[str, Any]:
+        # Recovery after an abandoned owner must validate the complete stable
+        # ledger.  The ordinary target-duplicate replacement exception is only
+        # available on a normal acquisition.
+        replacement_id = self._NO_REPLACEMENT if abandoned else execution_id
+        debits = self._reload_for_write(
+            replacement_id=replacement_id, binding=binding, verify=verify,
+        )
         if any(self._same_execution_id(execution_id, debit_id) for debit_id in debits):
             raise ResourceError("record cannot replace a budget debit")
         # Heartbeats replace one execution's elapsed total, never double-bill it.
@@ -759,7 +1000,11 @@ class Ledger:
         stored_entry = dict(entry)
         candidate["entries"].append(stored_entry)
         candidate["updated"] = entry["recorded"]
-        self._write(payload=candidate, ordinary_entry=stored_entry)
+        self._write(
+            payload=candidate, ordinary_entry=stored_entry,
+            binding=binding, verify=verify,
+        )
+        verify()
         self.payload = candidate
         return entry
 
