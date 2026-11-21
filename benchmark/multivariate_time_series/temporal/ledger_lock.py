@@ -17,7 +17,31 @@ import ctypes.wintypes
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Optional, Protocol
+from typing import Callable, Optional, Protocol, TypeVar
+
+
+_DeploymentConfig = TypeVar("_DeploymentConfig")
+
+
+class DeploymentConfigurationError(RuntimeError):
+    """Raised when an injected deployment configuration cannot be obtained."""
+
+
+def require_deployment_config(
+    provider: Optional[Callable[[], Optional[_DeploymentConfig]]],
+) -> _DeploymentConfig:
+    """Return the configuration supplied by the explicit provider."""
+    if provider is None:
+        raise DeploymentConfigurationError("deployment configuration provider is required")
+
+    try:
+        config = provider()
+    except Exception as exc:
+        raise DeploymentConfigurationError("deployment configuration provider failed") from exc
+
+    if config is None:
+        raise DeploymentConfigurationError("deployment configuration is missing")
+    return config
 
 
 def canonical_ledger_path(path: Path) -> Path:

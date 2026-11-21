@@ -23,12 +23,37 @@ from benchmark.multivariate_time_series.temporal import resources
 from benchmark.multivariate_time_series.temporal.ledger_lock import (
     AcquireResult,
     AcquireStatus,
+    DeploymentConfigurationError,
     FileTestLedgerLock,
     ledger_sidecar_path,
     NoopLedgerWriteLock,
     ReleaseResult,
     ReleaseStatus,
+    require_deployment_config,
 )
+
+
+class DeploymentConfigurationTests(unittest.TestCase):
+    def test_rejects_missing_provider(self):
+        with self.assertRaises(DeploymentConfigurationError):
+            require_deployment_config(None)
+
+    def test_rejects_missing_configuration(self):
+        with self.assertRaises(DeploymentConfigurationError):
+            require_deployment_config(lambda: None)
+
+    def test_preserves_provider_error_as_cause(self):
+        error = OSError("test provider failure")
+        provider = mock.Mock(side_effect=error)
+
+        with self.assertRaises(DeploymentConfigurationError) as caught:
+            require_deployment_config(provider)
+
+        self.assertIs(caught.exception.__cause__, error)
+
+    def test_returns_injected_configuration_by_identity(self):
+        config = mock.sentinel.deployment_config
+        self.assertIs(require_deployment_config(lambda: config), config)
 
 
 def _spawn_writer(path, cwd, operation, identity, ready, start, contending, result):
