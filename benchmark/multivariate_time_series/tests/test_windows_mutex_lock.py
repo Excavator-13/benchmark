@@ -1,8 +1,10 @@
+import math
 import unittest
 
 from benchmark.multivariate_time_series.temporal.ledger_lock import AcquireStatus
 from benchmark.multivariate_time_series.temporal.windows_mutex_lock import (
     map_wait_status,
+    timeout_to_wait_ms,
 )
 
 
@@ -72,6 +74,60 @@ class MapWaitStatusTests(unittest.TestCase):
         self.assertEqual(code.int_calls, 0)
         self.assertEqual(code.hash_calls, 0)
         self.assertEqual(code.eq_calls, 0)
+
+
+class TimeoutToWaitMsTests(unittest.TestCase):
+    def test_rejects_non_builtin_types_without_invoking_custom_methods(self):
+        class CustomTimeout:
+            def unexpected_call(self, *args):
+                raise AssertionError("rejected inputs must not be used")
+
+            __int__ = __float__ = __index__ = unexpected_call
+            __eq__ = __lt__ = __hash__ = unexpected_call
+
+        class FloatSubclass(float):
+            def as_integer_ratio(self):
+                raise AssertionError("float subclasses must not be used")
+
+        for timeout in (None, False, True, "0", HostileInt(0), FloatSubclass(0), CustomTimeout()):
+            with self.subTest(input_type=type(timeout).__name__):
+                self.assertIsNone(timeout_to_wait_ms(timeout))
+
+    def test_rejects_negative_values(self):
+        for timeout in (-1, -0.0005):
+            with self.subTest(timeout=timeout):
+                self.assertIsNone(timeout_to_wait_ms(timeout))
+
+    def test_zero_and_positive_submillisecond_values_use_zero_wait(self):
+        for timeout in (0, 0.0, -0.0, math.nextafter(0.0, 1.0), 0.0005):
+            with self.subTest(timeout=timeout):
+                wait_ms = timeout_to_wait_ms(timeout)
+                self.assertIs(type(wait_ms), int)
+                self.assertEqual(wait_ms, 0)
+
+    def test_floors_the_exact_binary_float_value(self):
+        self.assertEqual(timeout_to_wait_ms(0.125), 125)
+        self.assertEqual(timeout_to_wait_ms(0.1259765625), 125)
+        # This float is slightly below 9 ms even though float multiplication rounds to 9.
+        self.assertEqual(timeout_to_wait_ms(0.009), 8)
+
+    def test_integer_seconds_at_the_finite_limit_and_beyond(self):
+        self.assertEqual(timeout_to_wait_ms(4_294_967), 4_294_967_000)
+        self.assertIsNone(timeout_to_wait_ms(4_294_968))
+        self.assertIsNone(timeout_to_wait_ms(10**400))
+
+    def test_rejects_nonfinite_values(self):
+        for timeout in (math.nan, math.inf, -math.inf):
+            with self.subTest(timeout=timeout):
+                self.assertIsNone(timeout_to_wait_ms(timeout))
+
+    def test_float_boundary_where_floored_milliseconds_reach_infinite(self):
+        # The nearest float to 0xFFFFFFFF ms in seconds lies below the threshold.
+        last_finite = 4_294_967.295
+        first_rejected = math.nextafter(last_finite, math.inf)
+        self.assertEqual(timeout_to_wait_ms(4_294_967.2945), 0xFFFFFFFE)
+        self.assertEqual(timeout_to_wait_ms(last_finite), 0xFFFFFFFE)
+        self.assertIsNone(timeout_to_wait_ms(first_rejected))
 
 
 if __name__ == "__main__":
