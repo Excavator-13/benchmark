@@ -1,0 +1,558 @@
+{
+  "artifact_format_version": 2,
+  "config": {
+    "candidates": [
+      {
+        "diagnostic_epochs": [
+          10,
+          50,
+          100,
+          200
+        ],
+        "epochs": 200,
+        "grad_clip": 1.0,
+        "hidden_size": 32,
+        "layers": 1,
+        "learning_rate": 0.001,
+        "model": "GRU",
+        "node_chunk": 2048,
+        "seed": 0,
+        "threads": 1
+      },
+      {
+        "diagnostic_epochs": [
+          10,
+          50,
+          100,
+          200
+        ],
+        "epochs": 200,
+        "grad_clip": 1.0,
+        "hidden_size": 32,
+        "layers": 1,
+        "learning_rate": 0.003,
+        "model": "GRU",
+        "node_chunk": 2048,
+        "seed": 0,
+        "threads": 1
+      }
+    ]
+  },
+  "data": {
+    "dataset": "r0",
+    "mode": "count",
+    "node_keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+    "source_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946"
+  },
+  "environment": {
+    "cpu_count": 24,
+    "determinism": {
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms": false,
+      "num_threads": 1
+    },
+    "device": "cpu",
+    "machine": "AMD64",
+    "packages": {
+      "numpy": "2.4.2",
+      "pandas": "3.1.1",
+      "psutil": "7.2.2",
+      "pyarrow": "26.0.1",
+      "torch": "2.6.0+cpu"
+    },
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "python_executable": "C:\\Users\\zhuzhenyu\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "python_version": "3.13.0 (tags/v3.13.0:60403a5, Oct  7 2024, 09:38:07) [MSC v.1941 64 bit (AMD64)]",
+    "python_version_info": [
+      3,
+      13,
+      0
+    ],
+    "repo_root": "E:\\大创\\benchmark",
+    "system": "Windows",
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "threads": 1
+  },
+  "generated": "2026-11-28T16:48:43+08:00",
+  "operation": "select",
+  "protocol": {
+    "identity": {
+      "documents": [
+        {
+          "path": "research/phases/P02/protocol-v2.md",
+          "sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0"
+        },
+        {
+          "path": "research/phases/P02/protocol.md",
+          "sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2"
+        }
+      ],
+      "scientific_version": "P2-effective-training-L6-H3-v2"
+    },
+    "path": "E:\\大创\\benchmark\\research\\phases\\P02\\protocol-v2.md",
+    "sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0",
+    "version": "P2-effective-training-L6-H3-v2"
+  },
+  "purpose": "formal",
+  "roles": {
+    "kind": "selection",
+    "seed": 0
+  },
+  "scientific_version": "P2-effective-training-L6-H3-v2",
+  "source": {
+    "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+    "errors": {},
+    "files": {
+      "benchmark/multivariate_time_series/effective_temporal_training.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/effective_temporal_training.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/effective_temporal_training.py",
+          "sha256": "832ed36483abbaa42c5872193c73440e6543e0c358d18b5e7ea4d36a9ed0a4fb"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/effective_temporal_training.py",
+        "sha256": "6b120e0ac387ec6420ad510bccc78d5797fc5db3d4639b5711ed77c0b3964011",
+        "unavailable_reason": "no reconstructable scoped patch is available for this path; executing content saved under code-untracked"
+      },
+      "benchmark/multivariate_time_series/run.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/run.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/run.py",
+          "sha256": "5e3829f268b09db239e22738e66ba1f76bc24f2d97bfe9ac3cd6ad6e698b9edc"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/run.py",
+        "sha256": "fab341c77c520265247ca42e3ef9785d60ce8b0cecff3b00ecd3d7b791be5ea1",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      },
+      "benchmark/multivariate_time_series/temporal/__init__.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/__init__.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/__init__.py",
+          "sha256": "4e9d888eff6b2d9d385f5711432fb3442589be0d60e5688a9d49f4ef9ec51cde"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/__init__.py",
+        "sha256": "26e1c99f59d988f00e6da7333c8b51c5fd54ebd47b6cae459493c062dcb68318",
+        "unavailable_reason": "no reconstructable scoped patch is available for this path; executing content saved under code-untracked"
+      },
+      "benchmark/multivariate_time_series/temporal/artifacts.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/artifacts.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/artifacts.py",
+          "sha256": "ee63905b72c37120994c7f97b2cb65d55802d062c3b96f165d9bba6d095ca21f"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/artifacts.py",
+        "sha256": "20b35299ca58e2500e7f5556b318a47cf70b4b5d4a0833512bae4d631bc8acd6",
+        "unavailable_reason": "no reconstructable scoped patch is available for this path; executing content saved under code-untracked"
+      },
+      "benchmark/multivariate_time_series/temporal/checkpoints.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/checkpoints.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/checkpoints.py",
+          "sha256": "930523808d1e3ddb62ec14a9195990c93526d5412324aa96719ce03555f802ca"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/checkpoints.py",
+        "sha256": "072be8ff53f36c8d572c8edf5490c817319996996d65cc8e6fdc69ea3143181b",
+        "unavailable_reason": "no reconstructable scoped patch is available for this path; executing content saved under code-untracked"
+      },
+      "benchmark/multivariate_time_series/temporal/checks.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/checks.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/checks.py",
+          "sha256": "5b4b01c25657d026d52ec36f9c461123ef77d9cded51b200b0aa8ca7ec000f1e"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/checks.py",
+        "sha256": "4ed204662ec4f6e67391e10a5de54c9faddb3277010008490951e7eac415bf8f",
+        "unavailable_reason": "no reconstructable scoped patch is available for this path; executing content saved under code-untracked"
+      },
+      "benchmark/multivariate_time_series/temporal/cli.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/cli.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/cli.py",
+          "sha256": "d868bd048eccd7eadffaa777f900ccac384bdf8e9576b077cb75760d250ba749"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/cli.py",
+        "sha256": "7650821dc1ba72ee6c4535c9fbc9325530f611054f77be7775de12daf3a06d7d",
+        "unavailable_reason": "no reconstructable scoped patch is available for this path; executing content saved under code-untracked"
+      },
+      "benchmark/multivariate_time_series/temporal/data.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/data.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/data.py",
+          "sha256": "a7efc700ae2cd2fa517cba708a82575c0272edb87b57bdaaf17409bccca8b999"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/data.py",
+        "sha256": "76dd821ab48e6478835bea557f12f1c144151f796c85eb160c5df5a1cf779eff",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      },
+      "benchmark/multivariate_time_series/temporal/diagnostics.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/diagnostics.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/diagnostics.py",
+          "sha256": "0f4ddd4d6061569ea777eac808047d5d0125c1c7d93a04d918251fbb6f1e1ec7"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/diagnostics.py",
+        "sha256": "3d1007807bf19fe6f77dbacb12a54d692016ef4b13f931ef82f6a866d6d4e003",
+        "unavailable_reason": "no reconstructable scoped patch is available for this path; executing content saved under code-untracked"
+      },
+      "benchmark/multivariate_time_series/temporal/engine.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/engine.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/engine.py",
+          "sha256": "9409413a5b09bf1da87c3cdbb3da9c7b9a7c4fd4d39409be936dedeca049a7ea"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/engine.py",
+        "sha256": "7effd5717a73e09b2f829df0cfa21e4099c7ebbd80dbd053a50d72ec196198dc",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      },
+      "benchmark/multivariate_time_series/temporal/model.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/model.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/model.py",
+          "sha256": "fb033388f35c8416053e21ea42c8777fcc576052efd57e6cb0937d2ff47d074a"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/model.py",
+        "sha256": "c6190ae2fa375b54396686bccb651ac2d3272f026c70b349a1e337a04a651fe1",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      },
+      "benchmark/multivariate_time_series/temporal/protocol.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/protocol.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/protocol.py",
+          "sha256": "9c82ca01c6ef9543160f425e4654893ff7bd9169aec5626ec7db211363482b27"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/protocol.py",
+        "sha256": "03ea3c428e2bc9bdf3bf2125fc1a6347910d538a28e78c80ef8787927a1d8191",
+        "unavailable_reason": "no reconstructable scoped patch is available for this path; executing content saved under code-untracked"
+      },
+      "benchmark/multivariate_time_series/temporal/recovery.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/recovery.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/recovery.py",
+          "sha256": "078798a8eea94b90aaf849d5c04a69a7ddc7ac06a0869f176246eb2d4cef8854"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/recovery.py",
+        "sha256": "58aea07d797bac88ee946e11088b5279e5052b81b71d762bd84c0473122ad294",
+        "unavailable_reason": "no reconstructable scoped patch is available for this path; executing content saved under code-untracked"
+      },
+      "benchmark/multivariate_time_series/temporal/report.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/report.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/report.py",
+          "sha256": "26570a95c3e34f5a8e0441adf09cc452b3ce87fcd2263aeb8b5af0759c1b95cd"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/report.py",
+        "sha256": "a2cf800f6c022fb6f54b6768f198a4226daa304992a802ce8101d6c18888edef",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      },
+      "benchmark/multivariate_time_series/temporal/resources.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/resources.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/resources.py",
+          "sha256": "fb032dfc6fe6d299899efe270d85233444215aaf83fa4715a1e00e4e37b775cb"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/resources.py",
+        "sha256": "9f2a2fa3e7e033d22a38994b6bb50155b6ee809c4bc70c94d0eeea832abbaa77",
+        "unavailable_reason": "no reconstructable scoped patch is available for this path; executing content saved under code-untracked"
+      },
+      "benchmark/multivariate_time_series/temporal/runner.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/runner.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/runner.py",
+          "sha256": "e3c041e7bb798d93d7cdbc4aa635d3b8706603caeb9c4de3a8f56c2ade27c2ce"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/runner.py",
+        "sha256": "64a569ccb85ab8f760bfdcc80224e296004de3c4745423cac219bb208ff50ba7",
+        "unavailable_reason": "no reconstructable scoped patch is available for this path; executing content saved under code-untracked"
+      },
+      "benchmark/multivariate_time_series/temporal/selection.py": {
+        "content_saved": "code-untracked/benchmark/multivariate_time_series/temporal/selection.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/multivariate_time_series/temporal/selection.py",
+          "sha256": "dfa5619ae843d6cf4e9c0aa8b2fff91858bfb14050da15ca7bdabfa778aa2005"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/multivariate_time_series/temporal/selection.py",
+        "sha256": "51a6b7d3159e4057c368a05d4946f94d9a00ad24ab3ca69ce8c78a023426ddd6",
+        "unavailable_reason": "no reconstructable scoped patch is available for this path; executing content saved under code-untracked"
+      },
+      "benchmark/nograph_baseline/__init__.py": {
+        "content_saved": "code-untracked/benchmark/nograph_baseline/__init__.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/nograph_baseline/__init__.py",
+          "sha256": "d9c569ef793ad4575f7fef38f798f059687e3fd118a471b4d091bfec74c17d78"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/__init__.py",
+        "sha256": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      },
+      "benchmark/nograph_baseline/artifacts.py": {
+        "content_saved": "code-untracked/benchmark/nograph_baseline/artifacts.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/nograph_baseline/artifacts.py",
+          "sha256": "102ced0ef2ac276cbccb26876a874dec8ac04d5649184be90e38c88ecf52ca86"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/artifacts.py",
+        "sha256": "82622865b80ea6a7b3b6e1694c0faa2d76b46d1857d5f0740392e451a5c168f6",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      },
+      "benchmark/nograph_baseline/baselines.py": {
+        "content_saved": "code-untracked/benchmark/nograph_baseline/baselines.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/nograph_baseline/baselines.py",
+          "sha256": "90030ee66ddd71ef18677dc6195fde06ae3574b6298b5ac070a977372e5d293a"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/baselines.py",
+        "sha256": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      },
+      "benchmark/nograph_baseline/coverage.py": {
+        "content_saved": "code-untracked/benchmark/nograph_baseline/coverage.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/nograph_baseline/coverage.py",
+          "sha256": "fad3fa9302e9da44a3cc348977c5f2beaae0951a188cb4cdb983ef0b53177b22"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/coverage.py",
+        "sha256": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      },
+      "benchmark/nograph_baseline/data.py": {
+        "content_saved": "code-untracked/benchmark/nograph_baseline/data.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/nograph_baseline/data.py",
+          "sha256": "790dd78339e6b7f5476a34a9d272e4fbef1be21075a5b57691e7dff22871cc63"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/data.py",
+        "sha256": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      },
+      "benchmark/nograph_baseline/metrics.py": {
+        "content_saved": "code-untracked/benchmark/nograph_baseline/metrics.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/nograph_baseline/metrics.py",
+          "sha256": "476040954e611cafeb05eea71731cd43209ef7601455999f6772c0e21ebf127c"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/metrics.py",
+        "sha256": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      },
+      "benchmark/nograph_baseline/protocol.py": {
+        "content_saved": "code-untracked/benchmark/nograph_baseline/protocol.py",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "benchmark/nograph_baseline/protocol.py",
+          "sha256": "7b941e0f097ccd3b3f1a02337fab497dbbdadae3d478cce74011ea5f8591d73b"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "benchmark/nograph_baseline/protocol.py",
+        "sha256": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      },
+      "research/phases/P02/protocol-v2.md": {
+        "content_saved": "code-untracked/research/phases/P02/protocol-v2.md",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "research/phases/P02/protocol-v2.md",
+          "sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "research/phases/P02/protocol-v2.md",
+        "sha256": "bbe0586805c0b32aad025ff983b78ac02fb56d2de13e47d54a27ee1d9996d92f",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      },
+      "research/phases/P02/protocol.md": {
+        "content_saved": "code-untracked/research/phases/P02/protocol.md",
+        "git_reference": {
+          "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+          "path": "research/phases/P02/protocol.md",
+          "sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2"
+        },
+        "git_status": "modified",
+        "outside_repository": false,
+        "patch_path": null,
+        "path": "research/phases/P02/protocol.md",
+        "sha256": "984669a34fbbd36ac99ce59a010a9e4e0b0d106ae170aba1fc87700ea164ce59",
+        "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+      }
+    },
+    "generated": "2026-11-28T16:48:43+08:00",
+    "identity_available": true,
+    "patch_bytes": 0,
+    "patch_errors": {},
+    "patch_path": "git-diff.patch",
+    "patch_unusable_paths": [
+      "benchmark/multivariate_time_series/effective_temporal_training.py",
+      "benchmark/multivariate_time_series/run.py",
+      "benchmark/multivariate_time_series/temporal/__init__.py",
+      "benchmark/multivariate_time_series/temporal/artifacts.py",
+      "benchmark/multivariate_time_series/temporal/checkpoints.py",
+      "benchmark/multivariate_time_series/temporal/checks.py",
+      "benchmark/multivariate_time_series/temporal/cli.py",
+      "benchmark/multivariate_time_series/temporal/data.py",
+      "benchmark/multivariate_time_series/temporal/diagnostics.py",
+      "benchmark/multivariate_time_series/temporal/engine.py",
+      "benchmark/multivariate_time_series/temporal/model.py",
+      "benchmark/multivariate_time_series/temporal/protocol.py",
+      "benchmark/multivariate_time_series/temporal/recovery.py",
+      "benchmark/multivariate_time_series/temporal/report.py",
+      "benchmark/multivariate_time_series/temporal/resources.py",
+      "benchmark/multivariate_time_series/temporal/runner.py",
+      "benchmark/multivariate_time_series/temporal/selection.py",
+      "benchmark/nograph_baseline/__init__.py",
+      "benchmark/nograph_baseline/artifacts.py",
+      "benchmark/nograph_baseline/baselines.py",
+      "benchmark/nograph_baseline/coverage.py",
+      "benchmark/nograph_baseline/data.py",
+      "benchmark/nograph_baseline/metrics.py",
+      "benchmark/nograph_baseline/protocol.py",
+      "research/phases/P02/protocol-v2.md",
+      "research/phases/P02/protocol.md"
+    ],
+    "policy": "P01-records-v2",
+    "protocol": {
+      "content_saved": "code-untracked/research/phases/P02/protocol-v2.md",
+      "git_reference": {
+        "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+        "path": "research/phases/P02/protocol-v2.md",
+        "sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0"
+      },
+      "git_status": "modified",
+      "outside_repository": false,
+      "patch_path": null,
+      "path": "research/phases/P02/protocol-v2.md",
+      "sha256": "bbe0586805c0b32aad025ff983b78ac02fb56d2de13e47d54a27ee1d9996d92f",
+      "unavailable_reason": "working-tree bytes differ from the recorded commit despite a clean Git status"
+    },
+    "runtime_scope": [
+      "benchmark/multivariate_time_series/effective_temporal_training.py",
+      "benchmark/multivariate_time_series/run.py",
+      "benchmark/multivariate_time_series/temporal/__init__.py",
+      "benchmark/multivariate_time_series/temporal/artifacts.py",
+      "benchmark/multivariate_time_series/temporal/checkpoints.py",
+      "benchmark/multivariate_time_series/temporal/checks.py",
+      "benchmark/multivariate_time_series/temporal/cli.py",
+      "benchmark/multivariate_time_series/temporal/data.py",
+      "benchmark/multivariate_time_series/temporal/diagnostics.py",
+      "benchmark/multivariate_time_series/temporal/engine.py",
+      "benchmark/multivariate_time_series/temporal/model.py",
+      "benchmark/multivariate_time_series/temporal/protocol.py",
+      "benchmark/multivariate_time_series/temporal/recovery.py",
+      "benchmark/multivariate_time_series/temporal/report.py",
+      "benchmark/multivariate_time_series/temporal/resources.py",
+      "benchmark/multivariate_time_series/temporal/runner.py",
+      "benchmark/multivariate_time_series/temporal/selection.py",
+      "benchmark/nograph_baseline/__init__.py",
+      "benchmark/nograph_baseline/artifacts.py",
+      "benchmark/nograph_baseline/baselines.py",
+      "benchmark/nograph_baseline/coverage.py",
+      "benchmark/nograph_baseline/data.py",
+      "benchmark/nograph_baseline/metrics.py",
+      "benchmark/nograph_baseline/protocol.py",
+      "research/phases/P02/protocol-v2.md",
+      "research/phases/P02/protocol.md"
+    ],
+    "scoped_dirty": true,
+    "unrecoverable_paths": [],
+    "whole_repository_dirty": true
+  }
+}

@@ -190,7 +190,7 @@ def _fit_summary_text(
         "## Evidence",
         "",
         "- per-epoch validation history: `history.json`",
-        "- fixed-parameter scores (init/10/50/100/best): `scores.json`",
+        "- fixed-parameter scores (init/10/50/100/200/best): `scores.json`",
         "- update/clip records: `gradients.json`",
         "- validation predictions/labels: `validation/`",
         "- selected weights: `weights/best.pt`",
@@ -313,23 +313,31 @@ def run_fit(
     )
     ledger_path = Path(parent["ledger_path"]) if parent else (
         Path(request["ledger_path"]) if request.get("ledger_path") else run.path.parent / "ledger.json")
-    ledger = resources.Ledger(ledger_path, batch_id=(parent["batch_id"] if parent else str(request.get("batch_id", "p02-t006"))))
+    ledger = resources.Ledger(
+        ledger_path, batch_id=parent["batch_id"] if parent else str(request.get("batch_id", "p02-t006")),
+        require_existing=parent is not None or bool(request.get("controller_managed")),
+    )
     execution_id = str(request.get("execution_id") or f"{run.run_id}@{uuid.uuid4().hex}")
     inherited_fit_seconds = float(parent["fit_spent_seconds"]) if parent else 0.0
     trajectory_ids = list(parent["trajectory_execution_ids"]) if parent else []
     trajectory_ids.append(execution_id)
     controller_managed = bool(request.get("controller_managed"))
     last_billed = -1.0
+    last_refresh = -1.0
+
     def bill(status="running", force=False):
-        nonlocal last_billed
+        nonlocal last_billed, last_refresh
         elapsed = max(0.0, float(clock() - started))
         if not controller_managed and (force or elapsed - last_billed >= 1.0):
             ledger.record(execution_id=execution_id, run_id=run.run_id, seconds=elapsed, status=status)
             last_billed = elapsed
+            last_refresh = elapsed
+        elif force or elapsed - last_refresh >= 0.5:
+            ledger.refresh()
+            last_refresh = elapsed
         return elapsed
+
     bill(force=True)
-    batch_before = sum(float(entry["seconds"]) for entry in ledger.payload["entries"]
-                       if entry["execution_id"] != execution_id and entry["kind"] in {"measured", "replayed"})
     watchdog: Optional[resources.Watchdog] = None
     cost_payload: Dict[str, Any] = {
         "status": "not_measured",
@@ -422,16 +430,24 @@ def run_fit(
                 sha256=recovery_sha,
             )
 
-        def check_stop() -> None:
+        def check_stop(*, refresh_budget: bool = False) -> None:
             elapsed = bill()
+            if refresh_budget:
+                ledger.refresh()
             reason = watchdog.pause_reason() if watchdog is not None else None
             if reason is not None:
                 raise PauseRequest("resource_stop", reason)
             fit_elapsed = inherited_fit_seconds + elapsed
             if fit_elapsed > protocol.FIT_SECONDS:
                 raise PauseRequest("fit_timeout", {"elapsed_seconds": fit_elapsed, "limit_seconds": protocol.FIT_SECONDS})
-            if batch_before + elapsed > protocol.BATCH_SECONDS:
-                raise PauseRequest("batch_timeout", {"active_seconds": batch_before + elapsed, "limit_seconds": protocol.BATCH_SECONDS})
+            measured = ledger.active_seconds(excluding=execution_id) + elapsed
+            debited = ledger.debited_seconds()
+            if measured + debited >= protocol.BATCH_SECONDS:
+                raise PauseRequest("batch_timeout", {
+                    "active_seconds": measured, "debited_seconds": debited,
+                    "effective_used_seconds": measured + debited,
+                    "limit_seconds": protocol.BATCH_SECONDS,
+                })
             completed = trajectory.completed_epoch if trajectory is not None else 0
             if config.epochs >= protocol.COST_SAMPLE_EPOCHS and completed < protocol.COST_SAMPLE_EPOCHS and fit_elapsed > protocol.COST_SAMPLE_SECONDS:
                 raise PauseRequest("sample_timeout", {"elapsed_seconds": fit_elapsed, "limit_seconds": protocol.COST_SAMPLE_SECONDS})
@@ -452,6 +468,9 @@ def run_fit(
                 trajectory.completed_epoch == protocol.COST_SAMPLE_EPOCHS
                 and config.epochs > protocol.COST_SAMPLE_EPOCHS
             ):
+                ledger.refresh()
+                measured = ledger.active_seconds(excluding=execution_id) + elapsed
+                debited = ledger.debited_seconds()
                 cost_payload = resources.cost_gate(
                     trajectory.history,
                     epochs=config.epochs,
@@ -459,9 +478,9 @@ def run_fit(
                     spent_seconds=inherited_fit_seconds + elapsed,
                     sample_seconds=inherited_fit_seconds + elapsed,
                     remaining_fits=int(request.get("remaining_fits", 1)),
-                    batch_active_seconds=(
-                        batch_before + elapsed
-                    ),
+                    batch_active_seconds=measured + debited,
+                    batch_measured_seconds=measured,
+                    batch_debited_seconds=debited,
                 )
                 run.write_json(protocol.RUN_DIRECTORY_FILES["cost"], cost_payload)
                 if cost_payload["status"] != "ok":
@@ -654,7 +673,7 @@ def run_fit(
             recovery_sha256=recovery_sha,
             protocol_controls_complete=controls["complete"],
         )
-        check_stop()  # includes final checkpoint, arrays, summaries and status writes
+        check_stop(refresh_budget=True)  # includes final artifact publication
         return {
             "run_id": run.run_id,
             "run_dir": str(run.path),
@@ -721,6 +740,7 @@ def run_fit(
         bill(status=state.get("state", "failed"), force=True)
 
 
+@resources.account_stage
 def run_preflight(request: Mapping[str, Any]) -> Dict[str, Any]:
     return resources.preflight(
         purpose=str(request["purpose"]),
@@ -733,12 +753,16 @@ def run_preflight(request: Mapping[str, Any]) -> Dict[str, Any]:
         output_root=Path(request["output_root"]) if request.get("output_root") else None,
         ledger_path=Path(request["ledger_path"]) if request.get("ledger_path") else None,
         lock_path=Path(request["lock_path"]) if request.get("lock_path") else None,
+        additional_lock_path=Path(request["additional_lock_path"]) if request.get("additional_lock_path") else None,
         recovery_path=Path(request["recovery_path"]) if request.get("recovery_path") else None,
         dependencies_missing=request.get("dependencies_missing"),
         memory_available_bytes=request.get("memory_available_bytes"),
         disk_free_bytes=request.get("disk_free_bytes"),
         psutil_available=request.get("psutil_available"),
         data_identity=request.get("data_identity"),
+        batch_id=str(request.get("batch_id", "p02-t006")),
+        require_existing_ledger=bool(request.get("ledger_explicit")),
+        internal_preflight=bool(request.get("internal_preflight")),
     )
 
 
@@ -891,16 +915,12 @@ def _aggregate_cost(
     dataset = (request.get("dataset") or request.get("data_name") or
                next(iter(a_runs.values()), {}).get("dataset"))
     model = request.get("model")
-    ledger_active = None
+    ledger_active = ledger_debited = ledger_effective = None
     if request.get("ledger_path") and Path(request["ledger_path"]).exists():
-        ledger_payload = artifacts.read_json(Path(request["ledger_path"]))
-        ledger_active = float(
-            sum(
-                float(entry.get("seconds", 0.0))
-                for entry in ledger_payload.get("entries", [])
-                if entry.get("kind") in {"measured", "replayed"}
-            )
-        )
+        ledger = resources.Ledger(Path(request["ledger_path"]), batch_id=str(request.get("batch_id", "p02-t006")))
+        ledger_active = ledger.active_seconds()
+        ledger_debited = ledger.debited_seconds()
+        ledger_effective = ledger.effective_used_seconds()
     known_blocks = {f"{dataset}/{model}"} if dataset and model else set()
     unknown = sorted(
         f"{name}/{kind}"
@@ -919,10 +939,12 @@ def _aggregate_cost(
         "measured_steady_state_epoch_seconds": measured,
         "estimated_fit_seconds": max(estimates) if estimates else None,
         "estimate_definition": (
-            "1.3 * (setup + 2*100*t) with t the epoch 6..10 median; measured and "
+            "1.3 * (setup + 2*200*t) with t the epoch 6..10 median; measured and "
             "estimated values are separate fields"
         ),
         "batch_active_seconds": ledger_active,
+        "batch_debited_seconds": ledger_debited,
+        "batch_effective_used_seconds": ledger_effective,
         "batch_limit_seconds": protocol.BATCH_SECONDS,
         "unknown_unmeasured_blocks": unknown,
         "note": (

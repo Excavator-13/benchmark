@@ -26,6 +26,7 @@ def _base(kind: str, config: protocol.FitConfig, scientific_version: str = proto
     return {
         "artifact_format_version": protocol.ARTIFACT_FORMAT_VERSION,
         "scientific_version": scientific_version,
+        "protocol_identity": protocol.protocol_identity_payload(),
         "kind": kind,
         "config": config.to_payload(),
     }
@@ -86,6 +87,10 @@ def load_best(path: Path, *, expected_config: Optional[protocol.FitConfig] = Non
             f"{path}: scientific version {payload.get('scientific_version')!r} is "
             f"not {protocol.SCIENTIFIC_VERSION}"
         )
+    protocol.validate_bound_protocol_identity(
+        payload.get("scientific_version"), payload.get("protocol_identity"),
+        artifact=f"{path} checkpoint",
+    )
     if expected_config is not None:
         stored = protocol.FitConfig.from_payload(payload["config"])
         if stored.to_payload() != expected_config.to_payload():
@@ -214,6 +219,10 @@ def load_last(path: Path) -> Dict[str, Any]:
             f"{path}: checkpoint kind is {payload.get('kind')!r}, not 'last'; the "
             "best snapshot is not a recoverable last state"
         )
+    protocol.validate_bound_protocol_identity(
+        payload.get("scientific_version"), payload.get("protocol_identity"),
+        artifact=f"{path} recovery checkpoint",
+    )
     required = (
         "completed_epoch",
         "updates",

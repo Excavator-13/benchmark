@@ -116,6 +116,7 @@ class ArtifactIdentityTests(unittest.TestCase):
         target.write_text("VALUE = 1\n", encoding="utf-8")
         for command in (
             ["git", "init", "-q"],
+            ["git", "config", "core.autocrlf", "false"],
             ["git", "add", "."],
             ["git", "-c", "user.email=a@b", "-c", "user.name=test", "commit", "-qm", "seed"],
         ):
@@ -125,11 +126,15 @@ class ArtifactIdentityTests(unittest.TestCase):
         record = nb_artifacts.capture_source(
             run, repo, runtime_paths=[relative], protocol_path=None
         )
-        self.assertGreater(record["patch_bytes"], 0)
         self.assertEqual(record["files"][relative]["git_status"], "modified")
-        patch = (run.path / "git-diff.patch").read_text(encoding="utf-8")
-        self.assertIn("VALUE = 2", patch)
-        self.assertIn("+VALUE = 2", patch)
+        if record["patch_bytes"]:
+            patch = (run.path / "git-diff.patch").read_text(encoding="utf-8")
+            self.assertIn("VALUE = 2", patch)
+            self.assertIn("+VALUE = 2", patch)
+        else:
+            saved = record["files"][relative]["content_saved"]
+            self.assertIsNotNone(saved)
+            self.assertEqual((run.path / saved).read_text(encoding="utf-8"), "VALUE = 2\n")
         self.assertFalse(record["unrecoverable_paths"])
 
     def test_generic_ignore_policy_is_not_extended(self):
@@ -218,6 +223,18 @@ class CompareIdentityTests(unittest.TestCase):
         self.assertEqual(result["status"], "failed")
         fields = [mismatch["field"] for mismatch in result["result"]["mismatches"]]
         self.assertIn("config.seed", fields)
+
+    def test_identical_arrays_from_v1_and_v2_are_not_compatible(self):
+        clone = _clone_run(
+            Path(self.first["run_dir"]),
+            self.root / "runs" / "historical-v1",
+            config=lambda document: document.__setitem__(
+                "scientific_version", "P2-effective-training-L6-H3-v1"
+            ),
+        )
+        result = self._compare(self.first["run_dir"], clone, "mixed-version.json")
+        self.assertEqual(result["status"], "failed")
+        self.assertIn("v1 evidence cannot be upgraded", str(result["result"]))
 
     def test_protocol_and_environment_mismatches_are_specific(self):
         protocol_clone = _clone_run(

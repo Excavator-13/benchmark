@@ -657,14 +657,18 @@ they validate those saved records without reading the original sources.
 ### 4.7 P02 effective recurrent entry (`benchmark.multivariate_time_series`)
 
 `benchmark/multivariate_time_series/effective_temporal_training.py` is the
-protocol-isolated CPU GRU/LSTM entry for `P2-effective-training-L6-H3-v1`
-(`research/phases/P02/protocol.md`, sections 2–7). It is intentionally **staged**
+protocol-isolated CPU GRU/LSTM entry for `P2-effective-training-L6-H3-v2`
+(`research/phases/P02/protocol-v2.md` and its immutable inherited
+`research/phases/P02/protocol.md`, sections 2–7). New evidence binds both
+ordered document identities, including the research-declared inherited v1 hash.
+It is intentionally **staged**
 instead of one implicit train-then-test call:
 
 ```text
 preflight -> fit -> select -> diagnose -> report
                           \-> recompute / compare (saved evidence only)
 preflight -> resume (parent-linked recovery)
+budget-debit (existing-ledger accounting only)
 ```
 
 `fit` receives only training and validation observations; the four rolling test
@@ -687,7 +691,7 @@ ignored `scratch/effective-temporal/`; `--purpose formal` writes
 `research/runs/`. A development output that resolves inside `research/runs/`
 (including through a symlink alias) is rejected before any directory or worker is
 created. Purpose never changes a scientific calculation. Formal operation
-requires a complete 100-epoch protocol trajectory and is a research-side
+requires a complete 200-epoch / 3,800-update protocol trajectory and is a research-side
 authorization decision, not an implementation action.
 
 Commands (run from the repository root; one worker at a time, fresh
@@ -765,20 +769,52 @@ python -m benchmark.multivariate_time_series.effective_temporal_training resume 
     --output-root scratch/effective-temporal --data-name r0
 ```
 
-`fit` and `resume` accept the full control surface explicitly:
-`--epochs` (frozen at 100), `--hidden-size`, `--layers`, `--node-chunk`,
-`--grad-clip`, `--threads` (only 1), `--ledger`, `--batch-id`,
-`--remaining-fits`, `--monitor-interval`, `--memory-limit-bytes`,
-`--setup-seconds` (a conservative development timing injection; measured setup
-is always included), `--takeover-stale`. Any control that differs from the frozen
-protocol is a labelled development override and cannot be used for a formal
-report. For software rehearsal only, `fit`/`resume` accept
-`--memory-available-bytes`/`--disk-free-bytes` to inject the preflight resource
-readings; the flags are rejected for `--purpose formal`.
+`fit` accepts `--model`, `--seed`, `--learning-rate`, `--epochs` (frozen at 200
+for formal runs), `--hidden-size`, `--layers`, `--node-chunk`, `--grad-clip`,
+`--threads` (only 1), `--candidate-role`, `--repeat-role`, and `--setup-seconds`
+for a conservative development timing injection. Measured setup time is always
+included.
+
+`resume` takes the parent run through `--parent` and inherits its model, seed,
+training controls, candidate and repeat roles, ledger, and batch. Both commands
+accept `--ledger`, `--batch-id`, `--remaining-fits`, `--monitor-interval`,
+`--memory-limit-bytes`, and `--takeover-stale`. If supplied to `resume`,
+`--ledger` and `--batch-id` must match the parent. For software rehearsal only,
+both commands accept `--memory-available-bytes` and `--disk-free-bytes` to inject
+the preflight resource readings. Formal preflight measures the machine.
 The RSS limit must be a positive integer. Formal `fit`/`resume` reject values
 above 8 GiB before starting a worker; smaller conservative limits are allowed.
 Development RSS overrides are recorded in effective protocol controls and make
 those controls incomplete, including when inherited by a resumed trajectory.
+
+Formal `fit` and `resume` validate the training configuration against the frozen
+protocol, including its 200-epoch target, before starting a worker. The
+configuration comes from the parent for `resume`. Training controls that depart
+from the frozen protocol are labelled development overrides and are ineligible
+for formal reporting. Fixed-parameter score blocks are saved at initialization and
+epochs 10, 50, 100 and 200. The budget-tail gate uses the best validation MSE
+through epoch 160 and through epoch 200, reported as `b160` and `b200`; v1
+`b80`/`b100` evidence is not reinterpreted.
+The conservative full-fit estimate is `1.3*(setup + 2*200*t)`, where `t` is
+the median complete-epoch duration over epochs 6 through 10.
+
+The explicit `budget-debit` operation registers conservative prior preparation
+time without opening data or starting a worker. It requires an existing matching
+ledger and stable debit identity:
+
+```bash
+python -m benchmark.multivariate_time_series.effective_temporal_training budget-debit \
+    --ledger scratch/effective-temporal/ledger.json --batch-id p02-t006 \
+    --debit-id preparation-2026-11 --seconds 900 \
+    --reason "conservative prior preparation allowance"
+```
+
+Ledger and budget reports keep measured/replayed execution, debits and forecasts
+separate. Effective cumulative usage is measured/replayed time plus debits.
+Forecasts remain nonbinding. Public standalone preflight is measured against an
+explicit existing ledger. Research-side helpers can record measured duration
+with `temporal.resources.record_helper_cost`, supplying the existing ledger path,
+batch ID, unique execution ID, elapsed seconds and reason.
 
 **Exit codes.** `0` pass/completed, `1` failed, `2` usage or protocol violation,
 `3` paused (resource/cost/batch stop, recovery point preserved), `4` incomplete
@@ -813,6 +849,9 @@ prediction difference; test predictions are compared after final reporting.
 A usable destination retains a failure report and exits nonzero. Saved checks
 need NumPy and the saved artifacts; torch, pandas, Arrow, demand and graph readers
 are not required. Recompute derives sample counts from arrays and canonical keys.
+This current entry rejects v1 evidence rather than inferring a version from
+matching arrays. Historical v1 operations remain tied to runner `3bd9fa4` or its
+run-source baseline `bf5abed8`; v1 checkpoints cannot resume under v2.
 When saved evidence links to an available active batch ledger, select, diagnose,
 report, recompute and compare enforce its cumulative 12-hour budget before work
 and at cancellation points between saved reads, metric units, seeds and inference
@@ -820,7 +859,9 @@ chunks. Exhaustion retains paused/failed output and bills consumed time, includi
 failure publication, outside the consumed directories. A native array or file
 operation finishes before the next cancellation point. Offline copies remain
 checkable without the original ledger; reports identify `live-batch` or `offline`
-accounting. An explicitly requested live ledger must exist.
+accounting. An explicitly requested live ledger must exist. The effective budget
+gate includes conservative debits. Ledger summaries expose measured/replayed,
+estimated, debited and effective-used totals independently.
 
 Ridge validation JSON must supply `dataset`, `data_sha256`, `node_keys_sha256`,
 `split.validation_starts` and `split.validation_target_months` matching the
@@ -849,7 +890,7 @@ checkpoints without `artifact_format_version` (and the old single-window
 and budget evidence, are rejected rather than upgraded.
 
 **Diagnostics.** `fit` saves fixed-parameter original-unit train/validation MSE
-and MAE at initialization, epochs 10/50/100 and the selected checkpoint, the
+and MAE at initialization, epochs 10/50/100/200 and the selected checkpoint, the
 complete per-epoch validation history, and mixed-parameter online training loss
 (clearly labelled as different-parameter). `diagnose` implements P02 section 5
 without changing thresholds and reports per-seed and aggregate gate evidence,

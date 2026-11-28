@@ -30,22 +30,14 @@ def _read_json(path: Path) -> Any:
     return payload
 
 
-def remaining_budget_seconds(ledger_path: Optional[Path]) -> Optional[float]:
+def remaining_budget_seconds(ledger_path: Optional[Path], *, batch_id: str = "p02-t006") -> Optional[float]:
     """Return the remaining cumulative batch budget from the persistent ledger."""
     if ledger_path is None:
         return None
     path = Path(ledger_path)
     if not path.exists():
         return protocol.BATCH_SECONDS
-    import json
-
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    active = sum(
-        float(entry.get("seconds", 0.0))
-        for entry in payload.get("entries", [])
-        if entry.get("kind") in {"measured", "replayed"}
-    )
-    return max(0.0, protocol.BATCH_SECONDS - active)
+    return resources.Ledger(path, batch_id, require_existing=True).remaining_seconds()
 
 
 def load_parent(
@@ -58,13 +50,20 @@ def load_parent(
     directory = Path(parent_dir)
     config_doc = _read_json(directory / "config.json")
     provenance = _read_json(directory / "provenance.json")
+    try:
+        protocol.validate_protocol_identity(provenance)
+    except protocol.ProtocolError as exc:
+        raise RecoveryError(f"{directory}: {exc} Start v2 from fresh initialization.") from exc
     status_doc = _read_json(directory / "status.json")
     if config_doc.get("operation") not in {"fit", "resume"}:
         raise RecoveryError(
             f"{directory} is a {config_doc.get('operation')!r} run; only a fit or "
             "resumed trajectory has recoverable training state"
         )
-    payload = checkpoints.load_last(directory / protocol.RUN_DIRECTORY_FILES["last_recovery"])
+    try:
+        payload = checkpoints.load_last(directory / protocol.RUN_DIRECTORY_FILES["last_recovery"])
+    except protocol.ProtocolError as exc:
+        raise RecoveryError(str(exc)) from exc
     stored_config = protocol.FitConfig.from_payload(payload["config"])
     parent_config = protocol.FitConfig.from_payload(config_doc["config"])
     if stored_config.to_payload() != parent_config.to_payload():
@@ -116,8 +115,8 @@ def load_parent(
         raise RecoveryError("inherited ledger is missing; budget cannot be reset")
     if batch_id is not None and batch_id != bound.get("batch_id"):
         raise RecoveryError("resume batch identity differs from inherited ledger")
-    ledger = resources.Ledger(Path(bound_path), batch_id=bound["batch_id"])
-    if ledger.payload.get("ledger_id") != bound["ledger_id"] or ledger.active_seconds() < bound.get("active_seconds", 0):
+    ledger = resources.Ledger(Path(bound_path), batch_id=bound["batch_id"], require_existing=True)
+    if ledger.payload.get("ledger_id") != bound["ledger_id"] or ledger.effective_used_seconds() < bound.get("effective_used_seconds", bound.get("active_seconds", 0)):
         raise RecoveryError("inherited ledger was replaced or lost consumed budget")
     entries = {entry["execution_id"]: entry for entry in ledger.payload["entries"]}
     ids = bound["trajectory_execution_ids"]

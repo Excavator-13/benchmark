@@ -1,4 +1,4 @@
-"""Protocol-isolated recurrent training for ``P2-effective-training-L6-H3-v1``.
+"""Protocol-isolated recurrent training for ``P2-effective-training-L6-H3-v2``.
 
 The package keeps the scientific constants of ``research/phases/P02/protocol.md``
 in :mod:`benchmark.multivariate_time_series.temporal.protocol` and separates the

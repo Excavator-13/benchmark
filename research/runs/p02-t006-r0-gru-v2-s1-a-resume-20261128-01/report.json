@@ -1,0 +1,75 @@
+{
+  "artifact_format_version": 2,
+  "config": {
+    "diagnostic_epochs": [
+      10,
+      50,
+      100,
+      200
+    ],
+    "epochs": 200,
+    "grad_clip": 1.0,
+    "hidden_size": 32,
+    "layers": 1,
+    "learning_rate": 0.001,
+    "model": "GRU",
+    "node_chunk": 2048,
+    "seed": 1,
+    "threads": 1
+  },
+  "cost": {
+    "reason": "cost sample does not apply to this short development trajectory",
+    "status": "not_measured"
+  },
+  "history_epochs": 200,
+  "kind": "fit-summary",
+  "parameter_count": 3459,
+  "paused": null,
+  "preprocessing_scale": 3505.721244333227,
+  "protocol_controls": {
+    "complete": true,
+    "deviations": [],
+    "resources": {
+      "complete": true,
+      "conservative_limit": false,
+      "development_override": false,
+      "protocol_rss_stop_bytes": 8589934592,
+      "rss_stop_bytes": 8589934592
+    }
+  },
+  "purpose": "formal",
+  "recovery_sha256": "f66455acd343bae8f1cc85763cb8691ceccdd9f137b825cc5b6721835a34836d",
+  "reproduction": {
+    "absolute_differences": {
+      "MAE": 0.0,
+      "MSE": 0.0
+    },
+    "reevaluated": {
+      "MAE": 112.3347249185588,
+      "MSE": 202343.27046204376
+    },
+    "saved": {
+      "MAE": 112.3347249185588,
+      "MSE": 202343.27046204376
+    },
+    "status": "pass",
+    "tolerance": 1e-06
+  },
+  "scientific_version": "P2-effective-training-L6-H3-v2",
+  "selected_epoch": 200,
+  "selected_updates": 3800,
+  "status": "completed",
+  "total_updates": 3800,
+  "validation": {
+    "best": {
+      "MAE": 112.3347249185588,
+      "MSE": 202343.27046204376,
+      "epoch": 200
+    },
+    "initial": {
+      "MAE": 1378.9322274959402,
+      "MSE": 16555137.674820013
+    }
+  },
+  "warnings": []
+}

@@ -113,7 +113,7 @@ class WindowOptimizationTests(unittest.TestCase):
 
     def test_configuration_violations_are_rejected(self):
         for override in (
-            {"epochs": 101},
+            {"epochs": 201},
             {"threads": 2},
             {"learning_rate": 0.01},
             {"node_chunk": 0},

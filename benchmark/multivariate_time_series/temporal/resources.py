@@ -11,13 +11,17 @@ preceding complete recovery state when it stops mid-epoch.
 from __future__ import annotations
 
 import contextvars
+import errno
 import importlib.util
 import json
+import math
 import uuid
 import os
 import statistics
+import tempfile
 import threading
 import time
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence
 
@@ -128,9 +132,42 @@ def resource_availability(
 
 
 # -- locking ----------------------------------------------------------------
+@contextmanager
+def _file_lock(path: Path):
+    """Serialize short filesystem transactions through a stable lock file."""
+    with path.open("a+b") as handle:
+        if os.name == "nt":
+            import msvcrt
+
+            def acquire():
+                handle.seek(0)
+                msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+        else:
+            import fcntl
+
+            def acquire():
+                fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+
+        for attempt in range(50):
+            try:
+                acquire()
+                break
+            except OSError as exc:
+                if exc.errno not in {errno.EACCES, errno.EAGAIN} or attempt == 49:
+                    raise
+                time.sleep(0.02)
+        # Closing the handle releases the OS lock, including on exceptions.
+        yield
+
+
 def _pid_alive(pid: int) -> bool:
     if pid <= 0:
         return False
+    if os.name == "nt":
+        # Signal 0 is CTRL_C_EVENT on Windows.
+        import psutil
+
+        return psutil.pid_exists(pid)
     try:
         os.kill(pid, 0)
     except ProcessLookupError:
@@ -142,9 +179,25 @@ def _pid_alive(pid: int) -> bool:
     return True
 
 
+def worker_lock_path(ledger_path: Path) -> Path:
+    ledger = ledger_path.resolve()
+    return ledger.with_name(ledger.name + ".worker.lock")
+
+
+def _lock_guard_path(path: Path) -> Path:
+    return path.with_name(path.name + ".guard")
+
+
 def inspect_lock(path: Path) -> Dict[str, Any]:
     """Return the current owner state of a worker lock file."""
     path = Path(path)
+    if path.exists():
+        with _file_lock(_lock_guard_path(path)):
+            return _inspect_lock(path)
+    return {"status": "free", "path": str(path)}
+
+
+def _inspect_lock(path: Path) -> Dict[str, Any]:
     if not path.exists():
         return {"status": "free", "path": str(path)}
     try:
@@ -177,7 +230,11 @@ class WorkerLock:
 
     def acquire(self, *, takeover_stale: bool = False) -> Dict[str, Any]:
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        current = inspect_lock(self.path)
+        with _file_lock(_lock_guard_path(self.path)):
+            return self._acquire(takeover_stale=takeover_stale)
+
+    def _acquire(self, *, takeover_stale: bool) -> Dict[str, Any]:
+        current = _inspect_lock(self.path)
         if current["status"] == "held":
             self.state = {
                 **current,
@@ -215,7 +272,7 @@ class WorkerLock:
                 self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644
             )
         except FileExistsError:
-            current = inspect_lock(self.path)
+            current = _inspect_lock(self.path)
             self.state = {
                 **current,
                 "status": "conflict",
@@ -235,17 +292,10 @@ class WorkerLock:
     def release(self) -> None:
         if not self.acquired:
             return
-        try:
-            current = json.loads(self.path.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
-            current = None
-        if current is not None and int(current.get("pid", -1)) != os.getpid():
-            self.acquired = False
-            return
-        try:
-            self.path.unlink()
-        except FileNotFoundError:  # pragma: no cover
-            pass
+        with _file_lock(_lock_guard_path(self.path)):
+            current = _inspect_lock(self.path)
+            if current.get("owner") == self.state.get("owner"):
+                self.path.unlink(missing_ok=True)
         self.acquired = False
 
     def __enter__(self) -> "WorkerLock":
@@ -266,42 +316,199 @@ class Ledger:
 
     VERSION = 1
 
-    def __init__(self, path: Path, batch_id: str):
-        self.path = Path(path)
-        self.batch_id = batch_id
-        self.payload = self._load()
+    @staticmethod
+    def _sidecar_paths(path: Path) -> tuple[Path, Path]:
+        return (
+            path.with_name(path.name + ".lock"),
+            path.with_name(path.name + ".pending-bill.json"),
+        )
 
-    def _load(self) -> Dict[str, Any]:
+    @classmethod
+    def bookkeeping_paths(cls, path: Path) -> tuple[Path, ...]:
+        path = path.resolve()
+        worker_lock = worker_lock_path(path)
+        return (path, *cls._sidecar_paths(path), worker_lock, _lock_guard_path(worker_lock))
+
+    def __init__(self, path: Path, batch_id: str, *, require_existing: bool = False):
+        self.path = Path(path).resolve()
+        self._lock_path, self._pending_bill = self._sidecar_paths(self.path)
+        self.batch_id = batch_id
+        self._persisted = require_existing or self.path.is_file()
+        if self._persisted:
+            with _file_lock(self._lock_path):
+                self.payload = self._load(require_existing=True)
+        else:
+            self.payload = self._new_payload()
+
+    def _load(self, *, require_existing: bool = False) -> Dict[str, Any]:
         if self.path.exists():
             payload = json.loads(self.path.read_text(encoding="utf-8"))
-            if payload.get("version") != self.VERSION:
+            if not isinstance(payload, dict):
+                raise ResourceError(f"{self.path}: ledger must be a JSON object")
+            if type(payload.get("version")) is not int or payload["version"] != self.VERSION:
                 raise ResourceError(
                     f"{self.path}: ledger version {payload.get('version')!r} is not "
                     f"{self.VERSION}"
                 )
-            payload.setdefault("entries", [])
-            if payload.get("batch_id") and payload["batch_id"] != self.batch_id:
+            for field in ("batch_id", "ledger_id"):
+                if not isinstance(payload.get(field), str) or not payload[field].strip():
+                    raise ResourceError(f"{self.path}: ledger requires a stored {field}")
+            if payload["batch_id"] != self.batch_id:
                 raise ResourceError(
                     f"{self.path}: ledger belongs to batch {payload['batch_id']!r}, "
                     f"not {self.batch_id!r}"
                 )
+            payload.setdefault("debit_registry", [])
+            if not isinstance(payload.get("entries"), list):
+                raise ResourceError(f"{self.path}: ledger entries must be a list")
+            if not isinstance(payload["debit_registry"], list):
+                raise ResourceError(f"{self.path}: debit registry must be a list")
+            for item in payload["debit_registry"]:
+                if (
+                    not isinstance(item, dict)
+                    or not isinstance(item.get("debit_id"), str)
+                    or not item["debit_id"].strip()
+                    or not isinstance(item.get("reason"), str)
+                    or not item["reason"].strip()
+                    or isinstance(item.get("seconds"), bool)
+                    or not isinstance(item.get("seconds"), (int, float))
+                    or not math.isfinite(float(item["seconds"]))
+                    or item["seconds"] <= 0
+                ):
+                    raise ResourceError(f"{self.path}: debit registry contains a malformed record")
+            allowed = {"measured", "estimated", "replayed", "budget-debit"}
+            execution_ids = set()
+            for entry in payload["entries"]:
+                if not isinstance(entry, dict) or entry.get("kind") not in allowed:
+                    raise ResourceError(f"{self.path}: ledger contains an unknown or malformed entry kind")
+                execution_id = entry.get("execution_id")
+                if not isinstance(execution_id, str) or not execution_id.strip() or execution_id in execution_ids:
+                    raise ResourceError(f"{self.path}: missing or duplicate ledger execution identity")
+                execution_ids.add(execution_id)
+                seconds = entry.get("seconds")
+                if isinstance(seconds, bool) or not isinstance(seconds, (int, float)) or not math.isfinite(float(seconds)) or seconds < 0:
+                    raise ResourceError(f"{self.path}: ledger entry has an invalid seconds amount")
+                if entry["kind"] == "budget-debit" and (
+                    not isinstance(entry.get("debit_id"), str) or not entry["debit_id"].strip()
+                    or not isinstance(entry.get("reason"), str) or not entry["reason"].strip()
+                    or seconds <= 0
+                ):
+                    raise ResourceError(f"{self.path}: budget debit needs an ID, positive seconds, and a reason")
+            registered = {
+                item["debit_id"]: item
+                for item in payload["debit_registry"]
+            }
+            debits = [entry for entry in payload["entries"] if entry["kind"] == "budget-debit"]
+            debit_entries = {entry["debit_id"]: entry for entry in debits}
+            if len(registered) != len(payload["debit_registry"]) or len(debit_entries) != len(debits):
+                raise ResourceError(f"{self.path}: duplicate budget debit identity")
+            if set(registered) != set(debit_entries) or any(
+                registered[identity].get("seconds") != debit_entries[identity]["seconds"]
+                or registered[identity].get("reason") != debit_entries[identity]["reason"]
+                for identity in registered
+            ):
+                raise ResourceError(f"{self.path}: published budget debits were changed or removed")
+            self._recover_bill(payload)
             return payload
+        if require_existing:
+            raise ResourceError(f"{self.path}: existing ledger is unavailable")
+
+    def _new_payload(self) -> Dict[str, Any]:
         return {
             "version": self.VERSION,
             "batch_id": self.batch_id,
             "ledger_id": uuid.uuid4().hex,
             "created": iso_now(),
             "entries": [],
+            "debit_registry": [],
         }
 
-    def _write(self) -> None:
+    def refresh(self) -> None:
+        if not self._persisted and not self.path.is_file():
+            return
+        with _file_lock(self._lock_path):
+            self._refresh()
+
+    def _refresh(self) -> None:
+        if not self._persisted and not self.path.is_file():
+            return
+        payload = self._load(require_existing=True)
+        if self._persisted and payload["ledger_id"] != self.payload["ledger_id"]:
+            raise ResourceError(f"{self.path}: ledger identity changed")
+        self.payload = payload
+        self._persisted = True
+
+    @contextmanager
+    def _mutation(self):
+        # Lock the sidecar, whose inode survives atomic replacement of the ledger.
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        temporary = self.path.with_suffix(self.path.suffix + ".tmp")
-        temporary.write_text(
-            json.dumps(self.payload, indent=2, sort_keys=True) + "\n",
-            encoding="utf-8",
-        )
-        os.replace(temporary, self.path)
+        with _file_lock(self._lock_path):
+            self._refresh()
+            yield
+
+    def _write(self, payload: Dict[str, Any]) -> None:
+        self._publish_json(self.path, payload)
+        self.payload = payload
+        self._persisted = True
+        if self._pending_bill.exists():
+            # If cleanup fails, replay of the already committed bill is idempotent.
+            try:
+                self._pending_bill.unlink()
+            except OSError:
+                pass
+
+    @staticmethod
+    def _publish_json(path: Path, payload: Mapping[str, Any]) -> None:
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", dir=path.parent, prefix=".ledger-",
+            suffix=".tmp", delete=False,
+        ) as handle:
+            temporary = Path(handle.name)
+            try:
+                json.dump(payload, handle, indent=2, sort_keys=True)
+                handle.write("\n")
+                handle.flush()
+                os.fsync(handle.fileno())
+                handle.close()
+                os.replace(temporary, path)
+            finally:
+                handle.close()
+                temporary.unlink(missing_ok=True)
+
+    def defer_stopped_fit_bill(self, *, execution_id: str, run_id: str, seconds: float,
+                              reason: str) -> Path:
+        """Retain the terminal bill when the ledger itself cannot be replaced."""
+        with _file_lock(self._lock_path):
+            if self._pending_bill.exists():
+                raise ResourceError(f"{self.path}: an earlier stopped fit bill still needs publication")
+            self._publish_json(self._pending_bill, {
+                "ledger_id": self.payload["ledger_id"],
+                "batch_id": self.batch_id,
+                "execution_id": execution_id,
+                "run_id": run_id,
+                "seconds": seconds,
+                "recorded": iso_now(),
+                "note": reason,
+            })
+        return self._pending_bill
+
+    def _recover_bill(self, payload: Dict[str, Any]) -> None:
+        if not self._pending_bill.exists():
+            return
+        bill = json.loads(self._pending_bill.read_text(encoding="utf-8"))
+        if (bill.get("ledger_id") != payload["ledger_id"] or bill.get("batch_id") != self.batch_id
+                or not isinstance(bill.get("seconds"), (int, float))
+                or not math.isfinite(bill["seconds"]) or bill["seconds"] < 0):
+            raise ResourceError(f"{self.path}: invalid deferred fit bill")
+        for entry in payload["entries"]:
+            if entry["execution_id"] == bill.get("execution_id"):
+                if entry["kind"] != "measured" or entry.get("run_id") != bill.get("run_id"):
+                    break
+                if entry["seconds"] < bill["seconds"] or entry["status"] == "running":
+                    entry.update(seconds=max(entry["seconds"], bill["seconds"]), status="paused",
+                                 note=bill["note"], recorded=bill["recorded"])
+                return
+        raise ResourceError(f"{self.path}: deferred fit bill does not match a measured execution")
 
     def record(
         self,
@@ -312,10 +519,15 @@ class Ledger:
         kind: str = "measured",
         status: str = "completed",
         note: Optional[str] = None,
+        replace_existing: bool = True,
     ) -> Dict[str, Any]:
         if kind not in {"measured", "estimated", "replayed"}:
             raise ResourceError(f"unsupported ledger entry kind {kind!r}")
-        seconds = max(0.0, float(seconds))
+        if isinstance(seconds, bool) or not isinstance(seconds, (int, float)) or not math.isfinite(float(seconds)) or seconds < 0:
+            raise ResourceError("ledger seconds must be finite and nonnegative")
+        if not isinstance(execution_id, str) or not execution_id.strip():
+            raise ResourceError("ledger execution_id must be nonempty")
+        seconds = float(seconds)
         entry = {
             "execution_id": execution_id,
             "run_id": run_id,
@@ -325,21 +537,62 @@ class Ledger:
             "recorded": iso_now(),
             "note": note,
         }
-        # Heartbeats replace one execution's elapsed total, never double-bill it.
-        self.payload["entries"] = [old for old in self.payload["entries"]
-                                   if old["execution_id"] != execution_id]
-        self.payload["entries"].append(entry)
-        self.payload["updated"] = entry["recorded"]
-        self._write()
+        with self._mutation():
+            existing = next((old for old in self.payload["entries"]
+                             if old["execution_id"] == execution_id), None)
+            if existing is not None:
+                if existing["kind"] == "budget-debit":
+                    raise ResourceError("measured history cannot replace a budget debit")
+                if not replace_existing or existing["kind"] != kind or existing.get("run_id") != run_id:
+                    raise ResourceError(f"execution identity {execution_id!r} is already recorded")
+                # A late heartbeat cannot reduce an execution's cumulative bill.
+                entry["seconds"] = max(existing["seconds"], seconds)
+            entries = [old for old in self.payload["entries"] if old is not existing]
+            self._write({**self.payload, "entries": [*entries, entry], "updated": entry["recorded"]})
         return entry
 
-    def active_seconds(self) -> float:
+    def register_debit(self, *, debit_id: str, seconds: float, reason: str) -> Dict[str, Any]:
+        if not isinstance(debit_id, str) or not debit_id.strip():
+            raise ResourceError("debit_id must be a nonempty stable identity")
+        if isinstance(seconds, bool) or not isinstance(seconds, (int, float)) or not math.isfinite(float(seconds)) or seconds <= 0:
+            raise ResourceError("budget debit seconds must be positive and finite")
+        if not isinstance(reason, str) or not reason.strip():
+            raise ResourceError("budget debit reason must be nonempty")
+        execution_id = f"budget-debit:{debit_id}"
+        entry = {
+            "execution_id": execution_id,
+            "debit_id": debit_id,
+            "run_id": None,
+            "seconds": float(seconds),
+            "kind": "budget-debit",
+            "reason": reason,
+            "status": "registered",
+            "recorded": iso_now(),
+        }
+        with self._mutation():
+            for existing in self.payload["entries"]:
+                if existing.get("debit_id") == debit_id:
+                    if existing["kind"] == "budget-debit" and existing["seconds"] == float(seconds) and existing["reason"] == reason:
+                        return existing
+                    raise ResourceError(f"debit identity {debit_id!r} already exists with different content")
+                if existing["execution_id"] == execution_id:
+                    raise ResourceError(f"debit execution identity {execution_id!r} is already in use")
+            registry_entry = {"debit_id": debit_id, "seconds": float(seconds), "reason": reason}
+            self._write({
+                **self.payload,
+                "entries": [*self.payload["entries"], entry],
+                "debit_registry": [*self.payload["debit_registry"], registry_entry],
+                "updated": entry["recorded"],
+            })
+        return entry
+
+    def active_seconds(self, *, excluding: Optional[str] = None) -> float:
         """Measured + replayed execution seconds (estimates never count)."""
         return float(
             sum(
                 entry["seconds"]
                 for entry in self.payload["entries"]
-                if entry["kind"] in {"measured", "replayed"}
+                if entry["kind"] in {"measured", "replayed"} and entry["execution_id"] != excluding
             )
         )
 
@@ -352,8 +605,14 @@ class Ledger:
             )
         )
 
+    def debited_seconds(self) -> float:
+        return float(sum(entry["seconds"] for entry in self.payload["entries"] if entry["kind"] == "budget-debit"))
+
+    def effective_used_seconds(self, *, excluding: Optional[str] = None) -> float:
+        return self.active_seconds(excluding=excluding) + self.debited_seconds()
+
     def remaining_seconds(self, limit: float = protocol.BATCH_SECONDS) -> float:
-        return max(0.0, float(limit) - self.active_seconds())
+        return max(0.0, float(limit) - self.effective_used_seconds())
 
     def payload_view(self) -> Dict[str, Any]:
         return {
@@ -363,6 +622,8 @@ class Ledger:
             "ledger_id": self.payload.get("ledger_id"),
             "active_seconds": self.active_seconds(),
             "estimated_seconds": self.estimated_seconds(),
+            "debited_seconds": self.debited_seconds(),
+            "effective_used_seconds": self.effective_used_seconds(),
             "entries": len(self.payload["entries"]),
         }
 
@@ -388,6 +649,10 @@ def sample_process_tree_rss(root_pid: int) -> Dict[str, Any]:
         "root_pid": int(root_pid),
         "timestamp": iso_now(),
     }
+
+
+class WorkerExited(Exception):
+    """The controller's sampler verified the worker has exited successfully."""
 
 
 class Watchdog:
@@ -420,10 +685,12 @@ class Watchdog:
         self._thread: Optional[threading.Thread] = None
 
     def sample_once(self) -> Dict[str, Any]:
-        """Take one sample; record breach or monitor failure, never raise."""
+        """Take one sample and record a breach or failure while monitoring."""
         timestamp = self.clock()
         try:
             sample = dict(self.sampler())
+        except WorkerExited:
+            return {"status": "worker_exited"}
         except Exception as exc:  # monitoring failure must pause, not crash
             self.monitor_failure = {
                 "reason": "process monitoring failed",
@@ -457,8 +724,7 @@ class Watchdog:
 
     def _loop(self) -> None:  # pragma: no cover - timing dependent
         while not self._stop.wait(self.interval):
-            self.sample_once()
-            if self.breach is not None or self.monitor_failure is not None:
+            if self.sample_once()["status"] != "ok":
                 return
 
     def start(self) -> "Watchdog":
@@ -523,6 +789,8 @@ def cost_gate(
     sample_seconds: Optional[float] = None,
     remaining_fits: int = 1,
     batch_active_seconds: float = 0.0,
+    batch_measured_seconds: Optional[float] = None,
+    batch_debited_seconds: float = 0.0,
 ) -> Dict[str, Any]:
     """Evaluate the 10-epoch sample, single-fit and cumulative batch limits."""
     sample_epochs = [
@@ -598,7 +866,9 @@ def cost_gate(
         projected = batch_active_seconds + remaining_fits * estimate
         checks["batch"] = {
             "projected_seconds": projected,
-            "active_seconds": batch_active_seconds,
+            "effective_used_seconds": batch_active_seconds,
+            "measured_replayed_seconds": batch_measured_seconds,
+            "debited_seconds": batch_debited_seconds,
             "remaining_fits": int(remaining_fits),
             "estimated_seconds": estimate,
             "limit": protocol.BATCH_SECONDS,
@@ -631,6 +901,9 @@ def cost_gate(
         "spent_seconds": spent_seconds,
         "remaining_fits": int(remaining_fits),
         "batch_active_seconds": batch_active_seconds,
+        "batch_measured_replayed_seconds": batch_measured_seconds,
+        "batch_debited_seconds": batch_debited_seconds,
+        "batch_effective_used_seconds": batch_active_seconds,
         "batch_limit_seconds": protocol.BATCH_SECONDS,
         "fit_limit_seconds": protocol.FIT_SECONDS,
         "checks": checks,
@@ -658,6 +931,7 @@ def preflight(
     output_root: Optional[Path] = None,
     ledger_path: Optional[Path] = None,
     lock_path: Optional[Path] = None,
+    additional_lock_path: Optional[Path] = None,
     recovery_path: Optional[Path] = None,
     dependencies_missing: Optional[Sequence[str]] = None,
     memory_available_bytes: Optional[int] = None,
@@ -665,6 +939,9 @@ def preflight(
     psutil_available: Optional[bool] = None,
     thread_environment: Optional[Mapping[str, Optional[str]]] = None,
     data_identity: Optional[Mapping[str, Any]] = None,
+    batch_id: str = "p02-t006",
+    require_existing_ledger: bool = False,
+    internal_preflight: bool = False,
     repo: Optional[Path] = None,
 ) -> Dict[str, Any]:
     """Return the machine-readable preflight record.
@@ -677,12 +954,19 @@ def preflight(
     checks: Dict[str, Any] = {}
     root = Path(repo or artifacts.repo_root())
     protocol_sha = protocol.protocol_content_sha256()
+    try:
+        protocol_identity = protocol.protocol_identity_payload()
+        protocol_error = None
+    except protocol.ProtocolError as exc:
+        protocol_identity = None
+        protocol_error = str(exc)
     checks["protocol"] = {
-        "status": "pass" if protocol_sha else "fail",
+        "status": "pass" if protocol_identity else "fail",
         "path": str(protocol.P02_PROTOCOL_PATH),
         "sha256": protocol_sha,
+        "identity": protocol_identity,
         "version": protocol.SCIENTIFIC_VERSION,
-        "reason": None if protocol_sha else "the P02 protocol document is missing",
+        "reason": protocol_error,
     }
     commit, commit_error = _git_commit(root)
     checks["source"] = {
@@ -772,16 +1056,16 @@ def preflight(
             "status": "not_applicable",
             "reason": "no run identity was requested",
         }
-    if lock_path is not None:
-        state = inspect_lock(Path(lock_path))
-        checks["worker_lock"] = {
-            "status": "pass" if state["status"] in {"free", "stale"} else "fail",
-            "state": state,
-            "reason": None
-            if state["status"] in {"free", "stale"}
-            else "another controller already owns the single worker lock",
-        }
-    else:
+    for name, path in (("worker_lock", lock_path), ("additional_worker_lock", additional_lock_path)):
+        if path is not None:
+            state = inspect_lock(path)
+            available = state["status"] in {"free", "stale"}
+            checks[name] = {
+                "status": "pass" if available else "fail",
+                "state": state,
+                "reason": None if available else "another controller already owns the single worker lock",
+            }
+    if lock_path is None:
         checks["worker_lock"] = {
             "status": "not_applicable",
             "reason": "no worker lock was requested",
@@ -793,12 +1077,30 @@ def preflight(
         output_path=output_root,
     )
     if recovery_path is not None:
-        checks["recovery"] = _check_recovery(Path(recovery_path), ledger_path)
+        checks["recovery"] = _check_recovery(Path(recovery_path), ledger_path, batch_id)
     else:
         checks["recovery"] = {
             "status": "not_applicable",
             "reason": "this operation does not resume a parent trajectory",
         }
+    if ledger_path is not None and (operation != "preflight" or require_existing_ledger or internal_preflight):
+        if require_existing_ledger and not Path(ledger_path).is_file():
+            checks["budget"] = {"status": "fail", "reason": "the supplied ledger does not exist"}
+        else:
+            try:
+                ledger = Ledger(Path(ledger_path), batch_id=batch_id)
+                used = ledger.effective_used_seconds()
+                checks["budget"] = {
+                    "status": "pass" if used < protocol.BATCH_SECONDS else "fail",
+                    "measured_replayed_seconds": ledger.active_seconds(),
+                    "debited_seconds": ledger.debited_seconds(),
+                    "estimated_seconds": ledger.estimated_seconds(),
+                    "effective_used_seconds": used,
+                    "remaining_seconds": ledger.remaining_seconds(),
+                    "limit_seconds": protocol.BATCH_SECONDS,
+                }
+            except Exception as exc:
+                checks["budget"] = {"status": "fail", "reason": f"{type(exc).__name__}: {exc}"}
     failing = [
         name
         for name, check in checks.items()
@@ -821,6 +1123,7 @@ def preflight(
         "failing_checks": failing,
         "scientific_version": protocol.SCIENTIFIC_VERSION,
         "protocol_sha256": protocol_sha,
+        "protocol_identity": protocol_identity,
         "thresholds": {
             "available_memory_bytes": protocol.AVAILABLE_MEMORY_MIN_BYTES,
             "free_disk_bytes": protocol.DISK_FREE_MIN_BYTES,
@@ -838,7 +1141,7 @@ def _git_commit(root: Path) -> tuple[Optional[str], Optional[str]]:
 
 
 def _check_recovery(
-    recovery_path: Path, ledger_path: Optional[Path]
+    recovery_path: Path, ledger_path: Optional[Path], batch_id: str,
 ) -> Dict[str, Any]:
     try:
         from . import checkpoints
@@ -846,13 +1149,7 @@ def _check_recovery(
         payload = checkpoints.load_last(Path(recovery_path))
         remaining: Optional[float] = None
         if ledger_path is not None and Path(ledger_path).exists():
-            ledger_payload = json.loads(Path(ledger_path).read_text(encoding="utf-8"))
-            active = sum(
-                float(entry.get("seconds", 0.0))
-                for entry in ledger_payload.get("entries", [])
-                if entry.get("kind") in {"measured", "replayed"}
-            )
-            remaining = max(0.0, protocol.BATCH_SECONDS - active)
+            remaining = Ledger(ledger_path, batch_id, require_existing=True).remaining_seconds()
         usable = remaining is None or remaining > 0
         return {
             "status": "pass" if usable else "fail",
@@ -907,7 +1204,7 @@ class _StageBudget:
     def __init__(self, ledgers, clock, started, execution_id, name):
         self.ledgers, self.clock, self.started = ledgers, clock, started
         self.execution_id, self.name = execution_id, name
-        self.before = [ledger.active_seconds() for ledger in ledgers]
+        self.before = [ledger.effective_used_seconds() for ledger in ledgers]
         self.last_refresh = started
         self.tripped = False
         self.outputs = []
@@ -918,12 +1215,9 @@ class _StageBudget:
         elapsed = max(0.0, float(now - self.started))
         if now - self.last_refresh >= 1.0:
             for index, ledger in enumerate(self.ledgers):
-                current = Ledger(ledger.path, batch_id=ledger.batch_id)
-                self.before[index] = sum(float(entry["seconds"]) for entry in current.payload["entries"]
-                                         if entry["execution_id"] != self.execution_id
-                                         and entry["kind"] in {"measured", "replayed"})
-                current.record(execution_id=self.execution_id, run_id=self.name,
+                ledger.record(execution_id=self.execution_id, run_id=self.name,
                                seconds=elapsed, status="running", note="live stage heartbeat")
+                self.before[index] = ledger.effective_used_seconds(excluding=self.execution_id)
             self.last_refresh = now
         self.tripped = self.tripped or any(spent + elapsed >= protocol.BATCH_SECONDS for spent in self.before)
         if self.tripped:
@@ -1000,6 +1294,8 @@ def account_stage(function):
     def wrapped(*args, **kwargs):
         arguments = inspect.signature(function).bind(*args, **kwargs).arguments
         request = arguments.get("request") or arguments
+        if function.__name__ == "run_preflight" and request.get("internal_preflight"):
+            return function(*args, **kwargs)
         clock = request.get("accounting_clock") or time.monotonic
         started = clock()
         directories = []
@@ -1029,7 +1325,7 @@ def account_stage(function):
                 if document.get("budget"):
                     budgets.append(document["budget"])
         explicit = request.get("ledger_path")
-        if explicit:
+        if explicit and (function.__name__ != "run_preflight" or request.get("ledger_explicit")):
             if not Path(explicit).is_file():
                 raise ResourceError("explicit live batch ledger is unavailable")
             budgets.append({"path": explicit, "batch_id": request.get("batch_id", "p02-t006")})
@@ -1042,17 +1338,47 @@ def account_stage(function):
                 raise ResourceError("batch accounting ledger must be outside consumed evidence directories")
             ledgers.append(Ledger(resolved, batch_id=budget["batch_id"]))
         execution_id = f"{function.__name__}@{uuid.uuid4().hex}"
-        guard = _StageBudget(ledgers, clock, started, execution_id, function.__name__)
+        guard = None if function.__name__ == "run_preflight" else _StageBudget(
+            ledgers, clock, started, execution_id, function.__name__
+        )
         token = _STAGE_BUDGET.set(guard if ledgers else None)
         state = "failed"
         try:
             check_stage_budget()  # exhausted batches never enter the stage
             result = function(*args, **kwargs)
             check_stage_budget()  # includes final output/publication time
-            result["accounting"] = stage_accounting()
+            if function.__name__ == "run_preflight" and ledgers:
+                elapsed = max(0.0, float(clock() - started))
+                ledger = ledgers[0]
+                ledger.refresh()
+                if ledger.effective_used_seconds() + elapsed >= protocol.BATCH_SECONDS:
+                    budget_check = result.get("checks", {}).get("budget", {})
+                    budget_check.update(
+                        status="fail",
+                        reason="the measured standalone preflight exhausted the cumulative batch budget",
+                        effective_used_seconds=ledger.effective_used_seconds() + elapsed,
+                        remaining_seconds=0.0,
+                    )
+                    if "budget" not in result.get("failing_checks", []):
+                        result.setdefault("failing_checks", []).append("budget")
+                    result["status"] = "fail"
+                result["accounting"] = {
+                    "mode": "metered-standalone-preflight",
+                    "execution_id": execution_id,
+                    "measured_seconds": elapsed,
+                    "measured_replayed_seconds": ledger.active_seconds() + elapsed,
+                    "debited_seconds": ledger.debited_seconds(),
+                    "estimated_seconds": ledger.estimated_seconds(),
+                    "effective_used_seconds": ledger.effective_used_seconds() + elapsed,
+                    "remaining_seconds": max(0.0, protocol.BATCH_SECONDS - ledger.effective_used_seconds() - elapsed),
+                }
+            else:
+                result["accounting"] = stage_accounting()
             state = str(result.get("status", "completed"))
             return result
         except BatchBudgetExceeded as exc:
+            if function.__name__ == "run_preflight":
+                raise
             _STAGE_BUDGET.set(None)
             state = "paused"
             return _pause_stage(function, request, directories, guard, exc, arguments.get("repo"))
@@ -1060,8 +1386,22 @@ def account_stage(function):
             _STAGE_BUDGET.reset(token)
             elapsed = max(0.0, float(clock() - started))
             for ledger in ledgers:
-                current = Ledger(ledger.path, batch_id=ledger.batch_id)
-                current.record(execution_id=execution_id, run_id=function.__name__,
+                ledger.record(execution_id=execution_id, run_id=function.__name__,
                                seconds=elapsed, status=state,
-                               note="active selection/diagnostic/report/check work including failure publication")
+                               note=("standalone preflight elapsed time including failure" if function.__name__ == "run_preflight"
+                                     else "active selection/diagnostic/report/check work including failure publication"))
     return wrapped
+
+
+def record_helper_cost(*, ledger_path: Path, batch_id: str, execution_id: str,
+                       seconds: float, reason: str) -> Dict[str, Any]:
+    """Record measured elapsed time for a standalone non-fit helper operation."""
+    if not isinstance(reason, str) or not reason.strip():
+        raise ResourceError("helper cost reason must be nonempty")
+    if not isinstance(execution_id, str) or not execution_id.strip():
+        raise ResourceError("helper execution_id must be nonempty and stable")
+    ledger = Ledger(ledger_path, batch_id=batch_id, require_existing=True)
+    return ledger.record(
+        execution_id=execution_id, run_id=f"helper:{reason}", seconds=seconds,
+        status="completed", note=reason, replace_existing=False,
+    )

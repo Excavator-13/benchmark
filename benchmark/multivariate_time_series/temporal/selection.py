@@ -91,11 +91,23 @@ def load_candidate(run_dir: Path) -> Candidate:
             f"candidate {directory} is not artifact format "
             f"{protocol.ARTIFACT_FORMAT_VERSION}"
         )
+    if config_doc.get("scientific_version") != protocol.SCIENTIFIC_VERSION:
+        try:
+            protocol.validate_bound_protocol_identity(
+                config_doc.get("scientific_version"), None,
+                artifact=f"candidate {directory}",
+            )
+        except protocol.ProtocolError as exc:
+            raise SelectionError(str(exc)) from exc
     status_doc = _read_json(directory / "status.json") or {}
     config = protocol.FitConfig.from_payload(config_doc["config"])
     dataset = config_doc.get("dataset", {})
     roles = config_doc.get("roles", {})
     provenance = _read_json(directory / "provenance.json") or {}
+    try:
+        protocol.validate_protocol_identity(provenance)
+    except protocol.ProtocolError as exc:
+        raise SelectionError(f"candidate {directory}: {exc}") from exc
     data = provenance.get("data") or {}
     protocol_entry = provenance.get("protocol") or {}
     metrics = _read_json(directory / "validation" / "metrics.json")
@@ -356,6 +368,7 @@ def build_selection(
     payload = {
         "artifact_format_version": protocol.ARTIFACT_FORMAT_VERSION,
         "scientific_version": protocol.SCIENTIFIC_VERSION,
+        "protocol_identity": protocol.protocol_identity_payload(),
         "kind": "selection",
         "block_id": block_id,
         "purpose": purpose,
@@ -392,6 +405,13 @@ def load_selection(path: Path) -> Dict[str, Any]:
         raise SelectionError(f"selection record not found at {path}")
     if payload.get("kind") != "selection":
         raise SelectionError(f"{path} is not a selection record")
+    try:
+        protocol.validate_bound_protocol_identity(
+            payload.get("scientific_version"), payload.get("protocol_identity"),
+            artifact=f"{path} selection",
+        )
+    except protocol.ProtocolError as exc:
+        raise SelectionError(str(exc)) from exc
     return payload
 
 

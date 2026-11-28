@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "C:\\Users\\zhuzhenyu\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "-m",
+    "benchmark.multivariate_time_series.effective_temporal_training",
+    "resume",
+    "--data-name",
+    "r0",
+    "--data",
+    "dataset/demand/r0.parquet",
+    "--parent",
+    "research/runs/p02-t006-r0-gru-v2-s1-a-20261128-01",
+    "--run-id",
+    "p02-t006-r0-gru-v2-s1-a-resume-20261128-01",
+    "--purpose",
+    "formal",
+    "--output-root",
+    "research/runs",
+    "--remaining-fits",
+    "5"
+  ],
+  "created": "2026-11-28T16:56:21+08:00",
+  "cwd": "E:\\大创\\benchmark",
+  "module": "benchmark.multivariate_time_series.effective_temporal_training",
+  "operation": "resume",
+  "python": "C:\\Users\\zhuzhenyu\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+}

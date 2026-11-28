@@ -16,7 +16,7 @@ from benchmark.multivariate_time_series.temporal import checks, protocol, runner
 
 class PublicSurfaceTests(unittest.TestCase):
     def test_versions_and_config_alias(self):
-        self.assertEqual(entry.PROTOCOL_VERSION, "P2-effective-training-L6-H3-v1")
+        self.assertEqual(entry.PROTOCOL_VERSION, "P2-effective-training-L6-H3-v2")
         self.assertEqual(entry.SCIENTIFIC_VERSION, protocol.SCIENTIFIC_VERSION)
         self.assertEqual(entry.ARTIFACT_FORMAT_VERSION, 2)
         self.assertIs(entry.Config, protocol.FitConfig)

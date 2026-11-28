@@ -12,7 +12,7 @@ validation diagnostics are frozen.
 
 The default purpose is ``development`` and its output stays under an ignored
 ``scratch/`` root.  A development output that resolves into ``research/runs/`` is
-rejected.  Formal operation requires a complete 100-epoch protocol trajectory and
+rejected.  Formal operation requires a complete 200-epoch protocol trajectory and
 explicit research authorization; this module never schedules the real-data
 matrix and never declares research acceptance.
 

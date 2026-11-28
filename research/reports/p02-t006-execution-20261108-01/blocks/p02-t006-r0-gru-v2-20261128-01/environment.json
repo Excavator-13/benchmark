@@ -1,0 +1,36 @@
+{
+  "cpu_count": 24,
+  "determinism": {
+    "default_dtype": "torch.float32",
+    "deterministic_algorithms": false,
+    "num_threads": 1
+  },
+  "device": "cpu",
+  "machine": "AMD64",
+  "packages": {
+    "numpy": "2.4.2",
+    "pandas": "3.1.1",
+    "psutil": "7.2.2",
+    "pyarrow": "26.0.1",
+    "torch": "2.6.0+cpu"
+  },
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "python_executable": "C:\\Users\\zhuzhenyu\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+  "python_version": "3.13.0 (tags/v3.13.0:60403a5, Oct  7 2024, 09:38:07) [MSC v.1941 64 bit (AMD64)]",
+  "python_version_info": [
+    3,
+    13,
+    0
+  ],
+  "repo_root": "E:\\大创\\benchmark",
+  "system": "Windows",
+  "thread_environment": {
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "threads": 1
+}

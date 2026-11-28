@@ -1,0 +1,199 @@
+{
+  "accounting": {
+    "debited_seconds": 900.0,
+    "effective_used_seconds": 1264.932991890999,
+    "estimated_seconds": 0.0,
+    "execution_id": "run_preflight@24f76b7811ce421e8b3649c6001fc28b",
+    "measured_replayed_seconds": 364.9329918909989,
+    "measured_seconds": 1.4755331999986083,
+    "mode": "metered-standalone-preflight",
+    "remaining_seconds": 41935.067008109
+  },
+  "checks": {
+    "budget": {
+      "debited_seconds": 900.0,
+      "effective_used_seconds": 1263.4574586910003,
+      "estimated_seconds": 0.0,
+      "limit_seconds": 43200,
+      "measured_replayed_seconds": 363.4574586910003,
+      "remaining_seconds": 41936.542541309,
+      "status": "pass"
+    },
+    "data": {
+      "identity": {
+        "dataset": "r0",
+        "key_columns": [
+          "r0_id",
+          "skill_id"
+        ],
+        "mode": "count",
+        "months": 36,
+        "node_keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+        "nodes": 2335,
+        "source_kind": "parquet",
+        "source_path": "dataset\\demand\\r0.parquet",
+        "source_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946"
+      },
+      "status": "pass"
+    },
+    "dependencies": {
+      "detail": {
+        "numpy": {
+          "available": true,
+          "status": "pass"
+        },
+        "pandas": {
+          "available": true,
+          "status": "pass"
+        },
+        "psutil": {
+          "available": true,
+          "status": "pass"
+        },
+        "pyarrow": {
+          "available": true,
+          "status": "pass"
+        },
+        "torch": {
+          "available": true,
+          "status": "pass"
+        }
+      },
+      "missing": [],
+      "status": "pass"
+    },
+    "environment": {
+      "device": "cpu",
+      "packages": {
+        "numpy": "2.4.2",
+        "pandas": "3.1.1",
+        "psutil": "7.2.2",
+        "pyarrow": "26.0.1",
+        "torch": "2.6.0+cpu"
+      },
+      "python": [
+        3,
+        13,
+        0
+      ],
+      "status": "pass"
+    },
+    "output": {
+      "fresh": true,
+      "path": "research\\runs\\p02-t006-r0-gru-v2-s2-a-20261128-01",
+      "reason": null,
+      "resolved": "E:\\\u5927\u521b\\benchmark\\research\\runs\\p02-t006-r0-gru-v2-s2-a-20261128-01",
+      "status": "pass"
+    },
+    "protocol": {
+      "identity": {
+        "documents": [
+          {
+            "path": "research/phases/P02/protocol-v2.md",
+            "sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0"
+          },
+          {
+            "path": "research/phases/P02/protocol.md",
+            "sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2"
+          }
+        ],
+        "scientific_version": "P2-effective-training-L6-H3-v2"
+      },
+      "path": "E:\\\u5927\u521b\\benchmark\\research\\phases\\P02\\protocol-v2.md",
+      "reason": null,
+      "sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0",
+      "status": "pass",
+      "version": "P2-effective-training-L6-H3-v2"
+    },
+    "recovery": {
+      "reason": "this operation does not resume a parent trajectory",
+      "status": "not_applicable"
+    },
+    "resources": {
+      "checks": {
+        "available_memory": {
+          "minimum": 6442450944,
+          "status": "pass",
+          "value": 11970572288
+        },
+        "free_disk": {
+          "minimum": 5368709120,
+          "status": "pass",
+          "value": 65998491648
+        },
+        "rss_monitoring": {
+          "reason": null,
+          "status": "pass",
+          "value": true
+        }
+      },
+      "disk_free_bytes": 65998491648,
+      "failed": [],
+      "memory_available_bytes": 11970572288,
+      "memory_stop_bytes": 8589934592,
+      "monitor_interval_seconds": 5.0,
+      "psutil_available": true,
+      "status": "pass"
+    },
+    "source": {
+      "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+      "dirty": null,
+      "reason": null,
+      "status": "pass"
+    },
+    "threads": {
+      "environment": {
+        "MKL_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "reason": null,
+      "required": 1,
+      "status": "pass"
+    },
+    "worker_lock": {
+      "reason": null,
+      "state": {
+        "path": "E:\\\u5927\u521b\\benchmark\\research\\reports\\p02-t006-execution-20261108-01\\ledger.json.worker.lock",
+        "status": "free"
+      },
+      "status": "pass"
+    }
+  },
+  "failing_checks": [],
+  "generated": "2026-11-28T17:00:33+08:00",
+  "kind": "preflight",
+  "operation": "preflight",
+  "protocol_identity": {
+    "documents": [
+      {
+        "path": "research/phases/P02/protocol-v2.md",
+        "sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0"
+      },
+      {
+        "path": "research/phases/P02/protocol.md",
+        "sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2"
+      }
+    ],
+    "scientific_version": "P2-effective-training-L6-H3-v2"
+  },
+  "protocol_sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0",
+  "purpose": "formal",
+  "request": {
+    "data_name": "r0",
+    "model": "GRU",
+    "output_root": "research\\runs",
+    "run_id": "p02-t006-r0-gru-v2-s2-a-20261128-01",
+    "seed": 2
+  },
+  "scientific_version": "P2-effective-training-L6-H3-v2",
+  "status": "pass",
+  "thresholds": {
+    "available_memory_bytes": 6442450944,
+    "free_disk_bytes": 5368709120,
+    "monitor_interval_seconds": 5.0,
+    "rss_stop_bytes": 8589934592
+  }
+}

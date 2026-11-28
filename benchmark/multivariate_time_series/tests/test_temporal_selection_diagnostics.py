@@ -130,7 +130,7 @@ class SelectionTests(unittest.TestCase):
 
 
 class LongTrajectoryTests(unittest.TestCase):
-    """One complete 100-epoch development trajectory for the diagnostic nodes."""
+    """One complete 200-epoch development trajectory for the diagnostic nodes."""
 
     def test_complete_history_and_diagnostic_node_scores(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -156,13 +156,14 @@ class LongTrajectoryTests(unittest.TestCase):
             self.assertEqual(len(history["epochs"]), protocol.EPOCHS)
             self.assertEqual(history["epochs"][-1]["epoch"], protocol.EPOCHS)
             scores = fx.read_json(directory / "scores.json")
-            for name in ("init", "10", "50", "100", "best"):
+            for name in ("init", *(str(epoch) for epoch in protocol.DIAGNOSTIC_EPOCHS), "best"):
                 self.assertIn(name, scores)
                 self.assertIn("train", scores[name])
                 self.assertIn("validation", scores[name])
             self.assertEqual(scores["init"]["epoch"], 0)
             self.assertEqual(scores["10"]["updates"], 10 * protocol.UPDATES_PER_EPOCH)
-            self.assertEqual(scores["100"]["updates"], protocol.TOTAL_UPDATES)
+            self.assertEqual(scores["100"]["updates"], 100 * protocol.UPDATES_PER_EPOCH)
+            self.assertEqual(scores["200"]["updates"], protocol.TOTAL_UPDATES)
             report = fx.read_json(directory / "report.json")
             self.assertEqual(report["total_updates"], protocol.TOTAL_UPDATES)
             self.assertEqual(report["history_epochs"], protocol.EPOCHS)
@@ -216,7 +217,7 @@ class DiagnosticsGateTests(unittest.TestCase):
             best_validation=19.0,
             validation_mae=9.5,
             zero_mae=10.0,
-            history_values=[max(10.0 - 0.1 * index, 5.0) for index in range(100)],
+            history_values=[max(10.0 - 0.1 * index, 5.0) for index in range(protocol.EPOCHS)],
         )
         payload.update(overrides)
         return payload
@@ -316,7 +317,7 @@ class DiagnosticsGateTests(unittest.TestCase):
         )
 
     def test_budget_tail_boundary_and_both_zero_rule(self):
-        flat = [10.0] * 79 + [5.0] + [4.95] * 20
+        flat = [10.0] * 159 + [5.0] + [4.95] * 40
         a_runs = {
             seed: self._run(
                 f"a{seed}-tail", **self._passing(seed, history_values=flat)
@@ -326,7 +327,7 @@ class DiagnosticsGateTests(unittest.TestCase):
         gate = self._diagnose(a_runs)["gates"]["budget_tail_stability"]
         self.assertEqual(gate["status"], "pass", gate)
         self.assertAlmostEqual(gate["per_seed"][0]["relative"], 0.01, places=12)
-        steeper = [10.0] * 79 + [5.0] + [4.94] * 20
+        steeper = [10.0] * 159 + [5.0] + [4.94] * 40
         a_runs = {
             seed: self._run(
                 f"a{seed}-steep", **self._passing(seed, history_values=steeper)
@@ -335,7 +336,7 @@ class DiagnosticsGateTests(unittest.TestCase):
         }
         gate = self._diagnose(a_runs)["gates"]["budget_tail_stability"]
         self.assertEqual(gate["status"], "fail")
-        zeros = [0.0] * 100
+        zeros = [0.0] * protocol.EPOCHS
         a_runs = {
             seed: self._run(
                 f"a{seed}-zeros", **self._passing(seed, history_values=zeros)
@@ -345,6 +346,59 @@ class DiagnosticsGateTests(unittest.TestCase):
         gate = self._diagnose(a_runs)["gates"]["budget_tail_stability"]
         self.assertEqual(gate["status"], "pass")
         self.assertTrue(gate["per_seed"][0]["both_zero"])
+
+    def test_v2_tail_interval_can_disagree_with_v1_interval(self):
+        old_pass_new_fail = [5.0] * 160 + [4.9] * 40
+        a_runs = {
+            seed: self._run(f"old-pass-{seed}", **self._passing(seed, history_values=old_pass_new_fail))
+            for seed in protocol.SEEDS
+        }
+        gate = self._diagnose(a_runs)["gates"]["budget_tail_stability"]
+        self.assertEqual(gate["status"], "fail")
+        self.assertEqual(gate["per_seed"][0]["b160"], 5.0)
+        self.assertEqual(gate["per_seed"][0]["b200"], 4.9)
+
+        old_fail_new_pass = [5.0] * 80 + [4.0] * (protocol.EPOCHS - 80)
+        a_runs = {
+            seed: self._run(f"old-fail-{seed}", **self._passing(seed, history_values=old_fail_new_pass))
+            for seed in protocol.SEEDS
+        }
+        gate = self._diagnose(a_runs)["gates"]["budget_tail_stability"]
+        self.assertEqual(gate["status"], "pass")
+        self.assertEqual(gate["per_seed"][0]["b160"], 4.0)
+        self.assertEqual(gate["per_seed"][0]["b200"], 4.0)
+
+    def test_complete_100_epoch_artifact_is_incomplete_for_v2(self):
+        a_runs = {
+            seed: self._run(
+                f"v1-length-{seed}", epochs=100,
+                **self._passing(seed, history_values=[8.0] * 100),
+            )
+            for seed in protocol.SEEDS
+        }
+        gate = self._diagnose(a_runs)["gates"]["complete_and_finite_trajectories"]
+        self.assertEqual(gate["status"], "incomplete")
+        self.assertFalse(self._diagnose(a_runs)["learning_ready"])
+
+    def test_inherited_protocol_identity_mismatch_is_rejected(self):
+        run = fx.synthetic_completed_run(self.root, "mutated-protocol")
+        provenance_path = run / "provenance.json"
+        provenance = fx.read_json(provenance_path)
+        provenance["protocol"]["identity"]["documents"][1]["sha256"] = "0" * 64
+        fx.write_json(provenance_path, provenance)
+        with self.assertRaises(diagnostics.DiagnosticsError):
+            diagnostics.load_run_evidence(run)
+
+    def test_historical_scientific_version_is_rejected_with_runner_reference(self):
+        run = fx.synthetic_completed_run(self.root, "historical-v1")
+        config_path = run / "config.json"
+        config = fx.read_json(config_path)
+        config["scientific_version"] = "P2-effective-training-L6-H3-v1"
+        fx.write_json(config_path, config)
+        with self.assertRaises(temporal_selection.SelectionError) as raised:
+            temporal_selection.load_candidate(run)
+        self.assertIn("3bd9fa4", str(raised.exception))
+        self.assertIn("bf5abed8", str(raised.exception))
 
     def test_two_of_three_seeds_can_carry_a_gate(self):
         a_runs = {}
@@ -388,6 +442,19 @@ class DiagnosticsGateTests(unittest.TestCase):
         gate = payload["gates"]["complete_and_finite_trajectories"]
         self.assertEqual(gate["status"], "fail")
         self.assertEqual(payload["status"], "fail")
+
+    def test_negative_history_metrics_fail_the_completeness_gate(self):
+        broken = [5.0] * protocol.EPOCHS
+        broken[10] = -1.0
+        a_runs = {
+            seed: self._run(
+                f"a{seed}-negative", **self._passing(seed, history_values=broken)
+            )
+            for seed in protocol.SEEDS
+        }
+        gate = self._diagnose(a_runs)["gates"]["complete_and_finite_trajectories"]
+        self.assertEqual(gate["status"], "fail")
+        self.assertTrue(any("negative validation_MSE" in reason for reason in gate["reasons"]))
 
     def test_development_override_is_incomplete(self):
         a_runs = {

@@ -119,6 +119,7 @@ def checker_identity() -> Dict[str, Any]:
         ),
         "files": files,
         "protocol_sha256": protocol.protocol_content_sha256(),
+        "protocol_identity": protocol.protocol_identity_payload(),
         "errors": errors,
     }
 
@@ -220,6 +221,12 @@ def run_config(run_dir: Path) -> Dict[str, Any]:
             f"{protocol.ARTIFACT_FORMAT_VERSION}; legacy runs cannot be recomputed "
             "as this format"
         )
+    if payload.get("scientific_version") != protocol.SCIENTIFIC_VERSION:
+        raise CheckError(
+            f"{run_dir}: scientific version {payload.get('scientific_version')!r} "
+            f"is incompatible with {protocol.SCIENTIFIC_VERSION}; v1 evidence cannot "
+            "be upgraded here. Use runner `3bd9fa4` (run-source baseline `bf5abed8`)."
+        )
     return payload
 
 
@@ -228,6 +235,10 @@ def run_identity(run_dir: Path) -> Dict[str, Any]:
     directory = Path(run_dir)
     config_doc = run_config(directory)
     provenance = read_json(directory / "provenance.json", required=False) or {}
+    try:
+        protocol.validate_protocol_identity(provenance)
+    except protocol.ProtocolError as exc:
+        raise CheckError(f"{directory}: {exc}") from exc
     data = provenance.get("data") or {}
     environment = provenance.get("environment") or {}
     return {
@@ -517,6 +528,8 @@ def run_recompute(
     report_path: Path,
     argv: Sequence[str],
     tolerance: float = DIAGNOSTIC_TOLERANCE,
+    ledger_path: Optional[Path] = None,
+    batch_id: str = "p02-t006",
 ) -> Dict[str, Any]:
     """Recompute every saved metric without source data, fitting or torch."""
     directory = Path(run_dir)
@@ -601,6 +614,7 @@ def _identity_mismatches(left: Mapping[str, Any], right: Mapping[str, Any]) -> L
         )
     record("data.node_keys_sha256", left["data"].get("node_keys_sha256"), right["data"].get("node_keys_sha256"))
     record("protocol.sha256", (left.get("protocol") or {}).get("sha256"), (right.get("protocol") or {}).get("sha256"))
+    record("protocol.identity", (left.get("protocol") or {}).get("identity"), (right.get("protocol") or {}).get("identity"))
     record("split", left.get("split"), right.get("split"))
     left_config = left.get("config") or {}
     right_config = right.get("config") or {}
@@ -671,6 +685,8 @@ def run_compare(
     report_path: Path,
     argv: Sequence[str],
     tolerance: float = protocol.REPETITION_TOLERANCE,
+    ledger_path: Optional[Path] = None,
+    batch_id: str = "p02-t006",
 ) -> Dict[str, Any]:
     """Compare two same-condition runs, validating identity before numbers."""
     directory_a = Path(run_a)

@@ -39,7 +39,7 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 
 | 字段 | 值 |
 | --- | --- |
-| Status | `open` |
+| Status | `closed` |
 | 变更名 | `extend-effective-training-budget-v2` |
 | 研究任务 | P02-T006 |
 | 登记时间 | 2026-11-08 |
@@ -47,5 +47,5 @@ OpenSpec 的 propose / apply / verify / fix / archive 既不读也不写它，�
 | 委派给 | E13/spec-driven-compatible 变更流程；本轮先完成 propose |
 | 结束判据 | 活跃变更目录已移除；对应归档 verification 为独立 `Verdict: PASS`，验证基准与当前实现一致 |
 | 研究侧收尾 | 核对 v2 软件身份与独立 PASS，接受或拒绝软件就绪；保留 v1 失败结论和历史预算，确认 v2 继承文档／累计扣除／新身份的执行前置条件，更新研究状态后关闭指针。真实成本、完整学习／重复／测试证据与 T006 研究验收仍属研究侧，不以软件 PASS 代替；不介入 T009 |
-| 上次核对 | 2026-11-08：委托刚登记，软件尚未实现／独立验证 |
-| 回收记录 | 尚未回收 |
+| 上次核对 | 2026-11-28：活跃变更目录已移除；归档 verification 为独立 `PASS`，验证状态指纹与当前实现及归档工件匹配 |
+| 回收记录 | [P02-T006 v2 软件就绪验收与委托回收](research/reports/p02-t006-software-closeout-20261128-01/report.md)；接受软件就绪，T006 仍待真实环境预算扣除、预检与首候选成本门 |

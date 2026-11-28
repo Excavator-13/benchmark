@@ -1,0 +1,151 @@
+{
+  "artifact_format_version": 2,
+  "automatic_matrix_scheduling": false,
+  "b_used_for_selection": false,
+  "block_id": "p02-t006-r0-gru-v2-20261128-01",
+  "candidates": [
+    {
+      "condition_id": "08d5350e783e09ce6bde4840bb2f881ddc1adbeb2bfa2fd9becaba210d6d0e49",
+      "config": {
+        "diagnostic_epochs": [
+          10,
+          50,
+          100,
+          200
+        ],
+        "epochs": 200,
+        "grad_clip": 1.0,
+        "hidden_size": 32,
+        "layers": 1,
+        "learning_rate": 0.001,
+        "model": "GRU",
+        "node_chunk": 2048,
+        "seed": 0,
+        "threads": 1
+      },
+      "data_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+      "dataset": "r0",
+      "keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+      "learning_rate": 0.001,
+      "message": null,
+      "mode": "count",
+      "model": "GRU",
+      "protocol_controls_complete": true,
+      "protocol_sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0",
+      "purpose": "formal",
+      "roles": {
+        "candidate_role": "screening",
+        "repeat_role": "a"
+      },
+      "run_dir": "E:\\大创\\benchmark\\research\\runs\\p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+      "run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+      "run_sha256": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+      "seed": 0,
+      "selected_epoch": 200,
+      "status": "complete",
+      "validation_MAE": 109.61798197640894,
+      "validation_MSE": 206599.63377418948
+    },
+    {
+      "condition_id": "e27f1259eb5f5cdcd723c0f841869e32359c80aaf2c76e56a6d2259cf49aac6c",
+      "config": {
+        "diagnostic_epochs": [
+          10,
+          50,
+          100,
+          200
+        ],
+        "epochs": 200,
+        "grad_clip": 1.0,
+        "hidden_size": 32,
+        "layers": 1,
+        "learning_rate": 0.003,
+        "model": "GRU",
+        "node_chunk": 2048,
+        "seed": 0,
+        "threads": 1
+      },
+      "data_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+      "dataset": "r0",
+      "keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+      "learning_rate": 0.003,
+      "message": null,
+      "mode": "count",
+      "model": "GRU",
+      "protocol_controls_complete": true,
+      "protocol_sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0",
+      "purpose": "formal",
+      "roles": {
+        "candidate_role": "screening",
+        "repeat_role": "a"
+      },
+      "run_dir": "E:\\大创\\benchmark\\research\\runs\\p02-t006-r0-gru-v2-s0-lr3e3-a-20261128-01",
+      "run_id": "p02-t006-r0-gru-v2-s0-lr3e3-a-20261128-01",
+      "run_sha256": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+      "seed": 0,
+      "selected_epoch": 70,
+      "status": "complete",
+      "validation_MAE": 125.69942065619709,
+      "validation_MSE": 243982.36912072205
+    }
+  ],
+  "dataset": "r0",
+  "eliminated": [
+    {
+      "learning_rate": 0.003,
+      "reason": "higher validation MSE 243982 than 206600",
+      "run_id": "p02-t006-r0-gru-v2-s0-lr3e3-a-20261128-01"
+    }
+  ],
+  "frozen": true,
+  "kind": "selection",
+  "learning_rate_candidates": [
+    0.001,
+    0.003
+  ],
+  "mode": "count",
+  "model": "GRU",
+  "protocol_identity": {
+    "documents": [
+      {
+        "path": "research/phases/P02/protocol-v2.md",
+        "sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0"
+      },
+      {
+        "path": "research/phases/P02/protocol.md",
+        "sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2"
+      }
+    ],
+    "scientific_version": "P2-effective-training-L6-H3-v2"
+  },
+  "purpose": "formal",
+  "reason": null,
+  "scientific_version": "P2-effective-training-L6-H3-v2",
+  "seed": 0,
+  "selection_metric": "best validation original-unit MSE",
+  "selection_sha256": "edb3f646737e5dbdd7730c8fbe5eacd8d18816ae5df3e93e49429e686666e74c",
+  "status": "frozen",
+  "test_scores_used": false,
+  "tie": false,
+  "tie_break": "smaller learning rate on an exact tie",
+  "tied_learning_rates": [
+    0.001
+  ],
+  "winner": {
+    "learning_rate": 0.001,
+    "reason": "lowest best-validation original-unit MSE",
+    "run_dir": "E:\\大创\\benchmark\\research\\runs\\p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+    "run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+    "selected_epoch": 200,
+    "selection_metric": "best validation original-unit MSE",
+    "validation_MAE": 109.61798197640894,
+    "validation_MSE": 206599.63377418948
+  },
+  "winner_as_a": {
+    "condition_id": "08d5350e783e09ce6bde4840bb2f881ddc1adbeb2bfa2fd9becaba210d6d0e49",
+    "note": "the winning seed-0 screening trajectory is reused as repetition a by link; it is not refitted",
+    "repeat_role": "a",
+    "run_dir": "E:\\大创\\benchmark\\research\\runs\\p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+    "run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02"
+  }
+}

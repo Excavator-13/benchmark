@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import copy
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -219,14 +220,16 @@ class RuntimeRepairTests(unittest.TestCase):
         for replacement in (self.root/'fresh.json', self.root/'different.json'):
             with self.assertRaises(recovery.RecoveryError):
                 recovery.load_parent(parent, ledger_path=replacement)
-        saved = fx.read_json(parent/'provenance.json')
+        provenance_path = parent/'provenance.json'
+        saved_bytes = provenance_path.read_bytes()
+        saved = fx.read_json(provenance_path)
         for field in ('source','environment'):
             changed = copy.deepcopy(saved)
             changed[field] = {'different':True}
             fx.write_json(parent/'provenance.json', changed)
             with self.assertRaises(recovery.RecoveryError):
                 recovery.load_parent(parent)
-        fx.write_json(parent/'provenance.json', saved)
+        provenance_path.write_bytes(saved_bytes)
         self.assertEqual(fx.tree_digest(parent), before)
         ledger_saved = ledger_path.read_bytes()
         ledger_path.unlink()
@@ -296,6 +299,152 @@ class RuntimeRepairTests(unittest.TestCase):
         self.assertEqual(code, -15)
         self.assertIsNotNone(reason)
         self.assertEqual(resources.Ledger(ledger.path, batch_id='batch').active_seconds(), 7.)
+
+    def test_controller_enforces_debit_registered_during_run_and_preserves_final_bill(self):
+        clock = Clock()
+        worker = unittest.mock.Mock()
+        worker.poll.return_value = None
+        worker.wait.return_value = -15
+        dog = resources.Watchdog(sampler=lambda: {'rss_bytes': 0}, clock=clock)
+        ledger = resources.Ledger(self.root/'controller-ledger.json', batch_id='batch')
+        ledger.record(execution_id='prior', run_id='old', seconds=protocol.BATCH_SECONDS - 900)
+
+        def register_during_fit(seconds):
+            clock.value = 7.
+            resources.Ledger(ledger.path, 'batch').register_debit(
+                debit_id='prep', seconds=900, reason='fixture'
+            )
+
+        code, reason = cli.supervise_worker(
+            worker, watchdog=dog, ledger=ledger,
+            request={'execution_id': 'fit', 'run_id': 'worker', 'monitor_interval': 1},
+            started=0., clock=clock, sleeper=register_during_fit,
+        )
+        worker.terminate.assert_called_once()
+        self.assertEqual(code, -15)
+        self.assertEqual(reason['effective_used_seconds'], protocol.BATCH_SECONDS + 7)
+        final = resources.Ledger(ledger.path, 'batch')
+        self.assertEqual(final.debited_seconds(), 900)
+        self.assertEqual(final.payload['ledger_id'], ledger.payload['ledger_id'])
+        bills = {entry['execution_id']: entry for entry in final.payload['entries']}
+        self.assertEqual((bills['fit']['seconds'], bills['fit']['status']), (7, 'paused'))
+
+    @unittest.skipUnless(os.name == "nt", "Windows file sharing semantics")
+    def test_controller_stops_and_recovers_bill_while_independent_reader_holds_ledger(self):
+        ledger = resources.Ledger(self.root / "shared-ledger.json", "batch")
+        ledger.record(execution_id="prior", run_id="prior", seconds=43100)
+        ledger.record(execution_id="fit", run_id="fit", seconds=10, status="running")
+        ledger.register_debit(debit_id="prep", seconds=900, reason="fixture")
+        snapshot = ledger.path.read_bytes()
+        reader_script = """
+import sys
+with open(sys.argv[1], encoding="utf-8"):
+    print("held", flush=True)
+    sys.stdin.readline()
+"""
+        worker = unittest.mock.Mock()
+        worker.poll.return_value = None
+        worker.wait.return_value = -15
+        dog = resources.Watchdog(sampler=lambda: {"rss_bytes": 0})
+        with subprocess.Popen(
+            [sys.executable, "-c", reader_script, str(ledger.path)],
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True,
+        ) as reader:
+            try:
+                self.assertEqual(reader.stdout.readline().strip(), "held")
+                code, reason = cli.supervise_worker(
+                    worker, watchdog=dog, ledger=ledger, started=0., clock=lambda: 11.,
+                    request={"execution_id": "fit", "run_id": "fit", "monitor_interval": 1},
+                )
+                worker.terminate.assert_called_once()
+                worker.wait.assert_called_once_with(timeout=5)
+                self.assertEqual(code, -15)
+                self.assertIn("budget exhausted", reason["reason"])
+                pending = Path(reason["pending_bill"])
+                self.assertTrue(pending.is_file())
+                self.assertEqual(ledger.path.read_bytes(), snapshot)
+            finally:
+                reader.communicate(input="release\n", timeout=10)
+
+        recovered = resources.Ledger(ledger.path, "batch")
+        bill = next(entry for entry in recovered.payload["entries"] if entry["execution_id"] == "fit")
+        self.assertEqual((bill["seconds"], bill["status"]), (11, "paused"))
+        self.assertEqual(recovered.payload["ledger_id"], ledger.payload["ledger_id"])
+        self.assertEqual(recovered.debited_seconds(), 900)
+        self.assertEqual(recovered.effective_used_seconds(), 44011)
+        recovered.record(execution_id="later", run_id="later", seconds=0)
+        self.assertFalse(pending.exists())
+        self.assertEqual(resources.Ledger(ledger.path, "batch").effective_used_seconds(), 44011)
+
+    def test_project_reader_and_writer_serialize_across_processes(self):
+        ledger = resources.Ledger(self.root / "shared-ledger.json", "batch")
+        ledger.record(execution_id="prior", run_id="prior", seconds=10)
+        reader_script = """
+import sys
+from pathlib import Path
+from unittest.mock import patch
+from benchmark.multivariate_time_series.temporal.resources import Ledger
+
+ledger_path = Path(sys.argv[1]).resolve()
+original_read = Path.read_text
+
+def hold_read(path, *args, **kwargs):
+    if path != ledger_path:
+        return original_read(path, *args, **kwargs)
+    with path.open("r", encoding="utf-8") as handle:
+        print("held", flush=True)
+        sys.stdin.readline()
+        return handle.read()
+
+with patch.object(Path, "read_text", hold_read):
+    Ledger(ledger_path, "batch")
+"""
+        writer_script = """
+import sys
+from pathlib import Path
+from benchmark.multivariate_time_series.temporal.resources import Ledger
+ledger = Ledger(Path(sys.argv[1]), "batch")
+print("ready", flush=True)
+sys.stdin.readline()
+ledger.record(execution_id="writer", run_id="writer", seconds=11)
+"""
+        def launch(script):
+            return subprocess.Popen(
+                [sys.executable, "-c", script, str(ledger.path)],
+                stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True,
+            )
+
+        with launch(writer_script) as writer, launch(reader_script) as reader:
+            try:
+                self.assertEqual(writer.stdout.readline().strip(), "ready")
+                self.assertEqual(reader.stdout.readline().strip(), "held")
+                writer.stdin.write("go\n")
+                writer.stdin.flush()
+                with self.assertRaises(subprocess.TimeoutExpired):
+                    writer.wait(timeout=0.15)
+            finally:
+                reader.communicate(input="release\n", timeout=10)
+                writer.wait(timeout=10)
+        self.assertEqual(reader.returncode, 0)
+        self.assertEqual(writer.returncode, 0)
+        self.assertEqual(resources.Ledger(ledger.path, "batch").effective_used_seconds(), 21)
+
+    def test_worker_refreshes_debit_registered_during_fit(self):
+        ledger = resources.Ledger(self.root/'runs'/'ledger.json', batch_id='p02-t006')
+        ledger.record(execution_id='prior', run_id='old', seconds=protocol.BATCH_SECONDS - 900)
+        clock = Clock()
+
+        def register_during_fit(trajectory, epoch, window):
+            if epoch == 2 and window == 0:
+                resources.Ledger(ledger.path, 'p02-t006').register_debit(
+                    debit_id='prep', seconds=900, reason='fixture'
+                )
+                clock.value = 0.75
+
+        result = self.fit('live-debit', epochs=3, clock=clock, after_update=register_during_fit)
+        self.assertEqual((result['status'], result['completed_epoch']), ('paused', 1))
+        self.assertEqual(result['paused']['reason'], 'batch_timeout')
+        self.assertEqual(resources.Ledger(ledger.path, 'p02-t006').debited_seconds(), 900)
 
     def test_context_chunks_never_mix_nodes_and_preserve_global_update(self):
         keys = [(0,0),(0,1),(1,0),(1,1),(1,2)]
@@ -389,6 +538,24 @@ class RuntimeRepairTests(unittest.TestCase):
         self.assertEqual(checked['status'], 'pass')
         self.assertEqual(fx.tree_digest(directory), snapshot)
         self.assertEqual(resources.Ledger(ledger_path, batch_id='p02-t006').active_seconds()-before, 4.)
+
+    def test_debit_exhaustion_stops_live_saved_evidence_stage(self):
+        run = self.fit('debit-check', epochs=1)
+        directory = Path(run['run_dir'])
+        ledger_path = self.root / 'live-ledger.json'
+        ledger = resources.Ledger(ledger_path, batch_id='batch')
+        ledger.register_debit(debit_id='exhausted', seconds=protocol.BATCH_SECONDS,
+                              reason='synthetic saved-stage exhaustion')
+        destination = self.root / 'debit-check-report.json'
+        report = checks.run_recompute(
+            run_dir=directory, report_path=destination, argv=[],
+            ledger_path=str(ledger_path), batch_id='batch',
+        )
+        self.assertEqual(report['status'], 'failed')
+        self.assertEqual(report['accounting']['mode'], 'live-batch')
+        self.assertTrue(destination.is_file())
+        self.assertEqual(resources.Ledger(ledger_path, batch_id='batch').debited_seconds(),
+                         protocol.BATCH_SECONDS)
 
     def test_recovery_checks_current_source_environment_and_spent_time_floor(self):
         result = self.parent()

@@ -103,7 +103,7 @@ class CanonicalIdentityTests(unittest.TestCase):
         with self.assertRaises(protocol.ProtocolError):
             protocol.FitConfig(learning_rate=0.5).validate()
         with self.assertRaises(protocol.ProtocolError):
-            protocol.FitConfig(epochs=101).validate()
+            protocol.FitConfig(epochs=201).validate()
         with self.assertRaises(protocol.ProtocolError):
             protocol.FitConfig(threads=2).validate()
         with self.assertRaises(protocol.ProtocolError):

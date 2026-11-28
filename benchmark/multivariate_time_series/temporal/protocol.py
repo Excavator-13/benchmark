@@ -1,9 +1,8 @@
-"""Fixed ``P2-effective-training-L6-H3-v1`` constants and stage contracts.
+"""Fixed ``P2-effective-training-L6-H3-v2`` constants and stage contracts.
 
 Everything scientific in this package derives from ``research/phases/P02/
-protocol.md`` (sections 2-6) and its inherited P01 definitions.  The values are
-copied here and re-validated before a run may publish evidence; the protocol
-file itself is hashed into the provenance record rather than re-interpreted.
+protocol-v2.md``, its immutable inherited v1 document, and inherited P01
+definitions. The documents are identity-bound before evidence can be published.
 
 Nothing in this module imports torch, pandas or psutil: the saved-only checks
 must run with only NumPy available.
@@ -20,12 +19,18 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 from benchmark.nograph_baseline import protocol as p01
 
-SCIENTIFIC_VERSION = "P2-effective-training-L6-H3-v1"
+SCIENTIFIC_VERSION = "P2-effective-training-L6-H3-v2"
 ARTIFACT_FORMAT_VERSION = 2
 REPORT_VERSION = 1
 
-#: The protocol document this implementation claims to follow.
-P02_PROTOCOL_PATH = p01.REPO_ROOT / "research" / "phases" / "P02" / "protocol.md"
+#: Ordered scientific documents required by the current execution profile.
+P02_PROTOCOL_PATH = p01.REPO_ROOT / "research" / "phases" / "P02" / "protocol-v2.md"
+P02_INHERITED_PROTOCOL_PATH = p01.REPO_ROOT / "research" / "phases" / "P02" / "protocol.md"
+P02_INHERITED_PROTOCOL_SHA256 = "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2"
+P02_PROTOCOL_DOCUMENTS = (
+    ("research/phases/P02/protocol-v2.md", P02_PROTOCOL_PATH),
+    ("research/phases/P02/protocol.md", P02_INHERITED_PROTOCOL_PATH),
+)
 
 MODELS: Tuple[str, ...] = ("GRU", "LSTM")
 DATASETS: Tuple[str, ...] = ("r0", "region", "r2")
@@ -42,12 +47,13 @@ OPERATIONS: Tuple[str, ...] = (
     "recompute",
     "compare",
     "resume",
+    "budget-debit",
 )
 
 # -- section 3: model and optimization unit ---------------------------------
 HIDDEN_SIZE = 32
 LAYERS = 1
-EPOCHS = 100
+EPOCHS = 200
 TRAIN_WINDOW_COUNT = 19
 UPDATES_PER_EPOCH = TRAIN_WINDOW_COUNT
 TOTAL_UPDATES = EPOCHS * UPDATES_PER_EPOCH
@@ -56,7 +62,7 @@ ADAM_EPS = 1e-8
 WEIGHT_DECAY = 0.0
 AMSGRAD = False
 GRAD_CLIP_NORM = 1.0
-DIAGNOSTIC_EPOCHS: Tuple[int, ...] = (10, 50, 100)
+DIAGNOSTIC_EPOCHS: Tuple[int, ...] = (10, 50, 100, 200)
 PARAMETER_COUNTS: Mapping[str, int] = {"GRU": 3459, "LSTM": 4579}
 LR_CANDIDATES: Tuple[float, ...] = (1e-3, 3e-3)
 SEEDS: Tuple[int, ...] = (0, 1, 2)
@@ -67,7 +73,7 @@ CANDIDATE_ROLES: Tuple[str, ...] = ("screening", "confirmation")
 LEARNING_TRAIN_REDUCTION = 0.10
 LEARNING_VAL_REDUCTION = 0.05
 ZERO_MAE_IMPROVEMENT = 0.05
-BUDGET_TAIL_EPOCH = 80
+BUDGET_TAIL_EPOCH = 160
 BUDGET_TAIL_RELATIVE = 0.01
 MIN_PASSING_SEEDS = 2
 REQUIRED_SEED_COUNT = 3
@@ -86,7 +92,7 @@ FIT_SECONDS = 60 * 60
 BATCH_SECONDS = 12 * 60 * 60
 STEADY_STATE_EPOCHS: Tuple[int, ...] = (6, 7, 8, 9, 10)
 COST_RESERVE_FACTOR = 1.3
-COST_RESERVE_NOTE = "setup + 2*100*t with a 30% terminal reserve"
+COST_RESERVE_NOTE = "setup + 2*200*t with a 30% terminal reserve"
 MAX_FITS_PER_BLOCK = 7
 MAX_BLOCK_FITS = 42
 
@@ -154,6 +160,17 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def protocol_document_sha256(path: Path) -> str:
+    """Hash Git-normalized UTF-8 protocol bytes across CRLF/LF checkouts."""
+    from . import resources
+    digest = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            resources.check_stage_budget()
+            digest.update(block.replace(b"\r\n", b"\n"))
+    return digest.hexdigest()
+
+
 def canonical_json(payload: Any) -> str:
     """Return a stable JSON encoding used for content identities."""
     return json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
@@ -164,10 +181,66 @@ def content_sha256(payload: Any) -> str:
 
 
 def protocol_content_sha256() -> Optional[str]:
-    """SHA256 of the frozen P02 protocol document, or ``None`` when absent."""
+    """SHA256 of the current v2 protocol document, or ``None`` when absent."""
     if P02_PROTOCOL_PATH.is_file():
-        return sha256_file(P02_PROTOCOL_PATH)
+        return protocol_document_sha256(P02_PROTOCOL_PATH)
     return None
+
+
+def protocol_document_identities() -> List[Dict[str, str]]:
+    """Return ordered, validated identities for v2 and its immutable v1 basis."""
+    identities: List[Dict[str, str]] = []
+    for relative_path, path in P02_PROTOCOL_DOCUMENTS:
+        if not path.is_file():
+            raise ProtocolError(f"required protocol document is missing: {relative_path}")
+        identities.append({"path": relative_path, "sha256": protocol_document_sha256(path)})
+    inherited = identities[1]["sha256"]
+    if inherited != P02_INHERITED_PROTOCOL_SHA256:
+        raise ProtocolError(
+            "inherited v1 protocol identity differs from the research-declared "
+            f"SHA256 {P02_INHERITED_PROTOCOL_SHA256}: got {inherited}"
+        )
+    return identities
+
+
+def protocol_identity_payload() -> Dict[str, Any]:
+    return {
+        "scientific_version": SCIENTIFIC_VERSION,
+        "documents": protocol_document_identities(),
+    }
+
+
+def validate_protocol_identity(provenance: Mapping[str, Any]) -> None:
+    """Reject historical or incomplete provenance before saved evidence is used."""
+    version = provenance.get("scientific_version")
+    if version != SCIENTIFIC_VERSION:
+        raise ProtocolError(
+            f"saved evidence uses scientific version {version!r}; current entry "
+            f"requires {SCIENTIFIC_VERSION}. For v1 use runner `3bd9fa4` "
+            "(run-source baseline `bf5abed8`); v1 evidence cannot be upgraded."
+        )
+    expected = protocol_identity_payload()
+    actual = (provenance.get("protocol") or {}).get("identity")
+    if actual != expected:
+        raise ProtocolError(
+            "saved evidence is missing or has different v2/inherited protocol "
+            "document identities"
+        )
+
+
+def validate_bound_protocol_identity(
+    scientific_version: Any, identity: Any, *, artifact: str
+) -> None:
+    if scientific_version != SCIENTIFIC_VERSION:
+        raise ProtocolError(
+            f"{artifact} uses scientific version {scientific_version!r}; current "
+            f"entry requires {SCIENTIFIC_VERSION}. For v1 use runner `3bd9fa4` "
+            "(run-source baseline `bf5abed8`); v1 evidence cannot be upgraded."
+        )
+    if identity != protocol_identity_payload():
+        raise ProtocolError(
+            f"{artifact} is missing or has changed v2/inherited protocol identities"
+        )
 
 
 def normalization_scale(square_sum: float, elements: int) -> float:
@@ -420,6 +493,7 @@ def condition_identity(
     data_sha256: Optional[str],
     keys_sha256: Optional[str],
     protocol_sha256: Optional[str],
+    protocol_documents: Optional[Sequence[Mapping[str, Any]]] = None,
 ) -> Dict[str, Any]:
     """Return the shared condition identity of an a/b repetition pair.
 
@@ -435,6 +509,7 @@ def condition_identity(
         "data_sha256": data_sha256,
         "keys_sha256": keys_sha256,
         "protocol_sha256": protocol_sha256,
+        "protocol_documents": [dict(item) for item in (protocol_documents or protocol_document_identities())],
         "split": split_payload(),
     }
     return {

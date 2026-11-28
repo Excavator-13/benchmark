@@ -63,9 +63,21 @@ def load_run_evidence(run_dir: Path) -> Dict[str, Any]:
         raise DiagnosticsError(
             f"{directory} is not a format-v2 run: config.json is missing"
         )
+    if config_doc.get("scientific_version") != protocol.SCIENTIFIC_VERSION:
+        try:
+            protocol.validate_bound_protocol_identity(
+                config_doc.get("scientific_version"), None,
+                artifact=f"run {directory}",
+            )
+        except protocol.ProtocolError as exc:
+            raise DiagnosticsError(str(exc)) from exc
     status_doc = _read_json(directory / "status.json") or {}
     config = protocol.FitConfig.from_payload(config_doc["config"])
     provenance = _read_json(directory / "provenance.json") or {}
+    try:
+        protocol.validate_protocol_identity(provenance)
+    except protocol.ProtocolError as exc:
+        raise DiagnosticsError(f"{directory}: {exc}") from exc
     data = provenance.get("data") or {}
     return {
         "evidence_sha256": evidence_sha256(directory),
@@ -190,6 +202,11 @@ def gate_completeness(
                 problems.append("history epochs are not the ordered 1..N sequence")
             for record in records:
                 resources.check_stage_budget()
+                for metric in ("validation_MSE", "validation_MAE"):
+                    if _finite(record.get(metric)) and float(record[metric]) < 0:
+                        problems.append(
+                            f"epoch {record.get('epoch')} has negative {metric}"
+                        )
                 for key in (
                     "validation_MSE",
                     "validation_MAE",
@@ -204,18 +221,31 @@ def gate_completeness(
                         )
                         break
         scores = evidence.get("scores") or {}
-        for name in ("init", "10", "50", "100", "best"):
+        expected_epochs = {"init": 0, "best": None}
+        expected_epochs.update({str(epoch): epoch for epoch in protocol.DIAGNOSTIC_EPOCHS})
+        for name, expected_epoch in expected_epochs.items():
             resources.check_stage_budget()
             block = scores.get(name)
             if not isinstance(block, dict):
                 incomplete.append(f"missing fixed-parameter {name} score block")
                 continue
+            if expected_epoch is not None and (
+                block.get("epoch") != expected_epoch
+                or block.get("updates") != expected_epoch * protocol.UPDATES_PER_EPOCH
+            ):
+                problems.append(f"fixed-parameter {name} score has the wrong epoch/update boundary")
             for key in ("MSE", "MAE"):
                 resources.check_stage_budget()
-                if not _finite((block.get("train") or {}).get(key)):
+                train_value = (block.get("train") or {}).get(key)
+                validation_value = (block.get("validation") or {}).get(key)
+                if not _finite(train_value):
                     problems.append(f"{name} train {key} is nonfinite or missing")
-                if not _finite((block.get("validation") or {}).get(key)):
+                elif float(train_value) < 0:
+                    problems.append(f"{name} train {key} is negative")
+                if not _finite(validation_value):
                     problems.append(f"{name} validation {key} is nonfinite or missing")
+                elif float(validation_value) < 0:
+                    problems.append(f"{name} validation {key} is negative")
         reproduction = (scores.get("best") or {}).get("reproduction") or {}
         if not reproduction:
             incomplete.append("best-checkpoint reproduction evidence is missing")
@@ -245,7 +275,7 @@ def gate_completeness(
     return _gate_result(
         "complete_and_finite_trajectories",
         status=status,
-        threshold="every required a/b run covers all 100 epochs finitely",
+        threshold=f"every required a/b run covers all {protocol.EPOCHS} epochs finitely",
         per_seed=rows,
         reasons=reasons,
         required_seeds=2 * len(protocol.SEEDS),
@@ -419,7 +449,7 @@ def gate_beyond_zero(
 def gate_budget_tail(
     a_runs: Mapping[int, Mapping[str, Any]],
 ) -> Dict[str, Any]:
-    """Gate 4: ``(b80-b100)/max(1e-12,b80) <= 1%`` for at least 2/3 seeds."""
+    """Gate 4: compare best validation MSE through the cutoff and full budget."""
     resources.check_stage_budget()
     rows: List[Dict[str, Any]] = []
     reasons: List[str] = []
@@ -431,18 +461,16 @@ def gate_budget_tail(
             reasons.append(f"seed {seed}: repetition a evidence is missing")
             continue
         history = (evidence.get("history") or {}).get("epochs") or []
-        values = [
-            float(record["validation_MSE"])
-            for record in history
-            if _finite(record.get("validation_MSE"))
-        ]
-        if len(values) < protocol.EPOCHS:
+        epochs = [int(record.get("epoch", -1)) for record in history]
+        values = [record.get("validation_MSE") for record in history]
+        complete = len(history) == protocol.EPOCHS and epochs == list(range(1, protocol.EPOCHS + 1)) and all(_finite(value) for value in values)
+        if not complete:
             rows.append(
                 {
                     "seed": seed,
                     "run_id": evidence["run_id"],
                     "status": INCOMPLETE,
-                    "epochs": len(values),
+                    "epochs": len(history),
                     "reason": (
                         f"complete validation history needs {protocol.EPOCHS} "
                         f"epochs, found {len(values)}"
@@ -450,34 +478,34 @@ def gate_budget_tail(
                 }
             )
             reasons.append(
-                f"seed {seed}: budget-tail check needs a complete 100-epoch history"
+                f"seed {seed}: budget-tail check needs exactly the ordered 1..{protocol.EPOCHS} history"
             )
             continue
-        b80 = min(values[: protocol.BUDGET_TAIL_EPOCH])
-        b100 = min(values)
-        if b80 == 0.0 and b100 == 0.0:
+        before = min(float(value) for value in values[: protocol.BUDGET_TAIL_EPOCH])
+        full = min(float(value) for value in values)
+        if before == 0.0 and full == 0.0:
             relative = 0.0
             both_zero = True
-        elif b80 == 0.0:
+        elif before == 0.0:
             both_zero = False
             rows.append(
                 {
                     "seed": seed,
                     "run_id": evidence["run_id"],
                     "status": FAIL,
-                    "b80": b80,
-                    "b100": b100,
+                    "b160": before,
+                    "b200": full,
                     "relative": None,
                     "reason": (
-                        "b80 is zero while b100 is positive; that ordering is "
+                        "the cutoff minimum is zero while the full-budget minimum is positive; that ordering is "
                         "impossible for a minimum over an extended budget"
                     ),
                 }
             )
-            reasons.append(f"seed {seed}: inconsistent b80/b100 minima")
+            reasons.append(f"seed {seed}: inconsistent cutoff/full-budget minima")
             continue
         else:
-            relative = (b80 - b100) / max(protocol.BUDGET_TAIL_FLOOR, b80)
+            relative = (before - full) / max(protocol.BUDGET_TAIL_FLOOR, before)
             both_zero = False
         status = PASS if relative <= protocol.BUDGET_TAIL_RELATIVE else FAIL
         if status == FAIL:
@@ -490,8 +518,10 @@ def gate_budget_tail(
                 "seed": seed,
                 "run_id": evidence["run_id"],
                 "status": status,
-                "b80": b80,
-                "b100": b100,
+                "b160": before,
+                "b200": full,
+                "cutoff_epoch": protocol.BUDGET_TAIL_EPOCH,
+                "full_budget_epoch": protocol.EPOCHS,
                 "both_zero": both_zero,
                 "relative": relative,
             }

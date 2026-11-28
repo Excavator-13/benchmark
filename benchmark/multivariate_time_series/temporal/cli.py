@@ -75,7 +75,8 @@ def build_parser() -> argparse.ArgumentParser:
             "P02 effective GRU/LSTM entry. Stages: preflight, fit (train/validation "
             "only), select (frozen learning rate), diagnose (section-5 gates), "
             "report (four rolling test windows), recompute/compare (saved evidence), "
-            "resume (parent-linked recovery). Development is the default purpose."
+            "resume (parent-linked recovery), budget-debit (ledger-only). "
+            "Development is the default purpose."
         ),
         epilog=(
             "Execution evidence is software evidence only; formal research runs, "
@@ -112,6 +113,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     preflight.add_argument("--out", type=Path, default=None)
     preflight.set_defaults(handler="preflight")
+
+    debit = subparsers.add_parser(
+        "budget-debit", help="register a conservative debit on an existing batch ledger"
+    )
+    debit.add_argument("--ledger", type=Path, required=True)
+    debit.add_argument("--batch-id", required=True)
+    debit.add_argument("--debit-id", required=True)
+    debit.add_argument("--seconds", type=float, required=True)
+    debit.add_argument("--reason", required=True)
+    debit.set_defaults(handler="budget-debit")
 
     fit = subparsers.add_parser(
         "fit", help="fit one training/validation trajectory in a single worker"
@@ -161,7 +172,7 @@ def build_parser() -> argparse.ArgumentParser:
     resume.add_argument("--parent", type=Path, required=True)
     resume.add_argument("--run-id", required=True)
     resume.add_argument("--ledger", type=Path, default=None)
-    resume.add_argument("--batch-id", default="p02-t006")
+    resume.add_argument("--batch-id", help="must match the parent batch when supplied")
     resume.add_argument("--remaining-fits", type=int, default=1)
     resume.add_argument(
         "--monitor-interval",
@@ -253,6 +264,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     recompute.add_argument("--run-dir", type=Path, required=True)
     recompute.add_argument("--report", type=Path, required=True, dest="report_path")
+    recompute.add_argument("--ledger", type=Path, default=None)
+    recompute.add_argument("--batch-id", default="p02-t006")
     recompute.set_defaults(handler="recompute")
 
     compare = subparsers.add_parser(
@@ -261,6 +274,8 @@ def build_parser() -> argparse.ArgumentParser:
     compare.add_argument("--run-a", type=Path, required=True)
     compare.add_argument("--run-b", type=Path, required=True)
     compare.add_argument("--report", type=Path, required=True, dest="report_path")
+    compare.add_argument("--ledger", type=Path, default=None)
+    compare.add_argument("--batch-id", default="p02-t006")
     compare.set_defaults(handler="compare")
 
     worker = subparsers.add_parser("_worker")
@@ -281,7 +296,7 @@ def _default_root(args: argparse.Namespace) -> Path:
     )
 
 
-def _ledger_path(args: argparse.Namespace) -> Optional[Path]:
+def _ledger_path(args: argparse.Namespace) -> Path:
     if getattr(args, "ledger", None):
         return Path(args.ledger)
     root = _default_root(args)
@@ -289,7 +304,9 @@ def _ledger_path(args: argparse.Namespace) -> Optional[Path]:
 
 
 def _lock_path(args: argparse.Namespace) -> Path:
-    return _default_root(args) / "locks" / f"{args.batch_id}.lock"
+    from .resources import worker_lock_path
+
+    return worker_lock_path(_ledger_path(args))
 
 
 def _data_path(args: argparse.Namespace) -> Optional[Path]:
@@ -332,6 +349,8 @@ def _preflight_request(args: argparse.Namespace, *, operation: str) -> Dict[str,
         "run_id": getattr(args, "run_id", None),
         "output_root": str(args.output_root) if args.output_root else None,
         "ledger_path": str(_ledger_path(args)) if _ledger_path(args) else None,
+        "ledger_explicit": getattr(args, "ledger", None) is not None,
+        "batch_id": getattr(args, "batch_id", "p02-t006"),
         "lock_path": str(_lock_path(args)) if getattr(args, "batch_id", None) else None,
         "recovery_path": str(getattr(args, "recovery", None) or "") or None,
         "dependencies_missing": getattr(args, "dependencies_missing", None),
@@ -341,20 +360,52 @@ def _preflight_request(args: argparse.Namespace, *, operation: str) -> Dict[str,
     }
 
 
+def _preflight_path_identity(path: Path) -> Path:
+    resolved = path.resolve()
+    if os.name == "nt":
+        # A verbatim path can retain trailing dots and spaces, but its drive or
+        # UNC prefix still refers to the same filesystem as the ordinary spelling.
+        if resolved.drive.upper().startswith("\\\\?\\UNC\\"):
+            return Path("\\\\" + str(resolved)[8:])
+        if resolved.drive.startswith(("\\\\?\\", "\\\\.\\")) and resolved.drive.endswith(":"):
+            return Path(str(resolved)[4:])
+    return resolved
+
+
 def _handle_preflight(args: argparse.Namespace) -> int:
-    from . import runner
+    from . import resources, runner
 
     request = _preflight_request(args, operation="preflight")
-    if getattr(args, "lock", None):
-        request["lock_path"] = str(args.lock)
+    target = args.out
+    if target is not None:
+        if os.name == "nt" and not target.drive.startswith("\\\\?\\"):
+            # Win32 normalizes ordinary names on open, even if the file is absent.
+            target = Path(os.path.abspath(target))
+        backing_file = target
+        if os.name == "nt" and ":" in target.name:
+            # An NTFS stream can create its backing file even when it is absent.
+            backing_file = target.with_name(target.name.split(":", 1)[0])
+            if not target.drive.startswith("\\\\?\\"):
+                backing_file = Path(os.path.abspath(backing_file))
+        resolved_target = _preflight_path_identity(backing_file)
+        for reserved in resources.Ledger.bookkeeping_paths(Path(request["ledger_path"])):
+            if resolved_target.is_relative_to(_preflight_path_identity(reserved)) or (
+                backing_file.exists() and reserved.exists() and backing_file.samefile(reserved)
+            ):
+                raise protocol.ProtocolError(
+                    "preflight output must be separate from the batch ledger and its bookkeeping files"
+                )
+        if target.exists() or target.is_symlink():
+            raise protocol.ProtocolError("preflight output already exists")
+    if args.lock is not None:
+        request["additional_lock_path"] = str(args.lock)
     record = runner.run_preflight(request)
     _emit(record)
-    if args.out:
-        target = Path(args.out)
+    if target is not None:
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(
-            json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-        )
+        with target.open("x", encoding="utf-8") as handle:
+            json.dump(record, handle, indent=2, sort_keys=True)
+            handle.write("\n")
     return EXIT_OK if record["status"] == "pass" else EXIT_FAIL
 
 
@@ -371,32 +422,50 @@ def _worker_environment() -> Dict[str, str]:
     return environment
 
 
+def _sample_worker_rss(process: subprocess.Popen) -> Mapping[str, Any]:
+    import psutil
+
+    from .resources import WorkerExited, sample_process_tree_rss
+
+    try:
+        return sample_process_tree_rss(process.pid)
+    except psutil.NoSuchProcess as exc:
+        # Sampling can reach psutil just after the supervised worker exits.
+        if process.poll() == 0:
+            raise WorkerExited from exc
+        raise
+
+
 def _run_stage(args: argparse.Namespace, operation: str) -> int:
     stage_started = time.monotonic()
     from . import artifacts, resources, runner, recovery
     root = _default_root(args)
+    parent = None
+    if operation == "resume":
+        parent = recovery.load_parent(args.parent, ledger_path=args.ledger, batch_id=args.batch_id)
+        parent_config = parent["parent_config_doc"]
+        parent_dataset = parent_config["dataset"]["name"]
+        if args.data_name != parent_dataset:
+            raise protocol.ProtocolError(f"resume dataset must match the parent dataset {parent_dataset!r}")
+        config_payload = parent["parent_config"].to_payload()
+        args.ledger = Path(parent["ledger_path"])
+        args.batch_id = parent["batch_id"]
+        source_path = (parent["parent_provenance"].get("data") or {}).get("source_path")
+        if args.data is None and source_path and not source_path.startswith("<"):
+            args.data = Path(source_path)
+    else:
+        config_payload = _config_payload(args)
+    if args.purpose == "formal":
+        protocol.require_formal_controls(protocol.FitConfig.from_payload(config_payload))
     lock_path = _lock_path(args)
     preflight_request = _preflight_request(args, operation=operation)
-    if operation == "resume":
-        preflight_request["recovery_path"] = str(
-            Path(args.parent) / protocol.RUN_DIRECTORY_FILES["last_recovery"]
-        )
+    preflight_request["internal_preflight"] = True
+    preflight_request.update(model=config_payload["model"], seed=config_payload["seed"])
+    if parent is not None:
+        preflight_request["recovery_path"] = parent["recovery_path"]
     preflight = runner.run_preflight(preflight_request)
     if preflight["status"] != "pass":
         _emit({"status": "fail", "stage": "preflight", "preflight": preflight})
-        return EXIT_FAIL
-    lock = resources.WorkerLock(
-        lock_path,
-        {
-            "run_id": args.run_id,
-            "batch_id": args.batch_id,
-            "operation": operation,
-            "purpose": args.purpose,
-        },
-    )
-    state = lock.acquire(takeover_stale=bool(getattr(args, "takeover_stale", False)))
-    if state["status"] != "acquired":
-        _emit({"status": "conflict", "stage": "worker_lock", "lock": state})
         return EXIT_FAIL
     request: Dict[str, Any] = {
         "run_id": args.run_id,
@@ -405,7 +474,7 @@ def _run_stage(args: argparse.Namespace, operation: str) -> int:
         "data_name": args.data_name,
         "data_path": str(_data_path(args)) if _data_path(args) else None,
         "output_root": str(root),
-        "config": _config_payload(args),
+        "config": config_payload,
         "roles": {
             "candidate_role": getattr(args, "candidate_role", "confirmation"),
             "repeat_role": getattr(args, "repeat_role", "a"),
@@ -422,70 +491,53 @@ def _run_stage(args: argparse.Namespace, operation: str) -> int:
         "setup_seconds": float(getattr(args, "setup_seconds", 0.0)),
         "argv": [sys.executable, "-m", MODULE, *sys.argv[1:]],
     }
-    if operation == "resume":
-        parent = Path(args.parent)
-        parent_config = artifacts.read_json(
-            parent / protocol.RUN_DIRECTORY_FILES["config"]
-        )
-        request["config"] = parent_config["config"]
+    if parent is not None:
         request["roles"] = parent_config.get("roles") or request["roles"]
-        request["parent_dir"] = str(parent.resolve())
-        provenance = artifacts.read_json(
-            parent / protocol.RUN_DIRECTORY_FILES["provenance"]
-        )
-        request["data_name"] = parent_config["dataset"]["name"]
-        source_path = (provenance.get("data") or {}).get("source_path") or ""
-        if request["data_path"] is None and not str(source_path).startswith("<"):
-            request["data_path"] = source_path
+        request["parent_dir"] = str(args.parent.resolve())
     ledger = resources.Ledger(
-        _ledger_path(args), batch_id=args.batch_id
-    ) if _ledger_path(args) else None
-    if ledger is not None and ledger.active_seconds() >= protocol.BATCH_SECONDS:
-        _emit(
-            {
-                "status": "paused",
-                "stage": "batch_budget",
-                "reason": "the cumulative batch budget is exhausted",
-                "active_seconds": ledger.active_seconds(),
-                "limit_seconds": protocol.BATCH_SECONDS,
-            }
-        )
-        lock.release()
-        return EXIT_PAUSED
-    inherited_fit_seconds = 0.0
-    if operation == "resume":
-        try:
-            inherited = recovery.load_parent(Path(args.parent), ledger_path=_ledger_path(args), batch_id=args.batch_id)
-            inherited_fit_seconds = inherited["fit_spent_seconds"]
-        except Exception:
-            lock.release()
-            raise
+        _ledger_path(args), batch_id=args.batch_id, require_existing=args.ledger is not None,
+    )
+    inherited_fit_seconds = parent["fit_spent_seconds"] if parent is not None else 0.0
     request["execution_id"] = f"{args.run_id}@{uuid.uuid4().hex}"
     request["controller_managed"] = True
     request["controller_started_at"] = stage_started
-    if ledger is not None:
-        # Persist one ledger identity before the worker can open the same file.
-        ledger.record(execution_id=request["execution_id"], run_id=args.run_id,
-                      seconds=max(0.0, time.monotonic() - stage_started), status="running")
-    handle = tempfile.NamedTemporaryFile(
-        mode="w", suffix=".json", prefix="effective-temporal-", delete=False
+    lock = resources.WorkerLock(
+        lock_path,
+        {"run_id": args.run_id, "batch_id": args.batch_id,
+         "operation": operation, "purpose": args.purpose},
     )
+    state = lock.acquire(takeover_stale=bool(args.takeover_stale))
+    if state["status"] != "acquired":
+        _emit({"status": "conflict", "stage": "worker_lock", "lock": state})
+        return EXIT_FAIL
+    handle = None
+    watchdog = None
+    process = None
     try:
-        json.dump(request, handle, indent=2, sort_keys=True)
-        handle.write("\n")
-        handle.flush()
-        handle.close()
-        command = [sys.executable, "-m", MODULE, "_worker", "--request", handle.name]
-        watchdog = None
-        timeout_reason: Optional[Dict[str, Any]] = None
         try:
+            # Persist one ledger identity before the worker can open the same file.
+            entry = ledger.record(execution_id=request["execution_id"], run_id=args.run_id,
+                                  seconds=max(0.0, time.monotonic() - stage_started), status="running")
+            if ledger.remaining_seconds() <= 0:
+                ledger.record(execution_id=request["execution_id"], run_id=args.run_id,
+                              seconds=entry["seconds"], status="paused")
+                _emit({"status": "paused", "stage": "batch_budget",
+                       "reason": "the cumulative batch budget is exhausted",
+                       "limit_seconds": protocol.BATCH_SECONDS, **ledger.payload_view()})
+                return EXIT_PAUSED
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".json", prefix="effective-temporal-", delete=False,
+            ) as handle:
+                json.dump(request, handle, indent=2, sort_keys=True)
+                handle.write("\n")
+            command = [sys.executable, "-m", MODULE, "_worker", "--request", handle.name]
             process = subprocess.Popen(  # noqa: S603 - fixed interpreter and module
                 command,
                 cwd=str(artifacts.repo_root()),
                 env=_worker_environment(),
             )
             watchdog = resources.Watchdog(
-                sampler=lambda: resources.sample_process_tree_rss(process.pid),
+                sampler=lambda: _sample_worker_rss(process),
                 interval=request["monitor_interval"],
                 limit_bytes=request["memory_limit_bytes"],
             )
@@ -494,14 +546,22 @@ def _run_stage(args: argparse.Namespace, operation: str) -> int:
             code, timeout_reason = supervise_worker(
                 process, watchdog=watchdog, ledger=ledger, request=request,
                 started=stage_started, inherited_fit_seconds=inherited_fit_seconds)
+        except KeyboardInterrupt:
+            code, timeout_reason = _handle_controller_interrupt(
+                process, ledger, request, stage_started, time.monotonic,
+            )
+        except BaseException:
+            if process is not None and process.poll() is None:
+                _stop_worker(process)
+            raise
         finally:
             if watchdog is not None:
                 watchdog.stop()
         run_dir = root / args.run_id
-        pause_reason = (
+        pause_reason = timeout_reason or (
             watchdog.pause_reason()
             if watchdog is not None and watchdog.pause_reason() is not None
-            else timeout_reason
+            else None
         )
         if pause_reason is not None:
             _mark_controller_pause(run_dir, pause_reason)
@@ -509,44 +569,99 @@ def _run_stage(args: argparse.Namespace, operation: str) -> int:
         return _report_stage_result(run_dir, code)
     finally:
         lock.release()
+        if handle is not None:
+            Path(handle.name).unlink(missing_ok=True)
+
+
+def _stop_worker(process) -> int:
+    try:
+        process.terminate()
+    except ProcessLookupError:
+        pass
+    try:
+        return process.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        process.kill()
+        return process.wait(timeout=5)
+
+
+def _finish_worker_bill(ledger, request, elapsed, reason, *, note=None):
+    from .resources import ResourceError
+
+    if ledger is None:
+        return reason
+    try:
+        ledger.record(
+            execution_id=request["execution_id"], run_id=request["run_id"],
+            seconds=elapsed, status="paused" if reason else "finished", note=note,
+        )
+    except (OSError, ValueError, ResourceError) as exc:
+        if reason is None:
+            reason = {"reason": "final ledger accounting failed"}
+        reason.update(accounting_error=str(exc), execution_seconds=elapsed)
         try:
-            os.unlink(handle.name)
-        except OSError:
-            pass
+            pending_bill = ledger.defer_stopped_fit_bill(
+                execution_id=request["execution_id"], run_id=request["run_id"],
+                seconds=elapsed, reason=note or str(exc),
+            )
+            reason["pending_bill"] = str(pending_bill)
+        except (OSError, ValueError, ResourceError) as deferred_error:
+            reason["pending_bill_error"] = str(deferred_error)
+    return reason
+
+
+def _handle_controller_interrupt(process, ledger, request, started, clock):
+    code = EXIT_PAUSED
+    if process is not None:
+        code = _stop_worker(process) if process.poll() is None else process.wait(timeout=5)
+    elapsed = max(0.0, clock() - started)
+    message = "fit controller interrupted"
+    reason = {"reason": message, "execution_seconds": elapsed}
+    return code, _finish_worker_bill(ledger, request, elapsed, reason, note=message)
 
 
 def supervise_worker(process, *, watchdog, ledger, request, started,
                      inherited_fit_seconds=0.0, clock=time.monotonic, sleeper=time.sleep):
     """Enforce sampled stops independently and persist cost even on termination."""
-    base = sum(float(entry["seconds"]) for entry in ledger.payload["entries"]
-               if entry["execution_id"] != request["execution_id"] and entry["kind"] in {"measured", "replayed"}) if ledger is not None else 0.0
+    from .resources import ResourceError
+
     reason = None
-    def bill(status="running"):
-        elapsed = max(0.0, clock() - started)
-        if ledger is not None:
-            ledger.record(execution_id=request["execution_id"], run_id=request["run_id"],
-                          seconds=elapsed, status=status)
-        return elapsed
+
+    def batch_stop():
+        if ledger is not None and ledger.remaining_seconds() <= 0:
+            return {"reason": "cumulative batch budget exhausted", **ledger.payload_view()}
+        return None
+
+    accounting_error = None
     try:
         while process.poll() is None:
-            elapsed = bill()
+            elapsed = max(0.0, clock() - started)
             reason = watchdog.pause_reason()
             if reason is None and inherited_fit_seconds + elapsed > protocol.FIT_SECONDS:
                 reason = {"reason": "single fit exceeded the 60 min wall-clock limit",
                           "elapsed_seconds": inherited_fit_seconds + elapsed}
-            if reason is None and base + elapsed > protocol.BATCH_SECONDS:
-                reason = {"reason": "cumulative batch budget exhausted", "active_seconds": base + elapsed}
-            if reason is not None:
-                process.terminate()
+            if reason is None and ledger is not None:
                 try:
-                    process.wait(timeout=5)
-                except subprocess.TimeoutExpired:
-                    process.kill()
+                    ledger.record(execution_id=request["execution_id"], run_id=request["run_id"],
+                                  seconds=elapsed, status="running")
+                    reason = batch_stop()
+                except (OSError, ValueError, ResourceError) as exc:
+                    accounting_error = str(exc)
+                    reason = batch_stop() or {"reason": "ledger accounting failed"}
+            if reason is not None:
+                code = _stop_worker(process)
                 break
             sleeper(min(0.5, request["monitor_interval"]))
-        return process.wait(), reason
-    finally:
-        bill("paused" if reason else "finished")
+        else:
+            code = process.wait()
+        elapsed = max(0.0, clock() - started)
+        reason = _finish_worker_bill(ledger, request, elapsed, reason, note=accounting_error)
+    except KeyboardInterrupt:
+        return _handle_controller_interrupt(process, ledger, request, started, clock)
+    reason = reason or batch_stop()
+    if reason is not None:
+        reason.setdefault("execution_seconds", elapsed)
+    return code, reason
 
 
 def _mark_controller_pause(run_dir: Path, reason: Mapping[str, Any]) -> None:
@@ -747,6 +862,8 @@ def _handle_recompute(args: argparse.Namespace) -> int:
             run_dir=args.run_dir,
             report_path=args.report_path,
             argv=[sys.executable, "-m", MODULE, *sys.argv[1:]],
+            ledger_path=args.ledger,
+            batch_id=args.batch_id,
         )
     except Exception as exc:
         _emit({"status": "failed", "error": str(exc)})
@@ -769,6 +886,8 @@ def _handle_compare(args: argparse.Namespace) -> int:
             run_b=args.run_b,
             report_path=args.report_path,
             argv=[sys.executable, "-m", MODULE, *sys.argv[1:]],
+            ledger_path=args.ledger,
+            batch_id=args.batch_id,
         )
     except Exception as exc:
         _emit({"status": "failed", "error": str(exc)})
@@ -782,8 +901,32 @@ def _handle_compare(args: argparse.Namespace) -> int:
     return EXIT_OK if result["status"] == "pass" else EXIT_FAIL
 
 
+def _handle_budget_debit(args: argparse.Namespace) -> int:
+    from . import resources
+
+    if not args.ledger.is_file():
+        raise resources.ResourceError("budget-debit requires an existing ledger")
+    ledger = resources.Ledger(args.ledger, batch_id=args.batch_id, require_existing=True)
+    entry = ledger.register_debit(
+        debit_id=args.debit_id, seconds=args.seconds, reason=args.reason
+    )
+    _emit({
+        "status": "registered",
+        "entry": entry,
+        "ledger_id": ledger.payload.get("ledger_id"),
+        "batch_id": ledger.batch_id,
+        "measured_replayed_seconds": ledger.active_seconds(),
+        "debited_seconds": ledger.debited_seconds(),
+        "estimated_seconds": ledger.estimated_seconds(),
+        "effective_used_seconds": ledger.effective_used_seconds(),
+        "remaining_seconds": ledger.remaining_seconds(),
+    })
+    return EXIT_OK
+
+
 HANDLERS = {
     "preflight": _handle_preflight,
+    "budget-debit": _handle_budget_debit,
     "fit": lambda args: _run_stage(args, "fit"),
     "resume": lambda args: _run_stage(args, "resume"),
     "select": _handle_select,
@@ -800,6 +943,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = build_parser()
     if not arguments:
         parser.print_help()
+        return EXIT_OK
+    if arguments[0] == "--version":
+        print(protocol.SCIENTIFIC_VERSION)
         return EXIT_OK
     if arguments[0] in {"-h", "--help"}:
         parser.print_help()

@@ -1,0 +1,11 @@
+{
+  "artifact_format_version": 2,
+  "elapsed_seconds": 9.842034100000092,
+  "error": {
+    "message": "[WinError 5] 拒绝访问。: 'C:\\\\Users\\\\ZHUZHE~1\\\\AppData\\\\Local\\\\Temp\\\\nograph-patch-check-vj7bndj8'",
+    "type": "PermissionError"
+  },
+  "kind": "fit-summary",
+  "scientific_version": "P2-effective-training-L6-H3-v2",
+  "status": "failed"
+}

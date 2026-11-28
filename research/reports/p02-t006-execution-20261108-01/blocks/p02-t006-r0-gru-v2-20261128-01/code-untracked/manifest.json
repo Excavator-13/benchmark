@@ -1,0 +1,31 @@
+{
+  "files": {
+    "benchmark/multivariate_time_series/effective_temporal_training.py": "6b120e0ac387ec6420ad510bccc78d5797fc5db3d4639b5711ed77c0b3964011",
+    "benchmark/multivariate_time_series/run.py": "fab341c77c520265247ca42e3ef9785d60ce8b0cecff3b00ecd3d7b791be5ea1",
+    "benchmark/multivariate_time_series/temporal/__init__.py": "26e1c99f59d988f00e6da7333c8b51c5fd54ebd47b6cae459493c062dcb68318",
+    "benchmark/multivariate_time_series/temporal/artifacts.py": "20b35299ca58e2500e7f5556b318a47cf70b4b5d4a0833512bae4d631bc8acd6",
+    "benchmark/multivariate_time_series/temporal/checkpoints.py": "072be8ff53f36c8d572c8edf5490c817319996996d65cc8e6fdc69ea3143181b",
+    "benchmark/multivariate_time_series/temporal/checks.py": "4ed204662ec4f6e67391e10a5de54c9faddb3277010008490951e7eac415bf8f",
+    "benchmark/multivariate_time_series/temporal/cli.py": "7650821dc1ba72ee6c4535c9fbc9325530f611054f77be7775de12daf3a06d7d",
+    "benchmark/multivariate_time_series/temporal/data.py": "76dd821ab48e6478835bea557f12f1c144151f796c85eb160c5df5a1cf779eff",
+    "benchmark/multivariate_time_series/temporal/diagnostics.py": "3d1007807bf19fe6f77dbacb12a54d692016ef4b13f931ef82f6a866d6d4e003",
+    "benchmark/multivariate_time_series/temporal/engine.py": "7effd5717a73e09b2f829df0cfa21e4099c7ebbd80dbd053a50d72ec196198dc",
+    "benchmark/multivariate_time_series/temporal/model.py": "c6190ae2fa375b54396686bccb651ac2d3272f026c70b349a1e337a04a651fe1",
+    "benchmark/multivariate_time_series/temporal/protocol.py": "03ea3c428e2bc9bdf3bf2125fc1a6347910d538a28e78c80ef8787927a1d8191",
+    "benchmark/multivariate_time_series/temporal/recovery.py": "58aea07d797bac88ee946e11088b5279e5052b81b71d762bd84c0473122ad294",
+    "benchmark/multivariate_time_series/temporal/report.py": "a2cf800f6c022fb6f54b6768f198a4226daa304992a802ce8101d6c18888edef",
+    "benchmark/multivariate_time_series/temporal/resources.py": "9f2a2fa3e7e033d22a38994b6bb50155b6ee809c4bc70c94d0eeea832abbaa77",
+    "benchmark/multivariate_time_series/temporal/runner.py": "64a569ccb85ab8f760bfdcc80224e296004de3c4745423cac219bb208ff50ba7",
+    "benchmark/multivariate_time_series/temporal/selection.py": "51a6b7d3159e4057c368a05d4946f94d9a00ad24ab3ca69ce8c78a023426ddd6",
+    "benchmark/nograph_baseline/__init__.py": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee",
+    "benchmark/nograph_baseline/artifacts.py": "82622865b80ea6a7b3b6e1694c0faa2d76b46d1857d5f0740392e451a5c168f6",
+    "benchmark/nograph_baseline/baselines.py": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9",
+    "benchmark/nograph_baseline/coverage.py": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467",
+    "benchmark/nograph_baseline/data.py": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4",
+    "benchmark/nograph_baseline/metrics.py": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c",
+    "benchmark/nograph_baseline/protocol.py": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4",
+    "research/phases/P02/protocol-v2.md": "bbe0586805c0b32aad025ff983b78ac02fb56d2de13e47d54a27ee1d9996d92f",
+    "research/phases/P02/protocol.md": "984669a34fbbd36ac99ce59a010a9e4e0b0d106ae170aba1fc87700ea164ce59"
+  },
+  "tracked_by_git": false
+}

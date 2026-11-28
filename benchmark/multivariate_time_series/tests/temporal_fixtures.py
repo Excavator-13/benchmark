@@ -210,7 +210,7 @@ def synthetic_completed_run(
     directory = Path(root) / run_id
     directory.mkdir(parents=True, exist_ok=False)
     if history_values is None:
-        history_values = [100.0 - index for index in range(epochs)]
+        history_values = [max(100.0 - index, 1.0) for index in range(epochs)]
     records = []
     for index, value in enumerate(history_values):
         records.append(
@@ -294,7 +294,7 @@ def synthetic_completed_run(
             },
         },
     }
-    for epoch in (10, 50, 100):
+    for epoch in protocol.DIAGNOSTIC_EPOCHS:
         if epoch <= len(records):
             scores[str(epoch)] = {"epoch": epoch, "updates": epoch * protocol.UPDATES_PER_EPOCH,
                                   "train": dict(scores["best"]["train"]),
@@ -317,6 +317,7 @@ def synthetic_completed_run(
         "protocol": {
             "sha256": protocol.protocol_content_sha256(),
             "version": protocol.SCIENTIFIC_VERSION,
+            "identity": protocol.protocol_identity_payload(),
         },
     }
     baselines = {
@@ -398,6 +399,7 @@ def selection_document(
     return {
         "artifact_format_version": protocol.ARTIFACT_FORMAT_VERSION,
         "scientific_version": protocol.SCIENTIFIC_VERSION,
+        "protocol_identity": protocol.protocol_identity_payload(),
         "kind": "selection",
         "block_id": block_id,
         "purpose": "development",

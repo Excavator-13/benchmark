@@ -113,7 +113,12 @@ class PreflightTests(unittest.TestCase):
         lock_path = self.root / "locks" / "batch.lock"
         owner = resources.WorkerLock(lock_path, {"run_id": "held"})
         self.assertEqual(owner.acquire()["status"], "acquired")
-        record = self._preflight(lock_path=lock_path)
+        git_commit = resources._git_commit
+        resources._git_commit = lambda root: ("fixture", None)
+        try:
+            record = self._preflight(lock_path=lock_path)
+        finally:
+            resources._git_commit = git_commit
         self.assertEqual(record["status"], "fail")
         self.assertEqual(record["checks"]["worker_lock"]["status"], "fail")
         owner.release()
@@ -121,7 +126,12 @@ class PreflightTests(unittest.TestCase):
             json.dumps({"pid": 999_999, "created": "2026-01-01T00:00:00+08:00"}),
             encoding="utf-8",
         )
-        record = self._preflight(lock_path=lock_path)
+        git_commit = resources._git_commit
+        resources._git_commit = lambda root: ("fixture", None)
+        try:
+            record = self._preflight(lock_path=lock_path)
+        finally:
+            resources._git_commit = git_commit
         self.assertEqual(record["status"], "pass")
         blocked = resources.WorkerLock(lock_path, {"run_id": "new"})
         self.assertEqual(blocked.acquire()["status"], "conflict")
@@ -177,12 +187,114 @@ class LedgerAndWatchdogTests(unittest.TestCase):
         with self.assertRaises(resources.ResourceError):
             resources.Ledger(path, batch_id="other")
 
+    def test_stale_heartbeat_preserves_a_concurrently_registered_debit(self):
+        path = self.root / "ledger.json"
+        controller = resources.Ledger(path, "batch")
+        controller.record(execution_id="fit", run_id="fit", seconds=10, status="running")
+        ledger_id = controller.payload["ledger_id"]
+        registrar = resources.Ledger(path, "batch")
+        debit = registrar.register_debit(debit_id="prep", seconds=900, reason="fixture")
+        controller.record(execution_id="fit", run_id="fit", seconds=11, status="paused")
+        final = resources.Ledger(path, "batch")
+        self.assertEqual(final.effective_used_seconds(), 911)
+        self.assertEqual(final.payload["ledger_id"], ledger_id)
+        self.assertEqual([row for row in final.payload["entries"] if row["kind"] == "budget-debit"], [debit])
+
+    def test_reject_unbound_ledger_and_duplicate_debit_identities(self):
+        path = self.root / "ledger.json"
+        legacy = {"version": 1, "batch_id": "batch", "ledger_id": "legacy", "entries": []}
+        fx.write_json(path, legacy)
+        ledger = resources.Ledger(path, "batch")
+        ledger.register_debit(debit_id="prep", seconds=900, reason="fixture")
+        saved = path.read_bytes()
+        resources.Ledger(path, "batch").register_debit(debit_id="prep", seconds=900, reason="fixture")
+        self.assertEqual(path.read_bytes(), saved)
+        self.assertEqual((ledger.batch_id, ledger.payload["ledger_id"], ledger.debited_seconds()),
+                         ("batch", "legacy", 900))
+        duplicate_entry = json.loads(saved)
+        debit = duplicate_entry["entries"][0]
+        duplicate_entry["entries"].insert(0, dict(debit, seconds=1, execution_id="duplicate"))
+        duplicate_registry = json.loads(saved)
+        duplicate_registry["debit_registry"] *= 2
+        for payload in ({"version": 1, "entries": []}, {**legacy, "ledger_id": ""},
+                        {**legacy, "batch_id": ""}, duplicate_entry, duplicate_registry):
+            with self.subTest(payload=payload):
+                fx.write_json(path, payload)
+                before = path.read_bytes()
+                with self.assertRaises(resources.ResourceError):
+                    resources.Ledger(path, "batch").register_debit(
+                        debit_id="other", seconds=1, reason="fixture"
+                    )
+                self.assertEqual(path.read_bytes(), before)
+
+    def test_budget_debit_is_idempotent_validated_and_effective(self):
+        path = self.root / "debit-ledger.json"
+        ledger = resources.Ledger(path, batch_id="batch")
+        ledger.record(execution_id="old-fit", run_id="v1", seconds=17.0)
+        ledger.record(execution_id="forecast", run_id="v2", seconds=400.0, kind="estimated")
+        ledger_id = ledger.payload["ledger_id"]
+        debit = ledger.register_debit(
+            debit_id="preparation", seconds=900.0, reason="unmetered preparation"
+        )
+        self.assertEqual(
+            ledger.register_debit(
+                debit_id="preparation", seconds=900.0, reason="unmetered preparation"
+            ),
+            debit,
+        )
+        self.assertEqual(ledger.active_seconds(), 17.0)
+        self.assertEqual(ledger.estimated_seconds(), 400.0)
+        self.assertEqual(ledger.debited_seconds(), 900.0)
+        self.assertEqual(ledger.effective_used_seconds(), 917.0)
+        self.assertEqual(ledger.remaining_seconds(), protocol.BATCH_SECONDS - 917.0)
+        with self.assertRaises(resources.ResourceError):
+            ledger.register_debit(
+                debit_id="preparation", seconds=901.0, reason="changed"
+            )
+        for seconds in (0.0, -1.0, float("nan"), float("inf")):
+            with self.subTest(seconds=seconds), self.assertRaises(resources.ResourceError):
+                ledger.register_debit(debit_id=f"invalid-{seconds}", seconds=seconds, reason="invalid")
+        loaded = resources.Ledger(path, batch_id="batch")
+        self.assertEqual(loaded.payload["ledger_id"], ledger_id)
+        self.assertEqual(len(loaded.payload["entries"]), 3)
+        saved_bytes = path.read_bytes()
+        try:
+            for update in (
+                lambda payload: payload["entries"].__setitem__(0, {**payload["entries"][0], "kind": "unknown"}),
+                lambda payload: payload["entries"][0].update(seconds=-1.0),
+                lambda payload: payload["entries"].pop(),
+            ):
+                payload = json.loads(saved_bytes)
+                update(payload)
+                path.write_text(json.dumps(payload), encoding="utf-8")
+                with self.assertRaises(resources.ResourceError):
+                    resources.Ledger(path, batch_id="batch")
+        finally:
+            path.write_bytes(saved_bytes)
+
+    def test_helper_cost_records_measured_duration_once(self):
+        path = self.root / "helper-ledger.json"
+        resources.Ledger(path, batch_id="batch").record(
+            execution_id="previous", run_id="previous", seconds=0.0
+        )
+        entry = resources.record_helper_cost(
+            ledger_path=path, batch_id="batch", execution_id="helper-1",
+            seconds=3.5, reason="source inventory",
+        )
+        self.assertEqual(entry["kind"], "measured")
+        self.assertEqual(resources.Ledger(path, batch_id="batch").active_seconds(), 3.5)
+        with self.assertRaises(resources.ResourceError):
+            resources.record_helper_cost(
+                ledger_path=path, batch_id="batch", execution_id="helper-1",
+                seconds=4.0, reason="duplicate helper execution",
+            )
+
     def test_cost_gate_limits(self):
         history = _history(10, wall=1.0)
-        passed = resources.cost_gate(history, epochs=100, setup_seconds=0.0)
+        passed = resources.cost_gate(history, epochs=200, setup_seconds=0.0)
         self.assertEqual(passed["status"], "ok", passed)
         self.assertAlmostEqual(passed["steady_state_median_seconds"], 1.0)
-        self.assertAlmostEqual(passed["estimate_seconds"], 1.3 * 200.0)
+        self.assertAlmostEqual(passed["estimate_seconds"], 1.3 * 400.0)
         slow_sample = resources.cost_gate(
             history, sample_seconds=protocol.COST_SAMPLE_SECONDS + 1
         )
@@ -249,6 +361,23 @@ class FitResourceTests(unittest.TestCase):
         self.assertEqual(status["detail"]["reason"], "resource_stop")
         monitor = fx.read_json(directory / "monitor.json")
         self.assertIsNotNone(monitor["breach"])
+
+    def test_budget_debit_alone_stops_fit_before_optimizer_updates(self):
+        ledger_path = self.root / "runs" / "ledger.json"
+        ledger = resources.Ledger(ledger_path, batch_id="p02-t006")
+        ledger.register_debit(
+            debit_id="exhaustion", seconds=protocol.BATCH_SECONDS,
+            reason="synthetic budget exhaustion",
+        )
+        result = fx.fit_run(
+            self.root / "runs", run_id="debit-exhausted", data=self.data,
+            epochs=2, ledger_path=ledger_path,
+        )
+        self.assertEqual(result["status"], "paused")
+        self.assertEqual(result["completed_epoch"], 0)
+        self.assertEqual(
+            fx.read_json(Path(result["run_dir"]) / "gradients.json")["total_updates"], 0
+        )
 
     def test_monitor_failure_pauses_instead_of_crashing(self):
         def broken():
@@ -317,6 +446,7 @@ class CheckpointTests(unittest.TestCase):
         return {
             "artifact_format_version": 2,
             "scientific_version": protocol.SCIENTIFIC_VERSION,
+            "protocol_identity": protocol.protocol_identity_payload(),
             "kind": "last",
             "config": config.to_payload(),
             "completed_epoch": epoch,

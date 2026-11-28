@@ -200,6 +200,8 @@ def runtime_source_paths(repo: Optional[Path] = None) -> List[str]:
         if path.is_file()
     ):
         found.add(f"{MODULE_RELATIVE}/temporal/{name}")
+    for relative_path, _ in protocol.P02_PROTOCOL_DOCUMENTS:
+        found.add(relative_path)
     for name in ("data.py", "protocol.py", "metrics.py", "coverage.py", "baselines.py", "artifacts.py"):
         relative = f"benchmark/nograph_baseline/{name}"
         if (root / relative).is_file():
@@ -353,6 +355,7 @@ def provenance_payload(
             "path": str(protocol.P02_PROTOCOL_PATH),
             "sha256": protocol_sha,
             "version": protocol.SCIENTIFIC_VERSION,
+            "identity": protocol.protocol_identity_payload(),
         },
         "config": dict(config),
         "roles": dict(roles),

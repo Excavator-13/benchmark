@@ -1,0 +1,869 @@
+{
+  "accounting": {
+    "limit_seconds": 43200,
+    "mode": "live-batch"
+  },
+  "checker": {
+    "commit": "4993778f0fb2a11cbfc0339ad265f489479a1d3c",
+    "errors": {},
+    "files": {
+      "benchmark/multivariate_time_series/effective_temporal_training.py": "6b120e0ac387ec6420ad510bccc78d5797fc5db3d4639b5711ed77c0b3964011",
+      "benchmark/multivariate_time_series/run.py": "fab341c77c520265247ca42e3ef9785d60ce8b0cecff3b00ecd3d7b791be5ea1",
+      "benchmark/multivariate_time_series/temporal/__init__.py": "26e1c99f59d988f00e6da7333c8b51c5fd54ebd47b6cae459493c062dcb68318",
+      "benchmark/multivariate_time_series/temporal/artifacts.py": "20b35299ca58e2500e7f5556b318a47cf70b4b5d4a0833512bae4d631bc8acd6",
+      "benchmark/multivariate_time_series/temporal/checkpoints.py": "072be8ff53f36c8d572c8edf5490c817319996996d65cc8e6fdc69ea3143181b",
+      "benchmark/multivariate_time_series/temporal/checks.py": "4ed204662ec4f6e67391e10a5de54c9faddb3277010008490951e7eac415bf8f",
+      "benchmark/multivariate_time_series/temporal/cli.py": "7650821dc1ba72ee6c4535c9fbc9325530f611054f77be7775de12daf3a06d7d",
+      "benchmark/multivariate_time_series/temporal/data.py": "76dd821ab48e6478835bea557f12f1c144151f796c85eb160c5df5a1cf779eff",
+      "benchmark/multivariate_time_series/temporal/diagnostics.py": "3d1007807bf19fe6f77dbacb12a54d692016ef4b13f931ef82f6a866d6d4e003",
+      "benchmark/multivariate_time_series/temporal/engine.py": "7effd5717a73e09b2f829df0cfa21e4099c7ebbd80dbd053a50d72ec196198dc",
+      "benchmark/multivariate_time_series/temporal/model.py": "c6190ae2fa375b54396686bccb651ac2d3272f026c70b349a1e337a04a651fe1",
+      "benchmark/multivariate_time_series/temporal/protocol.py": "03ea3c428e2bc9bdf3bf2125fc1a6347910d538a28e78c80ef8787927a1d8191",
+      "benchmark/multivariate_time_series/temporal/recovery.py": "58aea07d797bac88ee946e11088b5279e5052b81b71d762bd84c0473122ad294",
+      "benchmark/multivariate_time_series/temporal/report.py": "a2cf800f6c022fb6f54b6768f198a4226daa304992a802ce8101d6c18888edef",
+      "benchmark/multivariate_time_series/temporal/resources.py": "9f2a2fa3e7e033d22a38994b6bb50155b6ee809c4bc70c94d0eeea832abbaa77",
+      "benchmark/multivariate_time_series/temporal/runner.py": "64a569ccb85ab8f760bfdcc80224e296004de3c4745423cac219bb208ff50ba7",
+      "benchmark/multivariate_time_series/temporal/selection.py": "51a6b7d3159e4057c368a05d4946f94d9a00ad24ab3ca69ce8c78a023426ddd6",
+      "benchmark/nograph_baseline/__init__.py": "92d002701a50eee29dba7be96aaf74f291d3586bedf2399e0529258e8c6af0ee",
+      "benchmark/nograph_baseline/artifacts.py": "82622865b80ea6a7b3b6e1694c0faa2d76b46d1857d5f0740392e451a5c168f6",
+      "benchmark/nograph_baseline/baselines.py": "baf74b772c39dda9d018e85452e7828d26a2bde8bc8f37472fa6fca51982f8d9",
+      "benchmark/nograph_baseline/coverage.py": "ef21625e4de01569b8e28e80da55a8becb911d78e5b54fcf955eb21a5395e467",
+      "benchmark/nograph_baseline/data.py": "86d088ab3f3b6a14daeb72dd2698e00e3acd65764fc414e6b5208f71af11aba4",
+      "benchmark/nograph_baseline/metrics.py": "b17ee51ca49fed1647260ca85b0b91c2778578380ec3f345a58ae9897ff7781c",
+      "benchmark/nograph_baseline/protocol.py": "d653c2fbf0d20bc5c2af990e4fc31615409c7abeebab37692197bda02a6becd4",
+      "research/phases/P02/protocol-v2.md": "bbe0586805c0b32aad025ff983b78ac02fb56d2de13e47d54a27ee1d9996d92f",
+      "research/phases/P02/protocol.md": "984669a34fbbd36ac99ce59a010a9e4e0b0d106ae170aba1fc87700ea164ce59"
+    },
+    "identity_available": true,
+    "module": "benchmark.multivariate_time_series.effective_temporal_training",
+    "protocol_identity": {
+      "documents": [
+        {
+          "path": "research/phases/P02/protocol-v2.md",
+          "sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0"
+        },
+        {
+          "path": "research/phases/P02/protocol.md",
+          "sha256": "2f583a3a7f771cfe82c36eb8983e37bfadf65c7c1ee62355d97bdae34872a5f2"
+        }
+      ],
+      "scientific_version": "P2-effective-training-L6-H3-v2"
+    },
+    "protocol_sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0",
+    "whole_repository_dirty": true
+  },
+  "command": {
+    "argv": [
+      "C:\\Users\\zhuzhenyu\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-m",
+      "benchmark.multivariate_time_series.effective_temporal_training",
+      "diagnose",
+      "--purpose",
+      "formal",
+      "--block",
+      "research/reports/p02-t006-execution-20261108-01/blocks/p02-t006-r0-gru-v2-20261128-01",
+      "--a-run",
+      "0=research/runs/p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+      "--a-run",
+      "1=research/runs/p02-t006-r0-gru-v2-s1-a-resume-20261128-01",
+      "--a-run",
+      "2=research/runs/p02-t006-r0-gru-v2-s2-a-20261128-01",
+      "--b-run",
+      "0=research/runs/p02-t006-r0-gru-v2-s0-b-20261128-01",
+      "--b-run",
+      "1=research/runs/p02-t006-r0-gru-v2-s1-b-20261128-01",
+      "--b-run",
+      "2=research/runs/p02-t006-r0-gru-v2-s2-b-20261128-01",
+      "--ridge",
+      "research/reports/p02-t006-execution-20261108-01/ridge-r0-validation.json",
+      "--remaining-fits",
+      "0",
+      "--dataset",
+      "r0",
+      "--model",
+      "GRU",
+      "--report",
+      "research/reports/p02-t006-execution-20261108-01/diagnose-r0-gru-v2-20261128-01.json"
+    ],
+    "cwd": "E:\\大创\\benchmark"
+  },
+  "created": "2026-11-28T19:10:35+08:00",
+  "errors": [],
+  "inputs": {
+    "a_runs": {
+      "0": "research/runs/p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+      "1": "research/runs/p02-t006-r0-gru-v2-s1-a-resume-20261128-01",
+      "2": "research/runs/p02-t006-r0-gru-v2-s2-a-20261128-01"
+    },
+    "b_runs": {
+      "0": "research/runs/p02-t006-r0-gru-v2-s0-b-20261128-01",
+      "1": "research/runs/p02-t006-r0-gru-v2-s1-b-20261128-01",
+      "2": "research/runs/p02-t006-r0-gru-v2-s2-b-20261128-01"
+    },
+    "block_dir": "E:\\大创\\benchmark\\research\\reports\\p02-t006-execution-20261108-01\\blocks\\p02-t006-r0-gru-v2-20261128-01",
+    "ridge_path": "research\\reports\\p02-t006-execution-20261108-01\\ridge-r0-validation.json"
+  },
+  "kind": "diagnose",
+  "result": {
+    "appendix": {
+      "input_zeroing": {
+        "MAE_change": 931.5853196406412,
+        "baseline_validation_MAE": 109.61798197640894,
+        "definition": "validation prediction difference when every validation input is replaced by zero; diagnostic only, never used for tuning",
+        "max_absolute_prediction_change": 68412.40154904127,
+        "zeroed_validation_MAE": 1041.20330161705
+      },
+      "note": "diagnostic appendix only; never used to select a configuration or clip rule",
+      "prediction_scale": {
+        "validation": {
+          "max": 68412.6328125,
+          "mean": 1034.0149092262745,
+          "min": -4.536096572875977,
+          "negative_fraction": 0.050392576730906496,
+          "saturated_above_99th_target_percentile": null,
+          "std": 3650.450817650937,
+          "target_max": 80169.0
+        }
+      },
+      "quantiles": {
+        "percentiles": [
+          0,
+          1,
+          5,
+          25,
+          50,
+          75,
+          95,
+          99,
+          100
+        ],
+        "train_scaled_inputs": {
+          "elements": 266190,
+          "max": 27.160174287647813,
+          "mean": 0.2715984880122903,
+          "min": 0.0,
+          "p1": 0.0,
+          "p25": 0.0031377280831386104,
+          "p5": 0.0,
+          "p50": 0.025101824665108883,
+          "p75": 0.14369368380737046,
+          "p95": 1.222858208401384,
+          "p99": 4.313520370292915,
+          "std": 0.9984517690645036
+        },
+        "train_scaled_targets": {
+          "elements": 133095,
+          "max": 27.160174287647813,
+          "mean": 0.26602116881655297,
+          "min": 0.0,
+          "p1": 0.0,
+          "p25": 0.0031377280831386104,
+          "p5": 0.0,
+          "p50": 0.02538707267266694,
+          "p75": 0.14205350776391162,
+          "p95": 1.1949039036606945,
+          "p99": 4.233816372021014,
+          "std": 0.982782335483676
+        },
+        "validation_scaled_inputs": {
+          "elements": 14010,
+          "max": 25.56592317340584,
+          "mean": 0.24991569489482302,
+          "min": 0.0,
+          "p1": 0.0,
+          "p25": 0.0031377280831386104,
+          "p5": 0.0,
+          "p50": 0.024246080642434716,
+          "p75": 0.1352075555825183,
+          "p95": 1.1056498020957783,
+          "p99": 4.055299611450984,
+          "std": 0.9374309861560903
+        },
+        "validation_scaled_targets": {
+          "elements": 7005,
+          "max": 22.868047517921752,
+          "mean": 0.2974364248494562,
+          "min": 0.0,
+          "p1": 0.0,
+          "p25": 0.003993472105812777,
+          "p5": 0.0,
+          "p50": 0.029951040793595826,
+          "p75": 0.16373235633832386,
+          "p95": 1.3027276505176384,
+          "p99": 4.964102616011026,
+          "std": 1.1012835010161506
+        }
+      },
+      "saturation": {
+        "definition": "fraction of output hidden-sequence elements with abs(h) > 0.99 on validation windows; LSTM cell state is not used",
+        "validation_fraction": 0.0003100463954318344
+      },
+      "source_run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02"
+    },
+    "artifact_format_version": 2,
+    "baselines": {
+      "expected": {
+        "data_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+        "dataset": "r0",
+        "keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+        "protocol_sha256": "c454954e9443cc363ebf94a23809d8ee003ecdc7844b693d38cb5f304db283d0",
+        "split_validation_months": [
+          "2023-04",
+          "2023-05",
+          "2023-06"
+        ],
+        "split_validation_starts": [
+          21
+        ]
+      },
+      "naive_validation": {
+        "LastValue": {
+          "MAE": 185.62655246252677,
+          "MSE": 397984.1727337616,
+          "elements": 7005
+        },
+        "SeasonalNaive12": {
+          "MAE": 226.25024982155603,
+          "MSE": 846365.5601713062,
+          "elements": 7005
+        },
+        "TrainMean27": {
+          "MAE": 180.80885082084225,
+          "MSE": 606931.7965286407,
+          "elements": 7005
+        },
+        "WindowMean6": {
+          "MAE": 185.12186533428505,
+          "MSE": 669875.6088746135,
+          "elements": 7005
+        },
+        "Zero": {
+          "MAE": 1042.729193433262,
+          "MSE": 15993006.493647395,
+          "elements": 7005
+        }
+      },
+      "reasons": [],
+      "ridge": {
+        "compatibility": [
+          "node",
+          "month",
+          "source-data",
+          "split",
+          "selection",
+          "preprocessing"
+        ],
+        "mismatches": [],
+        "note": "neural RMS and Ridge per-node standardization are different preprocessing conditions; compatibility is checked on node/month/source/split identity, not on a shared scaler",
+        "provided": {
+          "data_sha256": "fc8ebd497f3100f76bc92078529535055a34c281857d61a8d7bd8034898c6946",
+          "dataset": "r0",
+          "keys_sha256": "8928c4f21d4585d4dc79811e72d0c733649fa525ef900fb8db25328d7f9cb6fa",
+          "preprocessing": {
+            "constant_node_std": 1.0,
+            "ddof": 0,
+            "definition": "per-node standardization",
+            "training_months": [
+              "2021-01",
+              "2021-02",
+              "2021-03",
+              "2021-04",
+              "2021-05",
+              "2021-06",
+              "2021-07",
+              "2021-08",
+              "2021-09",
+              "2021-10",
+              "2021-11",
+              "2021-12",
+              "2022-01",
+              "2022-02",
+              "2022-03",
+              "2022-04",
+              "2022-05",
+              "2022-06",
+              "2022-07",
+              "2022-08",
+              "2022-09",
+              "2022-10",
+              "2022-11",
+              "2022-12",
+              "2023-01",
+              "2023-02",
+              "2023-03"
+            ]
+          },
+          "selection": {
+            "lambda": 0.0001,
+            "metric": "validation original-unit MSE",
+            "selected_on": "validation",
+            "tie_break": "larger lambda"
+          },
+          "split": {
+            "validation_starts": [
+              21
+            ],
+            "validation_target_months": [
+              "2023-04",
+              "2023-05",
+              "2023-06"
+            ]
+          },
+          "validation": {
+            "MAE": 149.042806326246,
+            "MSE": 375887.1958260734
+          }
+        }
+      },
+      "status": "pass"
+    },
+    "block_id": "p02-t006-r0-gru-v2-20261128-01",
+    "declares_research_acceptance": false,
+    "diagnostics_sha256": "03242318faf6f9b3aa0126d75e85869db174493c178b2a6433e46c1a7d430a6b",
+    "gates": {
+      "beyond_zero_baseline": {
+        "failing_seeds": [],
+        "incomplete_seeds": [],
+        "name": "beyond_zero_baseline",
+        "passing_seeds": [
+          0,
+          1,
+          2
+        ],
+        "per_seed": [
+          {
+            "improvement": 0.8948739685560315,
+            "model_MAE": 109.61798197640894,
+            "run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+            "seed": 0,
+            "status": "pass",
+            "zero_MAE": 1042.729193433262
+          },
+          {
+            "improvement": 0.8922685529224625,
+            "model_MAE": 112.3347249185588,
+            "run_id": "p02-t006-r0-gru-v2-s1-a-resume-20261128-01",
+            "seed": 1,
+            "status": "pass",
+            "zero_MAE": 1042.729193433262
+          },
+          {
+            "improvement": 0.8973802411236974,
+            "model_MAE": 107.00461840340276,
+            "run_id": "p02-t006-r0-gru-v2-s2-a-20261128-01",
+            "seed": 2,
+            "status": "pass",
+            "zero_MAE": 1042.729193433262
+          }
+        ],
+        "reasons": [],
+        "required_passing_seeds": 2,
+        "status": "pass",
+        "threshold": {
+          "required_seeds": 2,
+          "validation_MAE_improvement_over_Zero": 0.05,
+          "zero_denominator": "unavailable / all-zero diagnostic, never a pass"
+        }
+      },
+      "budget_tail_stability": {
+        "failing_seeds": [
+          0,
+          1,
+          2
+        ],
+        "incomplete_seeds": [],
+        "name": "budget_tail_stability",
+        "passing_seeds": [],
+        "per_seed": [
+          {
+            "b160": 246311.59046608562,
+            "b200": 206599.63377418948,
+            "both_zero": false,
+            "cutoff_epoch": 160,
+            "full_budget_epoch": 200,
+            "relative": 0.1612265042694531,
+            "run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+            "seed": 0,
+            "status": "fail"
+          },
+          {
+            "b160": 239181.00766311106,
+            "b200": 202343.27046204376,
+            "both_zero": false,
+            "cutoff_epoch": 160,
+            "full_budget_epoch": 200,
+            "relative": 0.15401614685457649,
+            "run_id": "p02-t006-r0-gru-v2-s1-a-resume-20261128-01",
+            "seed": 1,
+            "status": "fail"
+          },
+          {
+            "b160": 251409.92590456732,
+            "b200": 206192.2089152615,
+            "both_zero": false,
+            "cutoff_epoch": 160,
+            "full_budget_epoch": 200,
+            "relative": 0.17985653043177785,
+            "run_id": "p02-t006-r0-gru-v2-s2-a-20261128-01",
+            "seed": 2,
+            "status": "fail"
+          }
+        ],
+        "reasons": [
+          "seed 0: budget-tail relative change 0.161227 exceeds 0.01; the block remains budget-limited",
+          "seed 1: budget-tail relative change 0.154016 exceeds 0.01; the block remains budget-limited",
+          "seed 2: budget-tail relative change 0.179857 exceeds 0.01; the block remains budget-limited"
+        ],
+        "required_passing_seeds": 2,
+        "status": "fail",
+        "threshold": {
+          "best_through_epoch": 160,
+          "relative": 0.01,
+          "required_seeds": 2
+        }
+      },
+      "complete_and_finite_trajectories": {
+        "failing_seeds": [],
+        "incomplete_seeds": [],
+        "name": "complete_and_finite_trajectories",
+        "passing_seeds": [
+          0,
+          0,
+          1,
+          1,
+          2,
+          2
+        ],
+        "per_seed": [
+          {
+            "incomplete": [],
+            "problems": [],
+            "repeat_role": "a",
+            "run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+            "seed": 0,
+            "status": "pass"
+          },
+          {
+            "incomplete": [],
+            "problems": [],
+            "repeat_role": "b",
+            "run_id": "p02-t006-r0-gru-v2-s0-b-20261128-01",
+            "seed": 0,
+            "status": "pass"
+          },
+          {
+            "incomplete": [],
+            "problems": [],
+            "repeat_role": "a",
+            "run_id": "p02-t006-r0-gru-v2-s1-a-resume-20261128-01",
+            "seed": 1,
+            "status": "pass"
+          },
+          {
+            "incomplete": [],
+            "problems": [],
+            "repeat_role": "b",
+            "run_id": "p02-t006-r0-gru-v2-s1-b-20261128-01",
+            "seed": 1,
+            "status": "pass"
+          },
+          {
+            "incomplete": [],
+            "problems": [],
+            "repeat_role": "a",
+            "run_id": "p02-t006-r0-gru-v2-s2-a-20261128-01",
+            "seed": 2,
+            "status": "pass"
+          },
+          {
+            "incomplete": [],
+            "problems": [],
+            "repeat_role": "b",
+            "run_id": "p02-t006-r0-gru-v2-s2-b-20261128-01",
+            "seed": 2,
+            "status": "pass"
+          }
+        ],
+        "reasons": [],
+        "required_passing_seeds": 6,
+        "status": "pass",
+        "threshold": "every required a/b run covers all 200 epochs finitely"
+      },
+      "definite_learning": {
+        "failing_seeds": [],
+        "incomplete_seeds": [],
+        "name": "definite_learning",
+        "passing_seeds": [
+          0,
+          1,
+          2
+        ],
+        "per_seed": [
+          {
+            "incomplete": [],
+            "problems": [],
+            "run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+            "seed": 0,
+            "status": "pass",
+            "values": {
+              "train_best_MSE": 627197.8627051194,
+              "train_initial_MSE": 13484870.45609733,
+              "train_reduction": 0.9534887736039374,
+              "validation_best_MSE": 206599.63377418948,
+              "validation_initial_MSE": 16863986.091213536,
+              "validation_reduction": 0.9877490628457153
+            }
+          },
+          {
+            "incomplete": [],
+            "problems": [],
+            "run_id": "p02-t006-r0-gru-v2-s1-a-resume-20261128-01",
+            "seed": 1,
+            "status": "pass",
+            "values": {
+              "train_best_MSE": 643174.3927625971,
+              "train_initial_MSE": 13313565.149762651,
+              "train_reduction": 0.9516902959104035,
+              "validation_best_MSE": 202343.27046204376,
+              "validation_initial_MSE": 16555137.674820013,
+              "validation_reduction": 0.9877776147540106
+            }
+          },
+          {
+            "incomplete": [],
+            "problems": [],
+            "run_id": "p02-t006-r0-gru-v2-s2-a-20261128-01",
+            "seed": 2,
+            "status": "pass",
+            "values": {
+              "train_best_MSE": 649882.1828641889,
+              "train_initial_MSE": 13467335.780363543,
+              "train_reduction": 0.951743819752993,
+              "validation_best_MSE": 206192.2089152615,
+              "validation_initial_MSE": 16856030.255436182,
+              "validation_reduction": 0.9877674514229847
+            }
+          }
+        ],
+        "reasons": [],
+        "required_passing_seeds": 2,
+        "status": "pass",
+        "threshold": {
+          "required_seeds": 2,
+          "train_MSE_reduction": 0.1,
+          "validation_MSE_reduction": 0.05
+        }
+      },
+      "frozen_evidence_identity": {
+        "incomplete": [],
+        "name": "frozen_evidence_identity",
+        "per_seed": [],
+        "problems": [],
+        "reasons": [],
+        "status": "pass"
+      },
+      "same_condition_repetition": {
+        "failing_seeds": [],
+        "incomplete_seeds": [],
+        "name": "same_condition_repetition",
+        "passing_seeds": [
+          0,
+          1,
+          2
+        ],
+        "per_seed": [
+          {
+            "a_run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+            "b_run_id": "p02-t006-r0-gru-v2-s0-b-20261128-01",
+            "incomplete": [],
+            "problems": [],
+            "seed": 0,
+            "status": "pass",
+            "values": {
+              "a_MAE": 109.61798197640894,
+              "b_MAE": 109.61798197640894,
+              "max_absolute_prediction_difference": 0.0,
+              "normalized_MAE_difference": 0.0
+            }
+          },
+          {
+            "a_run_id": "p02-t006-r0-gru-v2-s1-a-resume-20261128-01",
+            "b_run_id": "p02-t006-r0-gru-v2-s1-b-20261128-01",
+            "incomplete": [],
+            "problems": [],
+            "seed": 1,
+            "status": "pass",
+            "values": {
+              "a_MAE": 112.3347249185588,
+              "b_MAE": 112.3347249185588,
+              "max_absolute_prediction_difference": 0.0,
+              "normalized_MAE_difference": 0.0
+            }
+          },
+          {
+            "a_run_id": "p02-t006-r0-gru-v2-s2-a-20261128-01",
+            "b_run_id": "p02-t006-r0-gru-v2-s2-b-20261128-01",
+            "incomplete": [],
+            "problems": [],
+            "seed": 2,
+            "status": "pass",
+            "values": {
+              "a_MAE": 107.00461840340276,
+              "b_MAE": 107.00461840340276,
+              "max_absolute_prediction_difference": 0.0,
+              "normalized_MAE_difference": 0.0
+            }
+          }
+        ],
+        "reasons": [],
+        "required_passing_seeds": 3,
+        "status": "pass",
+        "threshold": {
+          "normalized_MAE_difference": 1e-06,
+          "required_pairs": [
+            0,
+            1,
+            2
+          ]
+        }
+      }
+    },
+    "incomplete_reasons": [],
+    "inputs": {
+      "a_runs": {
+        "0": {
+          "condition_id": "08d5350e783e09ce6bde4840bb2f881ddc1adbeb2bfa2fd9becaba210d6d0e49",
+          "config": {
+            "diagnostic_epochs": [
+              10,
+              50,
+              100,
+              200
+            ],
+            "epochs": 200,
+            "grad_clip": 1.0,
+            "hidden_size": 32,
+            "layers": 1,
+            "learning_rate": 0.001,
+            "model": "GRU",
+            "node_chunk": 2048,
+            "seed": 0,
+            "threads": 1
+          },
+          "evidence_sha256": "63ab07e8a224e7518fed686a56ed216654a72838f3018ad64c427ceaa1247b2c",
+          "run_dir": "E:\\大创\\benchmark\\research\\runs\\p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+          "run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+          "state": "completed",
+          "validation": {
+            "MAE": 109.61798197640894,
+            "MSE": 206599.63377418948,
+            "epoch": 200,
+            "updates": 3800
+          }
+        },
+        "1": {
+          "condition_id": "a7cf51e74290b0a14878b0c25c3fec95def7bbd0cf1061b0eec80e054e48421f",
+          "config": {
+            "diagnostic_epochs": [
+              10,
+              50,
+              100,
+              200
+            ],
+            "epochs": 200,
+            "grad_clip": 1.0,
+            "hidden_size": 32,
+            "layers": 1,
+            "learning_rate": 0.001,
+            "model": "GRU",
+            "node_chunk": 2048,
+            "seed": 1,
+            "threads": 1
+          },
+          "evidence_sha256": "d93d1fe6823e3733d3dc7435b1e4b5b803f159eda6eac5183cce5da93ec0154d",
+          "run_dir": "E:\\大创\\benchmark\\research\\runs\\p02-t006-r0-gru-v2-s1-a-resume-20261128-01",
+          "run_id": "p02-t006-r0-gru-v2-s1-a-resume-20261128-01",
+          "state": "completed",
+          "validation": {
+            "MAE": 112.3347249185588,
+            "MSE": 202343.27046204376,
+            "epoch": 200,
+            "updates": 3800
+          }
+        },
+        "2": {
+          "condition_id": "b1e1b5ffbc61186a80ec2d1b7b0f3e18108209b5b3bdd35323146af38f1feef9",
+          "config": {
+            "diagnostic_epochs": [
+              10,
+              50,
+              100,
+              200
+            ],
+            "epochs": 200,
+            "grad_clip": 1.0,
+            "hidden_size": 32,
+            "layers": 1,
+            "learning_rate": 0.001,
+            "model": "GRU",
+            "node_chunk": 2048,
+            "seed": 2,
+            "threads": 1
+          },
+          "evidence_sha256": "cc391f3175e97464081185b2e000479444d7a16cf0ccd712b0da686913ae3877",
+          "run_dir": "E:\\大创\\benchmark\\research\\runs\\p02-t006-r0-gru-v2-s2-a-20261128-01",
+          "run_id": "p02-t006-r0-gru-v2-s2-a-20261128-01",
+          "state": "completed",
+          "validation": {
+            "MAE": 107.00461840340276,
+            "MSE": 206192.2089152615,
+            "epoch": 200,
+            "updates": 3800
+          }
+        }
+      },
+      "b_runs": {
+        "0": {
+          "condition_id": "08d5350e783e09ce6bde4840bb2f881ddc1adbeb2bfa2fd9becaba210d6d0e49",
+          "config": {
+            "diagnostic_epochs": [
+              10,
+              50,
+              100,
+              200
+            ],
+            "epochs": 200,
+            "grad_clip": 1.0,
+            "hidden_size": 32,
+            "layers": 1,
+            "learning_rate": 0.001,
+            "model": "GRU",
+            "node_chunk": 2048,
+            "seed": 0,
+            "threads": 1
+          },
+          "evidence_sha256": "a21621a2899a629b7b083adc85bf99861c1313e7b02c77490d5daa55794703d8",
+          "run_dir": "E:\\大创\\benchmark\\research\\runs\\p02-t006-r0-gru-v2-s0-b-20261128-01",
+          "run_id": "p02-t006-r0-gru-v2-s0-b-20261128-01",
+          "state": "completed"
+        },
+        "1": {
+          "condition_id": "a7cf51e74290b0a14878b0c25c3fec95def7bbd0cf1061b0eec80e054e48421f",
+          "config": {
+            "diagnostic_epochs": [
+              10,
+              50,
+              100,
+              200
+            ],
+            "epochs": 200,
+            "grad_clip": 1.0,
+            "hidden_size": 32,
+            "layers": 1,
+            "learning_rate": 0.001,
+            "model": "GRU",
+            "node_chunk": 2048,
+            "seed": 1,
+            "threads": 1
+          },
+          "evidence_sha256": "f864966cee6159346fedfcf093d172366e5d644f5991507ef80b78aab693d87a",
+          "run_dir": "E:\\大创\\benchmark\\research\\runs\\p02-t006-r0-gru-v2-s1-b-20261128-01",
+          "run_id": "p02-t006-r0-gru-v2-s1-b-20261128-01",
+          "state": "completed"
+        },
+        "2": {
+          "condition_id": "b1e1b5ffbc61186a80ec2d1b7b0f3e18108209b5b3bdd35323146af38f1feef9",
+          "config": {
+            "diagnostic_epochs": [
+              10,
+              50,
+              100,
+              200
+            ],
+            "epochs": 200,
+            "grad_clip": 1.0,
+            "hidden_size": 32,
+            "layers": 1,
+            "learning_rate": 0.001,
+            "model": "GRU",
+            "node_chunk": 2048,
+            "seed": 2,
+            "threads": 1
+          },
+          "evidence_sha256": "c20bc809981cfc2985fc7635390a9ce6dcdafad623dbf6766b59635f3fd94ba0",
+          "run_dir": "E:\\大创\\benchmark\\research\\runs\\p02-t006-r0-gru-v2-s2-b-20261128-01",
+          "run_id": "p02-t006-r0-gru-v2-s2-b-20261128-01",
+          "state": "completed"
+        }
+      }
+    },
+    "kind": "diagnostics",
+    "learning_ready": false,
+    "note": "learning_ready states only that the frozen section-5 software gates all evaluated true; it is not research acceptance, graph benefit or a claim of full convergence",
+    "required_epochs": 200,
+    "scientific_version": "P2-effective-training-L6-H3-v2",
+    "selection_sha256": "edb3f646737e5dbdd7730c8fbe5eacd8d18816ae5df3e93e49429e686666e74c",
+    "status": "fail",
+    "summary": {
+      "complete_comparison": true,
+      "complete_seed_count": 3,
+      "failed_or_incomplete": [],
+      "note": "failed or incomplete seeds are retained here and never dropped from a claimed complete comparison",
+      "per_seed": [
+        {
+          "a_run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+          "a_state": "completed",
+          "b_run_id": "p02-t006-r0-gru-v2-s0-b-20261128-01",
+          "b_state": "completed",
+          "seed": 0,
+          "selected_epoch": 200,
+          "validation_MAE": 109.61798197640894,
+          "validation_MSE": 206599.63377418948
+        },
+        {
+          "a_run_id": "p02-t006-r0-gru-v2-s1-a-resume-20261128-01",
+          "a_state": "completed",
+          "b_run_id": "p02-t006-r0-gru-v2-s1-b-20261128-01",
+          "b_state": "completed",
+          "seed": 1,
+          "selected_epoch": 200,
+          "validation_MAE": 112.3347249185588,
+          "validation_MSE": 202343.27046204376
+        },
+        {
+          "a_run_id": "p02-t006-r0-gru-v2-s2-a-20261128-01",
+          "a_state": "completed",
+          "b_run_id": "p02-t006-r0-gru-v2-s2-b-20261128-01",
+          "b_state": "completed",
+          "seed": 2,
+          "selected_epoch": 200,
+          "validation_MAE": 107.00461840340276,
+          "validation_MSE": 206192.2089152615
+        }
+      ],
+      "selected_learning_rate": 0.001,
+      "selection_status": "frozen",
+      "validation_MAE": {
+        "count": 3,
+        "mean": 109.6524417661235,
+        "sample_sd": 2.6652203424027836
+      },
+      "validation_MSE": {
+        "count": 3,
+        "mean": 205045.03771716493,
+        "sample_sd": 2348.6503527668374
+      },
+      "winner_run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02"
+    },
+    "test_scores_used": false
+  },
+  "status": "failed",
+  "tolerances": {
+    "budget_tail_relative": 0.01,
+    "learning_train_reduction": 0.1,
+    "learning_validation_reduction": 0.05,
+    "repetition_normalized_mae": 1e-06,
+    "zero_mae_improvement": 0.05
+  },
+  "version": 1
+}
