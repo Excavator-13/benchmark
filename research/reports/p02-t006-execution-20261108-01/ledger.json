@@ -1,6 +1,13 @@
 {
   "batch_id": "p02-t006-effective-20261108-01",
   "created": "2026-11-08T13:08:45+08:00",
+  "debit_registry": [
+    {
+      "debit_id": "p02-t006-v2-preparation-20261128",
+      "reason": "Conservative prior preparation and read-only auxiliary work allowance per P02 v2 protocol, not measured training time",
+      "seconds": 900.0
+    }
+  ],
   "entries": [
     {
       "execution_id": "p02-t006-r0-gru-s0-lr1e3-a-20261108-01@327f75e5b78547378f662f48affb1349",
@@ -64,9 +71,199 @@
       "run_id": "run_diagnose",
       "seconds": 0.05689495799924771,
       "status": "failed"
+    },
+    {
+      "debit_id": "p02-t006-v2-preparation-20261128",
+      "execution_id": "budget-debit:p02-t006-v2-preparation-20261128",
+      "kind": "budget-debit",
+      "reason": "Conservative prior preparation and read-only auxiliary work allowance per P02 v2 protocol, not measured training time",
+      "recorded": "2026-11-28T15:32:59+08:00",
+      "run_id": null,
+      "seconds": 900.0,
+      "status": "registered"
+    },
+    {
+      "execution_id": "run_preflight@2e4bc0b8cbc64e08b3d9b4a2d81fe298",
+      "kind": "measured",
+      "note": "standalone preflight elapsed time including failure",
+      "recorded": "2026-11-28T16:08:37+08:00",
+      "run_id": "run_preflight",
+      "seconds": 4.0562494000005245,
+      "status": "fail"
+    },
+    {
+      "execution_id": "run_preflight@f935b291518c4140adc6061174274e09",
+      "kind": "measured",
+      "note": "standalone preflight elapsed time including failure",
+      "recorded": "2026-11-28T16:23:08+08:00",
+      "run_id": "run_preflight",
+      "seconds": 1.068460700000287,
+      "status": "pass"
+    },
+    {
+      "execution_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-01@085184b110764ed597b6e80911c5c328",
+      "kind": "measured",
+      "note": null,
+      "recorded": "2026-11-28T16:30:05+08:00",
+      "run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-01",
+      "seconds": 10.688926900000297,
+      "status": "finished"
+    },
+    {
+      "execution_id": "run_preflight@8421fa6ed3d243b6a1eacfc96052c38c",
+      "kind": "measured",
+      "note": "standalone preflight elapsed time including failure",
+      "recorded": "2026-11-28T16:30:53+08:00",
+      "run_id": "run_preflight",
+      "seconds": 0.4952539000005345,
+      "status": "pass"
+    },
+    {
+      "execution_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02@0c8925620c2b4d508f290e66b57cfc88",
+      "kind": "measured",
+      "note": null,
+      "recorded": "2026-11-28T16:32:41+08:00",
+      "run_id": "p02-t006-r0-gru-v2-s0-lr1e3-a-20261128-02",
+      "seconds": 90.77825740000117,
+      "status": "finished"
+    },
+    {
+      "execution_id": "run_preflight@e77fce87679346b7be8e2a242f0099b7",
+      "kind": "measured",
+      "note": "standalone preflight elapsed time including failure",
+      "recorded": "2026-11-28T16:44:08+08:00",
+      "run_id": "run_preflight",
+      "seconds": 0.4698255000002973,
+      "status": "pass"
+    },
+    {
+      "execution_id": "p02-t006-r0-gru-v2-s0-lr3e3-a-20261128-01@54e1b8e4625b4db3902e37362068116a",
+      "kind": "measured",
+      "note": null,
+      "recorded": "2026-11-28T16:45:49+08:00",
+      "run_id": "p02-t006-r0-gru-v2-s0-lr3e3-a-20261128-01",
+      "seconds": 54.931774900000164,
+      "status": "finished"
+    },
+    {
+      "execution_id": "run_select@9f0011bc6dd942289fd1ce4c764d2ae4",
+      "kind": "measured",
+      "note": "active selection/diagnostic/report/check work including failure publication",
+      "recorded": "2026-11-28T16:48:43+08:00",
+      "run_id": "run_select",
+      "seconds": 4.552358399998411,
+      "status": "frozen"
+    },
+    {
+      "execution_id": "run_preflight@0f0c6508264b4e86b9fd353ff8be3389",
+      "kind": "measured",
+      "note": "standalone preflight elapsed time including failure",
+      "recorded": "2026-11-28T16:51:38+08:00",
+      "run_id": "run_preflight",
+      "seconds": 0.5147579000004043,
+      "status": "pass"
+    },
+    {
+      "execution_id": "p02-t006-r0-gru-v2-s1-a-20261128-01@0306267b61384ddcb667813877800e2d",
+      "kind": "measured",
+      "note": "[WinError 5] \u62d2\u7edd\u8bbf\u95ee\u3002: 'E:\\\\\u5927\u521b\\\\benchmark\\\\research\\\\reports\\\\p02-t006-execution-20261108-01\\\\.ledger-c4jwplzz.tmp' -> 'E:\\\\\u5927\u521b\\\\benchmark\\\\research\\\\reports\\\\p02-t006-execution-20261108-01\\\\ledger.json'",
+      "recorded": "2026-11-28T16:53:13+08:00",
+      "run_id": "p02-t006-r0-gru-v2-s1-a-20261128-01",
+      "seconds": 78.6995208999997,
+      "status": "paused"
+    },
+    {
+      "execution_id": "p02-t006-r0-gru-v2-s1-a-resume-20261128-01@d229f264e114438c9b33900a30077455",
+      "kind": "measured",
+      "note": null,
+      "recorded": "2026-11-28T16:57:01+08:00",
+      "run_id": "p02-t006-r0-gru-v2-s1-a-resume-20261128-01",
+      "seconds": 47.325755999998364,
+      "status": "finished"
+    },
+    {
+      "execution_id": "run_preflight@24f76b7811ce421e8b3649c6001fc28b",
+      "kind": "measured",
+      "note": "standalone preflight elapsed time including failure",
+      "recorded": "2026-11-28T17:00:33+08:00",
+      "run_id": "run_preflight",
+      "seconds": 1.4762406000008923,
+      "status": "pass"
+    },
+    {
+      "execution_id": "p02-t006-r0-gru-v2-s2-a-20261128-01@eabcccfb3b5e492bbc0091d6eacf4658",
+      "kind": "measured",
+      "note": null,
+      "recorded": "2026-11-28T17:03:33+08:00",
+      "run_id": "p02-t006-r0-gru-v2-s2-a-20261128-01",
+      "seconds": 162.1298123000015,
+      "status": "finished"
+    },
+    {
+      "execution_id": "run_preflight@6a2d47e7414a4d479103e3549c2cd6c4",
+      "kind": "measured",
+      "note": "standalone preflight elapsed time including failure",
+      "recorded": "2026-11-28T17:46:08+08:00",
+      "run_id": "run_preflight",
+      "seconds": 0.8451664999993227,
+      "status": "pass"
+    },
+    {
+      "execution_id": "p02-t006-r0-gru-v2-s0-b-20261128-01@ebcb54ffb58340d882fe05dc5bc134c5",
+      "kind": "measured",
+      "note": null,
+      "recorded": "2026-11-28T17:47:35+08:00",
+      "run_id": "p02-t006-r0-gru-v2-s0-b-20261128-01",
+      "seconds": 67.51273179999771,
+      "status": "finished"
+    },
+    {
+      "execution_id": "run_preflight@53888ffb1fd64fc4a008087a4ccbc6e4",
+      "kind": "measured",
+      "note": "standalone preflight elapsed time including failure",
+      "recorded": "2026-11-28T18:34:12+08:00",
+      "run_id": "run_preflight",
+      "seconds": 2.0035347000011825,
+      "status": "pass"
+    },
+    {
+      "execution_id": "p02-t006-r0-gru-v2-s1-b-20261128-01@8566f0fa984543ac9c79055a9a7fafbb",
+      "kind": "measured",
+      "note": null,
+      "recorded": "2026-11-28T18:38:31+08:00",
+      "run_id": "p02-t006-r0-gru-v2-s1-b-20261128-01",
+      "seconds": 125.40633739999976,
+      "status": "finished"
+    },
+    {
+      "execution_id": "run_preflight@646ed36ad601489ead3ca755bfe68fbe",
+      "kind": "measured",
+      "note": "standalone preflight elapsed time including failure",
+      "recorded": "2026-11-28T19:02:55+08:00",
+      "run_id": "run_preflight",
+      "seconds": 0.556411699999444,
+      "status": "pass"
+    },
+    {
+      "execution_id": "p02-t006-r0-gru-v2-s2-b-20261128-01@4ddccda6c747404fbea21a0e7f1cbe88",
+      "kind": "measured",
+      "note": null,
+      "recorded": "2026-11-28T19:04:29+08:00",
+      "run_id": "p02-t006-r0-gru-v2-s2-b-20261128-01",
+      "seconds": 60.644788399997196,
+      "status": "finished"
+    },
+    {
+      "execution_id": "run_diagnose@9a40a485022e4d689480a0ce11b8cb7e",
+      "kind": "measured",
+      "note": "active selection/diagnostic/report/check work including failure publication",
+      "recorded": "2026-11-28T19:10:35+08:00",
+      "run_id": "run_diagnose",
+      "seconds": 0.522246600001381,
+      "status": "failed"
     }
   ],
   "ledger_id": "f93290f346bc47e9914be45203c5edc3",
-  "updated": "2026-11-08T13:11:39+08:00",
+  "updated": "2026-11-28T19:10:35+08:00",
   "version": 1
 }

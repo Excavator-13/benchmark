@@ -41,7 +41,7 @@ D037 将后续范围扩展为：先建立有效的时序学习，再检验发布
 | ID | 任务 | 状态 | 依赖 | 验收 | 证据 |
 | --- | --- | --- | --- | --- | --- |
 | P02-T005 | 新训练条件与成本方案 | done | T004 | 明确 GRU/LSTM 的训练有效性检查、尺度／优化／更新预算候选、统一选模与搜索边界、三数据组开发顺序、设备／时间／内存上限及异常停止条件；给出协议兼容性和所需实现范围，形成后续可执行的条件方案 | [方案报告](../../reports/p02-t005-20261107-01/report.md)、[新协议](protocol.md)、[D038](../../decisions.md#d038-t005-新训练条件与成本方案) |
-| P02-T006 | 有效 GRU 自身基线与 LSTM 参照 | blocked | T005 | 按 P02 新协议逐块完成三数据组 GRU/LSTM 的有限选择、学习有效性判定、同条件 a/b 重复和适用的四窗口测试／可重算证据，经研究侧验收；未通过块按协议停止并保留诊断，不以软件 PASS 代替任务完成 | [首块执行与停止依据](../../reports/p02-t006-execution-20261108-01/report.md)、[D040：待预算修订](../../decisions.md#d040-t006-r0gru-预算末段失败与固定预算修订候选)、[软件收尾与旧结果限制](../../reports/p02-t006-software-closeout-20261108-01/report.md)、[D039](../../decisions.md#d039-t006-软件修复研究侧验收与完成状态纠正) |
+| P02-T006 | 有效 GRU 自身基线与 LSTM 参照 | blocked | T005 | 按 P02 新协议逐块完成三数据组 GRU/LSTM 的有限选择、学习有效性判定、同条件 a/b 重复和适用的四窗口测试／可重算证据，经研究侧验收；未通过块按协议停止并保留诊断，不以软件 PASS 代替任务完成 | [首块执行与停止依据](../../reports/p02-t006-execution-20261108-01/report.md)、[D040：待预算修订](../../decisions.md#d040-t006-r0gru-预算末段失败与固定预算修订候选)、[v1 软件收尾](../../reports/p02-t006-software-closeout-20261108-01/report.md)、[v2 软件就绪验收](../../reports/p02-t006-software-closeout-20261128-01/report.md)、[v2 预算扣除登记](../../reports/p02-t006-v2-budget-debit-20261128-01/report.md)、[v2 Windows 预检](../../reports/p02-t006-preflight-20261128-01/report.md)、[v2 Windows 预检重试](../../reports/p02-t006-preflight-20261128-02/report.md)、[seed 0 筛选与选择](../../reports/p02-t006-v2-execution-20261128-01/report.md)、[seed 1/a 执行与恢复](../../reports/p02-t006-v2-execution-20261128-02/report.md)、[seed 2/a 执行](../../reports/p02-t006-v2-execution-20261128-03/report.md)、[seed 0/b 执行](../../reports/p02-t006-v2-execution-20261128-04/report.md)、[seed 1/b 执行](../../reports/p02-t006-v2-execution-20261128-05/report.md)、[v2 readiness 诊断](../../reports/p02-t006-v2-diagnosis-20261128-01/report.md)、[OpenSpec 独立验证](../../../openspec/changes/archive/2026-11-28-extend-effective-training-budget-v2/verification.md)、[D039](../../decisions.md#d039-t006-软件修复研究侧验收与完成状态纠正) |
 | P02-T007 | 发布图对照与固定融合强度 | todo | T006 | 在有效 GRU 条件下完成自身／真实／保度打乱对照及少量预定 alpha（含 0、1）；同条件独立训练、配对 seeds、验证选配置，按 §5 报告总体和固定分组收益，判断是否有进入自适应融合的依据 | 待执行 |
 | P02-T008 | EvolveGCN-H 粒度扩展与架构比较 | todo | T006 | 补充市场 r0 与职业子类 r2，核对既有地区证据的可比性；统一协议比较 LastValue、Ridge、GRU、LSTM、EvolveGCN-H，公开各模型训练／搜索成本；任何架构图增益主张须有其内部去图／打乱等受控证据 | 待执行 |
 | P02-T009 | 跨粒度技能关系构造与审计 | todo | T005 | 明确职业／地区训练期分布到目标预测粒度的映射、候选分数与构图规则；审计时间边界、全零处理、覆盖、度／权重与计算成本，冻结少量待比较图；不以表中有行或跨场景行计数代替需求／共现证据 | 待执行 |
@@ -121,3 +121,27 @@ D037 后续比较继续遵守该边界：固定融合强度、架构比较和新
 - 2026-11-08（真实执行）：用户授权启动首个 r0/GRU 块；按协议预算末段失败分支停止，T006 → `blocked`。解除需先明确版本化预算修订并重新取得适用的成本／有效性证据；候选见 D040，尚未接受。保留完整任务范围及旧证据，未生成新测试或展开其他块，T009 不变。
 
 - 2026-11-08（D040 接受）：用户授权提交后继续，采用单独的固定 200 轮 v2 协议；v1 不覆盖。T006 保持 `blocked`，当前解除条件为相应软件归档独立 PASS、研究侧接受就绪，再重新预检与测量成本；没有启动新训练，T009 不变。
+
+- 2026-11-28：`extend-effective-training-budget-v2` 归档独立 PASS，研究侧接受软件就绪并关闭委托。T006 仍为 `blocked`，等待按 v2 登记保守准备成本扣除、完成真实环境新预检与首候选成本门；没有启动训练，T009 不变。[研究侧验收](../../reports/p02-t006-software-closeout-20261128-01/report.md)
+
+- 2026-11-28：按 v2 协议在原 batch/ledger 登记 900 秒保守准备成本扣除。T006 仍为 `blocked`，待选定正式执行环境完成 fresh preflight 与首候选成本门；无训练启动。[预算登记报告](../../reports/p02-t006-v2-budget-debit-20261128-01/report.md)
+
+- 2026-11-28：用户选择当前 Windows 本机作为 v2 执行环境。fresh preflight 的协议、数据、依赖、磁盘和预算检查通过，可用内存未达 6 GiB 门槛，T006 继续 `blocked`；无拟合启动。[预检报告](../../reports/p02-t006-preflight-20261128-01/report.md)
+
+- 2026-11-28：Windows 可用内存恢复后重跑 fresh preflight 并全部通过。T006 仍 `blocked`，下一步为首个 v2 r0/GRU 候选的第 10 轮真实成本门；训练尚未启动。[通过报告](../../reports/p02-t006-preflight-20261128-02/report.md)
+
+- 2026-11-28：v2 r0/GRU seed 0、学习率 `1e-3` screening/a 候选完成 200 epoch，10 轮成本门通过；T006 → `in_progress`。第一候选不构成冻结选择或研究验收，下一步运行 `3e-3` 候选。[执行报告](../../reports/p02-t006-v2-execution-20261128-01/report.md)
+
+- 2026-11-28：seed 0 的 `1e-3` 与 `3e-3` screening 候选均完成 200 epoch，按验证原始单位 MSE 冻结 `1e-3`；胜者链接复用为 repetition a。T006 继续 `in_progress`，下一步为 seed 1/a confirmation。[执行报告](../../reports/p02-t006-v2-execution-20261128-01/report.md)
+
+- 2026-11-28：seed 1/a confirmation 因账本原子替换 WinError 5 在 epoch 144 暂停，保留父 run 和 checkpoint；以新的同版本 recovery 身份完成 epoch 145–200，得到 200 epoch 轨迹。T006 继续 `in_progress`，下一步为 seed 2/a。[执行与恢复报告](../../reports/p02-t006-v2-execution-20261128-02/report.md)
+
+- 2026-11-28：seed 2/a confirmation 完成 200 epoch，成本门通过，reproduction 差异为 0。T006 继续 `in_progress`；三个 a 齐全，下一步按矩阵运行 seed 0/b，随后补 seed 1/2 b。[执行报告](../../reports/p02-t006-v2-execution-20261128-03/report.md)
+
+- 2026-11-28：seed 0/b confirmation 完成 200 epoch，成本门通过；seed 0/a 与 b 的验证摘要指标相同，完整配对判定留待诊断流程。T006 继续 `in_progress`，下一步为 seed 1/b。[执行报告](../../reports/p02-t006-v2-execution-20261128-04/report.md)
+
+- 2026-11-28：seed 1/b confirmation 完成 200 epoch，成本门通过；seed 1/a 与 b 的验证摘要指标相同，配对判定留待诊断流程。T006 继续 `in_progress`，下一步为 seed 2/b。[执行报告](../../reports/p02-t006-v2-execution-20261128-05/report.md)
+
+- 2026-11-28：seed 2/b confirmation 完成 200 epoch，三个 a/b 对均通过重复门；section-5 诊断因三个 seed 的预算末段变化均超过 1% 而失败，`learning_ready=false`。T006 → `blocked`，不生成测试或自动加轮。[诊断报告](../../reports/p02-t006-v2-diagnosis-20261128-01/report.md)
+
+- 2026-11-28：研究侧复核后提出 [D041](../../decisions.md#d041-t006-v2-预算末段失败后的固定预算跟进候选)：仅讨论一个新的固定 400 轮 r0/GRU 跟进块，尚未接受；T006 保持 `blocked`，未修订协议、启动软件变更或训练。[预算复核](../../reports/p02-t006-budget-review-20261128-01/report.md)
